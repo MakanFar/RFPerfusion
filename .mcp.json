@@ -1,0 +1,20 @@
+{
+  "mcpServers": {
+    "proto-tools": {
+      "type": "stdio",
+      "command": "uv",
+      "args": [
+        "run",
+        "--project",
+        "${CLAUDE_PROJECT_DIR:-.}/proto-skill",
+        "proto-tools-mcp",
+        "--device",
+        "modal"
+      ],
+      "env": {
+        "MODAL_ENVIRONMENT": "main",
+        "PROTO_MODAL_SCALEDOWN_WINDOW": "30"
+      }
+    }
+  }
+}

@@ -1,0 +1,11 @@
+[project]
+name = "rfperfusion-proto-runtime"
+version = "0.1.0"
+description = "Isolated proto-tools MCP runtime for RFPerfusion"
+requires-python = ">=3.10,<3.13"
+dependencies = [
+  "proto-tools[mcp] @ git+https://github.com/evo-design/proto-tools.git",
+]
+
+[tool.uv]
+package = false
