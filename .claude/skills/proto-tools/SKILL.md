@@ -14,7 +14,7 @@ Use the `proto-tools` MCP server as the machine interface. Keep tool selection, 
 3. Call `get_tool_schema` before `run_tool`, even when the fields look familiar. Use `get_tool_example` when the schema or a structure input is nontrivial.
 4. Confirm that the selected tool actually measures or produces what the user requested. State important scientific limitations rather than treating every output as ground truth.
 5. If the tool is not deployed, explain the deployment and persistent-storage cost and obtain explicit approval before calling `deploy_tool`. Deploy only the needed tool into `main`; never deploy the full catalogue.
-6. Create an absolute output directory under `artifacts/proto-tools/<run-id>/`, where `<run-id>` starts with a UTC timestamp and ends with the tool key. Pass it as `output_dir` to `run_tool`.
+6. Create an absolute output directory under `proto/outputs/<run-id>/`, where `<run-id>` starts with a UTC timestamp and ends with the tool key. Pass it as `output_dir` to `run_tool`.
 7. Run on the session's Modal backend. Use `run_on="local"` only when the user asks for local execution or a small CPU-only operation clearly benefits from it.
 8. On failure, preserve the returned error, correct schema or deployment problems, and retry at most once for a transient deployment/download failure. Do not repeatedly spend compute without new evidence.
 9. Call `get_tool_info` for completed scientific runs so the method, citation, and implementation are attributable.
@@ -29,7 +29,7 @@ Use the `proto-tools` MCP server as the machine interface. Keep tool selection, 
 - Display returned images when useful.
 - For PDB/mmCIF files, link the structure and display a returned preview image when one exists. Do not claim that a preview is an analytical validation.
 - For embeddings or other large arrays, report shape, dtype, and useful summary statistics; do not paste the array into the conversation.
-- Keep generated files under `artifacts/proto-tools/`, which is intentionally gitignored.
+- Keep generated files under `proto/outputs/`, which is intentionally gitignored.
 
 ## Guardrails
 

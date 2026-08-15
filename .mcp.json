@@ -6,7 +6,7 @@
       "args": [
         "run",
         "--project",
-        "${CLAUDE_PROJECT_DIR:-.}/proto-skill",
+        "${CLAUDE_PROJECT_DIR:-.}/proto",
         "proto-tools-mcp",
         "--device",
         "modal"
