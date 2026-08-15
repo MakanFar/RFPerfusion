@@ -5,7 +5,7 @@
 | | |
 |---|---|
 | **Document** | PRD-2 (framework/product) |
-| **Relationship to `PRD.md`** | Complementary. `PRD.md` is instance #1; if the two conflict during the hackathon, `PRD.md` wins |
+| **Relationship to `PRD-(outdated).md`** | Complementary. `PRD-(outdated).md` is instance #1; if the two conflict during the hackathon, `PRD-(outdated).md` wins |
 | **Date** | 2026-08-15 |
 | **Status** | Draft for team review |
 
@@ -78,7 +78,7 @@ Agents communicate only through typed artifacts (§4). No agent reads another ag
 
 **L1 Ideation.** ≥20 routes, but coverage is measured over *mechanism classes*, not count. Rank by **decisiveness** — how cheaply and definitively can this route be killed — not by feasibility. Every route carries a mandatory kill criterion; a route without one is rejected at emission.
 
-**L1.5 Falsification.** Adversarial stage, scored on routes eliminated. Three checks: physical bounds (order-of-magnitude against conservation laws), evidence status, evaluator availability. `PRD.md` §2.1 is this stage hardcoded for one instance.
+**L1.5 Falsification.** Adversarial stage, scored on routes eliminated. Three checks: physical bounds (order-of-magnitude against conservation laws), evidence status, evaluator availability. `PRD-(outdated).md` §2.1 is this stage hardcoded for one instance.
 
 **L2 Specification.** Converts mechanism → executable design task: scaffold, mutable degrees of freedom, quantitative targets. The hardest step in the system. Instrument it — log every human edit to a generated spec; edit distance is the L2 quality metric.
 
@@ -155,7 +155,7 @@ Frozen early. The only cross-workstream dependency.
 }
 ```
 
-**EvidenceItem, Candidate, ScoredCandidate:** reuse `PRD.md` §6.2 and §6.4 unchanged, plus `spec_id` and `route_id` on `ScoredCandidate`.
+**EvidenceItem, Candidate, ScoredCandidate:** reuse `PRD-(outdated).md` §6.2 and §6.4 unchanged, plus `spec_id` and `route_id` on `ScoredCandidate`.
 
 ---
 
@@ -189,7 +189,7 @@ Two structurally dissimilar objectives, end to end, **new registry entries only,
 
 | Instance | Objective | Class | Tests |
 |---|---|---|---|
-| **A** | SWIR transcriptional switch (`PRD.md`) | Soluble coiled-coil | Strong evaluators, known ground truth (Piraner) |
+| **A** | SWIR transcriptional switch (`PRD-(outdated).md`) | Soluble coiled-coil | Strong evaluators, known ground truth (Piraner) |
 | **B** | RF-sensitive ion channel | Membrane protein | Weak evaluators, contested literature, no ground truth |
 | **C** | A solved problem with published answer | Any | Does the loop recover the known answer? |
 
@@ -233,7 +233,7 @@ Run C first.
 | No evaluator for the interesting objectives | **High** | Registry as L1 input; `requires_new_evaluator` as output |
 | 20 routes, one pursued | Med | Portfolio controller |
 | Generality asserted from one instance | Med | §7 — two instances or no claim |
-| Framework work cannibalizes the hackathon artifact | **High** | `PRD.md` tiebreaker stands |
+| Framework work cannibalizes the hackathon artifact | **High** | `PRD-(outdated).md` tiebreaker stands |
 
 ---
 
@@ -249,5 +249,5 @@ Run C first.
 
 ## References
 
-- `PRD.md` — instance #1, SWIR/TlpA vertical
+- `PRD-(outdated).md` — instance #1, SWIR/TlpA vertical
 - `Team Discussion Summary & Proposed Project Direction.md` — originating discussion

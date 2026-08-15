@@ -1,6 +1,6 @@
 # RFPerfusion
 
-Read `docs/PRD.md` first (the 48h hackathon deliverable) and `docs/PRD-framework.md`
+Read `docs/PRD-(outdated).md` first (the 48h hackathon deliverable) and `docs/PRD-framework.md`
 (the general architecture it's an instance of). `docs/Team Discussion Summary & Proposed
 Project Direction.md` is background only — superseded where it conflicts with the PRDs.
 
@@ -30,8 +30,9 @@ without a bound evaluator can't become specs. Two files implement that here:
   `python scripts/sync_tamarind_catalog.py`. This is discovery only, not curation.
 - **`registry/evaluators.json`** — the actual Evaluator Registry the framework consults.
   Each entry names a Tamarind tool, what it measures, and its `status`
-  (`needs_calibration` until someone benchmarks it against a held-out set per PRD.md
-  §7.2 — an uncalibrated evaluator may run but its scores cannot rank candidates).
+  (`needs_calibration` until someone benchmarks it against a held-out set per
+  `docs/PRD-(outdated).md` §7.2 — an uncalibrated evaluator may run but its scores
+  cannot rank candidates).
 
 **Adding a new evaluator:** confirm the tool exists via `GET /tools`, add an entry to
 `registry/evaluators.json` with `status: "needs_calibration"`, then run the calibration

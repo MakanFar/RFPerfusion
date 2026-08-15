@@ -10,7 +10,7 @@
       "known_reliability": null,
       "cost": {"unit": "weighted_hours", "estimate": "verify via /tools schema"},
       "status": "needs_calibration",
-      "notes": "Candidate for c_fold_conf (PRD.md §6.3). Verify current schema/name via GET /tools before use — do not assume field names."
+      "notes": "Candidate for c_fold_conf (PRD-(outdated).md §6.3). Verify current schema/name via GET /tools before use — do not assume field names."
     },
     {
       "evaluator_id": "tamarind:esmfold",
@@ -21,7 +21,7 @@
       "known_reliability": null,
       "cost": {"unit": "weighted_hours", "estimate": "verify via /tools schema"},
       "status": "needs_calibration",
-      "notes": "Faster than alphafold; PRD.md names this tool explicitly for c_fold_conf. Cross-check against Proto's ESMFold path — pick one source of truth, don't run both silently."
+      "notes": "Faster than alphafold; PRD-(outdated).md names this tool explicitly for c_fold_conf. Cross-check against Proto's ESMFold path — pick one source of truth, don't run both silently."
     },
     {
       "evaluator_id": "tamarind:thermompnn",
@@ -32,7 +32,7 @@
       "known_reliability": null,
       "cost": {"unit": "weighted_hours", "estimate": "verify via /tools schema"},
       "status": "needs_calibration",
-      "notes": "Candidate proxy for c_cooperativity / thermal stability shift, NOT a direct Tm predictor. Must be benchmarked against the Piraner held-out set (PRD.md §7.2) before it can inform c_tm_target."
+      "notes": "Candidate proxy for c_cooperativity / thermal stability shift, NOT a direct Tm predictor. Must be benchmarked against the Piraner held-out set (PRD-(outdated).md §7.2) before it can inform c_tm_target."
     },
     {
       "evaluator_id": "tamarind:tap",
@@ -43,7 +43,7 @@
       "known_reliability": null,
       "cost": {"unit": "weighted_hours", "estimate": "verify via /tools schema"},
       "status": "needs_calibration",
-      "notes": "Candidate for c_aggregation (PRD.md §6.3)."
+      "notes": "Candidate for c_aggregation (PRD-(outdated).md §6.3)."
     },
     {
       "evaluator_id": "tamarind:netsolp",
@@ -54,7 +54,7 @@
       "known_reliability": null,
       "cost": {"unit": "weighted_hours", "estimate": "verify via /tools schema"},
       "status": "needs_calibration",
-      "notes": "Secondary developability check, not in PRD.md's constraint set as written. Add only if the team decides expressibility risk needs a second signal."
+      "notes": "Secondary developability check, not in PRD-(outdated).md's constraint set as written. Add only if the team decides expressibility risk needs a second signal."
     }
   ]
 }
