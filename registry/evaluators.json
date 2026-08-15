@@ -1,0 +1,60 @@
+{
+  "$comment": "The framework's Evaluator Registry (see docs/PRD-framework.md §Evaluator Registry, §4 Data Contracts). This is the curated, calibration-tracked list that L1/L2 bind DesignSpec objectives against — distinct from registry/tamarind_catalog.json, which is just a raw sync of what Tamarind exposes. An entry here with status 'needs_calibration' may run but MAY NOT rank candidates (PRD-framework.md §6).",
+  "evaluators": [
+    {
+      "evaluator_id": "tamarind:alphafold",
+      "source": "tamarind",
+      "tamarind_tool": "alphafold",
+      "measures": ["fold_confidence", "structure"],
+      "applicable_to": {"molecule_class": ["soluble_protein", "membrane_protein"]},
+      "known_reliability": null,
+      "cost": {"unit": "weighted_hours", "estimate": "verify via /tools schema"},
+      "status": "needs_calibration",
+      "notes": "Candidate for c_fold_conf (PRD.md §6.3). Verify current schema/name via GET /tools before use — do not assume field names."
+    },
+    {
+      "evaluator_id": "tamarind:esmfold",
+      "source": "tamarind",
+      "tamarind_tool": "esmfold",
+      "measures": ["fold_confidence", "structure"],
+      "applicable_to": {"molecule_class": ["soluble_protein"]},
+      "known_reliability": null,
+      "cost": {"unit": "weighted_hours", "estimate": "verify via /tools schema"},
+      "status": "needs_calibration",
+      "notes": "Faster than alphafold; PRD.md names this tool explicitly for c_fold_conf. Cross-check against Proto's ESMFold path — pick one source of truth, don't run both silently."
+    },
+    {
+      "evaluator_id": "tamarind:thermompnn",
+      "source": "tamarind",
+      "tamarind_tool": "thermompnn",
+      "measures": ["ddG_stability"],
+      "applicable_to": {"molecule_class": ["soluble_protein"]},
+      "known_reliability": null,
+      "cost": {"unit": "weighted_hours", "estimate": "verify via /tools schema"},
+      "status": "needs_calibration",
+      "notes": "Candidate proxy for c_cooperativity / thermal stability shift, NOT a direct Tm predictor. Must be benchmarked against the Piraner held-out set (PRD.md §7.2) before it can inform c_tm_target."
+    },
+    {
+      "evaluator_id": "tamarind:tap",
+      "source": "tamarind",
+      "tamarind_tool": "tap",
+      "measures": ["aggregation_propensity"],
+      "applicable_to": {"molecule_class": ["soluble_protein"]},
+      "known_reliability": null,
+      "cost": {"unit": "weighted_hours", "estimate": "verify via /tools schema"},
+      "status": "needs_calibration",
+      "notes": "Candidate for c_aggregation (PRD.md §6.3)."
+    },
+    {
+      "evaluator_id": "tamarind:netsolp",
+      "source": "tamarind",
+      "tamarind_tool": "netsolp",
+      "measures": ["solubility"],
+      "applicable_to": {"molecule_class": ["soluble_protein"]},
+      "known_reliability": null,
+      "cost": {"unit": "weighted_hours", "estimate": "verify via /tools schema"},
+      "status": "needs_calibration",
+      "notes": "Secondary developability check, not in PRD.md's constraint set as written. Add only if the team decides expressibility risk needs a second signal."
+    }
+  ]
+}
