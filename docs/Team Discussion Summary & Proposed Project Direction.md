@@ -1,6 +1,6 @@
 # Team Discussion Summary & Proposed Project Direction
 
-## 1. Core Problem
+## Core Problem
 
 The team discussed using an **AI-driven, multi-agent pipeline for protein design**, with the initial motivating example being the design of a protein that responds to a particular physical stimulus—specifically, a protein with sensitivity at wavelengths greater than ~1500 nm.
 
@@ -8,19 +8,17 @@ The important realization was that the project should **not be framed only as �
 
 The RF/wavelength-responsive protein would therefore serve as a **challenging test case for the general protein-design pipeline**, rather than necessarily being the sole deliverable.
 
----
-
-# 2. Proposed High-Level Pipeline
+## Proposed High-Level Pipeline
 
 ### Input: Scientific Design Goal
 
 A researcher begins with a high-level question such as:
 
-> “How can we design a protein that responds to wavelengths greater than 1500 nm?”
+> *“How can we design a protein that responds to wavelengths greater than 1500 nm?”*
 
 Rather than immediately asking an LLM to design the protein, the system first helps **formalize and decompose the problem**.
 
-### Stage 1 — Problem Formulation & Decomposition
+### Stage 0 — Problem Formulation & Decomposition + Literature Research Agent
 
 An LLM interacts recursively with the researcher to identify:
 
@@ -37,9 +35,7 @@ The human researcher acts as a **curator/validator**, accepting or rejecting pro
 
 This is important because expert prompting appears to substantially improve the ability of LLMs to converge on useful solutions. The system should therefore use the expert not merely at the beginning or end, but as part of an iterative narrowing process.
 
----
-
-# 3. Stage 2 — Literature Research Agent
+The output of this stage should decompose the protein design into distinct subtasks curated and validated by the domain expert. Each task can be given to one of the Stage 2 agents.
 
 Once the problem has been decomposed into specific research questions, specialized literature agents investigate each component.
 
@@ -67,9 +63,7 @@ The outputs would then be consolidated into an evidence layer containing:
 
 A key goal is to avoid simply producing plausible-sounding ideas. The system should be able to distinguish **literature-supported mechanisms from speculative hypotheses**.
 
----
-
-# 4. Stage 3 — Candidate Generation
+Not sure if relevant, but a curation step should be done here by a single agent to see whether all proposals are consistent for the design of a single protein - can we make sure that we’re not trying to design physically impossible proteins - maybe this is relevant at the end of step 3
 
 The literature stage should produce a constrained set of candidate starting points rather than asking the model to invent arbitrary proteins from scratch.
 
@@ -91,15 +85,15 @@ The candidate-generation process could potentially use:
 
 One idea discussed was clustering known wavelength-responsive or fluorescent proteins using **ESM embeddings or structural representations** to identify classes and potentially discover useful regions of protein space.
 
----
+At this stage, we need to figure out what is the input layer to the simulation, so we shape the ouput of this stage to slot into it
 
-# 5. Stage 4 — Computational Evaluation / Simulation
+### Stage 2 — Computational Evaluation / Simulation
 
 The next stage evaluates whether the proposed candidates are computationally plausible.
 
 The team discussed several possible levels of evaluation:
 
-### Protein-level evaluation
+#### Protein-level evaluation
 
 Depending on the proposed mechanism:
 
@@ -109,7 +103,21 @@ Depending on the proposed mechanism:
 - Functional-property prediction
 - Optical-property prediction
 
-### Simulation
+#### Stage 2.1 Establishment of Structure - Feature relationship space (JRP)
+
+- Using FBbase as a starting protein space, embed proteins with ESM and look to see if a relationship with excitation wavelength can be had
+  - Approach A: UMAP protein embeddings and see if they cluster by wavelength
+  - Approach B: Foldseek cluster protein structures
+  - Approach C: Focus just on 20A around the chromophore
+- Action items
+  - Create a skill that takes new data an appends it into a similar format
+
+Protein property datasets:
+
+- <https://flip.protein.properties/> (RhoMax for rhodopsin wavelength)
+- VPOD opsin data: <https://github.com/VisualPhysiologyDB/visual-physiology-opsin-db>
+
+#### Simulation
 
 Where feasible, simulations could be used to test whether a proposed mechanism behaves as expected.
 
@@ -121,13 +129,9 @@ The pipeline should also consider the **evaluatability of a candidate**. Some de
 
 This suggests another useful score:
 
-> **Evaluatability / verification feasibility**
+> ***Evaluatability / verification feasibility***
 
 A candidate that is slightly less promising scientifically but substantially easier to validate may be preferable to a highly speculative candidate that cannot realistically be tested.
-
----
-
-# 6. Stage 5 — Candidate Ranking & Verification
 
 The final candidates could be ranked using multiple dimensions rather than a single score.
 
@@ -146,45 +150,21 @@ For example:
 
 Known proteins with established behavior could also serve as **positive controls / benchmark cases**.
 
+- LigandMPNN for retinal transition for opsin, likelihood of structure “binding” cis/trans states as a proxy for transitions between closed and open states?
+
 For example, if the system is given a problem for which the correct design is already well established, the pipeline should be able to recover it. This provides a way to test whether the agentic workflow actually works before applying it to a genuinely novel design problem.
 
----
+## Stage 3 — Proto-based build.
 
-# 7. Important Architectural Question: Skills vs. Specialized Agents
+Given a designed light-responsive protein, create a genetic architecture that is likely to create a vesicle around it.
 
-The team discussed two possible architectures.
-
-### Option A — One orchestrator + skills
-
-A central LLM would move through a sequence such as:
-
-**Problem formulation → literature → candidate generation → simulation → evaluation**
-
-Each step would be implemented as a reusable skill.
-
-### Option B — Multi-agent architecture
-
-A central orchestrator would delegate work to specialized agents:
-
-- **Problem-formulation agent**
-- **Literature-research agents**
-- **Protein-design agent**
-- **Simulation/evaluation agent**
-- **Evidence/verification agent**
-
-The discussion leaned toward the second approach because different parts of the problem require different expertise, tools, environments, and persistent context.
-
-A particularly important concern was whether one orchestrator could maintain enough context to coordinate every subproblem effectively. Specialized agents could instead work continuously on their own portions of the problem and return structured outputs to the orchestrator.
-
----
-
-# 8. Proposed Team Architecture
+## Proposed Team Architecture
 
 Rather than strictly separating everyone into isolated projects, the team should work on **interconnected modules** with clearly defined interfaces.
 
 Possible groups:
 
-### Team A — Problem Decomposition / Orchestration
+### Team A — Problem Decomposition / Orchestration + Literature & Evidence + Candidate Generation
 
 Responsible for:
 
@@ -194,10 +174,6 @@ Responsible for:
 - Coordinating specialized agents
 - Defining how outputs move between stages
 
-### Team B — Literature & Evidence
-
-Responsible for:
-
 - Literature-search agent(s)
 - Candidate discovery
 - Evidence extraction
@@ -205,7 +181,13 @@ Responsible for:
 - Mechanism identification
 - Connecting papers to candidate proteins/designs
 
-### Team C — Protein Representation & Candidate Generation
+Literature search setup:
+
+- Take one topic per agent delivered by previous output and use an LLM to turn into sentence shards that can be regex-ed to identify correct papers or searched in full text papers through paperclip. Additionally extract sentences that have to do with why that sequence likely produce said mechanism to further refine search
+- For each paper, extract relevant FASTA sequence tied to the mechanism, and the full protein it belongs to?
+- Identify references that are commonly cited in the papers but are not available as full text in paper clip. Read those paper’s abstracts for extra information.
+
+### Team B — Protein Representation & Evaluation & Simulation
 
 Responsible for:
 
@@ -215,10 +197,6 @@ Responsible for:
 - Identifying relevant sequence/structural neighborhoods
 - Generating candidate starting points
 
-### Team D — Evaluation & Simulation
-
-Responsible for:
-
 - Defining evaluation metrics
 - Investigating feasible simulations
 - Benchmarking computational predictions
@@ -227,9 +205,7 @@ Responsible for:
 
 The exact division can remain flexible, but **the interfaces between teams need to be defined early**.
 
----
-
-# 9. Shared Infrastructure
+### Shared Infrastructure
 
 The team discussed having everyone work through a shared repository and potentially sharing agent outputs, prompts, JSON files, literature results, and intermediate artifacts.
 
@@ -246,13 +222,11 @@ This is likely more important than simply dividing the work by topic.
 
 The project should be designed around the **glue between components**, not just the individual components themselves.
 
----
-
-# 10. Potential Final Deliverable
+## Potential Final Deliverable
 
 The strongest framing discussed was:
 
-> **A reusable agentic framework for solving complex scientific/protein-design problems through iterative problem decomposition, literature-grounded hypothesis generation, candidate generation, computational evaluation, and verification.**
+> ***A reusable agentic framework for solving complex scientific/protein-design problems through iterative problem decomposition, literature-grounded hypothesis generation, candidate generation, computational evaluation, and verification.***
 
 The wavelength/RF-responsive protein serves as the primary demonstration problem.
 
@@ -260,7 +234,7 @@ The final system could look conceptually like:
 
 **Scientist**
 
-↓  
+↓
 
 **Scientific Design Question**
 
@@ -300,67 +274,17 @@ The final system could look conceptually like:
 
 **Final Candidate Designs**
 
----
-
-# 11. Possible Additional Deliverable
-
-One team member proposed going beyond identifying a candidate protein and producing a more complete construct.
-
-For example, once a promising protein is identified, the system could potentially design the surrounding components required for a usable experimental construct, such as localization tags or other supporting components.
-
-This would make the output closer to:
-
-> **“Here is an experimentally actionable construct you could order,”**
-
-rather than simply:
-
-> **“Here is a promising protein sequence.”**
-
-This should probably remain a **stretch goal**, because the core agentic pipeline is already substantial.
-
----
-
-# 12. Key Risks / Open Questions
-
-Several unresolved questions came up that should be addressed before implementation:
-
-### Data availability
-
-There may not be enough labeled data for RF/wavelength-responsive proteins to train a highly reliable predictive model.
-
-Therefore, the system should not assume that supervised learning alone can solve the problem.
-
-### Simulation cost
-
-Full molecular-dynamics or other high-fidelity simulations may be too expensive to execute repeatedly inside an agent loop.
-
-### Verification
-
-Some generated designs may be extremely difficult to experimentally validate.
-
-The pipeline therefore needs to account for **verification feasibility**, not just predicted performance.
-
-### Agent coordination
-
-It remains unclear how much autonomy should be given to the orchestrator versus specialized agents.
-
-### Generalization
-
-The team needs to determine whether the system genuinely solves a general class of scientific design problems or merely works for the selected protein example.
-
----
-
-# 13. Recommended Project Framing
+## Recommended Project Framing
 
 The project should therefore be framed at **two levels**:
 
 ### General scientific contribution
 
-> Build an agentic framework that converts high-level scientific design questions into evidence-grounded, computationally evaluable candidate solutions.
+> *Build an agentic framework that converts high-level scientific design questions into evidence-grounded, computationally evaluable candidate solutions.*
 
 ### Demonstration problem
 
-> Use the design of a wavelength-responsive protein as a difficult test case for the framework.
+> *Use the design of a wavelength-responsive protein as a difficult test case for the framework.*
 
 This framing gives the project a stronger research story. Even if the final protein candidates are not experimentally validated during the project, the team can still demonstrate that the system successfully:
 
@@ -372,22 +296,7 @@ This framing gives the project a stronger research story. Even if the final prot
 6. Ranks candidates according to multiple criteria.
 7. Produces an experimentally actionable shortlist.
 
----
-
-# 14. Immediate Next Steps
-
-1. **Agree on the abstract problem definition.**
-2. Define the exact input/output of the overall system.
-3. Decide whether the architecture will be primarily **multi-agent + orchestrator** or a single agent with specialized skills.
-4. Break the pipeline into 3–4 concrete modules.
-5. Have each team write a short agent specification.
-6. Investigate available protein databases, ESM/embedding tools, and simulation tools.
-7. Define a benchmark problem where the correct/known answer already exists.
-8. Define evaluation criteria based on the competition/judging rubric.
-9. Build the literature component first, since it establishes the evidence layer and candidate space.
-10. Establish the interfaces between modules before implementing each module independently.
-
-## Working Thesis
+### Working Thesis
 
 **The central idea is not simply to use an LLM to design a protein. It is to build an agentic scientific reasoning loop in which an LLM converts an underspecified design goal into structured hypotheses, experts curate those hypotheses, specialized agents gather evidence and generate candidates, computational tools evaluate them, and the system iteratively converges toward experimentally actionable solutions.**
 
