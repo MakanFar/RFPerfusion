@@ -1,0 +1,4 @@
+interface:
+  display_name: "Proto Tools on Modal"
+  short_description: "Run biology tools through Modal"
+  default_prompt: "Use $proto-tools to run the appropriate biology tool on Modal and report its artifacts."
