@@ -1,0 +1,534 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Formulation Agent</title>
+<style>
+  :root{
+    --bg:#fbfaf8; --panel:#fff; --ink:#1b1a17; --muted:#6c6862; --line:#e6e2db;
+    --accent:#2f6f6b; --ok:#2e7d5b; --warn:#a8720f; --bad:#a33a2c; --dim:#9a958d;
+    --shadow:0 1px 2px rgba(0,0,0,.05), 0 4px 16px rgba(0,0,0,.04);
+    --radius:10px;
+  }
+  @media (prefers-color-scheme:dark){
+    :root{
+      --bg:#15161a; --panel:#1c1e23; --ink:#e9e7e2; --muted:#9a968f;
+      --line:#2c2f36; --accent:#5fb3ad; --ok:#5cc08d; --warn:#d6a44a; --bad:#e0705f;
+      --dim:#726d66; --shadow:0 1px 2px rgba(0,0,0,.3), 0 6px 20px rgba(0,0,0,.25);
+    }
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font:15px/1.55 ui-sans-serif,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  a{color:var(--accent)}
+  code,.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+
+  header{
+    position:sticky; top:0; z-index:20; background:var(--bg);
+    border-bottom:1px solid var(--line); padding:14px 22px;
+    display:flex; align-items:center; gap:14px; flex-wrap:wrap;
+  }
+  header h1{font-size:15px; margin:0; font-weight:650; letter-spacing:-.01em}
+  header .q{color:var(--muted); font-size:13px; flex:1; min-width:200px}
+  .layout{display:grid; grid-template-columns:minmax(0,1fr) 372px; gap:20px; padding:20px 22px 60px; max-width:1500px; margin:0 auto}
+  @media (max-width:1080px){ .layout{grid-template-columns:1fr} }
+
+  /* ---------- controls ---------- */
+  button{
+    font:inherit; font-size:13px; padding:6px 12px; border-radius:7px;
+    border:1px solid var(--line); background:var(--panel); color:var(--ink);
+    cursor:pointer; transition:.12s;
+  }
+  button:hover{border-color:var(--accent); color:var(--accent)}
+  button.primary{background:var(--accent); color:#fff; border-color:var(--accent)}
+  button.primary:hover{opacity:.9; color:#fff}
+  button:disabled{opacity:.45; cursor:not-allowed}
+  input[type=text],textarea{
+    font:inherit; width:100%; padding:10px 12px; border-radius:8px;
+    border:1px solid var(--line); background:var(--panel); color:var(--ink); resize:vertical;
+  }
+  input:focus,textarea:focus{outline:2px solid var(--accent); outline-offset:-1px; border-color:transparent}
+
+  /* ---------- empty state ---------- */
+  .hero{max-width:720px; margin:9vh auto; text-align:center}
+  .hero h2{font-size:24px; font-weight:640; letter-spacing:-.02em; margin:0 0 10px}
+  .hero p{color:var(--muted); margin:0 0 24px}
+  .hero textarea{text-align:left; min-height:88px; font-size:16px}
+  .hero .go{margin-top:12px}
+
+  /* ---------- idea cards ---------- */
+  .card{
+    background:var(--panel); border:1px solid var(--line); border-radius:var(--radius);
+    margin-bottom:12px; box-shadow:var(--shadow); overflow:hidden;
+  }
+  .card.dropped{opacity:.5}
+  .card-head{display:flex; gap:13px; padding:14px 16px; cursor:pointer; align-items:flex-start}
+  .card-head:hover{background:rgba(127,127,127,.04)}
+  .rank{font-size:12px; color:var(--dim); min-width:20px; padding-top:2px; font-variant-numeric:tabular-nums}
+  .card-title{flex:1; min-width:0}
+  .card-title .t{font-weight:600; letter-spacing:-.01em}
+  .card-title .s{color:var(--muted); font-size:13px; margin-top:3px}
+  .idcode{font-size:11px; color:var(--dim); letter-spacing:.04em}
+
+  .metrics{display:flex; align-items:center; gap:14px; flex-shrink:0; padding-top:2px}
+  .score{text-align:right}
+  .score .n{font-size:19px; font-weight:640; font-variant-numeric:tabular-nums; letter-spacing:-.02em}
+  .bar{width:78px; height:5px; border-radius:3px; background:var(--line); overflow:hidden; margin-top:4px}
+  .bar span{display:block; height:100%; background:var(--accent)}
+  .pill{font-size:11px; padding:3px 9px; border-radius:20px; border:1px solid; white-space:nowrap; font-weight:550}
+  .pursue{color:var(--ok); border-color:var(--ok)}
+  .investigate{color:var(--accent); border-color:var(--accent)}
+  .park{color:var(--warn); border-color:var(--warn)}
+  .reject{color:var(--bad); border-color:var(--bad)}
+  .grounded{font-size:12px; color:var(--muted); font-variant-numeric:tabular-nums; white-space:nowrap}
+  .capflag{color:var(--bad); font-size:11px}
+
+  .card-body{border-top:1px solid var(--line); padding:16px; display:none}
+  .card.open .card-body{display:block}
+  .mech{font-size:13px; color:var(--muted); margin-bottom:14px}
+  .mech b{color:var(--ink); font-weight:600}
+
+  .axes{display:grid; grid-template-columns:repeat(auto-fit,minmax(148px,1fr)); gap:8px 18px; margin:0 0 16px}
+  .axis{font-size:12px}
+  .axis .lbl{color:var(--muted); display:flex; justify-content:space-between}
+  .axis .bar{width:100%}
+
+  h4{font-size:11px; text-transform:uppercase; letter-spacing:.07em; color:var(--dim);
+     margin:18px 0 8px; font-weight:620}
+
+  .claim{border-left:2px solid var(--line); padding:2px 0 2px 12px; margin-bottom:14px}
+  .claim.verified{border-color:var(--ok)}
+  .claim.partial{border-color:var(--warn)}
+  .claim.unsupported,.claim.quote_mismatch{border-color:var(--bad)}
+  .claim-text{font-size:14px}
+  .badge{font-size:10px; letter-spacing:.05em; font-weight:650; padding:2px 6px;
+         border-radius:4px; margin-right:7px; text-transform:uppercase; vertical-align:1px}
+  .b-verified{background:var(--ok); color:#fff}
+  .b-partial{background:var(--warn); color:#fff}
+  .b-unsupported,.b-quote_mismatch{background:var(--bad); color:#fff}
+  .b-no_evidence,.b-error{background:var(--dim); color:#fff}
+  .supporting{font-size:11px; color:var(--dim); margin-left:6px}
+
+  blockquote{
+    margin:8px 0 6px; padding:9px 12px; background:rgba(127,127,127,.06);
+    border-radius:7px; font-size:13.5px; line-height:1.5;
+  }
+  blockquote.refutes{background:rgba(200,70,50,.09)}
+  .cite{font-size:12px; color:var(--muted); margin-bottom:12px}
+  .cite a{text-decoration:none; border-bottom:1px solid rgba(127,127,127,.35)}
+  .cite a:hover{border-color:var(--accent)}
+  .tag{font-size:10px; padding:1px 6px; border:1px solid var(--line); border-radius:4px;
+       color:var(--dim); margin-left:6px; text-transform:uppercase; letter-spacing:.04em}
+  .nothing{font-size:12.5px; color:var(--dim); font-style:italic; margin:6px 0 10px}
+  .failed{font-size:12px; color:var(--bad); margin:4px 0 10px}
+
+  .actions{display:flex; gap:8px; padding-top:14px; border-top:1px solid var(--line); margin-top:6px; flex-wrap:wrap}
+  .fu{display:flex; gap:8px; margin-top:10px}
+  .fu input{flex:1}
+
+  /* ---------- sidebar ---------- */
+  .side{display:flex; flex-direction:column; gap:14px; position:sticky; top:74px; align-self:start; max-height:calc(100vh - 96px)}
+  .box{background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow)}
+  .box h3{font-size:11px; text-transform:uppercase; letter-spacing:.07em; color:var(--dim);
+          margin:0; padding:12px 14px 8px; font-weight:620}
+  .box .inner{padding:0 14px 14px; overflow-y:auto; max-height:40vh}
+  .log{font-size:12.5px; line-height:1.5; height:clamp(160px,34vh,340px)}
+  .log div{padding:3px 0; border-bottom:1px solid rgba(127,127,127,.07); display:flex; gap:8px}
+  .log .st{font-weight:600; flex:0 0 104px; font-size:11px; padding-top:2px;
+           white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+  .st.verified{color:var(--ok)} .st.partial{color:var(--warn)}
+  .st.unsupported,.st.quote_mismatch{color:var(--bad)}
+  .st.no_evidence,.st.error{color:var(--dim)}
+  .log .tx{color:var(--muted); flex:1; min-width:0}
+
+  .job{padding:10px 0; border-bottom:1px solid rgba(127,127,127,.1); font-size:13px}
+  .job:last-child{border:0}
+  .job .h{display:flex; gap:8px; align-items:center; margin-bottom:4px}
+  .job .ans{color:var(--muted); font-size:12.5px; margin-top:5px}
+  .spin{display:inline-block; width:9px; height:9px; border:2px solid var(--line);
+        border-top-color:var(--accent); border-radius:50%; animation:sp .7s linear infinite}
+  @keyframes sp{to{transform:rotate(360deg)}}
+
+  .chatline{margin-bottom:10px; font-size:13.5px}
+  .chatline .who{font-size:10px; text-transform:uppercase; letter-spacing:.06em; color:var(--dim)}
+  .chatline.agent{background:rgba(127,127,127,.05); padding:9px 11px; border-radius:8px}
+
+  .composer{padding:12px 14px; border-top:1px solid var(--line); display:flex; gap:8px}
+  .progress{height:3px; background:var(--line); border-radius:2px; overflow:hidden; margin:0 14px 12px}
+  .progress span{display:block; height:100%; background:var(--accent); transition:width .25s}
+  .hidden{display:none !important}
+  .err{color:var(--bad); font-size:13px; padding:10px 14px}
+
+  /* ---------- phase indicator ---------- */
+  .phase{display:flex; align-items:center; gap:9px; padding:2px 14px 12px; font-size:13px}
+  .phase .lbl{flex:1; min-width:0; color:var(--ink); font-weight:550;
+              white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+  .phase .clock{color:var(--muted); font-variant-numeric:tabular-nums;
+                font-size:12.5px; min-width:3.4em; text-align:right}
+  .phase.idle{color:var(--dim)}
+  .phase.idle .lbl{color:var(--dim); font-weight:400}
+
+  /* ---------- provisional (unverified) cards ---------- */
+  /* No score, no rank, no verdict pill: nothing here has been checked yet, and
+     a number that later moves would read as a finding. */
+  .card.pending{border-style:dashed}
+  .card.pending .card-title .t{color:var(--muted)}
+  .chip-pending{font-size:11px; padding:3px 9px; border-radius:20px;
+    border:1px dashed var(--dim); color:var(--dim); white-space:nowrap}
+  .sectionhead{font-size:11px; text-transform:uppercase; letter-spacing:.07em;
+    color:var(--dim); font-weight:620; margin:26px 0 10px}
+  /* Three real dots, animated on opacity. The previous version animated the
+     `content` of a pseudo-element between "", ".", "..", "..." — four different
+     widths, ~3x a second. That width change propagated out through
+     .chip-pending -> .metrics -> .card-title (flex:1), so every card's title
+     and one-liner re-wrapped continuously. Opacity doesn't affect layout, and
+     unlike `content` it animates outside Blink/WebKit. */
+  .dots{display:inline-block; margin-left:1px}
+  .dots i{font-style:normal; opacity:.25; animation:dot 1.2s infinite}
+  .dots i:nth-child(2){animation-delay:.2s}
+  .dots i:nth-child(3){animation-delay:.4s}
+  @keyframes dot{0%,60%,100%{opacity:.25} 30%{opacity:1}}
+  @media (prefers-reduced-motion:reduce){
+    .dots i{animation:none; opacity:.55}
+    .spin{animation:none}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Formulation Agent</h1>
+  <div class="q" id="question"></div>
+  <button id="btn-more" class="hidden">Propose more</button>
+  <button id="btn-save" class="hidden">Save report</button>
+</header>
+
+<!-- API key gate -->
+<div id="keygate" class="hero hidden">
+  <h2>Add your API key</h2>
+  <p>Held in memory for this session only — never written to disk.</p>
+  <input type="text" id="keyinput" placeholder="sk-ant-..." autocomplete="off">
+  <div class="go"><button class="primary" id="keysave">Connect</button></div>
+  <div class="err hidden" id="keyerr"></div>
+</div>
+
+<!-- first question -->
+<div id="hero" class="hero hidden">
+  <h2>What are you trying to design?</h2>
+  <p>Ask an open question. Every direction proposed gets decomposed into
+     checkable claims and verified against full-text literature before it's ranked.</p>
+  <textarea id="q0" placeholder="How can we design a protein that responds to wavelengths greater than 1500 nm?"></textarea>
+  <div class="go"><button class="primary" id="ask0">Formulate</button></div>
+</div>
+
+<!-- main -->
+<div class="layout hidden" id="main">
+  <div>
+    <div id="reading" class="box hidden" style="margin-bottom:14px">
+      <h3>Reading of the question</h3>
+      <div class="inner" id="reading-text" style="font-size:13.5px;color:var(--muted)"></div>
+    </div>
+    <div id="ideas"></div>
+    <div id="dropped"></div>
+  </div>
+
+  <aside class="side">
+    <div class="box">
+      <h3>Activity</h3>
+      <div class="phase idle" id="phase">
+        <span class="spin hidden" id="phase-spin"></span>
+        <span class="lbl" id="phase-label">Idle</span>
+        <span class="clock" id="phase-clock"></span>
+      </div>
+      <div class="progress hidden" id="progress"><span style="width:0"></span></div>
+      <div class="inner log" id="log"></div>
+    </div>
+    <div class="box hidden" id="jobsbox">
+      <h3>Background investigations</h3>
+      <div class="inner" id="jobs"></div>
+    </div>
+    <div class="box" style="display:flex;flex-direction:column;min-height:0">
+      <h3>Discussion</h3>
+      <div class="inner" id="chat"></div>
+      <div class="composer">
+        <input type="text" id="chatinput" placeholder="Push back, ask, redirect…">
+        <button id="chatsend">Send</button>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<script>
+const $ = s => document.querySelector(s);
+const esc = s => (s||"").replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let STATE = null, OPEN = new Set();
+
+/* ---------------- event stream ---------------- */
+function connect(){
+  const es = new EventSource("/api/events");
+  es.onmessage = e => handle(JSON.parse(e.data));
+  es.onerror = () => setTimeout(()=>{}, 1000);
+}
+
+/* The workspace holds the activity log, so if it is still hidden every progress
+   event lands in an invisible container and the page looks frozen. Any sign of
+   life un-hides it. */
+function ensureWorkspace(){
+  $("#hero").classList.add("hidden");
+  $("#keygate").classList.add("hidden");
+  $("#main").classList.remove("hidden");
+}
+
+function handle(m){
+  if (m.kind === "state"){ STATE = m; render(); }
+  else if (m.kind === "progress"){
+    ensureWorkspace();
+    const p = $("#progress"); p.classList.remove("hidden");
+    p.firstElementChild.style.width = (100*m.done/m.total).toFixed(1)+"%";
+    log(m.status, m.text);
+  }
+  else if (m.kind === "log"){ ensureWorkspace(); log("", m.text); }
+  else if (m.kind === "error"){ ensureWorkspace(); log("error", m.text); }
+  else if (m.kind === "phase"){ ensureWorkspace(); setPhase(m.label); }
+  else if (m.kind === "reading"){
+    ensureWorkspace();
+    $("#reading").classList.remove("hidden");
+    $("#reading-text").textContent = m.text;
+  }
+  else if (m.kind === "busy"){
+    if (m.busy) ensureWorkspace();
+    $("#progress").classList.toggle("hidden", !m.busy);
+    if(!m.busy){ $("#progress").firstElementChild.style.width = "0%"; setPhase(null); }
+  }
+  else if (m.kind === "chat") addChat("agent", m.text);
+  else if (m.kind === "followup_done"){
+    log(m.verdict || m.status, `${m.idea_id} — follow-up ${m.job_id} ${m.verdict||m.status}`);
+  }
+}
+
+/* ---------------- phase + elapsed clock ---------------- */
+let PHASE_AT = null, PHASE_TIMER = null;
+
+function setPhase(label){
+  const box = $("#phase"), spin = $("#phase-spin"), clock = $("#phase-clock");
+  $("#phase-label").textContent = label || "Idle";
+  box.classList.toggle("idle", !label);
+  spin.classList.toggle("hidden", !label);
+  clearInterval(PHASE_TIMER); PHASE_TIMER = null;
+  if (!label){ PHASE_AT = null; clock.textContent = ""; return; }
+  PHASE_AT = Date.now();
+  const tick = () => {
+    const s = Math.floor((Date.now()-PHASE_AT)/1000);
+    clock.textContent = `${Math.floor(s/60)}:${String(s%60).padStart(2,"0")}`;
+  };
+  tick(); PHASE_TIMER = setInterval(tick, 1000);
+}
+
+function log(status, text){
+  const el = document.createElement("div");
+  el.innerHTML = `<span class="st ${esc(status)}">${esc(status||"")}</span><span class="tx">${esc(text)}</span>`;
+  const box = $("#log"); box.appendChild(el); box.scrollTop = box.scrollHeight;
+}
+
+/* ---------------- rendering ---------------- */
+function bar(v, cls){ return `<div class="bar"><span style="width:${(v*100).toFixed(0)}%"></span></div>`; }
+
+function renderClaim(c){
+  const evs = c.evidence.filter(e => e.verification === "verified" || e.refutes);
+  const bad = c.evidence.filter(e => e.verification === "quote_mismatch" || e.verification === "unsupported");
+  let h = `<div class="claim ${c.status}">
+    <div class="claim-text"><span class="badge b-${c.status}">${c.status.replace(/_/g," ")}</span>${esc(c.text)}
+    ${c.load_bearing ? "" : '<span class="supporting">supporting</span>'}</div>`;
+  for (const e of evs){
+    h += `<blockquote class="${e.refutes?'refutes':''}">${e.refutes?'<b>Refutes.</b> ':''}“${esc(e.quote)}”</blockquote>
+      <div class="cite">${esc(e.citation)}
+        <a href="${esc(e.url)}" target="_blank" rel="noopener">${esc(e.span)} ↗</a>
+        <span class="tag">${esc(e.support_level)}</span><span class="tag">${esc(e.kind)}</span></div>`;
+  }
+  if (!evs.length){
+    const why = {
+      quote_mismatch:"quotes could not be found in the cited papers — discarded",
+      unsupported:"papers found, but none actually support this",
+      no_evidence:"no supporting passage retrieved (the search index has known gaps, so this is weaker than a refutation)",
+      error:"retrieval failed"
+    }[c.status] || "unverified";
+    h += `<div class="nothing">${esc(why)}</div>`;
+  }
+  for (const e of bad){
+    const msg = e.verification === "quote_mismatch"
+      ? `discarded — quote not found in ${e.doc_id}: ${e.note}`
+      : `discarded — real quote, does not support the claim`;
+    h += `<div class="failed">✕ ${esc(msg)}</div>`;
+  }
+  return h + `</div>`;
+}
+
+function renderIdea(i){
+  const s = i.score, open = OPEN.has(i.id), dropped = i.status === "dropped";
+  const pending = !s;   // no evidence checked yet — show nothing that implies a verdict
+  const axes = !s ? "" : ["grounding","evidence_strength","mechanistic_plausibility","novelty","testability"]
+    .map(k => `<div class="axis"><div class="lbl"><span>${k.replace(/_/g," ")}</span><span>${s[k].toFixed(2)}</span></div>${bar(s[k])}</div>`)
+    .join("");
+
+  const status = pending
+    ? `<span class="chip-pending">${i.claims.length ? "verifying" : "writing claims"}<span class="dots"><i>.</i><i>.</i><i>.</i></span></span>`
+    : `<div class="grounded">${i.verified_count}/${i.load_bearing_count} verified
+         ${s.cap_applied ? '<div class="capflag">▲ capped</div>' : ''}</div>
+       <div class="score"><div class="n">${s.overall.toFixed(2)}</div>${bar(s.overall)}</div>
+       <span class="pill ${s.recommendation}">${s.recommendation}</span>`;
+
+  return `<div class="card ${open?'open':''} ${dropped?'dropped':''} ${pending?'pending':''}" data-id="${i.id}">
+    <div class="card-head" onclick="toggle('${i.id}')">
+      <div class="rank">${pending ? "" : (i.rank ?? "—")}</div>
+      <div class="card-title">
+        <div class="t">${esc(i.title)}</div>
+        <div class="s">${esc(i.one_liner)}</div>
+        <div class="idcode">${i.id}${dropped ? " · dropped: "+esc(i.drop_reason) : ""}</div>
+      </div>
+      <div class="metrics">${status}</div>
+    </div>
+    <div class="card-body">
+      ${i.mechanism_chain.length ? `<div class="mech"><b>Mechanism</b> &nbsp;${i.mechanism_chain.map(esc).join(" → ")}</div>` : ""}
+      ${axes ? `<div class="axes">${axes}</div>` : ""}
+      ${s && s.cap_applied ? `<div class="failed">Score capped at ${s.grounding_cap.toFixed(2)} — load-bearing claims are unverified.</div>` : ""}
+      ${s && s.rationale ? `<div class="mech">${esc(s.rationale)}</div>` : ""}
+      <h4>Claims</h4>
+      ${i.claims.length
+        ? i.claims.map(renderClaim).join("")
+        : '<div class="nothing">Being decomposed into checkable claims<span class="dots"><i>.</i><i>.</i><i>.</i></span></div>'}
+      ${i.key_risk ? `<h4>Key risk</h4><div class="mech">${esc(i.key_risk)}</div>` : ""}
+      ${i.testability_note ? `<h4>Testability</h4><div class="mech">${esc(i.testability_note)}</div>` : ""}
+      <div class="actions">
+        ${dropped
+          ? `<button onclick="restore('${i.id}')">Restore</button>`
+          : `<button onclick="drop('${i.id}')">Drop this</button>`}
+      </div>
+      ${dropped ? "" : `<div class="fu">
+        <input type="text" id="fu-${i.id}" placeholder="Follow up — investigates in the background…"
+               onkeydown="if(event.key==='Enter')followup('${i.id}')">
+        <button onclick="followup('${i.id}')">Investigate</button></div>`}
+    </div>
+  </div>`;
+}
+
+function render(){
+  if (!STATE) return;
+  $("#keygate").classList.toggle("hidden", STATE.ready);
+  const started = !!STATE.question || !!STATE.busy;
+  $("#hero").classList.toggle("hidden", !STATE.ready || started);
+  $("#main").classList.toggle("hidden", !started);
+  $("#btn-more").classList.toggle("hidden", !started);
+  $("#btn-save").classList.toggle("hidden", !started);
+  $("#question").textContent = STATE.question || "";
+  if (STATE.phase !== undefined && !PHASE_AT && STATE.phase) setPhase(STATE.phase);
+
+  // Controls are inert while a run is in flight — a second submit used to fall
+  // through to the chat branch and quietly start another model call.
+  $("#btn-more").disabled = !!STATE.busy;
+  $("#chatsend").disabled = !!STATE.busy;
+  $("#chatinput").disabled = !!STATE.busy;
+  $("#chatinput").placeholder = STATE.busy ? "Working — wait for this run…" : "Push back, ask, redirect…";
+
+  // Unscored ideas are grouped, never interleaved: ranked() sorts them to 0.0,
+  // which would put a direction nobody has checked above a verified one.
+  const scored  = STATE.ideas.filter(i => i.score);
+  const pending = STATE.ideas.filter(i => !i.score);
+  $("#ideas").innerHTML =
+    scored.map(renderIdea).join("") +
+    (pending.length
+      ? `<div class="sectionhead">Still verifying — not yet ranked</div>` +
+        pending.map(renderIdea).join("")
+      : "");
+  $("#dropped").innerHTML = STATE.dropped.length
+    ? `<div class="sectionhead">Dropped</div>` + STATE.dropped.map(renderIdea).join("") : "";
+
+  const jobs = STATE.jobs || [];
+  $("#jobsbox").classList.toggle("hidden", !jobs.length);
+  $("#jobs").innerHTML = jobs.map(j => `<div class="job">
+      <div class="h">${j.status==="running"?'<span class="spin"></span>':""}
+        <b>${j.idea_id}</b>
+        <span class="pill ${j.verdict==='refutes'?'reject':j.verdict==='strengthens'?'pursue':j.verdict==='weakens'?'park':'investigate'}">${esc(j.verdict||j.status)}</span>
+        <span style="color:var(--dim);font-size:11px;margin-left:auto">${j.elapsed}s</span></div>
+      <div style="color:var(--muted);font-size:12.5px">${esc(j.question)}</div>
+      ${j.answer ? `<div class="ans">${esc(j.answer)}</div>` : ""}
+      ${j.error ? `<div class="failed">${esc(j.error)}</div>` : ""}
+    </div>`).join("");
+
+  const chat = STATE.transcript.filter(t => !t.text.startsWith("dropped ") && !t.text.startsWith("follow-up on "));
+  $("#chat").innerHTML = chat.map(t =>
+    `<div class="chatline ${t.role==='agent'?'agent':''}"><div class="who">${t.role}</div>${esc(t.text)}</div>`).join("");
+  $("#chat").scrollTop = $("#chat").scrollHeight;
+}
+
+function addChat(role, text){
+  const el = document.createElement("div");
+  el.className = "chatline " + (role==="agent"?"agent":"");
+  el.innerHTML = `<div class="who">${role}</div>${esc(text)}`;
+  $("#chat").appendChild(el); $("#chat").scrollTop = $("#chat").scrollHeight;
+}
+
+/* ---------------- actions ---------------- */
+function toggle(id){
+  OPEN.has(id) ? OPEN.delete(id) : OPEN.add(id);
+  document.querySelector(`.card[data-id="${id}"]`)?.classList.toggle("open");
+}
+async function post(url, body){
+  const r = await fetch(url, {method:"POST", headers:{"Content-Type":"application/json"},
+                             body: JSON.stringify(body||{})});
+  const j = await r.json().catch(()=>({}));
+  if (!r.ok) log("error", j.error || "request failed");
+  return j;
+}
+async function drop(id){
+  const reason = prompt("Why drop this? (optional)") ?? "";
+  await post("/api/drop", {idea_id:id, reason});
+}
+async function restore(id){ await post("/api/restore", {idea_id:id}); }
+async function followup(id){
+  const el = $("#fu-"+id); const q = el.value.trim();
+  if (!q) return;
+  el.value = "";
+  await post("/api/followup", {idea_id:id, question:q});
+  log("", `investigating ${id} in the background — keep going`);
+}
+
+$("#ask0").onclick = async () => {
+  const t = $("#q0").value.trim(); if(!t) return;
+  const btn = $("#ask0");
+  btn.disabled = true; btn.textContent = "Working…";
+  // Show the workspace and a phase immediately rather than waiting on the
+  // round-trip — this is the moment the page used to appear to die.
+  ensureWorkspace(); setPhase("Proposing directions");
+  const r = await post("/api/ask", {text:t});
+  if (r && r.error){ btn.disabled = false; btn.textContent = "Formulate"; setPhase(null); }
+};
+$("#chatsend").onclick = send;
+$("#chatinput").onkeydown = e => { if(e.key==="Enter") send(); };
+async function send(){
+  const t = $("#chatinput").value.trim(); if(!t) return;
+  $("#chatinput").value = "";
+  addChat("scientist", t);
+  await post("/api/ask", {text:t});
+}
+$("#btn-more").onclick = () => post("/api/more", {n:3});
+$("#btn-save").onclick = async () => {
+  const j = await post("/api/save");
+  if (j.paths) log("", "saved " + j.paths.join("  "));
+};
+$("#keysave").onclick = async () => {
+  const key = $("#keyinput").value.trim();
+  const r = await fetch("/api/key", {method:"POST", headers:{"Content-Type":"application/json"},
+                                     body: JSON.stringify({key})});
+  const j = await r.json().catch(()=>({}));
+  if (!r.ok){ $("#keyerr").textContent = j.error || "failed"; $("#keyerr").classList.remove("hidden"); }
+  else { $("#keyerr").classList.add("hidden"); }
+};
+$("#keyinput")?.addEventListener("keydown", e => { if(e.key==="Enter") $("#keysave").click(); });
+
+connect();
+</script>
+</body>
+</html>
