@@ -101,3 +101,73 @@ def fetch_input_doc(key, project="../proto"):
     return subprocess.run(
         ["uv", "run", "--project", project, "proto-tools", "input", key],
         capture_output=True, text=True).stdout
+
+
+_SEQUENCE_KINDS = ("sequence", "subsequence")
+
+
+def check(artifact, tool):
+    """Three-valued constraint check. `unknown` NEVER counts as `pass` --
+    failing open would silently reintroduce unusable artifacts."""
+    checks = {}
+
+    kind = tool.get("input_kind")
+    if kind is None:
+        checks["input_kind"] = "unknown"
+    elif kind in ("sequence", "complex"):
+        checks["input_kind"] = f"pass tool takes a {kind}"
+    else:
+        checks["input_kind"] = f"fail tool needs a {kind}, artifact is a sequence"
+
+    molecules = tool.get("molecules")
+    if molecules is None:
+        checks["molecule"] = "unknown"
+    elif artifact["molecule"] in molecules:
+        checks["molecule"] = f"pass {artifact['molecule']}"
+    else:
+        checks["molecule"] = f"fail tool accepts {molecules}, artifact is {artifact['molecule']}"
+
+    alphabet = tool.get("alphabet")
+    if alphabet is None:
+        checks["alphabet"] = "unknown"
+    else:
+        bad = sorted(set(artifact["value"].upper()) - set(alphabet))
+        checks["alphabet"] = "pass" if not bad else f"fail illegal characters {bad}"
+
+    cap = tool.get("max_length")
+    if cap is None:
+        checks["max_length"] = "unknown"
+    elif artifact["length"] <= cap:
+        checks["max_length"] = f"pass {artifact['length']}<={cap}"
+    else:
+        checks["max_length"] = f"fail {artifact['length']}>{cap}"
+
+    return checks
+
+
+def bind_artifact(artifact, catalog):
+    """Bind one artifact to every tool that accepts it."""
+    accepted, rejected, unverified = [], [], []
+    for tool in catalog["tools"]:
+        if artifact["kind"] not in _SEQUENCE_KINDS:
+            continue
+        checks = check(artifact, tool)
+        failed = [k for k, v in checks.items() if v.startswith("fail")]
+        unknown = [k for k, v in checks.items() if v == "unknown"]
+        if failed:
+            rejected.append({"key": tool["key"], "failed": failed[0],
+                             "detail": checks[failed[0]]})
+        elif unknown:
+            unverified.append({"key": tool["key"], "checks": checks,
+                               "unknown": unknown})
+        else:
+            accepted.append({"key": tool["key"], "checks": checks})
+
+    if accepted:
+        status = "runnable"
+    elif unverified:
+        status = "unverified"
+    else:
+        status = "rejected"
+    return {"status": status, "tools": accepted,
+            "unverified": unverified, "rejected_by": rejected}
