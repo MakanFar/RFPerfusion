@@ -185,3 +185,99 @@ def resolve_properties(properties, catalog):
     tools = sorted(t["key"] for t in catalog["tools"]
                    if wanted & set(t.get("measures") or []))
     return {"tools": tools, "requires_new_evaluator": not tools}
+
+
+# `proto-tools output <key>` renders each tool's declarative `metric_spec`
+# as a fixed-width table. It is a rendering of structured data, not free
+# prose, which is why it is worth parsing -- unlike the input docs, whose
+# phrasing varies per author.
+# The `(per X item)` suffix is optional -- bindcraft-design emits a bare
+# `Metrics:`.
+_METRICS_HEADER = re.compile(r"^Metrics(?: \(per (.+?) item\))?:\s*$")
+_METRIC_ROW = re.compile(
+    # Uppercase is legal in a metric name: `dG`, `dG_per_dSASA` are real.
+    r"^  (?P<name>[A-Za-z_][A-Za-z0-9_]*)\s{2,}"
+    r"(?P<type>[^,]+?),\s*"
+    r"range \[(?P<lo>[^,\]]+),\s*(?P<hi>[^\]]+)\],\s*"
+    # Between the range and `better=` there is either an availability phrase
+    # ("always", "when include_pae_matrix=True"), a unit ("REU", "Å^2"), or
+    # BOTH ("%, always"). Captured whole and split below rather than guessed
+    # at here.
+    r"(?P<notes>.+?),\s*"
+    # "context-dependent" is the literal spelling. Matching only "context"
+    # fails the whole row, silently dropping 72 of the 311 rows in the
+    # current catalogue.
+    r"better=(?P<better>higher|lower|context-dependent)"
+    r"(?P<primary>\s*\*primary)?\s*$"
+)
+
+# An availability phrase says WHEN a metric is present; a unit says what it is
+# measured in. When only one annotation is given, these words identify it as
+# an availability rather than a unit.
+_AVAILABILITY_HINTS = ("always", "when ", "depends", "if ", "optional")
+
+
+def _split_annotations(notes):
+    """-> (unit, availability). Either may be empty."""
+    parts = [p.strip() for p in notes.split(",") if p.strip()]
+    if len(parts) >= 2:
+        return ", ".join(parts[:-1]), parts[-1]
+    if not parts:
+        return "", ""
+    only = parts[0]
+    if any(h in only.lower() for h in _AVAILABILITY_HINTS):
+        return "", only
+    return only, ""
+
+
+def _bound(text):
+    """'inf'/'-inf' -> None, since JSON has no infinity literal."""
+    text = text.strip()
+    if text.lstrip("+-") == "inf":
+        return None
+    try:
+        return float(text)
+    except ValueError:
+        return None
+
+
+def parse_metrics_doc(text):
+    """Extract the metric spec table from `proto-tools output <key>`.
+
+    A tool with no Metrics block measures nothing -- that is a real answer
+    (generators, retrievers and aligners produce no scores), not a parse
+    failure, so `failures` stays empty for it. A row inside a block that
+    does NOT parse is recorded, because a silently dropped metric is
+    indistinguishable from a tool that never emitted it.
+    """
+    measures, failures, in_block = [], [], False
+
+    for line in text.splitlines():
+        if _METRICS_HEADER.match(line):
+            in_block = True
+            continue
+        if not in_block:
+            continue
+        if not line.strip():
+            in_block = False
+            continue
+
+        m = _METRIC_ROW.match(line)
+        if m:
+            unit, availability = _split_annotations(m.group("notes"))
+            measures.append({
+                "metric": m.group("name"),
+                "type": m.group("type").strip(),
+                "range": [_bound(m.group("lo")), _bound(m.group("hi"))],
+                "unit": unit,
+                "availability": availability,
+                "better": m.group("better"),
+                "primary": bool(m.group("primary")),
+            })
+        elif line.startswith("      "):
+            # Deeper indent than a row: a continuation of the row above.
+            continue
+        else:
+            failures.append(line.strip())
+
+    return {"measures": measures, "failures": failures}
