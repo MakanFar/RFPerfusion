@@ -33,6 +33,25 @@ def _run(args):
     blob = p.stdout + p.stderr
     if "Not authenticated" in blob:
         raise PaperclipError("paperclip is not authenticated -- run `paperclip login`")
+    # A crashed paperclip is indistinguishable from a genuine no-match unless
+    # we check for this specifically. Confirmed live: under `uv run`,
+    # paperclip's `#!/usr/bin/env python3` shebang picked up this project's
+    # venv Python first on PATH, which doesn't have paperclip's own deps
+    # installed, so it crashed at import with ModuleNotFoundError, printed a
+    # traceback to stderr, produced EMPTY stdout, and exited 1 -- the same
+    # code grep-style "no matches" uses. `_run` used to return that empty
+    # stdout as-is, so a 23-phrase search silently reported 0 papers for
+    # every phrase. A genuine "ran fine, matched nothing" result either has
+    # something on stdout (e.g. "No matches for /.../ in s_xxx") or has no
+    # stderr at all -- only a real crash produces nonzero exit + empty
+    # stdout + nonempty stderr, so that combination is the signal to use.
+    if p.returncode != 0 and not p.stdout and p.stderr:
+        tail = p.stderr[-2000:]
+        raise PaperclipError(
+            f"paperclip {' '.join(args)} exited {p.returncode} with no "
+            f"stdout and output on stderr -- this is a crash, not a "
+            f"genuine no-match (stderr tail):\n{tail}"
+        )
     # Exit 1 means "no results", as in grep. Anything higher is a real failure.
     if p.returncode > 1:
         raise PaperclipError(f"paperclip {' '.join(args)} failed ({p.returncode}):\n{blob}")
@@ -123,26 +142,35 @@ def grep_set(set_id, patterns, ignore_case=False, fixed=False):
 # gated tier once account access allows it -- this default should revert to
 # "structured-extraction" the moment that's true, and nothing else here needs
 # to change.
-def map_papers(set_id, query, schema, worker="quick-reader", n=None,
-               concurrency=32):
+def map_papers(set_id, query, schema, worker="quick-reader", n=None):
     """LLM read across a saved set. Server-side Claude -- no API key here."""
+    # No -j here on purpose. Confirmed live that passing -j at ANY value
+    # triggers the "[error] Parallel map workers are currently limited to
+    # GXL testers" gate on this account, regardless of --worker:
+    #   map --from S --output-schema ... -n 1 "q"                     -> rc=0, works
+    #   map --from S --output-schema ... -n 1 --worker quick-reader "q" -> rc=0, works
+    #   map --from S --output-schema ... -n 1 -j 32 "q"                -> rc=1, gated
+    # So concurrency is left at whatever the server defaults to -- there is
+    # no parameter for it.
     args = ["map", "--from", set_id, "--worker", worker,
-            "--output-schema", json.dumps(schema), "-j", str(concurrency)]
+            "--output-schema", json.dumps(schema)]
     if n:
         args += ["-n", str(n)]
     args.append(query)
     out = _run(args)
-    # `_run` treats exit 1 as "no matches" and returns stdout as-is -- but the
-    # worker-gating error (see the default-worker comment above) also exits 1,
-    # with its message on stderr, so a gated worker looks identical to a
-    # legitimate empty sweep unless we check for the map header we've actually
-    # observed on every successful run ("Map complete: N/M papers" -- see
-    # task-5-report.md Step 5 for the captured bytes).
+    # `_run` treats exit 1 as "no matches" and returns stdout as-is -- but a
+    # gate error also exits 1, with its message on stderr, so a gated call
+    # looks identical to a legitimate empty sweep unless we check for the map
+    # header we've actually observed on every successful run ("Map complete:
+    # N/M papers" -- see task-5-report.md Step 5 for the captured bytes).
     if "Map complete" not in out:
         raise PaperclipError(
-            f"`paperclip map --worker {worker}` returned no map output. "
-            "Non-default workers are gated to GXL testers on this account "
-            "and fail with exit 1 and an empty stdout."
+            f"`paperclip map --worker {worker}` produced no map output "
+            '(no "Map complete" header in stdout). Only that fact is known '
+            "-- not why. Plausible causes: the -j gate (see comment above), "
+            "a genuinely gated worker such as structured-extraction, or an "
+            "unrelated paperclip failure. This message does not assert "
+            "which one occurred."
         )
     return out
 
