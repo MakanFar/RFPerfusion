@@ -14,3 +14,9 @@ biophys-triage = "biophys_triage.run:main"
 
 [tool.setuptools.packages.find]
 include = ["biophys_triage*"]
+
+[dependency-groups]
+dev = ["pytest>=8"]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
