@@ -1,0 +1,149 @@
+{
+  "slug": "rfp",
+  "sources": "pmc,biorxiv",
+  "n": 20,
+  "classes": [
+    {
+      "id": "cryptochrome_rf",
+      "sets": [
+        {
+          "phrase": "CraCRY ODMR",
+          "set_id": "s_a9e5e726",
+          "n_papers": 20
+        },
+        {
+          "phrase": "cryptochrome RF radical pair FAD",
+          "set_id": "s_8c17dc9d",
+          "n_papers": 19
+        },
+        {
+          "phrase": "CraCRY C-terminal extension conformational change",
+          "set_id": "s_0e007400",
+          "n_papers": 18
+        },
+        {
+          "phrase": "cryptochrome flavin redox conformational switching",
+          "set_id": "s_3a17e02e",
+          "n_papers": 19
+        },
+        {
+          "phrase": "cryptochrome ODMR heating artifact",
+          "set_id": "s_e296eab2",
+          "n_papers": 18
+        },
+        {
+          "phrase": "RF cryptochrome null result",
+          "set_id": "s_a631e058",
+          "n_papers": 19
+        },
+        {
+          "phrase": "radical pair conformational coupling",
+          "set_id": "s_8e506dc3",
+          "n_papers": 20
+        },
+        {
+          "phrase": "cryptochrome magnetic effect reproducibility",
+          "set_id": "s_5fdabf1e",
+          "n_papers": 20
+        }
+      ],
+      "n_papers_total": 153,
+      "status": "covered"
+    },
+    {
+      "id": "lov_radical_pair",
+      "sets": [
+        {
+          "phrase": "MagLOV ODMR",
+          "set_id": "s_45db16fe",
+          "n_papers": 20
+        },
+        {
+          "phrase": "AsLOV2 C450A radical pair",
+          "set_id": "s_939ebbc5",
+          "n_papers": 18
+        },
+        {
+          "phrase": "iLOV ODMR",
+          "set_id": "s_dbcf34e5",
+          "n_papers": 20
+        },
+        {
+          "phrase": "LOV2 Jalpha helix conformational change",
+          "set_id": "s_ea60fe83",
+          "n_papers": 19
+        },
+        {
+          "phrase": "FMN radical pair allostery",
+          "set_id": "s_0678eafd",
+          "n_papers": 20
+        },
+        {
+          "phrase": "C450A LOV signaling loss",
+          "set_id": "s_e416fb9a",
+          "n_papers": 20
+        },
+        {
+          "phrase": "LOV radical pair not involved signaling",
+          "set_id": "s_03ac4980",
+          "n_papers": 20
+        },
+        {
+          "phrase": "MagLOV ODMR artifact",
+          "set_id": "s_baed0f89",
+          "n_papers": 19
+        },
+        {
+          "phrase": "RF flavoprotein conformational change",
+          "set_id": "s_2da74dff",
+          "n_papers": 20
+        }
+      ],
+      "n_papers_total": 176,
+      "status": "covered"
+    },
+    {
+      "id": "magnetothermal",
+      "sets": [
+        {
+          "phrase": "radiofrequency thermolysin nanoparticle",
+          "set_id": "s_116a5162",
+          "n_papers": 19
+        },
+        {
+          "phrase": "magnetothermal protein switch",
+          "set_id": "s_5bd0a93f",
+          "n_papers": 17
+        },
+        {
+          "phrase": "magnetic nanoparticle local heating protein",
+          "set_id": "s_fc1affef",
+          "n_papers": 20
+        },
+        {
+          "phrase": "nanoscale heating controversy magnetic nanoparticles",
+          "set_id": "s_04eaf4fd",
+          "n_papers": 20
+        },
+        {
+          "phrase": "specific absorption rate protein conjugate",
+          "set_id": "s_ff243d0e",
+          "n_papers": 19
+        },
+        {
+          "phrase": "bulk heating control RF nanoparticle",
+          "set_id": "s_4510d7d8",
+          "n_papers": 20
+        }
+      ],
+      "n_papers_total": 115,
+      "status": "covered"
+    }
+  ],
+  "rejections": [],
+  "coverage": {
+    "classes_covered": 3,
+    "classes_total": 3,
+    "meets_framework_minimum": false
+  }
+}

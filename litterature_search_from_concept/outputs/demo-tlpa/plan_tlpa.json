@@ -1,0 +1,60 @@
+{
+  "objective": "# design concept :: rf-thermoswitch-tlpa\n\nQUESTION: We are interested in how to design a protein that responds to radio frequencies outside of the range of biological chromophores",
+  "slug": "tlpa",
+  "search_mode": "exact",
+  "mechanism_classes": [
+    {
+      "id": "tlpa",
+      "question": "Deliberately excluded phrases about direct RF/electromagnetic field effects on proteins, ferritin-TRPV1 magnetogenetics, and photoreceptor/chromophore retuning, since those pathways are out of scope and would flood the corpus with non-construct papers; also avoided generic thermostability-engineering terms that return no depositable coiled-coil sequences. Patterns are reserved for two-state switching physics, register/packing determinants, and failure modes (aggregation, avidity, constitutive output) rather than built-in quantity or sequence regexes.",
+      "candidate_evaluators": [],
+      "search_phrases": [
+        "coiled-coil thermosensor",
+        "thermal bioswitch",
+        "temperature-sensitive coiled coil",
+        "parallel homodimeric coiled coil",
+        "designed coiled-coil dimer",
+        "knobs-into-holes packing",
+        "GCN4 leucine zipper",
+        "SpyTag SpyCatcher conjugation",
+        "isopeptide bond formation",
+        "magnetic nanoparticle hyperthermia",
+        "alternating magnetic field heating",
+        "magnetite nanoparticle mineralization",
+        "temperature-sensitive repressor",
+        "split luciferase complementation"
+      ],
+      "mechanism_patterns": [
+        "two-state unfolding",
+        "cooperative unfolding transition",
+        "dimer to monomer",
+        "coiled-coil register",
+        "heptad a and d",
+        "interhelical salt bridge",
+        "buried polar residue",
+        "core packing mutation",
+        "oligomerization state",
+        "trigger sequence",
+        "reversible upon cooling",
+        "irreversible aggregation",
+        "loss of switching",
+        "constitutively active at",
+        "specific absorption rate",
+        "Neel relaxation",
+        "local temperature increase",
+        "avidity effect",
+        "operator binding affinity",
+        "fragment complementation"
+      ]
+    }
+  ],
+  "exclusions": [
+    {
+      "excluded": "Deliberately excluded phrases about direct RF/electromagnetic field effects on proteins, ferritin-TRPV1 magnetogenetics, and photoreceptor/chromophore retuning, since those pathways are out of scope and would flood the corpus with non-construct papers; also avoided generic thermostability-engineering terms that return no depositable coiled-coil sequences. Patterns are reserved for two-state switching physics, register/packing determinants, and failure modes (aggregation, avidity, constitutive output) rather than built-in quantity or sequence regexes.",
+      "reason": "carried verbatim from the design-brief plan's `notes` field by `plan-adopt`, so the planner's reasoning is not lost"
+    }
+  ],
+  "provenance": {
+    "adopted_from": "brief_plan",
+    "source_path": "../formulation_agent007/briefs/rf-demo/plan_rf-thermoswitch-tlpa.json"
+  }
+}

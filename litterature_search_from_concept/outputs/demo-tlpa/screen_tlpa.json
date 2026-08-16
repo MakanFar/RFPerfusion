@@ -1,0 +1,541 @@
+{
+  "slug": "tlpa",
+  "papers": [
+    {
+      "doc_id": "PMC9128120",
+      "extraction_failed": false,
+      "mechanisms": [],
+      "named_proteins": [],
+      "has_sequence": false,
+      "sequence_location": "none",
+      "class_id": "tlpa",
+      "set_id": "s_6b5491fb"
+    },
+    {
+      "doc_id": "PMC5996958",
+      "extraction_failed": false,
+      "has_sequence": true,
+      "mechanisms": [
+        {
+          "chain": "Stu2",
+          "claim": "The parallel homodimeric coiled-coil domain positions the N-terminal TOG domains in proximity to one another to potentially promote longitudinal and/or lateral tubulin:tubulin contacts and drive microtubule polymerization cooperatively.",
+          "measurable_properties": [
+            "tubulin-binding affinity",
+            "microtubule polymerization rate",
+            "thermal stability (Tm)",
+            "oligomeric state"
+          ]
+        }
+      ],
+      "named_proteins": [
+        {
+          "accession": "1D7M",
+          "name": "Cortexillin I"
+        },
+        {
+          "accession": "6BL7",
+          "name": "Stu2"
+        }
+      ],
+      "sequence_location": "figure",
+      "class_id": "tlpa",
+      "set_id": "s_8ca581e1"
+    },
+    {
+      "doc_id": "PMC6175849",
+      "extraction_failed": false,
+      "has_sequence": true,
+      "sequence_location": "supplementary",
+      "mechanisms": [
+        {
+          "chain": "pH-dependent oligomerization and structural switching via protonation of buried glutamic acid residues (Glu-17)",
+          "claim": "Introduction of polar/ionisable residues (such as Glu) into the hydrophobic core allows a pH-dependent switch where varying pH and charge states control stability, hydration, and structural transitions between collapsed and open barrel states.",
+          "measurable_properties": [
+            "thermal unfolding transitions (melting temperature, Tm)",
+            "circular dichroism (CD) spectra/alpha-helicity",
+            "hydrophobic dye binding (DPH / TMA-DPH fluorescence)"
+          ]
+        }
+      ],
+      "named_proteins": [
+        {
+          "name": "GCN4 leucine zipper",
+          "accession": null
+        },
+        {
+          "name": "GCN4-pAA",
+          "accession": null
+        },
+        {
+          "name": "CC-Hex",
+          "accession": null
+        },
+        {
+          "name": "COMP",
+          "accession": null
+        },
+        {
+          "name": "CC-Hept",
+          "accession": null
+        },
+        {
+          "name": "CC-Type2-II-Sg (CC-Hex3)",
+          "accession": "6G67"
+        },
+        {
+          "name": "CC-Type2-LI-Sg (CC-Hex2)",
+          "accession": "4PNA"
+        },
+        {
+          "name": "CC-Type2-IL-Eg (CC-Hex-IL)",
+          "accession": null
+        },
+        {
+          "name": "CC-Type2-IL-Sg",
+          "accession": "6G68"
+        },
+        {
+          "name": "CC-Type2-LL-Sg",
+          "accession": "6G6A"
+        },
+        {
+          "name": "CC-Type2-VV",
+          "accession": "6G65"
+        },
+        {
+          "name": "CC-Type2-IV",
+          "accession": "6G66"
+        },
+        {
+          "name": "CC-Type2-VI",
+          "accession": null
+        },
+        {
+          "name": "CC-Type2-II",
+          "accession": "6G67"
+        },
+        {
+          "name": "CC-Type2-LI",
+          "accession": "4PNA"
+        },
+        {
+          "name": "CC-Type2-deLI",
+          "accession": "6G6E"
+        },
+        {
+          "name": "CC-Type2-LV",
+          "accession": null
+        },
+        {
+          "name": "CC-Type2-VL",
+          "accession": null
+        },
+        {
+          "name": "CC-Type2-IL-Sg-L17E",
+          "accession": "6G69"
+        },
+        {
+          "name": "CC-Type2-LL",
+          "accession": "6G6A"
+        },
+        {
+          "name": "CC-Type2-LL-L17Q",
+          "accession": "6G6B"
+        },
+        {
+          "name": "CC-Type2-LL-L17E",
+          "accession": "6G6C"
+        },
+        {
+          "name": "CC-Type2-IF",
+          "accession": null
+        },
+        {
+          "name": "CC-Type2-FI",
+          "accession": "6G6F"
+        },
+        {
+          "name": "CC-Type2-LF",
+          "accession": "6G6G"
+        },
+        {
+          "name": "5H2L_2.1",
+          "accession": null
+        },
+        {
+          "name": "5H2L_2.1-I9L",
+          "accession": null
+        },
+        {
+          "name": "5H2L_9.1",
+          "accession": null
+        },
+        {
+          "name": "CC-Pent",
+          "accession": null
+        },
+        {
+          "name": "CC-Type2-FV",
+          "accession": null
+        },
+        {
+          "name": "CC-Type2-FL",
+          "accession": null
+        },
+        {
+          "name": "CC-Type2-FF",
+          "accession": null
+        }
+      ],
+      "class_id": "tlpa",
+      "set_id": "s_7c4c6301"
+    },
+    {
+      "doc_id": "PMC7126439",
+      "extraction_failed": false,
+      "has_sequence": true,
+      "mechanisms": [
+        {
+          "chain": "Viral envelope proteins / GCN4 mutants",
+          "claim": "Polymorphic interactions between heptad repeat regions provide a reservoir of free energy that can be released to drive structural transitions in a precise temporal sequence required for membrane fusion, and conserved charged residues at e and g positions impart a negative design element to disfavor thermodynamically more stable antiparallel tetramers.",
+          "measurable_properties": [
+            "thermal stability (Tm)",
+            "molecular weight / oligomeric state via sedimentation equilibrium",
+            "circular dichroism (CD) ellipticity"
+          ]
+        }
+      ],
+      "named_proteins": [
+        {
+          "name": "GCN4 leucine zipper",
+          "accession": null
+        },
+        {
+          "name": "GCN4-pR",
+          "accession": null
+        },
+        {
+          "name": "GCN4-pA",
+          "accession": "2B1F"
+        },
+        {
+          "name": "GCN4-pV",
+          "accession": "2B22"
+        },
+        {
+          "name": "GCN4-p1",
+          "accession": null
+        },
+        {
+          "name": "GCN4-pIL",
+          "accession": "1GCL"
+        },
+        {
+          "name": "SARS coronavirus S2 protein",
+          "accession": null
+        },
+        {
+          "name": "lac repressor",
+          "accession": "1LBI"
+        },
+        {
+          "name": "rop protein",
+          "accession": "1ROP"
+        },
+        {
+          "name": "WSPLB 21-52",
+          "accession": "1YOD"
+        }
+      ],
+      "sequence_location": "figure",
+      "class_id": "tlpa",
+      "set_id": "s_21053a49"
+    },
+    {
+      "doc_id": "PMC8455372",
+      "extraction_failed": false,
+      "mechanisms": [
+        {
+          "chain": "SpyTag/SpyCatcher conjugation and Split-GFP dimerization",
+          "claim": "SpyTag/SpyCatcher-mediated covalent conjugation improves Split-GFP dimerization, which promotes stable dimerization of NCre/CCre halves to reconstitute Cre recombinase activity.",
+          "measurable_properties": [
+            "fluorescence intensity of GFP",
+            "frequency of TdTomato+ cells",
+            "recombinase activity",
+            "luciferase activity"
+          ]
+        }
+      ],
+      "has_sequence": true,
+      "sequence_location": "methods",
+      "named_proteins": [
+        {
+          "name": "Cre",
+          "accession": "KC800700.1"
+        },
+        {
+          "name": "\u0394N17Cre",
+          "accession": null
+        },
+        {
+          "name": "GFP",
+          "accession": null
+        },
+        {
+          "name": "NCre",
+          "accession": null
+        },
+        {
+          "name": "CCre",
+          "accession": null
+        },
+        {
+          "name": "Thy1.1",
+          "accession": null
+        },
+        {
+          "name": "NGFR",
+          "accession": null
+        },
+        {
+          "name": "SpyTag",
+          "accession": null
+        },
+        {
+          "name": "SpyCatcher",
+          "accession": null
+        }
+      ],
+      "class_id": "tlpa",
+      "set_id": "s_58b2f577"
+    },
+    {
+      "doc_id": "PMC10702597",
+      "extraction_failed": false,
+      "mechanisms": [
+        {
+          "chain": "Ub (46\u201376) / ubiquitin",
+          "claim": "Isopeptide bond formation is mediated by a \u03b4-selenolysine residue (via \u03b4-selenolysine-mediated ligation followed by one-pot deselenization), which allows traceless isopeptide bond formation without desulfurizing native cysteine residues.",
+          "measurable_properties": [
+            "Retention time on reversed-phase (RP) HPLC",
+            "Molecular weight via ESI-MS / LC-MS",
+            "Tryptic digestion fragment masses"
+          ]
+        }
+      ],
+      "has_sequence": true,
+      "sequence_location": "supplementary",
+      "named_proteins": [
+        {
+          "name": "ubiquitin",
+          "accession": null
+        },
+        {
+          "name": "CCL1",
+          "accession": null
+        },
+        {
+          "name": "H2B",
+          "accession": null
+        },
+        {
+          "name": "\u03b1-synuclein",
+          "accession": null
+        }
+      ],
+      "class_id": "tlpa",
+      "set_id": "s_e76baa04"
+    },
+    {
+      "doc_id": "PMC8467495",
+      "extraction_failed": false,
+      "mechanisms": [],
+      "has_sequence": false,
+      "sequence_location": "none",
+      "named_proteins": [
+        {
+          "name": "ferritin",
+          "accession": null
+        },
+        {
+          "name": "transferrin",
+          "accession": null
+        }
+      ],
+      "class_id": "tlpa",
+      "set_id": "s_774b95c5"
+    },
+    {
+      "doc_id": "PMC9417684",
+      "extraction_failed": false,
+      "mechanisms": [],
+      "has_sequence": false,
+      "sequence_location": "none",
+      "named_proteins": [],
+      "class_id": "tlpa",
+      "set_id": "s_39a9915c"
+    },
+    {
+      "doc_id": "PMC2894183",
+      "extraction_failed": false,
+      "mechanisms": [],
+      "has_sequence": false,
+      "sequence_location": "none",
+      "named_proteins": [],
+      "class_id": "tlpa",
+      "set_id": "s_03082edb"
+    },
+    {
+      "doc_id": "PMC2327240",
+      "extraction_failed": false,
+      "has_sequence": true,
+      "mechanisms": [
+        {
+          "chain": "bacteriophage lambda CI repressor",
+          "claim": "Inactivation of the lambda CI repressor can be initiated either by heat treatment of a temperature-sensitive repressor (causing direct denaturation) or by DNA damage activating the host SOS response where RecA promotes auto-cleavage.",
+          "measurable_properties": [
+            "fluorescence levels from promoter-gfp fusions",
+            "promoter activity",
+            "phage yield"
+          ]
+        },
+        {
+          "chain": "lambda CII transcriptional activator",
+          "claim": "CII function is eliminated/downregulated following prophage induction (via FtsH/HflKC proteases after heat induction, or post-transcriptional downregulation overcoming Cro regulation).",
+          "measurable_properties": [
+            "pE-gfp expression levels",
+            "CII protein levels by Western blot"
+          ]
+        }
+      ],
+      "sequence_location": "methods",
+      "named_proteins": [
+        {
+          "accession": null,
+          "name": "CI repressor"
+        },
+        {
+          "accession": null,
+          "name": "CII"
+        },
+        {
+          "accession": null,
+          "name": "Cro"
+        },
+        {
+          "accession": null,
+          "name": "Q"
+        },
+        {
+          "accession": null,
+          "name": "FtsH"
+        },
+        {
+          "accession": null,
+          "name": "HflB"
+        },
+        {
+          "accession": null,
+          "name": "HflKC"
+        },
+        {
+          "accession": null,
+          "name": "HflK"
+        },
+        {
+          "accession": null,
+          "name": "CIII"
+        },
+        {
+          "accession": null,
+          "name": "RecA"
+        },
+        {
+          "accession": null,
+          "name": "LexA"
+        },
+        {
+          "accession": null,
+          "name": "GFP"
+        },
+        {
+          "accession": null,
+          "name": "RNase III"
+        },
+        {
+          "accession": null,
+          "name": "Lon"
+        },
+        {
+          "accession": null,
+          "name": "HtpX"
+        },
+        {
+          "accession": null,
+          "name": "ClpY"
+        },
+        {
+          "accession": null,
+          "name": "ClpQ"
+        }
+      ],
+      "class_id": "tlpa",
+      "set_id": "s_1a363326"
+    },
+    {
+      "doc_id": "PMC5113697",
+      "extraction_failed": false,
+      "has_sequence": true,
+      "mechanisms": [
+        {
+          "chain": "The paper establishes supramolecular split-enzyme complementation through host-guest binding, where split-luciferase fragment pairs functionalized with an N-terminal FGG sequence are brought together via cucurbit[8]uril (Q8) binding to restore enzymatic activity (on-off switching).",
+          "claim": "Supramolecular split-luciferase complementation and on-off switching via Q8 host-guest binding and competitive inhibitors.",
+          "measurable_properties": [
+            "luminescence intensity",
+            "enzymatic activity"
+          ]
+        }
+      ],
+      "named_proteins": [
+        {
+          "accession": null,
+          "name": "firefly luciferase"
+        },
+        {
+          "accession": null,
+          "name": "NFluc416"
+        },
+        {
+          "accession": null,
+          "name": "CFluc398"
+        },
+        {
+          "accession": null,
+          "name": "NFluc437"
+        },
+        {
+          "accession": null,
+          "name": "CFluc438"
+        },
+        {
+          "accession": null,
+          "name": "TEV protease"
+        }
+      ],
+      "sequence_location": "supplementary",
+      "class_id": "tlpa",
+      "set_id": "s_2d95ac79"
+    }
+  ],
+  "flagged": [
+    "PMC5996958",
+    "PMC6175849",
+    "PMC7126439",
+    "PMC8455372",
+    "PMC10702597",
+    "PMC2327240",
+    "PMC5113697"
+  ],
+  "failed": [],
+  "extracted_by": "quick-reader"
+}
