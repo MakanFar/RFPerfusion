@@ -1,0 +1,17 @@
+[mcp_servers.proto-tools]
+command = "uv"
+args = [
+  "run",
+  "--project",
+  "proto",
+  "proto-tools-mcp",
+  "--device",
+  "modal",
+]
+startup_timeout_sec = 30
+tool_timeout_sec = 3600
+enabled = true
+
+[mcp_servers.proto-tools.env]
+MODAL_ENVIRONMENT = "main"
+PROTO_MODAL_SCALEDOWN_WINDOW = "30"
