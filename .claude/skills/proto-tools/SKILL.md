@@ -7,6 +7,18 @@ description: Discover, deploy, and run computational-biology and biological-AI t
 
 Use the `proto-tools` MCP server as the machine interface. Keep tool selection, schemas, execution, and results structured; do not generate ad hoc Python unless the MCP server cannot express a required operation.
 
+## Scope boundary
+
+This skill covers **single tool invocations** — one model, one input, one result. Fetching a record, predicting a structure, scoring a known sequence, benchmarking a fixed candidate set.
+
+It does not cover **iterative design**. When the request requires proposing candidates, scoring them, selecting survivors, and repeating, do not loop `run_tool` from the conversation. That search belongs in an optimizer, where it is reproducible, runs without consuming model context, and does not spend one model round-trip per candidate.
+
+- Iterative search over many rounds → use the `write-program` skill.
+- A scoring function that does not exist in the catalogue → use the `implement-constraint` skill.
+- Everything else → continue here.
+
+The prohibition on ad hoc Python above applies to substituting hand-written code for an available tool call. It does not apply to authoring a proto-language program, which is the supported way to express a design run.
+
 ## Run workflow
 
 1. Call `workspace_info` before the first operation in a session. If credentials or the Modal environment are unavailable, read [references/setup.md](references/setup.md) and report the exact failing prerequisite.
@@ -34,6 +46,7 @@ Use the `proto-tools` MCP server as the machine interface. Keep tool selection, 
 ## Guardrails
 
 - Treat Modal deployment and execution as billable actions.
+- Never implement an optimization loop by repeatedly calling `run_tool`. Hand the search to `write-program` instead.
 - Keep the environment fixed to `main` unless the user explicitly chooses another environment.
 - Never expose `~/.modal.toml`, tokens, gated-model credentials, or secret values.
 - Do not bypass gated-model licenses. Explain the required acceptance or secret setup.

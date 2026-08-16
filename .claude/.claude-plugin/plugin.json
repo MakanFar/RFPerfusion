@@ -1,0 +1,5 @@
+{
+  "name": "rfperfusion",
+  "version": "0.1.0",
+  "description": "RFPerfusion pipeline skills: literature mining, grounded formulation, proto-tools execution on Modal, proto-language program authoring, custom constraint implementation, and design visualization."
+}
