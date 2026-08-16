@@ -1,0 +1,4 @@
+interface:
+  display_name: "Literature Knowledge Base (litkb)"
+  short_description: "Mine literature into typed evidence bounded by proto-tools"
+  default_prompt: "Use $litkb to mine the literature for my design concept and keep only sequences a proto tool can actually run."

@@ -1,113 +1,54 @@
 ---
 name: litkb
-description: Use when turning a protein-design concept into cited, typed literature evidence — mining PubMed Central and bioRxiv full text into EvidenceItem records for the ideation layer of docs/PRD-framework.md. Triggers on "find evidence for", "literature search from concept", "build a knowledge base", "what does the literature say about <mechanism>", or any request to ground design routes in citations.
+description: Mine Paperclip full text into typed evidence and proto-runnable sequence artifacts from a design concept. Use when literature findings must be machine-consumable rather than a prose knowledge base — extracting mechanisms with their measurable properties, candidate sequences verified present in their source, and the proto-tools that could actually score them.
 ---
 
-# litkb — concept to typed evidence
+# litkb — literature to typed, proto-bounded evidence
 
-Nine deterministic tool calls over the `paperclip` corpus. You supply every
-judgement; the tool supplies plumbing and citations.
+Discrete subcommands over the `paperclip` corpus. You supply every judgement; the tool supplies plumbing, constraint checking, and citations.
 
-**The split that matters:** `litkb` never invents a claim, a support level, or
-a mechanism class. It searches, greps, parses, and fetches citation metadata.
-You write the plan and you write the labels. Judgement fields on every
-EvidenceItem start `null` by construction, and `litkb validate` refuses to
-pass items that still are.
+Related but different: `mine-literature-from-concept` runs `paperclip_kb.py` and emits a grep-based knowledge base for human reading. `litkb` reads full text with an LLM and emits typed records for machine consumption. Both are discovery, not verification.
 
-## Setup
+Read [references/output-contract.md](references/output-contract.md) before interpreting or forwarding anything this skill emits.
 
-Requires Python >= 3.10 and an authenticated `paperclip` (both `paperclip` and
-this package use `str | None`, so a 3.9 interpreter fails at import). Check
-with `paperclip config` — if it shows an auth error, tell the user to run
-`paperclip login` themselves; it is an interactive browser flow you cannot
-complete.
+## Run workflow
 
-Run from `litterature_search_from_concept/` as `python -m litkb <cmd>`.
+1. Confirm `paperclip config` shows an authenticated account. `paperclip login` is an interactive browser flow — report it and stop rather than attempting it.
+2. Create a run directory under `litterature_search_from_concept/outputs/` using a UTC timestamp and a short slug. Pass it as `--output-dir`.
+3. Get a plan, by whichever route applies:
+   - From `design-brief-007`: `plan-adopt <brief-plan> --objective "<question>" --slug <slug>`. The brief's plan is already validated; do not re-plan it.
+   - From a curated keyword CSV: `plan-import <csv> <groups.json>`, where groups maps each mechanism class to its rows. An unassigned row is an error, not a silent drop.
+   - Written by you: start from `plan-template`.
+4. `plan-validate <plan> --probe` before searching. It reports per-phrase yield and warns when one class will swamp the corpus.
+5. `search` → `screen` → `dig` → `bind`, then `evidence` → `label` → `validate` → `report`, then `manifest`.
+6. Report the coverage summary, what was rejected and why, and the evidence status. Link every emitted file.
 
-## The pipeline
+Run from `litterature_search_from_concept/` as `uv run --project . python -m litkb <cmd>`. Every command reads JSON and writes JSON, so any stage can be inspected or retried alone.
 
-```
-plan-template ─▶ (you write the plan) ─▶ plan-validate --probe
-                                              │
-                                              ▼
-                    search ─▶ extract ─▶ evidence ─▶ label ─▶ validate ─▶ report
-                                                       ▲
-                                              (you write the labels)
-```
+## Cost
 
-| Command | In | Out |
-|---|---|---|
-| `plan-template` | — | empty plan skeleton |
-| `plan-validate PLAN [--probe]` | plan | schema errors + per-phrase yield |
-| `search PLAN` | plan | set IDs + per-class coverage |
-| `extract PLAN SEARCH` | plan, search | raw categorized hits |
-| `evidence HITS` | hits | draft `EvidenceItem[]` |
-| `label EVIDENCE LABELS` | evidence, your labels | labelled evidence |
-| `validate EVIDENCE` | evidence | pass/fail for L1 entry |
-| `registry-check PLAN` | plan | evaluator coverage per class |
-| `report EVIDENCE --search S` | evidence | human-readable knowledge base |
+`screen` and `dig` are LLM passes over full text and spend the user's Paperclip account.
 
-Every command writes JSON to stdout, or to `-o FILE`.
+`screen` reads every paper in every set. Use `-n` to cap papers per set for a pilot before committing to a full corpus. `dig` re-reads each set containing at least one flagged paper — paperclip cannot scope a read to specific document ids, so the flagged subset cannot be targeted, and `dig` logs flagged-against-total per set so the waste is visible. Sets with nothing flagged are skipped.
 
-## Writing the plan
+Get approval before a full run on a large corpus.
 
-The unit is the **mechanism class**, not the phrase. The framework measures
-coverage over classes and wants at least six, so one class per distinct
-physical route — not six rewordings of one route.
+## Paperclip constraints this skill works around
 
-Per class: an `id`, the `question` it answers, `search_phrases`, and
-`mechanism_patterns`.
+Verified against 0.7.36. Re-check if that version moves.
 
-**`search_phrases` are matched as strict literals.** Write phrases authors
-actually put in a title or abstract. Compound phrases you assemble yourself
-return nothing — "engineered magnetoreceptor" and "magnetic field effect on
-enzyme" both returned 0 papers in testing, while "radical pair mechanism" and
-"magnetic torque" work. Always run `plan-validate --probe` before `search`; it
-flags zero-yield phrases and any single class about to swamp the corpus.
+- `map` rejects any `-j` concurrency flag: "Parallel map workers are currently limited to GXL testers". The gate is on `-j`, not the worker.
+- `--worker structured-extraction` is gated. `exhaustive-extraction` is not, but needs `--claim-schema` and an active repo — repos are opt-in, so ask before creating one. Both passes currently run `quick-reader`.
+- Paperclip's launcher is `#!/usr/bin/env python3`; under `uv run` that resolves to a venv without its dependencies and it crashes on import. Strip `VIRTUAL_ENV` before invoking it.
+- Exit code 1 means "no matches" — but a crashed paperclip also exits 1 with empty stdout. Never treat exit 1 alone as an empty result.
+- `search` has no `--tag` and does not accumulate; `merge` resolves only its first argument. Every set ID must be carried separately.
 
-**`mechanism_patterns`** are case-insensitive fragments that mark mechanistic
-content — the physical basis, rate-limiting steps, failure modes.
-"excited-state proton transfer" is useful; "protein" is not.
+## Guardrails
 
-Structural patterns (sequences, accessions, PDB IDs, mutations) are hardcoded
-in `litkb/patterns.py` and are not yours to plan — they do not vary by concept.
-
-## Writing labels
-
-`evidence` gives you drafts with a verbatim `provenance.span` and a citation.
-Read the span, then write a labels file:
-
-```json
-[{"id": "ev_001", "claim": "Water absorption is the primary energy-absorption mechanism for infrared neural stimulation",
-  "claim_type": "mechanism", "support": "established",
-  "evidence_kind": "experimental", "confidence": 0.9}]
-```
-
-`support` is `established | contested | speculative` and is load-bearing:
-**nothing marked speculative may become a hard constraint downstream.** Label
-from the span in front of you, not from memory. `provenance` is tool-owned and
-`label` rejects any attempt to rewrite it.
-
-## Reading the output
-
-`search` reports `coverage.meets_framework_minimum`. If false, add mechanism
-classes rather than more phrases to existing ones.
-
-`registry-check` returns `requires_new_evaluator` for classes nothing can
-evaluate. Per framework §77 that is a legitimate output to report to the
-scientist, not a discard — the evaluator registry constrains what is worth
-ideating. There is currently **no registry on disk**; `registry/evaluators.json`
-was removed in commit `945164f` with the Tamarind integration, so the command
-returns `status: missing` and coverage `unknown` until something replaces it.
-
-Zero-yield phrases and empty classes are recorded as `rejections` and carried
-into the report — rejection is a first-class output.
-
-## Known limits
-
-- `extract` truncates long per-document hit lists; `provenance.truncated_after`
-  records how many were dropped.
-- Hits are paragraph-level, so citation URLs have no `#L` line anchor.
-- `PDB[ :]?[0-9][A-Za-z0-9]{3}` still matches the software name "PDB2PQR".
-- `paperclip merge` is broken upstream (resolves only its first argument), which
-  is why every set ID is carried separately rather than unioned.
+- Never present litkb output as evidence. Everything carries `evidence_status: discovery_only_unverified`, and it propagates into anything assembled from it.
+- Never treat an artifact in `artifacts[]` as validated. Binding is a schema check against the constraint table; nothing has been executed.
+- Never let an `unknown` constraint check count as a pass. An unparsed limit yields `unverified`, which does not enter `artifacts[]`.
+- Never accept a sequence that failed source confirmation, whatever its constraint status. A fabricated sequence passes every alphabet and length check.
+- Never fill `support` yourself from memory. Read the span and label it, or leave it unlabelled and let `validate` block it.
+- Never rewrite an empty category as evidence that the literature contains nothing. Zero-yield phrases and empty classes are diagnostics.
+- Regenerate `registry/proto_catalog.json` with `proto-sync` rather than hand-editing it; `measures` and `status` are the only curated fields.
