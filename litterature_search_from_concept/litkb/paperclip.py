@@ -110,7 +110,18 @@ def grep_set(set_id, patterns, ignore_case=False):
     return hits
 
 
-def map_papers(set_id, query, schema, worker="structured-extraction", n=None,
+# Default is "quick-reader", not "structured-extraction", even though the
+# latter is the tier this module's callers conceptually want. Confirmed live
+# (see litkb/reader.py and task-5-report.md Step 5): every non-default worker
+# -- structured-extraction, exhaustive-extraction, eligibility-screen -- is
+# currently gated to GXL testers on this account and fails fast with
+# "[error] Parallel map workers are currently limited to GXL testers" before
+# reading a single paper. quick-reader is the only worker this account can
+# run, and it does support --output-schema. Pass worker= explicitly to use a
+# gated tier once account access allows it -- this default should revert to
+# "structured-extraction" the moment that's true, and nothing else here needs
+# to change.
+def map_papers(set_id, query, schema, worker="quick-reader", n=None,
                concurrency=32):
     """LLM read across a saved set. Server-side Claude -- no API key here."""
     args = ["map", "--from", set_id, "--worker", worker,

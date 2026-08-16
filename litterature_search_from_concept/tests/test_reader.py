@@ -1,4 +1,6 @@
-from litkb import reader
+from unittest.mock import patch
+
+from litkb import paperclip, reader
 
 # Real `paperclip map` stdout is human-formatted text, not a JSON envelope
 # (confirmed live against PMC6200754 -- see reader.py comment above
@@ -43,3 +45,24 @@ def test_parse_map_output_keeps_doc_id_alongside_output():
 def test_flagged_papers_are_those_claiming_a_sequence():
     flagged = reader.flagged_for_dig(reader.parse_map_output(RAW))
     assert flagged == ["PMC1"]
+
+
+def test_map_papers_defaults_to_quick_reader_because_other_workers_are_gated():
+    """structured-extraction/exhaustive-extraction/eligibility-screen are
+    gated to GXL testers on this account (confirmed live -- see
+    task-5-report.md Step 5); quick-reader is the only one that runs. If
+    someone restores the gated default, this should fail loudly instead of
+    only failing on a live call."""
+    captured_args = []
+
+    def mock_run(args):
+        captured_args.append(args)
+        return ""
+
+    with patch("litkb.paperclip._run", side_effect=mock_run):
+        paperclip.map_papers("s_abc123", "a query", {"type": "object"})
+
+    assert captured_args
+    assert "--worker" in captured_args[0]
+    i = captured_args[0].index("--worker")
+    assert captured_args[0][i + 1] == "quick-reader"
