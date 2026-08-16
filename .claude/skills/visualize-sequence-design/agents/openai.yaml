@@ -1,0 +1,4 @@
+interface:
+  display_name: "Visualize Sequence Design"
+  short_description: "Compare input and designed biological sequences"
+  default_prompt: "Use $visualize-sequence-design to compare an input sequence with the final designed sequence."
