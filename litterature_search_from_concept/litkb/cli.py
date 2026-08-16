@@ -38,6 +38,30 @@ def _fail(lines):
     sys.exit(1)
 
 
+def _resolve_out(args, default_name):
+    """Resolve where an artifact-writing command should write.
+
+    --output-dir is additive, never a replacement for -o: with neither set,
+    a caller keeps printing to stdout exactly as before (`_emit`'s existing
+    behaviour). With --output-dir alone, the artifact lands at
+    <output-dir>/<default_name>, following the run-directory convention the
+    other skills use (outputs/<UTC-timestamp>-<slug>/...) -- the timestamped
+    directory itself is the caller's job to create and pass in, same as
+    paperclip_kb.py's own --output-dir. With both set, -o is treated as a
+    filename inside --output-dir unless it is already absolute, in which
+    case the explicit absolute path wins as a deliberate override.
+    """
+    out_dir = getattr(args, "output_dir", None)
+    out = getattr(args, "out", None)
+    if not out_dir:
+        return out
+    base = Path(out_dir)
+    if out:
+        out_path = Path(out)
+        return str(out_path if out_path.is_absolute() else base / out_path)
+    return str(base / default_name)
+
+
 # ----------------------------------------------------------------- plan
 
 TEMPLATE = {
@@ -95,7 +119,17 @@ def cmd_plan_import(args):
     rows = [line.strip() for line in Path(args.csv).read_text().splitlines()[1:]
             if line.strip()]
     groups = _load(args.groups)
-    _emit(rows_to_plan(rows, args.objective, args.slug, groups), args.out)
+    plan = rows_to_plan(rows, args.objective, args.slug, groups)
+    _emit(plan, _resolve_out(args, f"plan_{args.slug}.json"))
+
+
+def cmd_plan_adopt(args):
+    """Lift a design-brief's flat plan_<slug>.json into litkb's
+    class-structured plan. See contracts.adopt_brief_plan for the mapping
+    and why a one-class plan here is correct, not degraded."""
+    brief_plan = _load(args.plan)
+    adopted = contracts.adopt_brief_plan(brief_plan, args.objective, args.slug, args.plan)
+    _emit(adopted, _resolve_out(args, f"plan_{args.slug}.json"))
 
 
 def cmd_plan_template(args):
@@ -161,7 +195,7 @@ def cmd_search(args):
         _fail(errors)
 
     exact = plan.get("search_mode") != "semantic"
-    out = {"slug": plan["slug"], "sources": args.sources, "classes": [],
+    out = {"slug": plan["slug"], "sources": args.sources, "n": args.n, "classes": [],
            "rejections": list(plan.get("exclusions", []))}
 
     for c in plan["mechanism_classes"]:
@@ -200,7 +234,7 @@ def cmd_search(args):
     out["coverage"] = {"classes_covered": covered,
                        "classes_total": len(out["classes"]),
                        "meets_framework_minimum": covered >= 6}
-    _emit(out, args.out)
+    _emit(out, _resolve_out(args, f"search_{plan['slug']}.json"))
 
 
 # ---------------------------------------------------------- screen / dig / bind
@@ -234,7 +268,8 @@ def cmd_screen(args):
     print(f"  {len(flagged)}/{len(records)} papers claim a sequence, "
           f"{len(failed)} failed extraction", file=sys.stderr)
     _emit({"slug": found["slug"], "papers": records, "flagged": flagged,
-           "failed": failed, "extracted_by": SCREEN_WORKER}, args.out)
+           "failed": failed, "extracted_by": SCREEN_WORKER},
+          _resolve_out(args, f"screen_{found['slug']}.json"))
 
 
 # Worker actually invoked by cmd_dig for both sequence and mutation reads --
@@ -292,7 +327,12 @@ def cmd_dig(args):
     n_seq = sum(1 for a in artifacts if a["kind"] != "mutation")
     n_mut = len(artifacts) - n_seq
     print(f"  {n_seq} candidate sequences, {n_mut} mutations", file=sys.stderr)
-    _emit({"slug": screened["slug"], "artifacts": artifacts}, args.out)
+    # extracted_by is threaded at the top level (not just per-artifact
+    # provenance.extractor) so `litkb manifest` can record the worker dig
+    # actually used even on a run where dig flagged zero sequences and
+    # `artifacts` came back empty.
+    _emit({"slug": screened["slug"], "artifacts": artifacts, "extracted_by": DIG_WORKER},
+          _resolve_out(args, f"dig_{screened['slug']}.json"))
 
 
 def cmd_bind(args):
@@ -351,7 +391,8 @@ def cmd_bind(args):
                                          art["proto_binding"]["unverified"]})
 
     print(f"  {len(kept)} runnable, {len(rejections)} rejected", file=sys.stderr)
-    _emit({"slug": dug["slug"], "artifacts": kept, "rejections": rejections}, args.out)
+    _emit({"slug": dug["slug"], "artifacts": kept, "rejections": rejections},
+          _resolve_out(args, f"artifacts_{dug['slug']}.json"))
 
 
 # ------------------------------------------------------------- evidence
@@ -385,7 +426,8 @@ def cmd_evidence(args):
     need_eval = sum(1 for i in items if i["testable_by"]["requires_new_evaluator"])
     print(f"  {len(items)} items, {need_eval} need a new evaluator", file=sys.stderr)
     _emit({"slug": screened["slug"], "items": items,
-           "unlabelled": len(contracts.validate_items(items))}, args.out)
+           "unlabelled": len(contracts.validate_items(items))},
+          _resolve_out(args, f"evidence_{screened['slug']}.json"))
 
 
 def cmd_label(args):
@@ -470,9 +512,73 @@ def cmd_registry_check(args):
 
 def cmd_report(args):
     ev = _load(args.evidence)
-    text = report.render(ev, _load(args.search) if args.search else None)
-    Path(args.out).write_text(text)
-    print(f"-> {args.out}", file=sys.stderr)
+    search_path = getattr(args, "search", None)
+    artifacts_path = getattr(args, "artifacts", None)
+    search = _load(search_path) if search_path else None
+    artifacts = _load(artifacts_path) if artifacts_path else None
+    text = report.render(ev, search, artifacts)
+
+    out = _resolve_out(args, f"knowledge_base_{ev['slug']}.txt")
+    if not out:
+        _fail(["report needs an output path: pass -o FILE or --output-dir DIR"])
+    Path(out).parent.mkdir(parents=True, exist_ok=True)
+    Path(out).write_text(text)
+    print(f"-> {out}", file=sys.stderr)
+
+    # report is the terminal step of a run per the output contract (a run
+    # directory holds plan_, knowledge_base_, and manifest_) -- so it emits
+    # manifest_<slug>.json alongside its own output too, from whatever stage
+    # inputs it was actually given, rather than requiring a separate
+    # `litkb manifest` invocation on every run.
+    plan_path = getattr(args, "plan", None)
+    screen_path = getattr(args, "screen", None)
+    dig_path = getattr(args, "dig", None)
+    plan = _load(plan_path) if plan_path else None
+    screen = _load(screen_path) if screen_path else None
+    dig = _load(dig_path) if dig_path else None
+    objective = getattr(args, "objective", None) or (plan or {}).get("objective")
+    manifest = contracts.build_manifest(
+        slug=ev["slug"], objective=objective, search=search, screen=screen, dig=dig,
+        artifacts=artifacts, evidence=ev,
+        paths={"plan": plan_path, "search": search_path, "screen": screen_path,
+               "dig": dig_path, "artifacts": artifacts_path, "evidence": args.evidence,
+               "report": out},
+    )
+    _emit(manifest, str(Path(out).parent / f"manifest_{ev['slug']}.json"))
+
+
+# ------------------------------------------------------------- manifest
+
+
+def cmd_manifest(args):
+    """Assemble manifest_<slug>.json from whatever stage outputs the caller
+    has on disk. Every input is optional (design goal: a partial run must
+    still produce a manifest describing what exists), so slug/objective are
+    recovered from --slug/--objective first and from any provided stage
+    JSON's own slug/objective fields second."""
+    plan = _load(args.plan) if args.plan else None
+    search = _load(args.search) if args.search else None
+    screen = _load(args.screen) if args.screen else None
+    dig = _load(args.dig) if args.dig else None
+    artifacts = _load(args.artifacts) if args.artifacts else None
+    evidence = _load(args.evidence) if args.evidence else None
+
+    slug = (args.slug or (plan or {}).get("slug") or (search or {}).get("slug") or
+            (screen or {}).get("slug") or (dig or {}).get("slug") or
+            (artifacts or {}).get("slug") or (evidence or {}).get("slug"))
+    if not slug:
+        _fail(["manifest needs a slug: pass --slug, or one of "
+               "--plan/--search/--screen/--dig/--artifacts/--evidence whose "
+               "JSON carries one"])
+    objective = args.objective or (plan or {}).get("objective")
+
+    manifest = contracts.build_manifest(
+        slug=slug, objective=objective, search=search, screen=screen, dig=dig,
+        artifacts=artifacts, evidence=evidence,
+        paths={"plan": args.plan, "search": args.search, "screen": args.screen,
+               "dig": args.dig, "artifacts": args.artifacts, "evidence": args.evidence},
+    )
+    _emit(manifest, _resolve_out(args, f"manifest_{slug}.json"))
 
 
 # ------------------------------------------------------------------ cli
@@ -500,37 +606,51 @@ def main(argv=None):
     p.add_argument("--objective", required=True)
     p.add_argument("--slug", required=True)
     p.add_argument("-o", "--out")
+    p.add_argument("--output-dir")
     p.set_defaults(fn=cmd_plan_import)
+
+    p = sub.add_parser("plan-adopt", help="lift a design-brief's flat plan into litkb's class-structured plan")
+    p.add_argument("plan", help="the brief's plan_<slug>.json (search_phrases/mechanism_patterns/notes)")
+    p.add_argument("--objective", required=True)
+    p.add_argument("--slug", required=True)
+    p.add_argument("-o", "--out")
+    p.add_argument("--output-dir")
+    p.set_defaults(fn=cmd_plan_adopt)
 
     p = sub.add_parser("search", help="run every phrase, keep every set ID")
     p.add_argument("plan")
     p.add_argument("--sources", default="pmc,biorxiv")
     p.add_argument("-n", type=int, default=100)
     p.add_argument("-o", "--out")
+    p.add_argument("--output-dir")
     p.set_defaults(fn=cmd_search)
 
     p = sub.add_parser("screen", help="cheap full-text sweep for mechanisms")
     p.add_argument("search")
     p.add_argument("-n", type=int, default=None)
     p.add_argument("-o", "--out")
+    p.add_argument("--output-dir")
     p.set_defaults(fn=cmd_screen)
 
     p = sub.add_parser("dig", help="deep read of papers that claim a sequence")
     p.add_argument("screen")
     p.add_argument("-n", type=int, default=None)
     p.add_argument("-o", "--out")
+    p.add_argument("--output-dir")
     p.set_defaults(fn=cmd_dig)
 
     p = sub.add_parser("bind", help="verify artifacts against the proto catalogue")
     p.add_argument("artifacts")
     p.add_argument("--registry", default="../registry/proto_catalog.json")
     p.add_argument("-o", "--out")
+    p.add_argument("--output-dir")
     p.set_defaults(fn=cmd_bind)
 
     p = sub.add_parser("evidence", help="screen output -> draft EvidenceItems (judgement fields null)")
     p.add_argument("screen")
     p.add_argument("--registry", default="../registry/proto_catalog.json")
     p.add_argument("-o", "--out")
+    p.add_argument("--output-dir")
     p.set_defaults(fn=cmd_evidence)
 
     p = sub.add_parser("label", help="merge agent-written judgements into evidence")
@@ -554,11 +674,30 @@ def main(argv=None):
     p.add_argument("-o", "--out")
     p.set_defaults(fn=cmd_registry_check)
 
-    p = sub.add_parser("report", help="render the human-readable knowledge base")
+    p = sub.add_parser("report", help="render the human-readable knowledge base; also emits manifest_<slug>.json")
     p.add_argument("evidence")
     p.add_argument("--search")
-    p.add_argument("-o", "--out", required=True)
+    p.add_argument("--artifacts")
+    p.add_argument("--plan", help="used only to recover `objective` for the emitted manifest")
+    p.add_argument("--screen", help="used only to fill manifest counts/worker; not rendered")
+    p.add_argument("--dig", help="used only to fill the manifest's dig worker; not rendered")
+    p.add_argument("--objective", help="overrides the manifest's objective if --plan is not given")
+    p.add_argument("-o", "--out")
+    p.add_argument("--output-dir")
     p.set_defaults(fn=cmd_report)
+
+    p = sub.add_parser("manifest", help="assemble manifest_<slug>.json from a run's artifacts")
+    p.add_argument("--plan")
+    p.add_argument("--search")
+    p.add_argument("--screen")
+    p.add_argument("--dig")
+    p.add_argument("--artifacts")
+    p.add_argument("--evidence")
+    p.add_argument("--slug")
+    p.add_argument("--objective")
+    p.add_argument("-o", "--out")
+    p.add_argument("--output-dir")
+    p.set_defaults(fn=cmd_manifest)
 
     args = ap.parse_args(argv)
     try:

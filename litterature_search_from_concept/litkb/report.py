@@ -11,7 +11,15 @@ from datetime import datetime
 RULE = "=" * 70
 
 
-def render(evidence, search=None):
+def render(evidence, search=None, artifacts=None):
+    """Render the human-readable knowledge base.
+
+    `artifacts` is `bind`'s output ({"artifacts": [...], "rejections": [...]}),
+    optional since a report can be rendered before `dig`/`bind` ever ran. When
+    given, it adds a PROTO-RUNNABLE ARTIFACTS section. Acceptance there is a
+    schema check against the proto-tools constraint table (molecule,
+    alphabet, length cap), not a run -- nothing in that section has actually
+    been executed."""
     items = evidence["items"]
     out = [f"# knowledge base :: {evidence['slug']} :: "
            f"{datetime.now():%Y-%m-%d %H:%M}",
@@ -61,5 +69,25 @@ def render(evidence, search=None):
             label = r.get("kind", "exclusion")
             what = r.get("phrase") or r.get("class_id") or r.get("excluded", "")
             out.append(f"- [{label}] {what}: {r.get('reason', '')}")
+
+    if artifacts:
+        kept = artifacts.get("artifacts", [])
+        out += ["", "", RULE, f"## PROTO-RUNNABLE ARTIFACTS  ({len(kept)})", RULE,
+                "# Every artifact below is confirmed present in its source document",
+                "# and accepted by at least one proto tool. Acceptance is a schema",
+                "# check, not a run -- nothing here has been executed."]
+        for a in kept:
+            tools = ", ".join(t["key"] for t in a.get("proto_binding", {}).get("tools", []))
+            parent = (a.get("parent") or {}).get("name") or "unnamed"
+            out.append(f"[{a['id']}] {a['kind']} :: {parent} :: {a['length']} aa :: {tools}")
+            out.append(f"    {a['value'][:120]}")
+            prov = a.get("provenance", {})
+            out.append(f"    {prov.get('doc_id')} :: {prov.get('where')}")
+
+        rejected = artifacts.get("rejections", [])
+        if rejected:
+            out += ["", f"### rejected artifacts ({len(rejected)})"]
+            for r in rejected:
+                out.append(f"- [{r.get('kind')}] {r.get('id')}: {r.get('reason')}")
 
     return "\n".join(out) + "\n"

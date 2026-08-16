@@ -7,6 +7,9 @@ drafts and validates completions; it never guesses a claim or a support level.
 That work belongs to the agent, via `litkb label`.
 """
 
+import re
+from datetime import datetime, timezone
+
 SUPPORT_LEVELS = ("established", "contested", "speculative")
 CLAIM_TYPES = ("mechanism", "quantity", "scaffold", "failure_mode", "negative_result")
 EVIDENCE_KINDS = ("experimental", "computational", "review", "theoretical")
@@ -51,6 +54,141 @@ def validate_plan(plan):
         if not c.get("mechanism_patterns"):
             errors.append(f"{where}.mechanism_patterns must be a non-empty list")
     return errors
+
+
+# design-brief-007 hands off a FLAT plan (exactly three keys:
+# search_phrases/mechanism_patterns/notes), already validated against
+# paperclip_kb.py's own `validate_plan` -- see
+# .claude/skills/design-brief-007/references/handoff-contract.md. This is
+# the same three-key check mirrored here rather than imported, so litkb has
+# no import dependency on the sibling script; a plan that fails it names
+# exactly which key is missing, per that handoff contract.
+BRIEF_PLAN_KEYS = ("search_phrases", "mechanism_patterns", "notes")
+
+
+def validate_brief_plan(plan):
+    if not isinstance(plan, dict):
+        return ["brief plan must be a JSON object"]
+    missing = [k for k in BRIEF_PLAN_KEYS if k not in plan]
+    if missing:
+        return [f"brief plan is missing required key(s): {', '.join(missing)}"]
+    errors = []
+    for key in ("search_phrases", "mechanism_patterns"):
+        values = plan[key]
+        if not isinstance(values, list) or not values:
+            errors.append(f"brief plan.{key} must be a non-empty list")
+    if not isinstance(plan.get("notes"), str):
+        errors.append("brief plan.notes must be a string")
+    return errors
+
+
+def adopt_brief_plan(plan, objective, slug, source_path):
+    """Lift a design-brief's flat plan (search_phrases/mechanism_patterns/
+    notes) into litkb's class-structured plan, honestly rather than by
+    inventing structure the brief never had.
+
+    A flat plan carries no mechanism-class decomposition -- design-brief-007
+    never shards a mining plan by mechanism -- so it becomes exactly ONE
+    class here. `search_mode` is set to "exact", not "semantic": the brief's
+    phrases were written for paperclip_kb.py's own planner, which the
+    handoff contract says matches them as strict literals, so switching them
+    to hybrid/semantic ranking here would silently change what they search
+    against. `notes` is carried into `exclusions` verbatim (as a single
+    entry recording it came from the brief) rather than discarded, so the
+    brief planner's own reasoning about what it left out is not lost.
+
+    NOTE: a one-class plan built this way will report
+    `coverage.meets_framework_minimum: false` the moment it reaches
+    `litkb search` -- the framework wants >=6 mechanism classes (see
+    `validate_plan`'s docstring above). That is ACCURATE, not a bug: a flat
+    brief plan genuinely carries one class's worth of decomposition, and
+    this function must not manufacture a false >=6 split just to make the
+    coverage gate pass.
+    """
+    errors = validate_brief_plan(plan)
+    if errors:
+        raise ContractError("; ".join(errors))
+
+    class_id = re.sub(r"[^a-z0-9]+", "_", slug.lower()).strip("_") or "brief"
+    notes = plan.get("notes", "").strip()
+    question = notes or f"What does the literature say about {objective}?"
+
+    return {
+        "objective": objective,
+        "slug": slug,
+        "search_mode": "exact",
+        "mechanism_classes": [{
+            "id": class_id,
+            "question": question,
+            "candidate_evaluators": [],
+            "search_phrases": list(plan["search_phrases"]),
+            "mechanism_patterns": list(plan["mechanism_patterns"]),
+        }],
+        "exclusions": [{
+            "excluded": notes or "(the brief plan's notes field was empty)",
+            "reason": "carried verbatim from the design-brief plan's `notes` "
+                      "field by `plan-adopt`, so the planner's reasoning is "
+                      "not lost",
+        }],
+        "provenance": {
+            "adopted_from": "brief_plan",
+            "source_path": str(source_path),
+        },
+    }
+
+
+def build_manifest(*, slug, objective, search=None, screen=None, dig=None,
+                    artifacts=None, evidence=None, paths=None):
+    """Assemble manifest_<slug>.json from whatever stage outputs exist for
+    this run. Every stage argument is optional -- `litkb manifest` must
+    produce a manifest describing what exists even from a partial run, per
+    the mine-literature-from-concept output contract.
+
+    `evidence_status` is always the literal string
+    "discovery_only_unverified" -- non-negotiable, and every code path
+    through this function sets it the same way, with nothing able to
+    override it. A litkb line proves only that a reader (`paperclip map`)
+    returned it from a saved result set; it does not prove the claim it
+    carries is faithful to its source, entailed by it, or generalisable
+    beyond the paper's own experimental conditions. Everything assembled
+    from this manifest -- the report, the bound artifacts, any shortlist a
+    downstream agent builds -- inherits that status through the cascade
+    (see .claude/skills/design-brief-007/references/handoff-contract.md and
+    .claude/skills/mine-literature-from-concept/references/output-contract.md).
+
+    `set_ids` lists every paperclip set ID litkb kept, one row per
+    (mechanism class, phrase) pair -- not just one ID -- because the output
+    contract's whole point is that a reader reopens THAT specific set to
+    verify a candidate, and litkb runs many searches per plan.
+    """
+    set_ids = []
+    if search:
+        for c in search.get("classes", []):
+            for s in c.get("sets", []):
+                set_ids.append({"class_id": c["id"], "phrase": s["phrase"],
+                                "set_id": s["set_id"], "n_papers": s.get("n_papers")})
+
+    return {
+        "created_at": datetime.now(timezone.utc).isoformat(),
+        "slug": slug,
+        "objective": objective,
+        "evidence_status": "discovery_only_unverified",
+        "sources": search.get("sources") if search else None,
+        "n": search.get("n") if search else None,
+        "set_ids": set_ids,
+        "extracted_by": {
+            "screen": screen.get("extracted_by") if screen else None,
+            "dig": dig.get("extracted_by") if dig else None,
+        },
+        "artifact_paths": {k: v for k, v in (paths or {}).items() if v},
+        "counts": {
+            "papers_screened": len(screen["papers"]) if screen else None,
+            "papers_flagged": len(screen["flagged"]) if screen else None,
+            "failed_extractions": len(screen["failed"]) if screen else None,
+            "artifacts_runnable": len(artifacts["artifacts"]) if artifacts else None,
+            "artifacts_rejected": len(artifacts["rejections"]) if artifacts else None,
+        },
+    }
 
 
 def draft_artifact(index, record, doc_id, set_id, extractor="quick-reader", kind=None):
