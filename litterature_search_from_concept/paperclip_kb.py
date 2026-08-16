@@ -131,39 +131,55 @@ def run(cmd: list, dry: bool) -> str:
     if dry:
         return ""
     p = subprocess.run(cmd, capture_output=True, text=True)
-    if p.returncode != 0:
+    # paperclip, like grep, exits 1 to mean "no matches" -- not an error.
+    if p.returncode not in (0, 1):
         sys.exit(f"FAILED ({p.returncode}):\n{p.stderr}")
     return p.stdout
 
 
-def search_all(phrases: list, tag: str, n: int, dry: bool) -> str | None:
-    set_id = None
+def search_all(phrases: list, n: int, dry: bool) -> list:
+    """One search per phrase; each returns its OWN set.
+
+    `paperclip search` has no --tag and does not accumulate, and `paperclip
+    merge` resolves only its first argument, so there is no server-side union
+    to lean on. Collect every set ID and fan the grep out over all of them.
+    """
+    set_ids = []
     for phrase in phrases:
-        out = run(["paperclip", "search", "-s", "pmc", "--tag", tag,
+        out = run(["paperclip", "search", "-s", "pmc",
                    "-n", str(n), "-e", phrase], dry)
         found = SET_ID_RE.findall(out)
         if found:
-            set_id = found[-1]          # last mention = merged set
-    return set_id
+            set_ids.append(found[0])    # first mention = this search's set
+    return set_ids
 
 
 # ----------------------------------------------------------------------
 # Stage 4: categorized grep
 # ----------------------------------------------------------------------
 
-def build_kb(set_id: str, mechanism: list, outpath: Path, dry: bool) -> None:
+def build_kb(set_ids: list, mechanism: list, outpath: Path, dry: bool) -> None:
     categories = {"mechanism": mechanism, **STRUCTURAL}
     seen_global = set()
 
+    # The amino-acid classes in STRUCTURAL are case-significant: -i would let
+    # them match ordinary lowercase prose, so only the prose categories get it.
+    case_insensitive = {"mechanism", "quantitative"}
+
     with outpath.open("w") as fh:
-        fh.write(f"# knowledge base :: set {set_id} :: "
+        fh.write(f"# knowledge base :: {len(set_ids)} sets "
+                 f"({', '.join(set_ids)}) :: "
                  f"{datetime.now():%Y-%m-%d %H:%M}\n")
 
         for cat, patterns in categories.items():
-            cmd = ["paperclip", "grep", "--from", set_id, "-i", "-n"]
-            for p in patterns:
-                cmd += ["-e", p]
-            out = run(cmd, dry)
+            out = ""
+            for set_id in set_ids:
+                cmd = ["paperclip", "grep", "--from", set_id, "-n"]
+                if cat in case_insensitive:
+                    cmd.append("-i")
+                for p in patterns:
+                    cmd += ["-e", p]
+                out += run(cmd, dry)
 
             fh.write(f"\n\n{'=' * 70}\n## {cat.upper()}  "
                      f"({len(patterns)} patterns)\n{'=' * 70}\n")
@@ -188,35 +204,41 @@ def main() -> None:
     ap.add_argument("-n", type=int, default=500)
     ap.add_argument("--dry-run", action="store_true",
                     help="print commands, run only the Claude planning step")
-    ap.add_argument("--set-id", help="skip search, grep an existing set")
+    ap.add_argument("--set-id", action="append",
+                    help="skip search, grep an existing set (repeatable)")
+    ap.add_argument("--plan", type=Path,
+                    help="read a hand-written plan JSON instead of calling Claude")
     args = ap.parse_args()
 
     concept = args.concept.read_text()
-    tag = f"{args.slug}_pmc"
 
     print("[1/3] planning queries", file=sys.stderr)
-    plan = plan_queries(concept)
+    if args.plan:
+        print(f"      reading {args.plan} (planner skipped)", file=sys.stderr)
+        plan = json.loads(args.plan.read_text())
+    else:
+        plan = plan_queries(concept)
     Path(f"plan_{args.slug}.json").write_text(json.dumps(plan, indent=2))
     print(f"      {len(plan['search_phrases'])} phrases, "
           f"{len(plan['mechanism_patterns'])} mechanism patterns", file=sys.stderr)
     print(f"      note: {plan.get('notes', '')}", file=sys.stderr)
 
     print("[2/3] searching", file=sys.stderr)
-    set_id = args.set_id or search_all(
-        plan["search_phrases"], tag, args.n, args.dry_run)
+    set_ids = args.set_id or search_all(
+        plan["search_phrases"], args.n, args.dry_run)
 
-    if not set_id:
+    if not set_ids:
         if args.dry_run:
             print("\ndry run: inspect plan_%s.json, then rerun without --dry-run"
                   % args.slug, file=sys.stderr)
             return
         sys.exit("no set ID found in search output -- check SET_ID_RE against "
                  "what `paperclip search` actually prints")
-    print(f"      set: {set_id}", file=sys.stderr)
+    print(f"      {len(set_ids)} sets: {', '.join(set_ids)}", file=sys.stderr)
 
     print("[3/3] building knowledge base", file=sys.stderr)
     out = Path(f"knowledge_base_{args.slug}.txt")
-    build_kb(set_id, plan["mechanism_patterns"], out, args.dry_run)
+    build_kb(set_ids, plan["mechanism_patterns"], out, args.dry_run)
     print(f"\n-> {out}", file=sys.stderr)
 
 

@@ -1,0 +1,135 @@
+{
+  "objective": "We are interested in how to design a protein that responds to radio frequencies outside of the range of biological chromophores",
+  "slug": "rfp",
+  "mechanism_classes": [
+    {
+      "id": "thermal_transduction",
+      "question": "How does an RF field become a local temperature change a protein can read?",
+      "candidate_evaluators": [],
+      "search_phrases": [
+        "magnetic hyperthermia",
+        "magnetic nanoparticle heating",
+        "specific absorption rate"
+      ],
+      "mechanism_patterns": [
+        "Neel relaxation",
+        "Brownian relaxation",
+        "local temperature increase",
+        "heat dissipation",
+        "hysteresis loss"
+      ]
+    },
+    {
+      "id": "radical_pair_spin",
+      "question": "Can a magnetic field alter protein chemistry through electron spin rather than heat?",
+      "candidate_evaluators": [],
+      "search_phrases": [
+        "radical pair mechanism",
+        "cryptochrome magnetoreception",
+        "magnetic field effects"
+      ],
+      "mechanism_patterns": [
+        "singlet-triplet interconversion",
+        "hyperfine coupling",
+        "spin-correlated radical pair",
+        "flavin adenine dinucleotide",
+        "photoinduced electron transfer"
+      ]
+    },
+    {
+      "id": "ferritin_magnetogenetics",
+      "question": "Can a genetically encoded iron store make a protein field-responsive without injected particles?",
+      "candidate_evaluators": [],
+      "search_phrases": [
+        "ferritin iron core",
+        "magnetogenetics",
+        "iron oxide nanoparticle"
+      ],
+      "mechanism_patterns": [
+        "iron loading",
+        "ferritin shell",
+        "magnetic moment of",
+        "channel gating",
+        "force on the particle"
+      ]
+    },
+    {
+      "id": "dielectric_thz_coupling",
+      "question": "Does RF or terahertz radiation couple directly to protein motion?",
+      "candidate_evaluators": [],
+      "search_phrases": [
+        "terahertz spectroscopy",
+        "microwave irradiation",
+        "dielectric relaxation"
+      ],
+      "mechanism_patterns": [
+        "collective vibrational modes",
+        "non-thermal mechanism",
+        "dipole moment",
+        "absorption coefficient",
+        "protein hydration shell"
+      ]
+    },
+    {
+      "id": "mechanical_torque",
+      "question": "Can a field exert mechanical force a mechanosensitive protein can transduce?",
+      "candidate_evaluators": [],
+      "search_phrases": [
+        "mechanosensitive ion channel",
+        "magnetic tweezers",
+        "magnetic torque"
+      ],
+      "mechanism_patterns": [
+        "force applied to",
+        "membrane tension",
+        "gating force",
+        "torque on the particle",
+        "conformational change upon"
+      ]
+    },
+    {
+      "id": "thermosensitive_scaffold",
+      "question": "Which protein scaffolds already switch over a small physiological temperature step?",
+      "candidate_evaluators": [],
+      "search_phrases": [
+        "temperature-sensitive mutant",
+        "thermal stability of proteins",
+        "coiled-coil"
+      ],
+      "mechanism_patterns": [
+        "melting temperature",
+        "transition midpoint",
+        "site-directed mutagenesis",
+        "heptad repeat",
+        "unfolding transition"
+      ]
+    },
+    {
+      "id": "field_bioeffects_baseline",
+      "question": "What field effects on biology are reported, and how contested are they?",
+      "candidate_evaluators": [],
+      "search_phrases": [
+        "electromagnetic field exposure",
+        "extremely low frequency",
+        "radiofrequency electromagnetic fields"
+      ],
+      "mechanism_patterns": [
+        "no significant effect",
+        "failed to replicate",
+        "dose-response",
+        "exposure duration",
+        "oxidative stress"
+      ]
+    }
+  ],
+  "exclusions": [
+    {
+      "excluded": "optogenetics and visible/UV chromophore phrases (channelrhodopsin, LOV domain, phytochrome)",
+      "reason": "the concept explicitly asks for actuation outside the biological chromophore range"
+    },
+    {
+      "excluded": "clinical RF ablation and MRI patient-safety literature",
+      "reason": "concerns bulk tissue heating and dosimetry, not protein-level transduction"
+    }
+  ]
+}
