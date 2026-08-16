@@ -11,26 +11,6 @@ with a mandatory human gate at spec approval.
 SWIR-actuated **TlpA** thermal switch, kept because its data contracts (§6) are
 still the ones the code implements.
 
-## What runs today
-
-The product is a chain of agent skills plus two standalone agents. There is no
-single-command pipeline: each stage is invoked on its own, and its output is the
-next stage's input.
-
-```
-design question
-   │
-   ├─ formulate-grounded-directions ─→ ranked directions, claim-verified
-   │
-   └─ design-brief-007 ─→ shards · mining plan · assembly recipe · fitness cascade
-          │
-          ├─ plan_<slug>.json ─→ mine-literature-from-concept  (grep knowledge base)
-          │                   └─ litkb                          (typed evidence + artifacts)
-          │
-          └─ proto_brief_<slug>.md ─→ write-program / proto-tools ─→ scores
-```
-
-### 1 — Design brief
 
 ```bash
 FA7_LLM_BACKEND=claude uv run --project formulation_agent007 formulate007-run \
