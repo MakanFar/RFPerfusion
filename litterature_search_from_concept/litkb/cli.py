@@ -14,8 +14,8 @@ import json
 import sys
 from pathlib import Path
 
-from . import contracts, patterns, proto, report
-from .paperclip import PaperclipError, count, grep_set, meta, search
+from . import contracts, proto, reader, report
+from .paperclip import PaperclipError, count, grep_set, map_papers, meta, search
 
 
 def _load(path):
@@ -203,32 +203,92 @@ def cmd_search(args):
     _emit(out, args.out)
 
 
-# -------------------------------------------------------------- extract
+# ---------------------------------------------------------- screen / dig / bind
 
 
-def cmd_extract(args):
-    plan = _load(args.plan)
+def cmd_screen(args):
     found = _load(args.search)
-    by_id = {c["id"]: c for c in plan["mechanism_classes"]}
+    records = []
+    for cls in found["classes"]:
+        for s in cls["sets"]:
+            # structured-extraction is gated to GXL testers on this account
+            # (see litkb/paperclip.py's map_papers default-worker comment);
+            # omit worker= so both passes run on quick-reader, the only
+            # worker this account can actually run.
+            raw = map_papers(s["set_id"], reader.SCREEN_QUERY,
+                             reader.SCREEN_SCHEMA, n=args.n)
+            for rec in reader.parse_map_output(raw):
+                rec["class_id"] = cls["id"]
+                rec["set_id"] = s["set_id"]
+                records.append(rec)
+            print(f"  {cls['id']:<28} {s['set_id']} read", file=sys.stderr)
+    flagged = reader.flagged_for_dig(records)
+    print(f"  {len(flagged)}/{len(records)} papers claim a sequence", file=sys.stderr)
+    _emit({"slug": found["slug"], "papers": records, "flagged": flagged}, args.out)
 
-    out = {"slug": found["slug"], "classes": []}
-    for sc in found["classes"]:
-        cls = by_id.get(sc["id"])
-        if cls is None or sc["status"] != "covered":
+
+def cmd_dig(args):
+    screened = _load(args.screen)
+    flagged = set(screened["flagged"])
+    by_set = {}
+    for rec in screened["papers"]:
+        if rec["doc_id"] in flagged:
+            by_set.setdefault(rec["set_id"], []).append(rec["doc_id"])
+
+    artifacts, n = [], 0
+    for set_id, docs in by_set.items():
+        # exhaustive-extraction is likewise gated (see cmd_screen); omit
+        # worker= to fall back to quick-reader here too.
+        raw = map_papers(set_id, reader.DIG_QUERY, reader.DIG_SCHEMA, n=args.n)
+        for rec in reader.parse_map_output(raw):
+            if rec["doc_id"] not in flagged:
+                continue
+            for seq in rec.get("sequences", []):
+                n += 1
+                artifacts.append(contracts.draft_artifact(n, seq, rec["doc_id"], set_id))
+    print(f"  {len(artifacts)} candidate sequences", file=sys.stderr)
+    _emit({"slug": screened["slug"], "artifacts": artifacts}, args.out)
+
+
+def cmd_bind(args):
+    dug = _load(args.artifacts)
+    catalog = _load(args.registry)
+    kept, rejections = [], []
+
+    for art in dug["artifacts"]:
+        # confirm_in_source's grep_fn is 2-arg (set_id, patterns) and cannot
+        # itself request fixed-string matching -- so this closure asks for
+        # it explicitly. A bare grep_set would send the sequence to
+        # `paperclip grep -e` as a REGEX, and a sequence containing `*`
+        # (stop codon) or `.` (masked residue) could then match text that
+        # is not actually the sequence, producing a false confirmation --
+        # exactly what this check exists to prevent.
+        art["provenance"]["confirmed_in_source"] = reader.confirm_in_source(
+            {"value": art["value"], "verbatim": art["provenance"]["verbatim"],
+             "provenance": art["provenance"]},
+            lambda set_id, patterns: grep_set(set_id, patterns, fixed=True),
+        )
+        if not art["provenance"]["confirmed_in_source"]:
+            rejections.append({"kind": "not_confirmed_in_source", "id": art["id"],
+                               "doc_id": art["provenance"]["doc_id"],
+                               "reason": "sequence does not literally appear in its source document"})
             continue
-        categories = {
-            "mechanism": {"ignore_case": True, "patterns": cls["mechanism_patterns"]},
-            **patterns.STRUCTURAL,
-        }
-        cat_hits = {}
-        for cat, spec in categories.items():
-            hits = []
-            for s in sc["sets"]:
-                hits += grep_set(s["set_id"], spec["patterns"], spec["ignore_case"])
-            cat_hits[cat] = hits
-            print(f"  {sc['id']:<28} {cat:<12} {len(hits):>4} hits", file=sys.stderr)
-        out["classes"].append({"id": sc["id"], "categories": cat_hits})
-    _emit(out, args.out)
+        art["proto_binding"] = proto.bind_artifact(art, catalog)
+        status = art["proto_binding"]["status"]
+        if status == "runnable":
+            kept.append(art)
+        elif status == "unsupported_kind":
+            rejections.append({"kind": f"proto_{status}", "id": art["id"],
+                               "reason": art["proto_binding"].get("reason",
+                                         "no proto tool consumes this artifact kind")})
+        else:
+            rejections.append({"kind": f"proto_{status}",
+                               "id": art["id"],
+                               "reason": art["proto_binding"]["rejected_by"] or
+                                         art["proto_binding"]["unverified"]})
+
+    print(f"  {len(kept)} runnable, {len(rejections)} rejected", file=sys.stderr)
+    _emit({"slug": dug["slug"], "artifacts": kept, "rejections": rejections}, args.out)
 
 
 # ------------------------------------------------------------- evidence
@@ -378,11 +438,23 @@ def main(argv=None):
     p.add_argument("-o", "--out")
     p.set_defaults(fn=cmd_search)
 
-    p = sub.add_parser("extract", help="grep the sets into categorized raw hits")
-    p.add_argument("plan")
+    p = sub.add_parser("screen", help="cheap full-text sweep for mechanisms")
     p.add_argument("search")
+    p.add_argument("-n", type=int, default=None)
     p.add_argument("-o", "--out")
-    p.set_defaults(fn=cmd_extract)
+    p.set_defaults(fn=cmd_screen)
+
+    p = sub.add_parser("dig", help="deep read of papers that claim a sequence")
+    p.add_argument("screen")
+    p.add_argument("-n", type=int, default=None)
+    p.add_argument("-o", "--out")
+    p.set_defaults(fn=cmd_dig)
+
+    p = sub.add_parser("bind", help="verify artifacts against the proto catalogue")
+    p.add_argument("artifacts")
+    p.add_argument("--registry", default="../registry/proto_catalog.json")
+    p.add_argument("-o", "--out")
+    p.set_defaults(fn=cmd_bind)
 
     p = sub.add_parser("evidence", help="hits -> draft EvidenceItems (judgement fields null)")
     p.add_argument("hits")

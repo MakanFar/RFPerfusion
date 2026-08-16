@@ -81,6 +81,30 @@ def draft_item(index, class_id, hit, category, citation):
     }
 
 
+def draft_artifact(index, record, doc_id, set_id):
+    """One extracted sequence -> one ProtoArtifact, unbound and unconfirmed."""
+    return {
+        "id": f"art_{index:03d}",
+        "kind": "subsequence" if record.get("region") else "sequence",
+        "molecule": record["molecule"],
+        "value": record["value"],
+        "length": len(record["value"]),
+        "parent": {"name": record.get("name"), "accession": None,
+                   "region": record.get("region")},
+        "evidence_refs": [],
+        "provenance": {
+            "doc_id": doc_id,
+            "set_id": set_id,
+            "where": record.get("where"),
+            "verbatim": record.get("verbatim", False),
+            "confirmed_in_source": False,
+            "extractor": "exhaustive-extraction",
+        },
+        "proto_binding": {"status": "unbound", "tools": [],
+                          "unverified": [], "rejected_by": []},
+    }
+
+
 def citation_from_meta(m):
     # Preprints carry pub_date and source but no pub_year or journal.
     year = m.get("pub_year")
