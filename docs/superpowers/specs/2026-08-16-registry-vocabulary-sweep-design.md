@@ -153,26 +153,37 @@ JSON has no infinity literal.
 | | |
 |---|---:|
 | tools publishing a metrics block | 48 / 140 |
-| metric rows | 211 |
-| distinct metric names | 99 |
-| tools declaring a `*primary` | 33 |
+| metric rows | 311 |
+| distinct metric names | 170 |
+| tools declaring a `*primary` | 42 |
+| rows left unparsed | 0 |
 
 The remaining 92 are generators, retrievers, aligners and annotators that
 measure nothing. For them `measures: []` is the correct answer, and it becomes a
 derived fact rather than an unfilled column.
 
-**The row parser must handle three observed variants**, not only the ESMFold
+**The row parser must handle four observed variants**, not only the ESMFold
 shape:
 
 ```
-avg_plddt      float, range [0.0, 1.0], always, better=higher  *primary
-pae            list[list[float]], range [0.0, inf], when include_pae_matrix=True, better=lower
-dSASA          float, range [0.0, inf], Å^2, better=context
+avg_plddt      float, range [0.0, 1.0], always, better=higher  *primary   # availability only
+dG             float, range [-inf, inf], REU, better=lower                # unit only
+helix_pct      float, range [0.0, 100.0], %, always, better=higher        # unit AND availability
+dSASA          float, range [0.0, inf], Å^2, better=context-dependent     # non-ASCII unit
 ```
 
-That is: `better=` takes `higher | lower | context`; field three is either an
-availability phrase or a unit; and rows may carry indented continuation lines
-that are not themselves rows.
+That is: `better=` takes `higher | lower | context-dependent` — the last spelled
+in full, not `context`; the annotations between the range and `better=` are a
+unit, an availability phrase, or both; metric names may contain uppercase
+(`dG`, `dG_per_dSASA`); the header is sometimes a bare `Metrics:` with no
+`(per X item)` suffix; and rows may carry indented continuation lines that are
+not themselves rows.
+
+These four were established by parsing all 140 tools, not by reading a sample.
+A narrower parser — lowercase-only names, `context` instead of
+`context-dependent`, a single annotation field — drops 100 of the 311 rows and
+71 of the 170 names while appearing to succeed, which is the exact failure this
+design exists to remove.
 
 **Unparsed in-block lines are recorded, not dropped.** The registry gains a
 top-level `parse_failures: [{key, line}]`. Coverage stays auditable and the
@@ -294,7 +305,7 @@ suite's contract.
 
 | area | cases |
 |---|---|
-| metrics parser | all three row variants; a tool with no metrics block; a continuation line; an unparseable row landing in `parse_failures` |
+| metrics parser | all four row variants; bare `Metrics:` header; uppercase names; non-ASCII units; a tool with no metrics block; a continuation line; an unparseable row landing in `parse_failures` |
 | schema constraint parsing | schema-supplied molecules/alphabet; prose-only cap fallback; a tool supplying neither stays `unknown` |
 | vocabulary | every term resolves to ≥1 registry metric; unknown term id rejected by `label` |
 | `resolve_properties` | all three `requires_new_evaluator` values |

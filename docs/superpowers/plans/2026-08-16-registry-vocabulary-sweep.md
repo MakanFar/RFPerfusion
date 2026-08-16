@@ -139,7 +139,26 @@ git commit -m "ci: run all four suites; drop tracked lock files; fix design poin
 - Produces: `proto.parse_metrics_doc(text: str) -> dict` returning
   `{"measures": list[dict], "failures": list[str]}`. Each measure is
   `{"metric": str, "type": str, "range": [float|None, float|None],
-  "availability": str, "better": "higher"|"lower"|"context", "primary": bool}`.
+  "unit": str, "availability": str,
+  "better": "higher"|"lower"|"context-dependent", "primary": bool}`.
+
+**Row formats observed live — all four must parse.** Verified against all 140
+tools: with these handled, 311 rows across 48 tools parse and **zero** rows are
+left over.
+
+```
+avg_plddt      float, range [0.0, 1.0], always, better=higher  *primary   # availability only
+dG             float, range [-inf, inf], REU, better=lower                # unit only
+helix_pct      float, range [0.0, 100.0], %, always, better=higher        # unit AND availability
+dSASA          float, range [0.0, inf], Å^2, better=context-dependent     # non-ASCII unit
+```
+
+Three traps, each of which silently drops rows rather than failing:
+`better=context-dependent` is the literal spelling (not `context`); metric names
+contain uppercase (`dG`, `dG_per_dSASA`); and the header is sometimes the bare
+`Metrics:` with no `(per X item)` suffix. A name pattern of `[a-z_][a-z0-9_]*`
+plus a `context` alternative loses 100 of the 311 rows while looking like it
+works.
 
 - [ ] **Step 1: Write the failing tests**
 
@@ -161,12 +180,24 @@ Metrics (per structures item):
   pae                       list[list[float]], range [0.0, inf], when include_pae_matrix=True, better=lower
 """
 
+# Captured verbatim from `proto-tools output bindcraft-design`. Note the bare
+# `Metrics:` header, the uppercase metric names, the non-ASCII unit, and
+# `context-dependent` rather than `context`.
 BINDCRAFT_OUT = """Output: BindCraftOutput
 
-Metrics (per designs item):
+Metrics:
   dG                        float, range [-inf, inf], REU, better=lower
-  dSASA                     float, range [0.0, inf], A^2, better=context
-  interface_sasa_pct        float, range [0.0, 100.0], percent, better=context
+  dSASA                     float, range [0.0, inf], Å^2, better=context-dependent
+  dG_per_dSASA              float, range [-inf, inf], REU/Å^2, better=lower
+  interface_sasa_pct        float, range [0.0, 100.0], percent, better=context-dependent
+"""
+
+# From `proto-tools output dssp-secondary-structure`: a unit AND an
+# availability between the range and better=.
+DSSP_OUT = """Output: DSSPOutput
+
+Metrics (per structures item):
+  helix_pct                 float, range [0.0, 100.0], %, always, better=higher
 """
 
 ABLANG_OUT = """Output: AbLangScoreOutput
@@ -205,15 +236,44 @@ def test_only_one_metric_is_primary():
     assert [d["metric"] for d in m if d["primary"]] == ["avg_plddt"]
 
 
-def test_availability_field_may_be_a_unit():
+def test_bare_metrics_header_is_recognised():
+    # bindcraft-design uses `Metrics:` with no `(per X item)` suffix.
+    assert len(proto.parse_metrics_doc(BINDCRAFT_OUT)["measures"]) == 4
+
+
+def test_uppercase_metric_names_are_parsed():
+    # `dG` and `dG_per_dSASA` are real names; a lowercase-only pattern drops them.
     m = {d["metric"]: d for d in proto.parse_metrics_doc(BINDCRAFT_OUT)["measures"]}
-    assert m["dG"]["availability"] == "REU"
+    assert "dG" in m and "dG_per_dSASA" in m
+
+
+def test_single_annotation_is_read_as_a_unit():
+    m = {d["metric"]: d for d in proto.parse_metrics_doc(BINDCRAFT_OUT)["measures"]}
+    assert m["dG"]["unit"] == "REU"
+    assert m["dG"]["availability"] == ""
     assert m["dG"]["range"] == [None, None]
 
 
-def test_better_context_is_accepted():
+def test_unit_and_availability_together_are_split():
+    m = {d["metric"]: d for d in proto.parse_metrics_doc(DSSP_OUT)["measures"]}
+    assert m["helix_pct"]["unit"] == "%"
+    assert m["helix_pct"]["availability"] == "always"
+
+
+def test_availability_only_row_has_no_unit():
+    m = {d["metric"]: d for d in proto.parse_metrics_doc(ESMFOLD_OUT)["measures"]}
+    assert m["avg_plddt"]["availability"] == "always"
+    assert m["avg_plddt"]["unit"] == ""
+
+
+def test_better_context_dependent_is_the_literal_spelling():
     m = {d["metric"]: d for d in proto.parse_metrics_doc(BINDCRAFT_OUT)["measures"]}
-    assert m["dSASA"]["better"] == "context"
+    assert m["dSASA"]["better"] == "context-dependent"
+
+
+def test_non_ascii_unit_survives():
+    m = {d["metric"]: d for d in proto.parse_metrics_doc(BINDCRAFT_OUT)["measures"]}
+    assert m["dSASA"]["unit"] == "Å^2"
 
 
 def test_indented_continuation_lines_are_not_metrics():
@@ -249,18 +309,43 @@ Add to `litterature_search_from_concept/litkb/proto.py`:
 # as a fixed-width table. It is a rendering of structured data, not free
 # prose, which is why it is worth parsing -- unlike the input docs, whose
 # phrasing varies per author.
+# The `(per X item)` suffix is optional -- bindcraft-design emits a bare
+# `Metrics:`.
 _METRICS_HEADER = re.compile(r"^Metrics(?: \(per (.+?) item\))?:\s*$")
 _METRIC_ROW = re.compile(
-    r"^  (?P<name>[a-z_][a-z0-9_]*)\s{2,}"
+    # Uppercase is legal in a metric name: `dG`, `dG_per_dSASA` are real.
+    r"^  (?P<name>[A-Za-z_][A-Za-z0-9_]*)\s{2,}"
     r"(?P<type>[^,]+?),\s*"
     r"range \[(?P<lo>[^,\]]+),\s*(?P<hi>[^\]]+)\],\s*"
-    # Field three is an availability phrase ("always", "when x=True") on most
-    # tools and a unit ("REU", "percent") on the design tools. Both observed
-    # live; neither is more correct, so it is captured verbatim.
-    r"(?P<avail>[^,]+),\s*"
-    r"better=(?P<better>higher|lower|context)"
+    # Between the range and `better=` there is either an availability phrase
+    # ("always", "when include_pae_matrix=True"), a unit ("REU", "Å^2"), or
+    # BOTH ("%, always"). Captured whole and split below rather than guessed
+    # at here.
+    r"(?P<notes>.+?),\s*"
+    # "context-dependent" is the literal spelling. Matching only "context"
+    # fails the whole row, silently dropping 72 of the 311 rows in the
+    # current catalogue.
+    r"better=(?P<better>higher|lower|context-dependent)"
     r"(?P<primary>\s*\*primary)?\s*$"
 )
+
+# An availability phrase says WHEN a metric is present; a unit says what it is
+# measured in. When only one annotation is given, these words identify it as
+# an availability rather than a unit.
+_AVAILABILITY_HINTS = ("always", "when ", "depends", "if ", "optional")
+
+
+def _split_annotations(notes):
+    """-> (unit, availability). Either may be empty."""
+    parts = [p.strip() for p in notes.split(",") if p.strip()]
+    if len(parts) >= 2:
+        return ", ".join(parts[:-1]), parts[-1]
+    if not parts:
+        return "", ""
+    only = parts[0]
+    if any(h in only.lower() for h in _AVAILABILITY_HINTS):
+        return "", only
+    return only, ""
 
 
 def _bound(text):
@@ -297,11 +382,13 @@ def parse_metrics_doc(text):
 
         m = _METRIC_ROW.match(line)
         if m:
+            unit, availability = _split_annotations(m.group("notes"))
             measures.append({
                 "metric": m.group("name"),
                 "type": m.group("type").strip(),
                 "range": [_bound(m.group("lo")), _bound(m.group("hi"))],
-                "availability": m.group("avail").strip(),
+                "unit": unit,
+                "availability": availability,
                 "better": m.group("better"),
                 "primary": bool(m.group("primary")),
             })
@@ -317,7 +404,7 @@ def parse_metrics_doc(text):
 - [ ] **Step 4: Run the tests to verify they pass**
 
 Run: `cd litterature_search_from_concept && uv run --project . pytest tests/test_metrics_parse.py -q`
-Expected: `8 passed`
+Expected: `11 passed`
 
 - [ ] **Step 5: Commit**
 
@@ -523,7 +610,7 @@ def merge_constraints(from_schema, from_doc):
 - [ ] **Step 4: Run the tests to verify they pass**
 
 Run: `cd litterature_search_from_concept && uv run --project . pytest tests/test_schema_parse.py -q`
-Expected: `8 passed`
+Expected: `11 passed`
 
 - [ ] **Step 5: Confirm the existing prose parser still passes**
 
@@ -771,7 +858,8 @@ print('distinct metrics', len(m)); assert 'avg_plddt' in m
 "
 ```
 
-Expected: `version 2 | tools 140`, `with measures 48`, `distinct metrics 99`.
+Expected: `version 2 | tools 140`, `with measures 48`, `distinct metrics 170`,
+`parse_failures 0`.
 
 - [ ] **Step 8: Commit**
 
@@ -1465,7 +1553,7 @@ assert s['metrics']['avg_pae']['better'] == 'lower'
 "
 ```
 
-Expected: `keys 140 | metrics 99`.
+Expected: `keys 140 | metrics 170`.
 
 - [ ] **Step 3: Write the failing tests**
 
@@ -1732,9 +1820,10 @@ def test_between_is_never_a_direction_error():
 
 
 def test_context_metrics_are_exempt():
-    """`better=context` means direction is not decidable; do not guess."""
+    """`better=context-dependent` means direction is not decidable; do not guess."""
     from formulation_agent007 import catalog
-    contextual = [m for m, d in catalog.METRIC_DIRECTION.items() if d == "context"]
+    contextual = [m for m, d in catalog.METRIC_DIRECTION.items()
+                  if d == "context-dependent"]
     if not contextual:
         pytest.skip("no better=context metrics in the current snapshot")
     assert _problems(_gate(contextual[0], ">=")) == []

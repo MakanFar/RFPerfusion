@@ -15,3 +15,6 @@ proto/outputs/
 .modal.toml
 
 .DS_Store
+
+# subagent-driven-development scratch workspaces
+.superpowers/
