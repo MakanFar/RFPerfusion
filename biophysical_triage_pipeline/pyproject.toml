@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "biophys-triage"
+version = "0.1.0"
+description = "Linear biophysical triage: sequences in, filtered TSV out."
+requires-python = ">=3.10"
+dependencies = ["pandas","numpy","pyyaml","peptides","biotite","propka","freesasa","pyKVFinder"]
+
+[project.scripts]
+biophys-triage = "biophys_triage.run:main"
+
+[tool.setuptools.packages.find]
+include = ["biophys_triage*"]
+
+[dependency-groups]
+dev = ["pytest>=8"]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
