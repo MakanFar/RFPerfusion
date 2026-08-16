@@ -1,0 +1,4 @@
+interface:
+  display_name: "Mine Literature from Concept"
+  short_description: "Build a concept-driven literature knowledge base"
+  default_prompt: "Use $mine-literature-from-concept to build a literature knowledge base from my biological design concept."

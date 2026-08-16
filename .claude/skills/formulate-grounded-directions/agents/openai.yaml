@@ -1,0 +1,4 @@
+interface:
+  display_name: "Formulate Grounded Directions"
+  short_description: "Rank research directions with verified evidence"
+  default_prompt: "Use $formulate-grounded-directions to rank evidence-grounded research directions for my design question."

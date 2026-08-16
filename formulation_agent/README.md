@@ -21,6 +21,19 @@ export ANTHROPIC_API_KEY=sk-ant-...     # Console credits work here
 uv run formulate
 ```
 
+For agents and automation, use the non-interactive entry point:
+
+```bash
+uv run --project formulation_agent formulate-run \
+  --question "How can we design a protein that responds above 1500 nm?" \
+  --output-dir formulation_agent/sessions/example \
+  --json-progress
+```
+
+Repeat `--context-file <path>` to supply proposal context. Context can influence
+which directions are proposed, but every load-bearing claim is still retrieved
+and verified independently before it affects the ranking.
+
 ```
 › How can we design a protein that responds to wavelengths greater than 1500 nm?
 

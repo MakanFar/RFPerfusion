@@ -12,6 +12,7 @@ dependencies = [
 
 [project.scripts]
 formulate = "formulation_agent.cli:main"
+formulate-run = "formulation_agent.run:main"
 formulate-web = "formulation_agent.web:main"
 
 [build-system]
