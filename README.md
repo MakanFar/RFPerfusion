@@ -9,6 +9,7 @@ RFPerfusion combines project design documents, literature-search tooling, and a 
 - `formulation_agent/` — turns an open design question into ranked research directions, with every claim verified against full-text literature. Browser UI or terminal; see its [README](formulation_agent/README.md).
 - `proto/` — the isolated uv runtime for proto-tools. Generated results go to the gitignored `proto/outputs/` directory.
 - `.claude/skills/proto-tools/` — instructions that teach Claude and compatible agents how to discover, deploy, and run proto-tools.
+- `.claude/skills/formulation-agent/` — instructions that orient an agent to the formulation agent's code, its verification invariants, and its cost model.
 - `.agents` — a symlink to `.claude`, so the same skill works with agents that use either convention.
 - `.mcp.json` — the project-scoped MCP server configuration.
 
