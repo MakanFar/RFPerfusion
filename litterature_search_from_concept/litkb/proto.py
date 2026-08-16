@@ -173,3 +173,15 @@ def bind_artifact(artifact, catalog):
         status = "rejected"
     return {"status": status, "tools": accepted,
             "unverified": unverified, "rejected_by": rejected}
+
+
+def resolve_properties(properties, catalog):
+    """Map measurable properties onto tools that measure them.
+
+    Framework §77: a class nothing can evaluate returns
+    requires_new_evaluator, which is a legitimate output to hand back to the
+    scientist rather than a discard."""
+    wanted = set(properties or [])
+    tools = sorted(t["key"] for t in catalog["tools"]
+                   if wanted & set(t.get("measures") or []))
+    return {"tools": tools, "requires_new_evaluator": not tools}

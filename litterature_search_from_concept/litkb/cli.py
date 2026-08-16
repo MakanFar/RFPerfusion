@@ -295,26 +295,27 @@ def cmd_bind(args):
 
 
 def cmd_evidence(args):
-    hits = _load(args.hits)
-    items, seen, cache, n = [], set(), {}, 0
+    screened = _load(args.screen)
+    catalog = _load(args.registry) if Path(args.registry).exists() else {"tools": []}
+    items, cache, n = [], {}, 0
 
-    for cls in hits["classes"]:
-        for category, hit_list in cls["categories"].items():
-            for hit in hit_list:
-                key = (hit["doc_id"], hit["text"])
-                if key in seen:          # one span can match several categories
-                    continue
-                seen.add(key)
-                doc = hit["doc_id"]
-                if doc not in cache:
-                    cache[doc] = contracts.citation_from_meta(meta(doc))
-                n += 1
-                items.append(contracts.draft_item(n, cls["id"], hit, category, cache[doc]))
+    for rec in screened["papers"]:
+        doc = rec["doc_id"]
+        if doc not in cache:
+            cache[doc] = contracts.citation_from_meta(meta(doc))
+        for mech in rec.get("mechanisms", []):
+            n += 1
+            item = contracts.item_from_mechanism(n, rec["class_id"], mech, doc, cache[doc])
+            item["testable_by"] = {
+                "properties": mech.get("measurable_properties", []),
+                **proto.resolve_properties(mech.get("measurable_properties", []), catalog),
+            }
+            items.append(item)
 
-    _emit({"slug": hits["slug"], "items": items,
-           "unlabelled": len(items),
-           "note": "judgement fields are null by design -- fill them with `litkb label`"},
-          args.out)
+    need_eval = sum(1 for i in items if i["testable_by"]["requires_new_evaluator"])
+    print(f"  {len(items)} items, {need_eval} need a new evaluator", file=sys.stderr)
+    _emit({"slug": screened["slug"], "items": items,
+           "unlabelled": len(contracts.validate_items(items))}, args.out)
 
 
 def cmd_label(args):
@@ -456,8 +457,9 @@ def main(argv=None):
     p.add_argument("-o", "--out")
     p.set_defaults(fn=cmd_bind)
 
-    p = sub.add_parser("evidence", help="hits -> draft EvidenceItems (judgement fields null)")
-    p.add_argument("hits")
+    p = sub.add_parser("evidence", help="screen output -> draft EvidenceItems (judgement fields null)")
+    p.add_argument("screen")
+    p.add_argument("--registry", default="../registry/proto_catalog.json")
     p.add_argument("-o", "--out")
     p.set_defaults(fn=cmd_evidence)
 

@@ -117,6 +117,35 @@ def draft_artifact(index, record, doc_id, set_id, extractor="quick-reader", kind
     }
 
 
+def item_from_mechanism(index, class_id, mech, doc_id, citation):
+    """One mechanism read out of a paper -> one EvidenceItem.
+
+    `claim` arrives filled because `screen` is itself an LLM call. `support`
+    stays null: how well established a claim is cannot be read off a single
+    paper's own wording."""
+    return {
+        "id": f"ev_{index:03d}",
+        "question_id": class_id,
+        "claim": mech["claim"],
+        "claim_type": "mechanism",
+        "quantitative": None,
+        "support": None,
+        "citation": citation,
+        "evidence_kind": None,
+        "extracted_by": "structured-extraction",
+        "confidence": None,
+        "testable_by": {"properties": mech.get("measurable_properties", []),
+                        "tools": [], "requires_new_evaluator": True},
+        "provenance": {
+            "doc_id": doc_id,
+            "section": None,
+            "category": "mechanism",
+            "span": mech["chain"],
+            "url": f"https://paperclip.gxl.ai/citations/papers/{doc_id}",
+        },
+    }
+
+
 def citation_from_meta(m):
     # Preprints carry pub_date and source but no pub_year or journal.
     year = m.get("pub_year")
