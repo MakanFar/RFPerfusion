@@ -54,3 +54,18 @@ def test_bind_rejects_when_every_tool_fails():
     result = proto.bind_artifact(DNA, {"tools": [ESM2]})
     assert result["status"] == "rejected"
     assert result["tools"] == []
+
+
+def test_bind_unsupported_kind_returns_distinct_status():
+    mutation = {"kind": "mutation", "molecule": "protein", "value": "A123B", "length": 5}
+    result = proto.bind_artifact(mutation, {"tools": [ESM2]})
+    assert result["status"] == "unsupported_kind"
+    assert result["tools"] == []
+    assert result["rejected_by"] == []
+    assert "mutation" in result["reason"]
+
+
+def test_input_kind_failure_names_artifact_kind():
+    structure_artifact = {"kind": "structure_id", "molecule": "protein", "value": "1ABC", "length": 4}
+    checks = proto.check(structure_artifact, MPNN)
+    assert "structure_id" in checks["input_kind"]

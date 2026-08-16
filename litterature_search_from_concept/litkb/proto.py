@@ -117,7 +117,7 @@ def check(artifact, tool):
     elif kind in ("sequence", "complex"):
         checks["input_kind"] = f"pass tool takes a {kind}"
     else:
-        checks["input_kind"] = f"fail tool needs a {kind}, artifact is a sequence"
+        checks["input_kind"] = f"fail tool needs a {kind}, artifact is a {artifact['kind']}"
 
     molecules = tool.get("molecules")
     if molecules is None:
@@ -147,10 +147,12 @@ def check(artifact, tool):
 
 def bind_artifact(artifact, catalog):
     """Bind one artifact to every tool that accepts it."""
+    if artifact["kind"] not in _SEQUENCE_KINDS:
+        return {"status": "unsupported_kind", "tools": [], "unverified": [],
+                "rejected_by": [], "reason": f"no proto tool consumes a bare {artifact['kind']}"}
+
     accepted, rejected, unverified = [], [], []
     for tool in catalog["tools"]:
-        if artifact["kind"] not in _SEQUENCE_KINDS:
-            continue
         checks = check(artifact, tool)
         failed = [k for k, v in checks.items() if v.startswith("fail")]
         unknown = [k for k, v in checks.items() if v == "unknown"]
