@@ -221,7 +221,12 @@ def _split_annotations(notes):
     """-> (unit, availability). Either may be empty."""
     parts = [p.strip() for p in notes.split(",") if p.strip()]
     if len(parts) >= 2:
-        return ", ".join(parts[:-1]), parts[-1]
+        # Only treat the last part as availability if it actually looks like one.
+        # Otherwise, the whole annotation is a unit (e.g., `log10(IC50, µM)`).
+        last_part = parts[-1]
+        if any(h in last_part.lower() for h in _AVAILABILITY_HINTS):
+            return ", ".join(parts[:-1]), last_part
+        return notes.strip(), ""
     if not parts:
         return "", ""
     only = parts[0]
@@ -274,8 +279,8 @@ def parse_metrics_doc(text):
                 "better": m.group("better"),
                 "primary": bool(m.group("primary")),
             })
-        elif line.startswith("      "):
-            # Deeper indent than a row: a continuation of the row above.
+        elif line.startswith("   "):
+            # Indented more than the 2-space metric row: a continuation.
             continue
         else:
             failures.append(line.strip())

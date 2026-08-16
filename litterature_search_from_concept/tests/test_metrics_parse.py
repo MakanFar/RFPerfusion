@@ -124,3 +124,49 @@ def test_unparseable_row_is_recorded_not_dropped():
     parsed = proto.parse_metrics_doc(doc)
     assert parsed["measures"] == []
     assert "weird_metric" in parsed["failures"][0]
+
+
+def test_unit_with_comma_stays_whole():
+    # A unit containing a comma (e.g. `log10(IC50, µM)`) should not be split
+    # just because it has a comma. Only split if the trailing part is an
+    # availability hint.
+    doc = "Metrics (per structures item):\n  my_metric  float, range [0.0, 1.0], log10(IC50, µM), better=higher\n"
+    parsed = proto.parse_metrics_doc(doc)
+    assert len(parsed["measures"]) == 1
+    assert parsed["measures"][0]["unit"] == "log10(IC50, µM)"
+    assert parsed["measures"][0]["availability"] == ""
+
+
+def test_unit_and_availability_comma_separated():
+    # When both unit and availability are present, the last part should be
+    # availability IF it matches an availability hint.
+    doc = "Metrics (per structures item):\n  my_metric  float, range [0.0, 1.0], %, always, better=higher\n"
+    parsed = proto.parse_metrics_doc(doc)
+    assert len(parsed["measures"]) == 1
+    assert parsed["measures"][0]["unit"] == "%"
+    assert parsed["measures"][0]["availability"] == "always"
+
+
+def test_continuation_at_4_spaces_is_skipped():
+    # A continuation line indented 4 spaces (more than the 2-space metric row)
+    # should be skipped, not recorded as a failure.
+    doc = "Metrics (per structures item):\n  my_metric  float, range [0.0, 1.0], always, better=higher\n    continuation line\n"
+    parsed = proto.parse_metrics_doc(doc)
+    assert len(parsed["measures"]) == 1
+    assert parsed["failures"] == []
+
+
+def test_continuation_at_6_spaces_is_skipped():
+    # A continuation line indented 6 spaces should also be skipped.
+    doc = "Metrics (per structures item):\n  my_metric  float, range [0.0, 1.0], always, better=higher\n      continuation line\n"
+    parsed = proto.parse_metrics_doc(doc)
+    assert len(parsed["measures"]) == 1
+    assert parsed["failures"] == []
+
+
+def test_malformed_row_at_2_spaces_goes_to_failures():
+    # A row at exactly 2 spaces that doesn't parse should go to failures.
+    doc = "Metrics (per structures item):\n  bad_metric  float, no range\n"
+    parsed = proto.parse_metrics_doc(doc)
+    assert parsed["measures"] == []
+    assert "bad_metric" in parsed["failures"][0]
