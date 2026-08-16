@@ -110,6 +110,17 @@ def grep_set(set_id, patterns, ignore_case=False):
     return hits
 
 
+def map_papers(set_id, query, schema, worker="structured-extraction", n=None,
+               concurrency=32):
+    """LLM read across a saved set. Server-side Claude -- no API key here."""
+    args = ["map", "--from", set_id, "--worker", worker,
+            "--output-schema", json.dumps(schema), "-j", str(concurrency)]
+    if n:
+        args += ["-n", str(n)]
+    args.append(query)
+    return _run(args)
+
+
 def meta(doc_id):
     """Citation metadata for one document."""
     out = _run(["cat", f"/papers/{doc_id}/meta.json"])
