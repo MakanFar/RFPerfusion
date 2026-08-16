@@ -17,9 +17,25 @@ question ──▶ propose directions ──▶ decompose into claims ──▶ 
 ## Quick start
 
 ```bash
-export ANTHROPIC_API_KEY=sk-ant-...     # Console credits work here
+codex login                            # one-time subscription sign-in
+export FA_LLM_BACKEND=codex            # the default
 uv run formulate
 ```
+
+The model backend launches a fresh, headless CLI process for every structured
+call and uses that CLI's saved subscription authentication. To use Claude Code
+instead:
+
+```bash
+claude auth login                      # one-time subscription sign-in
+export FA_LLM_BACKEND=claude
+uv run formulate
+```
+
+`FA_MODEL` and `FA_JUDGE_MODEL` are optional provider-specific model names. If
+unset, the selected CLI chooses its configured default. API-key environment
+variables are deliberately removed from child processes so an inherited key
+cannot silently switch a run from subscription usage to API billing.
 
 For agents and automation, use the non-interactive entry point:
 
@@ -110,11 +126,9 @@ session.
 
 Recorded because each one failed silently and looked like something else.
 
-- **Never put `max_length` on a response model.** Anthropic structured outputs
-  don't support string `maxLength` / array `maxItems`. The SDK strips them from
-  the schema sent to the model and validates client-side *afterwards* — so the
-  model never learns the limit, writes past it, and a completed, paid-for
-  generation is thrown away. Put length guidance in the prompt instead.
+- **Never put `max_length` on a response model.** A response that misses a
+  client-side length constraint is discarded after the headless model has
+  already generated it. Put prose-length guidance in the prompt instead.
   `tests/test_verification.py::TestNoUnsupportedConstraints` enforces this.
 - **Proposal runs in two stages** (`propose_outline` → `expand_all`). One call
   producing six fully-decomposed directions took 6+ minutes, during which the
@@ -173,5 +187,6 @@ uv run pytest tests/ -q          # 15 tests, incl. live corpus checks
 uv run pytest tests/ -m "not live"
 ```
 
-Tunable via env: `FA_MODEL`, `FA_JUDGE_MODEL`, `FA_EFFORT`, `FA_N_IDEAS`,
-`FA_PAPERS_PER_CLAIM`, `FA_SOURCES`, `FA_PC_CONCURRENCY`.
+Tunable via env: `FA_LLM_BACKEND`, `FA_MODEL`, `FA_JUDGE_MODEL`, `FA_EFFORT`,
+`FA_LLM_CONCURRENCY`, `FA_N_IDEAS`, `FA_PAPERS_PER_CLAIM`, `FA_SOURCES`,
+`FA_PC_CONCURRENCY`.

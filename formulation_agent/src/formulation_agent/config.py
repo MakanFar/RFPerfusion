@@ -5,19 +5,19 @@ from __future__ import annotations
 import os
 from dataclasses import dataclass
 
-# Claude Opus 5: thinking is on by default, so max_tokens bounds thinking +
-# visible text together. Keep it generous or structured answers truncate.
-MODEL = os.environ.get("FA_MODEL", "claude-opus-5")
-JUDGE_MODEL = os.environ.get("FA_JUDGE_MODEL", "claude-sonnet-5")
+MODEL = os.environ.get("FA_MODEL", "").strip() or None
+JUDGE_MODEL = os.environ.get("FA_JUDGE_MODEL", "").strip() or None
 
 
 @dataclass(frozen=True)
 class Settings:
-    model: str = MODEL
+    # Each model call launches one subscription-authenticated headless CLI.
+    llm_backend: str = os.environ.get("FA_LLM_BACKEND", "codex")
+    model: str | None = MODEL
     # The entailment judge is a narrow yes/partial/no call over a short passage.
-    # A smaller model keeps it cheap, and independence from the proposing model
-    # is the point of the check.
-    judge_model: str = JUDGE_MODEL
+    # Set FA_JUDGE_MODEL to use a different provider-specific model; otherwise
+    # the selected CLI's default runs in a fresh, isolated process.
+    judge_model: str | None = JUDGE_MODEL
 
     max_tokens: int = 16_000
     judge_max_tokens: int = 2_000
@@ -32,8 +32,7 @@ class Settings:
     propose_effort: str = os.environ.get("FA_PROPOSE_EFFORT", "high")
     expand_effort: str = os.environ.get("FA_EXPAND_EFFORT", "medium")
 
-    # Without this the SDK default (10 min, 2 retries) lets a wedged call hang
-    # for ~30 minutes with no way to tell it apart from slow work.
+    # Bound a wedged headless child process and surface a useful failure.
     request_timeout: float = float(os.environ.get("FA_REQUEST_TIMEOUT", "240"))
 
     n_ideas: int = int(os.environ.get("FA_N_IDEAS", "6"))
@@ -54,7 +53,7 @@ class Settings:
     # These subprocesses sit near 0% CPU waiting on the network, so this cap
     # protects nothing locally — it only throttles throughput.
     paperclip_concurrency: int = int(os.environ.get("FA_PC_CONCURRENCY", "16"))
-    llm_concurrency: int = int(os.environ.get("FA_LLM_CONCURRENCY", "6"))
+    llm_concurrency: int = int(os.environ.get("FA_LLM_CONCURRENCY", "2"))
 
     # Queried one at a time and merged: paperclip's comma form silently
     # returns PMC-only results instead of unioning the corpora.
@@ -68,18 +67,6 @@ class Settings:
 
     def source_list(self) -> list[str]:
         return [s.strip() for s in self.sources.split(",") if s.strip()]
-
-    def require_api_key(self) -> str:
-        key = os.environ.get("ANTHROPIC_API_KEY", "").strip()
-        if not key:
-            raise SystemExit(
-                "ANTHROPIC_API_KEY is not set.\n\n"
-                "The formulation agent needs Claude API access. If you are using "
-                "Console credits, create a key in the workspace holding the balance "
-                "and run:\n\n"
-                "    export ANTHROPIC_API_KEY=sk-ant-...\n"
-            )
-        return key
 
 
 SETTINGS = Settings()

@@ -196,8 +196,7 @@ def render_idea(idea: Idea, show_failures: bool = False) -> None:
 
 class App:
     def __init__(self) -> None:
-        key = SETTINGS.require_api_key()
-        self.llm = LLM(api_key=key)
+        self.llm = LLM()
         self.pc = Paperclip(concurrency=SETTINGS.paperclip_concurrency)
         self.agent = FormulationAgent(self.llm, self.pc)
         self.followups = FollowupManager(self.agent)

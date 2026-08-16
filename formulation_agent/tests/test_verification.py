@@ -184,12 +184,10 @@ class TestLiveQuoteCheck:
 
 
 class TestNoUnsupportedConstraints:
-    """Response models must not carry constraints the API cannot enforce.
+    """Response models must not carry client-side prose-length constraints.
 
-    Anthropic structured outputs do not support string `maxLength` or array
-    `maxItems`. The SDK strips them from the schema sent to the model and then
-    validates client-side, so the model never learns the limit, writes past it,
-    and a finished — already paid for — generation is thrown away.
+    If a headless provider does not enforce one of these constraints during
+    generation, local validation discards an otherwise complete response.
 
     This cost a real session (`ChatReply.reply` capped at 2000 chars), so it is
     checked mechanically rather than left to review.

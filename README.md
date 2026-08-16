@@ -19,11 +19,13 @@ RFPerfusion combines project design documents, literature-search tooling, and a 
 From the repository root:
 
 ```bash
-export ANTHROPIC_API_KEY=sk-ant-...        # or paste it into the browser UI
+codex login                                # one-time subscription sign-in
+export FA_LLM_BACKEND=codex                # default; or: claude
 uv run --project formulation_agent formulate-web
 ```
 
 Opens a local browser UI. `formulate` runs the same engine in the terminal.
+For Claude, run `claude auth login` once and set `FA_LLM_BACKEND=claude`.
 Details, guarantees and known corpus limitations: [formulation_agent/README.md](formulation_agent/README.md).
 
 ## Proto-tools setup
