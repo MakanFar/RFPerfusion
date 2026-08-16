@@ -1,0 +1,4 @@
+interface:
+  display_name: "Write Proto Program"
+  short_description: "Author a constraint-based sequence design program"
+  default_prompt: "Use $write-program to author and validate a proto-language design program for this objective."
