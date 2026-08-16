@@ -1,0 +1,28 @@
+[project]
+name = "formulation-agent007"
+version = "0.1.0"
+description = "Protein design question -> shard decomposition, Paperclip mining plan, assembly recipe, and a proto-tools fitness cascade."
+requires-python = ">=3.12"
+dependencies = [
+    "pydantic>=2.13.4",
+    "rich>=15.0.0",
+]
+
+[project.scripts]
+formulate007 = "formulation_agent007.cli:main"
+formulate007-run = "formulation_agent007.run:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/formulation_agent007"]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.1.1",
+]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
