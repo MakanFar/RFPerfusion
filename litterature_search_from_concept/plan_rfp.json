@@ -1,0 +1,41 @@
+{
+  "search_phrases": [
+    "radiofrequency magnetic field",
+    "alternating magnetic field",
+    "magnetic nanoparticle hyperthermia",
+    "magnetothermal neural stimulation",
+    "remote control of protein activity",
+    "radical pair mechanism",
+    "cryptochrome magnetoreception",
+    "engineered magnetoreceptor",
+    "terahertz radiation protein",
+    "non-thermal microwave effect",
+    "ferritin iron core",
+    "thermosensitive ion channel TRPV1",
+    "electromagnetic field exposure protein",
+    "magnetic field effect on enzyme"
+  ],
+  "mechanism_patterns": [
+    "specific absorption rate",
+    "spin-correlated radical pair",
+    "hyperfine coupling",
+    "singlet-triplet interconversion",
+    "Neel relaxation",
+    "Brownian relaxation",
+    "local temperature increase",
+    "non-thermal mechanism",
+    "dielectric relaxation",
+    "collective vibrational modes",
+    "conformational change upon",
+    "channel gating",
+    "flavin adenine dinucleotide",
+    "photoinduced electron transfer",
+    "magnetic field effect on",
+    "iron oxide nanoparticle",
+    "energy of a single photon",
+    "thermal dissipation",
+    "torque on the particle",
+    "structure-function relationship"
+  ],
+  "notes": "Excluded optogenetics and visible/UV chromophore phrases (channelrhodopsin, LOV domain, phytochrome) since the concept explicitly asks for actuation outside the biological chromophore range; also excluded clinical RF-ablation and MRI-safety literature, which is about tissue heating rather than protein-level mechanism. Kept a small terahertz/microwave arm because it is the main non-magnetic route to RF-frequency protein coupling."
+}

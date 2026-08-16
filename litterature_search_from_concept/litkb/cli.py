@@ -1,0 +1,712 @@
+#!/usr/bin/env python3
+"""litkb -- concept -> corpus -> typed evidence, as discrete tool calls.
+
+Each subcommand reads JSON, writes JSON, and does exactly one thing, so an
+agent can drive the pipeline, inspect any stage, and retry one step without
+rerunning the rest. All judgement (planning, claim wording, support level)
+belongs to the calling agent; this tool only does deterministic work.
+
+Feeds L1 of docs/PRD-framework.md. Requires Python >= 3.10.
+"""
+
+import argparse
+import json
+import sys
+from pathlib import Path
+
+from . import contracts, proto, reader, report
+from .paperclip import PaperclipError, count, grep_set, map_papers, meta, search
+
+
+def _load(path):
+    return json.loads(Path(path).read_text())
+
+
+def _emit(data, out):
+    text = json.dumps(data, indent=2)
+    if out:
+        Path(out).parent.mkdir(parents=True, exist_ok=True)
+        Path(out).write_text(text + "\n")
+        print(f"-> {out}", file=sys.stderr)
+    else:
+        print(text)
+
+
+def _fail(lines):
+    for line in lines:
+        print(f"  {line}", file=sys.stderr)
+    sys.exit(1)
+
+
+def _resolve_out(args, default_name):
+    """Resolve where an artifact-writing command should write.
+
+    --output-dir is additive, never a replacement for -o: with neither set,
+    a caller keeps printing to stdout exactly as before (`_emit`'s existing
+    behaviour). With --output-dir alone, the artifact lands at
+    <output-dir>/<default_name>, following the run-directory convention the
+    other skills use (outputs/<UTC-timestamp>-<slug>/...) -- the timestamped
+    directory itself is the caller's job to create and pass in, same as
+    paperclip_kb.py's own --output-dir. With both set, -o is treated as a
+    filename inside --output-dir unless it is already absolute, in which
+    case the explicit absolute path wins as a deliberate override.
+    """
+    out_dir = getattr(args, "output_dir", None)
+    out = getattr(args, "out", None)
+    if not out_dir:
+        return out
+    base = Path(out_dir)
+    if out:
+        out_path = Path(out)
+        return str(out_path if out_path.is_absolute() else base / out_path)
+    return str(base / default_name)
+
+
+# ----------------------------------------------------------------- plan
+
+TEMPLATE = {
+    "objective": "<the free-text design concept>",
+    "slug": "<short name>",
+    "mechanism_classes": [
+        {
+            "id": "<snake_case mechanism class, e.g. thermal_transduction>",
+            "question": "<the sub-question this class answers>",
+            "candidate_evaluators": [],
+            "search_phrases": [
+                "<multi-word phrase authors write VERBATIM in a title or abstract>"
+            ],
+            "mechanism_patterns": [
+                "<distinctive multi-word fragment flagging mechanistic content>"
+            ],
+        }
+    ],
+    "exclusions": [
+        {"excluded": "<what you deliberately left out>", "reason": "<why>"}
+    ],
+}
+
+
+def rows_to_plan(rows, objective, slug, groups):
+    """Turn curated keyword rows into a class-structured plan.
+
+    Rows are expert-written keyword bags, not verbatim phrases, so they are
+    searched semantically. An ungrouped row is an error rather than a silent
+    drop -- losing an expert query without saying so is the failure mode this
+    guards against."""
+    grouped = {r for rs in groups.values() for r in rs}
+    orphans = [r for r in rows if r not in grouped]
+    if orphans:
+        raise contracts.ContractError(
+            f"rows not assigned to any mechanism class: {orphans}")
+
+    return {
+        "objective": objective,
+        "slug": slug,
+        "search_mode": "semantic",
+        "mechanism_classes": [
+            {"id": cid,
+             "question": f"What does the literature say about {cid.replace('_', ' ')}?",
+             "candidate_evaluators": [],
+             "search_phrases": phrases,
+             "mechanism_patterns": ["mechanism"]}
+            for cid, phrases in groups.items()
+        ],
+        "exclusions": [],
+    }
+
+
+def cmd_plan_import(args):
+    rows = [line.strip() for line in Path(args.csv).read_text().splitlines()[1:]
+            if line.strip()]
+    groups = _load(args.groups)
+    plan = rows_to_plan(rows, args.objective, args.slug, groups)
+    _emit(plan, _resolve_out(args, f"plan_{args.slug}.json"))
+
+
+def cmd_plan_adopt(args):
+    """Lift a design-brief's flat plan_<slug>.json into litkb's
+    class-structured plan. See contracts.adopt_brief_plan for the mapping
+    and why a one-class plan here is correct, not degraded."""
+    brief_plan = _load(args.plan)
+    adopted = contracts.adopt_brief_plan(brief_plan, args.objective, args.slug, args.plan)
+    _emit(adopted, _resolve_out(args, f"plan_{args.slug}.json"))
+
+
+def cmd_plan_template(args):
+    _emit(TEMPLATE, args.out)
+    print(
+        "\nWrite one class per mechanism class, not per phrase -- the framework "
+        "measures coverage over classes (>=6) and this is where that is decided.\n"
+        "search_phrases are matched as STRICT LITERALS. Probe each with "
+        "`litkb plan-validate <plan> --probe` before searching.",
+        file=sys.stderr,
+    )
+
+
+def cmd_plan_validate(args):
+    plan = _load(args.plan)
+    errors = contracts.validate_plan(plan)
+    if errors:
+        print("plan is invalid:", file=sys.stderr)
+        _fail(errors)
+
+    exact = plan.get("search_mode") != "semantic"
+    result = {"valid": True, "classes": [], "warnings": []}
+    for c in plan["mechanism_classes"]:
+        entry = {"id": c["id"], "n_phrases": len(c["search_phrases"])}
+        if args.probe:
+            probes = [{"phrase": p, "n_papers": count(p, args.sources, exact=exact)}
+                      for p in c["search_phrases"]]
+            entry["probes"] = probes
+            entry["n_papers_estimated"] = sum(p["n_papers"] for p in probes)
+            for p in probes:
+                if p["n_papers"] == 0:
+                    if exact:
+                        warning = (
+                            f"{c['id']}: phrase '{p['phrase']}' returns 0 papers -- "
+                            "exact match is literal, rewrite it as something authors write"
+                        )
+                    else:
+                        warning = (
+                            f"{c['id']}: phrase '{p['phrase']}' returns 0 papers under hybrid ranking"
+                        )
+                    result["warnings"].append(warning)
+        result["classes"].append(entry)
+
+    if args.probe:
+        total = sum(e.get("n_papers_estimated", 0) for e in result["classes"])
+        for e in result["classes"]:
+            got = e.get("n_papers_estimated", 0)
+            if total and got / total > 0.5:
+                result["warnings"].append(
+                    f"{e['id']}: {got}/{total} papers come from this one class -- "
+                    "it will swamp the corpus"
+                )
+    _emit(result, args.out)
+
+
+# --------------------------------------------------------------- search
+
+
+def cmd_search(args):
+    plan = _load(args.plan)
+    errors = contracts.validate_plan(plan)
+    if errors:
+        _fail(errors)
+
+    exact = plan.get("search_mode") != "semantic"
+    out = {"slug": plan["slug"], "sources": args.sources, "n": args.n, "classes": [],
+           "rejections": list(plan.get("exclusions", []))}
+
+    for c in plan["mechanism_classes"]:
+        sets = []
+        for phrase in c["search_phrases"]:
+            r = search(phrase, args.sources, args.n, exact=exact)
+            print(f"  {c['id']:<28} {r['n_papers']:>4}  {phrase}", file=sys.stderr)
+            if r["set_id"]:
+                sets.append(r)
+            else:
+                reason = (
+                    "exact-phrase search returned no papers" if exact
+                    else "hybrid ranking returned no papers"
+                )
+                out["rejections"].append({
+                    "kind": "phrase_zero_yield",
+                    "class_id": c["id"],
+                    "phrase": phrase,
+                    "reason": reason,
+                })
+        entry = {
+            "id": c["id"],
+            "sets": sets,
+            "n_papers_total": sum(s["n_papers"] for s in sets),
+            "status": "covered" if sets else "empty",
+        }
+        if not sets:
+            out["rejections"].append({
+                "kind": "class_no_corpus",
+                "class_id": c["id"],
+                "reason": "every phrase in this mechanism class returned no papers",
+            })
+        out["classes"].append(entry)
+
+    covered = sum(1 for c in out["classes"] if c["status"] == "covered")
+    out["coverage"] = {"classes_covered": covered,
+                       "classes_total": len(out["classes"]),
+                       "meets_framework_minimum": covered >= 6}
+    _emit(out, _resolve_out(args, f"search_{plan['slug']}.json"))
+
+
+# ---------------------------------------------------------- screen / dig / bind
+
+
+# Worker actually invoked by cmd_screen for the mechanism sweep -- named
+# once here, the same pattern as DIG_WORKER below, so the `extracted_by`
+# threaded into the screen output (and from there into every EvidenceItem
+# cmd_evidence builds) can never drift from the worker paperclip is
+# actually asked to run. structured-extraction is gated to GXL testers on
+# this account (see litkb/paperclip.py's map_papers default-worker
+# comment); quick-reader is the only worker this account can actually run,
+# so it is passed explicitly below rather than left to map_papers's default.
+SCREEN_WORKER = "quick-reader"
+
+
+def cmd_screen(args):
+    found = _load(args.search)
+    records = []
+    for cls in found["classes"]:
+        for s in cls["sets"]:
+            raw = map_papers(s["set_id"], reader.SCREEN_QUERY,
+                             reader.SCREEN_SCHEMA, worker=SCREEN_WORKER, n=args.n)
+            for rec in reader.parse_map_output(raw):
+                rec["class_id"] = cls["id"]
+                rec["set_id"] = s["set_id"]
+                records.append(rec)
+            print(f"  {cls['id']:<28} {s['set_id']} read", file=sys.stderr)
+    flagged = reader.flagged_for_dig(records)
+    failed = reader.failed_extractions(records)
+    print(f"  {len(flagged)}/{len(records)} papers claim a sequence, "
+          f"{len(failed)} failed extraction", file=sys.stderr)
+    _emit({"slug": found["slug"], "papers": records, "flagged": flagged,
+           "failed": failed, "extracted_by": SCREEN_WORKER},
+          _resolve_out(args, f"screen_{found['slug']}.json"))
+
+
+# Worker actually invoked by cmd_dig for both sequence and mutation reads --
+# named once here so the `extractor=` recorded on every draft_artifact this
+# command emits can never drift from the worker paperclip is actually asked
+# to run. exhaustive-extraction is gated to GXL testers on this account (see
+# cmd_screen and paperclip.py's map_papers default-worker comment); only
+# quick-reader runs here, so it is both the worker= passed below and the
+# extractor= credited on the artifact.
+DIG_WORKER = "quick-reader"
+
+
+def cmd_dig(args):
+    screened = _load(args.screen)
+    flagged = set(screened["flagged"])
+    by_set, totals = {}, {}
+    for rec in screened["papers"]:
+        totals[rec["set_id"]] = totals.get(rec["set_id"], 0) + 1
+        if rec["doc_id"] in flagged:
+            by_set.setdefault(rec["set_id"], []).append(rec["doc_id"])
+
+    artifacts, n = [], 0
+    for set_id, docs in by_set.items():
+        # Controller ruling: this waste is unavoidable, not a bug -- make it
+        # visible instead. paperclip offers no way to scope a map to
+        # specific doc ids (map has no doc filter; refine filters only on
+        # metadata flags; intersect/subtract work on sets, not docs; merge
+        # is broken), so `map --from set_id` below re-reads every paper in
+        # the set even though only `docs` are flagged; the per-doc filter
+        # after parsing discards the rest.
+        print(f"  {set_id}  re-reading {totals[set_id]} papers for {len(docs)} flagged "
+              "(paperclip cannot scope a map to doc ids)", file=sys.stderr)
+        raw = map_papers(set_id, reader.DIG_QUERY, reader.DIG_SCHEMA,
+                         worker=DIG_WORKER, n=args.n)
+        for rec in reader.parse_map_output(raw):
+            if rec["doc_id"] not in flagged:
+                continue
+            for seq in rec.get("sequences", []):
+                n += 1
+                artifacts.append(contracts.draft_artifact(
+                    n, seq, rec["doc_id"], set_id, extractor=DIG_WORKER))
+            # DIG_SCHEMA's mutations were paid for the same as sequences --
+            # they must not disappear with no trace. Each becomes a
+            # "mutation"-kind artifact; proto.bind_artifact has no tool that
+            # consumes a bare mutation, so it flows through `bind` and lands
+            # in rejections with reason unsupported_kind rather than
+            # vanishing silently.
+            for mut in rec.get("mutations", []):
+                n += 1
+                mut_record = {"value": mut["mutation"], "molecule": "protein",
+                              "name": mut["parent"], "verbatim": True}
+                artifacts.append(contracts.draft_artifact(
+                    n, mut_record, rec["doc_id"], set_id,
+                    extractor=DIG_WORKER, kind="mutation"))
+    n_seq = sum(1 for a in artifacts if a["kind"] != "mutation")
+    n_mut = len(artifacts) - n_seq
+    print(f"  {n_seq} candidate sequences, {n_mut} mutations", file=sys.stderr)
+    # extracted_by is threaded at the top level (not just per-artifact
+    # provenance.extractor) so `litkb manifest` can record the worker dig
+    # actually used even on a run where dig flagged zero sequences and
+    # `artifacts` came back empty.
+    _emit({"slug": screened["slug"], "artifacts": artifacts, "extracted_by": DIG_WORKER},
+          _resolve_out(args, f"dig_{screened['slug']}.json"))
+
+
+def cmd_bind(args):
+    dug = _load(args.artifacts)
+    if not Path(args.registry).exists():
+        _fail([f"registry not found: {args.registry}",
+               "run `litkb proto-sync -o <registry>` first"])
+    catalog = _load(args.registry)
+    kept, rejections = [], []
+
+    for art in dug["artifacts"]:
+        doc_id = art["provenance"]["doc_id"]
+        # confirm_in_source's grep_fn is 2-arg (set_id, patterns) and cannot
+        # itself request fixed-string matching -- so this closure asks for
+        # it explicitly. A bare grep_set would send the sequence to
+        # `paperclip grep -e` as a REGEX, and a sequence containing `*`
+        # (stop codon) or `.` (masked residue) could then match text that
+        # is not actually the sequence, producing a false confirmation --
+        # exactly what this check exists to prevent.
+        art["provenance"]["confirmed_in_source"] = reader.confirm_in_source(
+            {"value": art["value"], "verbatim": art["provenance"]["verbatim"],
+             "provenance": art["provenance"]},
+            lambda set_id, patterns: grep_set(set_id, patterns, fixed=True),
+        )
+        if not art["provenance"]["confirmed_in_source"]:
+            if art["kind"] == "mutation":
+                # A genuine, paper-reported mutation whose notation the
+                # reader normalised (Val342Ala written as V342A, spacing,
+                # etc.) fails a literal grep for a reason quite different
+                # from fabrication -- say so, rather than reusing the
+                # sequence-fabrication wording on what may be a real finding.
+                reason = ("mutation notation as extracted does not appear "
+                          "verbatim in its source document -- a notation "
+                          "mismatch (e.g. three-letter vs one-letter amino-acid "
+                          "codes, or spacing) is a more likely cause than "
+                          "fabrication")
+            else:
+                reason = "sequence does not literally appear in its source document"
+            rejections.append({"kind": "not_confirmed_in_source", "id": art["id"],
+                               "doc_id": doc_id, "reason": reason})
+            continue
+        art["proto_binding"] = proto.bind_artifact(art, catalog)
+        status = art["proto_binding"]["status"]
+        if status == "runnable":
+            kept.append(art)
+        elif status == "unsupported_kind":
+            rejections.append({"kind": f"proto_{status}", "id": art["id"],
+                               "doc_id": doc_id,
+                               "reason": art["proto_binding"].get("reason",
+                                         "no proto tool consumes this artifact kind")})
+        else:
+            rejections.append({"kind": f"proto_{status}",
+                               "id": art["id"],
+                               "doc_id": doc_id,
+                               "reason": art["proto_binding"]["rejected_by"] or
+                                         art["proto_binding"]["unverified"]})
+
+    print(f"  {len(kept)} runnable, {len(rejections)} rejected", file=sys.stderr)
+    _emit({"slug": dug["slug"], "artifacts": kept, "rejections": rejections},
+          _resolve_out(args, f"artifacts_{dug['slug']}.json"))
+
+
+# ------------------------------------------------------------- evidence
+
+
+def cmd_evidence(args):
+    screened = _load(args.screen)
+    catalog = _load(args.registry) if Path(args.registry).exists() else {"tools": []}
+    # Record the worker that actually produced these mechanisms, not an
+    # assumed one -- cmd_screen threads its own SCREEN_WORKER through the
+    # screen output for exactly this. Falling back to SCREEN_WORKER only
+    # covers a screen.json written before this field existed; it is not a
+    # guess about a different pipeline run.
+    extracted_by = screened.get("extracted_by", SCREEN_WORKER)
+    items, cache, n = [], {}, 0
+
+    for rec in screened["papers"]:
+        doc = rec["doc_id"]
+        if doc not in cache:
+            cache[doc] = contracts.citation_from_meta(meta(doc))
+        for mech in rec.get("mechanisms", []):
+            n += 1
+            item = contracts.item_from_mechanism(n, rec["class_id"], mech, doc, cache[doc],
+                                                 extracted_by=extracted_by)
+            item["testable_by"] = {
+                "properties": mech.get("measurable_properties", []),
+                **proto.resolve_properties(mech.get("measurable_properties", []), catalog),
+            }
+            items.append(item)
+
+    need_eval = sum(1 for i in items if i["testable_by"]["requires_new_evaluator"])
+    print(f"  {len(items)} items, {need_eval} need a new evaluator", file=sys.stderr)
+    _emit({"slug": screened["slug"], "items": items,
+           "unlabelled": len(contracts.validate_items(items))},
+          _resolve_out(args, f"evidence_{screened['slug']}.json"))
+
+
+def cmd_label(args):
+    ev = _load(args.evidence)
+    labels = _load(args.labels)
+    if isinstance(labels, dict):
+        labels = labels.get("labels", [])
+    applied, errors = contracts.apply_labels(ev["items"], labels)
+    if errors:
+        print(f"applied {applied} labels, {len(errors)} rejected:", file=sys.stderr)
+        _fail(errors)
+    ev["unlabelled"] = len(contracts.validate_items(ev["items"]))
+    _emit(ev, args.out or args.evidence)
+
+
+def cmd_validate(args):
+    ev = _load(args.evidence)
+    errors = contracts.validate_items(ev["items"])
+    if errors:
+        print(f"{len(errors)} of {len(ev['items'])} items are not ready for L1:",
+              file=sys.stderr)
+        _fail(errors[:20])
+    print(f"all {len(ev['items'])} items complete", file=sys.stderr)
+
+
+# ------------------------------------------------------------- registry
+
+
+def resolve_coverage(plan, catalog):
+    """Resolve each mechanism class against the proto catalogue.
+
+    §6: an uncalibrated evaluator may run but may not rank, so a class is
+    `full` only when every tool it names is both known and validated."""
+    known = {t["key"]: t for t in catalog["tools"]}
+    classes = []
+    for c in plan["mechanism_classes"]:
+        wanted = c.get("candidate_evaluators", [])
+        bound = [w for w in wanted if w in known]
+        usable = [b for b in bound if known[b].get("status") == "validated"]
+        if not wanted or not bound:
+            coverage = "none"
+        elif len(bound) == len(wanted) and len(usable) == len(bound):
+            coverage = "full"
+        else:
+            coverage = "partial"
+        classes.append({
+            "id": c["id"],
+            "evaluator_coverage": coverage,
+            "bound": bound,
+            "unresolved": [w for w in wanted if w not in known],
+            "uncalibrated": [b for b in bound if b not in usable],
+            "requires_new_evaluator": coverage == "none",
+        })
+    return classes
+
+
+def cmd_proto_sync(args):
+    tools = proto.fetch_tools(args.project)
+    print(f"  {len(tools)} tools from proto-tools", file=sys.stderr)
+    catalog = proto.build_catalog(tools, lambda k: proto.fetch_input_doc(k, args.project))
+    parsed = sum(1 for t in catalog["tools"] if t["max_length"] is not None)
+    print(f"  {parsed}/{len(tools)} have a parseable length cap", file=sys.stderr)
+    _emit(catalog, args.out)
+
+
+def cmd_registry_check(args):
+    plan = _load(args.plan)
+    path = Path(args.registry)
+    if not path.exists():
+        _emit({"registry": str(path), "status": "missing",
+               "classes": [{"id": c["id"], "evaluator_coverage": "unknown"}
+                           for c in plan["mechanism_classes"]],
+               "note": "run `litkb proto-sync -o registry/proto_catalog.json` first"},
+              args.out)
+        return
+    _emit({"registry": str(path), "status": "loaded",
+           "classes": resolve_coverage(plan, _load(path))}, args.out)
+
+
+# --------------------------------------------------------------- report
+
+
+def cmd_report(args):
+    ev = _load(args.evidence)
+    search_path = getattr(args, "search", None)
+    artifacts_path = getattr(args, "artifacts", None)
+    search = _load(search_path) if search_path else None
+    artifacts = _load(artifacts_path) if artifacts_path else None
+    text = report.render(ev, search, artifacts)
+
+    out = _resolve_out(args, f"knowledge_base_{ev['slug']}.txt")
+    if not out:
+        _fail(["report needs an output path: pass -o FILE or --output-dir DIR"])
+    Path(out).parent.mkdir(parents=True, exist_ok=True)
+    Path(out).write_text(text)
+    print(f"-> {out}", file=sys.stderr)
+
+    # report is the terminal step of a run per the output contract (a run
+    # directory holds plan_, knowledge_base_, and manifest_) -- so it emits
+    # manifest_<slug>.json alongside its own output too, from whatever stage
+    # inputs it was actually given, rather than requiring a separate
+    # `litkb manifest` invocation on every run.
+    plan_path = getattr(args, "plan", None)
+    screen_path = getattr(args, "screen", None)
+    dig_path = getattr(args, "dig", None)
+    plan = _load(plan_path) if plan_path else None
+    screen = _load(screen_path) if screen_path else None
+    dig = _load(dig_path) if dig_path else None
+    objective = getattr(args, "objective", None) or (plan or {}).get("objective")
+    manifest = contracts.build_manifest(
+        slug=ev["slug"], objective=objective, search=search, screen=screen, dig=dig,
+        artifacts=artifacts, evidence=ev,
+        paths={"plan": plan_path, "search": search_path, "screen": screen_path,
+               "dig": dig_path, "artifacts": artifacts_path, "evidence": args.evidence,
+               "report": out},
+    )
+    _emit(manifest, str(Path(out).parent / f"manifest_{ev['slug']}.json"))
+
+
+# ------------------------------------------------------------- manifest
+
+
+def cmd_manifest(args):
+    """Assemble manifest_<slug>.json from whatever stage outputs the caller
+    has on disk. Every input is optional (design goal: a partial run must
+    still produce a manifest describing what exists), so slug/objective are
+    recovered from --slug/--objective first and from any provided stage
+    JSON's own slug/objective fields second."""
+    plan = _load(args.plan) if args.plan else None
+    search = _load(args.search) if args.search else None
+    screen = _load(args.screen) if args.screen else None
+    dig = _load(args.dig) if args.dig else None
+    artifacts = _load(args.artifacts) if args.artifacts else None
+    evidence = _load(args.evidence) if args.evidence else None
+
+    slug = (args.slug or (plan or {}).get("slug") or (search or {}).get("slug") or
+            (screen or {}).get("slug") or (dig or {}).get("slug") or
+            (artifacts or {}).get("slug") or (evidence or {}).get("slug"))
+    if not slug:
+        _fail(["manifest needs a slug: pass --slug, or one of "
+               "--plan/--search/--screen/--dig/--artifacts/--evidence whose "
+               "JSON carries one"])
+    objective = args.objective or (plan or {}).get("objective")
+
+    manifest = contracts.build_manifest(
+        slug=slug, objective=objective, search=search, screen=screen, dig=dig,
+        artifacts=artifacts, evidence=evidence,
+        paths={"plan": args.plan, "search": args.search, "screen": args.screen,
+               "dig": args.dig, "artifacts": args.artifacts, "evidence": args.evidence},
+    )
+    _emit(manifest, _resolve_out(args, f"manifest_{slug}.json"))
+
+
+# ------------------------------------------------------------------ cli
+
+
+def main(argv=None):
+    ap = argparse.ArgumentParser(prog="litkb", description=__doc__,
+                                 formatter_class=argparse.RawDescriptionHelpFormatter)
+    sub = ap.add_subparsers(dest="cmd", required=True)
+
+    p = sub.add_parser("plan-template", help="print an empty plan for the agent to fill")
+    p.add_argument("-o", "--out")
+    p.set_defaults(fn=cmd_plan_template)
+
+    p = sub.add_parser("plan-validate", help="schema-check a plan; --probe tests phrase yield")
+    p.add_argument("plan")
+    p.add_argument("--probe", action="store_true")
+    p.add_argument("--sources", default="pmc")
+    p.add_argument("-o", "--out")
+    p.set_defaults(fn=cmd_plan_validate)
+
+    p = sub.add_parser("plan-import", help="curated keyword CSV -> class-structured plan")
+    p.add_argument("csv")
+    p.add_argument("groups", help="JSON mapping class id -> list of CSV rows")
+    p.add_argument("--objective", required=True)
+    p.add_argument("--slug", required=True)
+    p.add_argument("-o", "--out")
+    p.add_argument("--output-dir")
+    p.set_defaults(fn=cmd_plan_import)
+
+    p = sub.add_parser("plan-adopt", help="lift a design-brief's flat plan into litkb's class-structured plan")
+    p.add_argument("plan", help="the brief's plan_<slug>.json (search_phrases/mechanism_patterns/notes)")
+    p.add_argument("--objective", required=True)
+    p.add_argument("--slug", required=True)
+    p.add_argument("-o", "--out")
+    p.add_argument("--output-dir")
+    p.set_defaults(fn=cmd_plan_adopt)
+
+    p = sub.add_parser("search", help="run every phrase, keep every set ID")
+    p.add_argument("plan")
+    p.add_argument("--sources", default="pmc,biorxiv")
+    p.add_argument("-n", type=int, default=100)
+    p.add_argument("-o", "--out")
+    p.add_argument("--output-dir")
+    p.set_defaults(fn=cmd_search)
+
+    p = sub.add_parser("screen", help="cheap full-text sweep for mechanisms")
+    p.add_argument("search")
+    p.add_argument("-n", type=int, default=None)
+    p.add_argument("-o", "--out")
+    p.add_argument("--output-dir")
+    p.set_defaults(fn=cmd_screen)
+
+    p = sub.add_parser("dig", help="deep read of papers that claim a sequence")
+    p.add_argument("screen")
+    p.add_argument("-n", type=int, default=None)
+    p.add_argument("-o", "--out")
+    p.add_argument("--output-dir")
+    p.set_defaults(fn=cmd_dig)
+
+    p = sub.add_parser("bind", help="verify artifacts against the proto catalogue")
+    p.add_argument("artifacts")
+    p.add_argument("--registry", default="../registry/proto_catalog.json")
+    p.add_argument("-o", "--out")
+    p.add_argument("--output-dir")
+    p.set_defaults(fn=cmd_bind)
+
+    p = sub.add_parser("evidence", help="screen output -> draft EvidenceItems (judgement fields null)")
+    p.add_argument("screen")
+    p.add_argument("--registry", default="../registry/proto_catalog.json")
+    p.add_argument("-o", "--out")
+    p.add_argument("--output-dir")
+    p.set_defaults(fn=cmd_evidence)
+
+    p = sub.add_parser("label", help="merge agent-written judgements into evidence")
+    p.add_argument("evidence")
+    p.add_argument("labels")
+    p.add_argument("-o", "--out")
+    p.set_defaults(fn=cmd_label)
+
+    p = sub.add_parser("validate", help="are all items complete enough for L1?")
+    p.add_argument("evidence")
+    p.set_defaults(fn=cmd_validate)
+
+    p = sub.add_parser("proto-sync", help="regenerate the proto-tools constraint catalogue")
+    p.add_argument("--project", default="../proto")
+    p.add_argument("-o", "--out")
+    p.set_defaults(fn=cmd_proto_sync)
+
+    p = sub.add_parser("registry-check", help="resolve mechanism classes against the evaluator registry")
+    p.add_argument("plan")
+    p.add_argument("--registry", default="../registry/proto_catalog.json")
+    p.add_argument("-o", "--out")
+    p.set_defaults(fn=cmd_registry_check)
+
+    p = sub.add_parser("report", help="render the human-readable knowledge base; also emits manifest_<slug>.json")
+    p.add_argument("evidence")
+    p.add_argument("--search")
+    p.add_argument("--artifacts")
+    p.add_argument("--plan", help="used only to recover `objective` for the emitted manifest")
+    p.add_argument("--screen", help="used only to fill manifest counts/worker; not rendered")
+    p.add_argument("--dig", help="used only to fill the manifest's dig worker; not rendered")
+    p.add_argument("--objective", help="overrides the manifest's objective if --plan is not given")
+    p.add_argument("-o", "--out")
+    p.add_argument("--output-dir")
+    p.set_defaults(fn=cmd_report)
+
+    p = sub.add_parser("manifest", help="assemble manifest_<slug>.json from a run's artifacts")
+    p.add_argument("--plan")
+    p.add_argument("--search")
+    p.add_argument("--screen")
+    p.add_argument("--dig")
+    p.add_argument("--artifacts")
+    p.add_argument("--evidence")
+    p.add_argument("--slug")
+    p.add_argument("--objective")
+    p.add_argument("-o", "--out")
+    p.add_argument("--output-dir")
+    p.set_defaults(fn=cmd_manifest)
+
+    args = ap.parse_args(argv)
+    try:
+        args.fn(args)
+    except PaperclipError as e:
+        sys.exit(f"paperclip: {e}")
+    except (contracts.ContractError, FileNotFoundError) as e:
+        sys.exit(str(e))
+
+
+if __name__ == "__main__":
+    main()

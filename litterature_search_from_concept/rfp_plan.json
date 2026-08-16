@@ -1,0 +1,61 @@
+{
+  "objective": "We are interested in how to design a protein that responds to radio frequencies outside of the range of biological chromophores",
+  "slug": "rfp",
+  "search_mode": "semantic",
+  "mechanism_classes": [
+    {
+      "id": "cryptochrome_rf",
+      "question": "What does the literature say about cryptochrome rf?",
+      "candidate_evaluators": [],
+      "search_phrases": [
+        "CraCRY ODMR",
+        "cryptochrome RF radical pair FAD",
+        "CraCRY C-terminal extension conformational change",
+        "cryptochrome flavin redox conformational switching",
+        "cryptochrome ODMR heating artifact",
+        "RF cryptochrome null result",
+        "radical pair conformational coupling",
+        "cryptochrome magnetic effect reproducibility"
+      ],
+      "mechanism_patterns": [
+        "mechanism"
+      ]
+    },
+    {
+      "id": "lov_radical_pair",
+      "question": "What does the literature say about lov radical pair?",
+      "candidate_evaluators": [],
+      "search_phrases": [
+        "MagLOV ODMR",
+        "AsLOV2 C450A radical pair",
+        "iLOV ODMR",
+        "LOV2 Jalpha helix conformational change",
+        "FMN radical pair allostery",
+        "C450A LOV signaling loss",
+        "LOV radical pair not involved signaling",
+        "MagLOV ODMR artifact",
+        "RF flavoprotein conformational change"
+      ],
+      "mechanism_patterns": [
+        "mechanism"
+      ]
+    },
+    {
+      "id": "magnetothermal",
+      "question": "What does the literature say about magnetothermal?",
+      "candidate_evaluators": [],
+      "search_phrases": [
+        "radiofrequency thermolysin nanoparticle",
+        "magnetothermal protein switch",
+        "magnetic nanoparticle local heating protein",
+        "nanoscale heating controversy magnetic nanoparticles",
+        "specific absorption rate protein conjugate",
+        "bulk heating control RF nanoparticle"
+      ],
+      "mechanism_patterns": [
+        "mechanism"
+      ]
+    }
+  ],
+  "exclusions": []
+}
