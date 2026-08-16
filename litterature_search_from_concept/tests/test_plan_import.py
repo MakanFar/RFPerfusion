@@ -1,4 +1,7 @@
+import json
+import types
 from unittest.mock import patch
+from pathlib import Path
 from litkb import cli, contracts, paperclip
 
 ROWS = ["CraCRY ODMR", "MagLOV ODMR", "magnetothermal protein switch"]
@@ -85,3 +88,175 @@ def test_count_with_exact_false_omits_e_flag():
 
     assert captured_args
     assert "-e" not in captured_args[0]
+
+
+def test_cmd_search_derives_exact_true_when_no_search_mode_key(tmp_path):
+    """Verify cmd_search derives exact=True when plan has NO search_mode key."""
+    plan = {
+        "objective": "test",
+        "slug": "test-slug",
+        "mechanism_classes": [
+            {
+                "id": "class1",
+                "question": "test?",
+                "candidate_evaluators": [],
+                "search_phrases": ["test phrase"],
+                "mechanism_patterns": ["pattern"],
+            }
+        ],
+        "exclusions": [],
+    }
+    # NO search_mode key -- should default to exact=True
+    assert "search_mode" not in plan
+    assert contracts.validate_plan(plan) == []
+
+    plan_file = tmp_path / "plan.json"
+    plan_file.write_text(json.dumps(plan))
+
+    captured_exact = []
+
+    def mock_search(phrase, sources, n, exact=False):
+        captured_exact.append(exact)
+        return {"phrase": phrase, "set_id": "s_abc123", "n_papers": 3}
+
+    args = types.SimpleNamespace(
+        plan=str(plan_file),
+        sources="pmc",
+        n=100,
+        out=None,
+    )
+
+    with patch("litkb.cli.search", side_effect=mock_search):
+        cli.cmd_search(args)
+
+    assert captured_exact
+    assert captured_exact[0] is True, "Plan without search_mode should use exact=True"
+
+
+def test_cmd_search_derives_exact_false_when_search_mode_semantic(tmp_path):
+    """Verify cmd_search derives exact=False when plan has search_mode=semantic."""
+    plan = {
+        "objective": "test",
+        "slug": "test-slug",
+        "search_mode": "semantic",
+        "mechanism_classes": [
+            {
+                "id": "class1",
+                "question": "test?",
+                "candidate_evaluators": [],
+                "search_phrases": ["test phrase"],
+                "mechanism_patterns": ["pattern"],
+            }
+        ],
+        "exclusions": [],
+    }
+    assert plan.get("search_mode") == "semantic"
+    assert contracts.validate_plan(plan) == []
+
+    plan_file = tmp_path / "plan.json"
+    plan_file.write_text(json.dumps(plan))
+
+    captured_exact = []
+
+    def mock_search(phrase, sources, n, exact=False):
+        captured_exact.append(exact)
+        return {"phrase": phrase, "set_id": "s_def456", "n_papers": 5}
+
+    args = types.SimpleNamespace(
+        plan=str(plan_file),
+        sources="pmc",
+        n=100,
+        out=None,
+    )
+
+    with patch("litkb.cli.search", side_effect=mock_search):
+        cli.cmd_search(args)
+
+    assert captured_exact
+    assert captured_exact[0] is False, "Plan with search_mode=semantic should use exact=False"
+
+
+def test_cmd_plan_validate_derives_exact_true_when_no_search_mode_key(tmp_path):
+    """Verify cmd_plan_validate probe derives exact=True when plan has NO search_mode key."""
+    plan = {
+        "objective": "test",
+        "slug": "test-slug",
+        "mechanism_classes": [
+            {
+                "id": "class1",
+                "question": "test?",
+                "candidate_evaluators": [],
+                "search_phrases": ["test phrase"],
+                "mechanism_patterns": ["pattern"],
+            }
+        ],
+        "exclusions": [],
+    }
+    # NO search_mode key -- should default to exact=True
+    assert "search_mode" not in plan
+    assert contracts.validate_plan(plan) == []
+
+    plan_file = tmp_path / "plan.json"
+    plan_file.write_text(json.dumps(plan))
+
+    captured_exact = []
+
+    def mock_count(phrase, sources, exact=False):
+        captured_exact.append(exact)
+        return 5
+
+    args = types.SimpleNamespace(
+        plan=str(plan_file),
+        probe=True,
+        sources="pmc",
+        out=None,
+    )
+
+    with patch("litkb.cli.count", side_effect=mock_count):
+        cli.cmd_plan_validate(args)
+
+    assert captured_exact
+    assert captured_exact[0] is True, "Plan without search_mode should probe with exact=True"
+
+
+def test_cmd_plan_validate_derives_exact_false_when_search_mode_semantic(tmp_path):
+    """Verify cmd_plan_validate probe derives exact=False when plan has search_mode=semantic."""
+    plan = {
+        "objective": "test",
+        "slug": "test-slug",
+        "search_mode": "semantic",
+        "mechanism_classes": [
+            {
+                "id": "class1",
+                "question": "test?",
+                "candidate_evaluators": [],
+                "search_phrases": ["test phrase"],
+                "mechanism_patterns": ["pattern"],
+            }
+        ],
+        "exclusions": [],
+    }
+    assert plan.get("search_mode") == "semantic"
+    assert contracts.validate_plan(plan) == []
+
+    plan_file = tmp_path / "plan.json"
+    plan_file.write_text(json.dumps(plan))
+
+    captured_exact = []
+
+    def mock_count(phrase, sources, exact=False):
+        captured_exact.append(exact)
+        return 8
+
+    args = types.SimpleNamespace(
+        plan=str(plan_file),
+        probe=True,
+        sources="pmc",
+        out=None,
+    )
+
+    with patch("litkb.cli.count", side_effect=mock_count):
+        cli.cmd_plan_validate(args)
+
+    assert captured_exact
+    assert captured_exact[0] is False, "Plan with search_mode=semantic should probe with exact=False"
