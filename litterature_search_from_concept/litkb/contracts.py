@@ -81,11 +81,23 @@ def draft_item(index, class_id, hit, category, citation):
     }
 
 
-def draft_artifact(index, record, doc_id, set_id):
-    """One extracted sequence -> one ProtoArtifact, unbound and unconfirmed."""
+def draft_artifact(index, record, doc_id, set_id, extractor="quick-reader", kind=None):
+    """One extracted sequence (or mutation) -> one ProtoArtifact, unbound and
+    unconfirmed.
+
+    `extractor` must name the paperclip worker that actually produced this
+    record, not an aspirational tier -- only quick-reader runs on this
+    account (see paperclip.py's map_papers default-worker comment), so that
+    is the correct default rather than "exhaustive-extraction", which never
+    touches a real run.
+
+    `kind` lets a caller declare a non-sequence kind explicitly (e.g.
+    "mutation", which has no `region` to derive from); when omitted, kind is
+    derived from `region` as before.
+    """
     return {
         "id": f"art_{index:03d}",
-        "kind": "subsequence" if record.get("region") else "sequence",
+        "kind": kind or ("subsequence" if record.get("region") else "sequence"),
         "molecule": record["molecule"],
         "value": record["value"],
         "length": len(record["value"]),
@@ -98,7 +110,7 @@ def draft_artifact(index, record, doc_id, set_id):
             "where": record.get("where"),
             "verbatim": record.get("verbatim", False),
             "confirmed_in_source": False,
-            "extractor": "exhaustive-extraction",
+            "extractor": extractor,
         },
         "proto_binding": {"status": "unbound", "tools": [],
                           "unverified": [], "rejected_by": []},
