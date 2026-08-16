@@ -4,9 +4,8 @@ A different driver over the same engine as `cli.py` — no agent logic lives her
 The browser gets a live event stream (SSE) so verification progress and
 background follow-ups appear as they happen rather than at a prompt.
 
-Runs on localhost only. The API key can be supplied by the environment or
-pasted into the UI, in which case it is held in memory for the process
-lifetime and never written to disk.
+Runs on localhost only. Model calls use the configured subscription-authenticated
+Codex or Claude CLI.
 """
 
 from __future__ import annotations
@@ -108,25 +107,12 @@ class Hub:
     def __init__(self) -> None:
         self.session = Session()
         self.pc = Paperclip(concurrency=SETTINGS.paperclip_concurrency)
-        self.llm: LLM | None = None
-        self.agent: FormulationAgent | None = None
-        self.followups: FollowupManager | None = None
+        self.llm: LLM | None = LLM()
+        self.agent: FormulationAgent | None = FormulationAgent(self.llm, self.pc)
+        self.followups: FollowupManager | None = FollowupManager(self.agent)
         self.subscribers: set[asyncio.Queue] = set()
         self.busy = False
         self.phase: str | None = None
-        self._try_env_key()
-
-    # ---------------------------------------------------------------- auth
-
-    def _try_env_key(self) -> None:
-        key = os.environ.get("ANTHROPIC_API_KEY", "").strip()
-        if key:
-            self.set_key(key)
-
-    def set_key(self, key: str) -> None:
-        self.llm = LLM(api_key=key)
-        self.agent = FormulationAgent(self.llm, self.pc)
-        self.followups = FollowupManager(self.agent)
 
     @property
     def ready(self) -> bool:
@@ -322,24 +308,10 @@ async def events(request: Request) -> StreamingResponse:
     )
 
 
-@app.post("/api/key")
-async def set_key(body: dict) -> JSONResponse:
-    key = (body.get("key") or "").strip()
-    if not key.startswith("sk-"):
-        return JSONResponse({"error": "That doesn't look like an API key."}, status_code=400)
-    hub.set_key(key)
-    ok, msg = await hub.llm.healthcheck()  # type: ignore[union-attr]
-    if not ok:
-        hub.llm = hub.agent = hub.followups = None
-        return JSONResponse({"error": f"Key rejected: {msg}"}, status_code=400)
-    await hub.push_state()
-    return JSONResponse({"ok": True})
-
-
 @app.post("/api/ask")
 async def ask(body: dict) -> JSONResponse:
     if not hub.ready:
-        return JSONResponse({"error": "No API key set."}, status_code=400)
+        return JSONResponse({"error": "Model backend is unavailable."}, status_code=400)
     text = (body.get("text") or "").strip()
     if not text:
         return JSONResponse({"error": "empty"}, status_code=400)
@@ -414,7 +386,7 @@ async def restore(body: dict) -> JSONResponse:
 @app.post("/api/followup")
 async def followup(body: dict) -> JSONResponse:
     if not hub.ready:
-        return JSONResponse({"error": "No API key set."}, status_code=400)
+        return JSONResponse({"error": "Model backend is unavailable."}, status_code=400)
     idea = hub.session.by_id(body.get("idea_id") or "")
     question = (body.get("question") or "").strip()
     if not idea or not question:

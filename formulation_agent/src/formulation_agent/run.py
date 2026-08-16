@@ -89,7 +89,7 @@ async def run_once(args: argparse.Namespace) -> list[Path]:
     context = read_context(args.context_file)
     progress = Progress(args.json_progress)
 
-    llm = LLM(api_key=SETTINGS.require_api_key())
+    llm = LLM()
     paperclip = Paperclip(concurrency=SETTINGS.paperclip_concurrency)
     agent = FormulationAgent(llm, paperclip)
 

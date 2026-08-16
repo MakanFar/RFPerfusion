@@ -206,15 +206,6 @@
   <button id="btn-save" class="hidden">Save report</button>
 </header>
 
-<!-- API key gate -->
-<div id="keygate" class="hero hidden">
-  <h2>Add your API key</h2>
-  <p>Held in memory for this session only — never written to disk.</p>
-  <input type="text" id="keyinput" placeholder="sk-ant-..." autocomplete="off">
-  <div class="go"><button class="primary" id="keysave">Connect</button></div>
-  <div class="err hidden" id="keyerr"></div>
-</div>
-
 <!-- first question -->
 <div id="hero" class="hero hidden">
   <h2>What are you trying to design?</h2>
@@ -278,7 +269,6 @@ function connect(){
    life un-hides it. */
 function ensureWorkspace(){
   $("#hero").classList.add("hidden");
-  $("#keygate").classList.add("hidden");
   $("#main").classList.remove("hidden");
 }
 
@@ -416,7 +406,6 @@ function renderIdea(i){
 
 function render(){
   if (!STATE) return;
-  $("#keygate").classList.toggle("hidden", STATE.ready);
   const started = !!STATE.question || !!STATE.busy;
   $("#hero").classList.toggle("hidden", !STATE.ready || started);
   $("#main").classList.toggle("hidden", !started);
@@ -518,16 +507,6 @@ $("#btn-save").onclick = async () => {
   const j = await post("/api/save");
   if (j.paths) log("", "saved " + j.paths.join("  "));
 };
-$("#keysave").onclick = async () => {
-  const key = $("#keyinput").value.trim();
-  const r = await fetch("/api/key", {method:"POST", headers:{"Content-Type":"application/json"},
-                                     body: JSON.stringify({key})});
-  const j = await r.json().catch(()=>({}));
-  if (!r.ok){ $("#keyerr").textContent = j.error || "failed"; $("#keyerr").classList.remove("hidden"); }
-  else { $("#keyerr").classList.add("hidden"); }
-};
-$("#keyinput")?.addEventListener("keydown", e => { if(e.key==="Enter") $("#keysave").click(); });
-
 connect();
 </script>
 </body>
