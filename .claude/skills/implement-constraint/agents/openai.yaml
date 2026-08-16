@@ -1,0 +1,4 @@
+interface:
+  display_name: "Implement Proto Constraint"
+  short_description: "Write and calibrate a custom scoring constraint"
+  default_prompt: "Use $implement-constraint to implement, calibrate, and register a constraint for this property."

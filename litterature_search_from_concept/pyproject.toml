@@ -12,4 +12,8 @@ package = false
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-pythonpath = ["."]
+# "." makes `litkb` importable; ".." makes the sibling
+# `litterature_search_from_concept.paperclip_kb` import in the merged
+# test_paperclip_kb.py resolve, since that test is written to run from the
+# repository root.
+pythonpath = [".", ".."]

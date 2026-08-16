@@ -16,17 +16,20 @@ Usage:
     python paperclip_kb.py concept.txt --slug rfp
 """
 
+from __future__ import annotations
+
 import argparse
 import json
 import os
 import re
 import subprocess
 import sys
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 
-MODEL = "claude-sonnet-4-6"          # swap as you like
+MODEL = os.environ.get("LIT_MODEL", "claude-sonnet-4-6")
 SET_ID_RE = re.compile(r"\bs_[0-9a-f]{6,}\b")
+SAFE_SLUG_RE = re.compile(r"^[a-z0-9][a-z0-9-]*$")
 
 
 # ----------------------------------------------------------------------
@@ -59,6 +62,24 @@ fences, with exactly these keys:
 """
 
 
+def validate_plan(plan: object) -> dict:
+    if not isinstance(plan, dict):
+        raise TypeError("plan must be a JSON object")
+    required = {"search_phrases", "mechanism_patterns", "notes"}
+    missing = required - plan.keys()
+    if missing:
+        raise ValueError(f"plan is missing keys: {', '.join(sorted(missing))}")
+    for key in ("search_phrases", "mechanism_patterns"):
+        values = plan[key]
+        if not isinstance(values, list) or not values:
+            raise ValueError(f"{key} must be a non-empty list")
+        if not all(isinstance(value, str) and value.strip() for value in values):
+            raise ValueError(f"{key} must contain non-empty strings")
+    if not isinstance(plan["notes"], str):
+        raise TypeError("notes must be a string")
+    return plan
+
+
 def plan_queries(concept: str) -> dict:
     try:
         import anthropic
@@ -73,8 +94,8 @@ def plan_queries(concept: str) -> dict:
         messages=[{"role": "user", "content": concept}],
     )
     raw = "".join(b.text for b in resp.content if b.type == "text")
-    raw = re.sub(r"^```(?:json)?|```$", "", raw.strip(), flags=re.M).strip()
-    return json.loads(raw)
+    raw = re.sub(r"^```(?:json)?|```$", "", raw.strip(), flags=re.MULTILINE).strip()
+    return validate_plan(json.loads(raw))
 
 
 # ----------------------------------------------------------------------
@@ -87,7 +108,7 @@ def plan_queries(concept: str) -> dict:
 
 STRUCTURAL = {
     "sequence": [
-        r"[ACDEFGHIKLMNPQRSTVWY]{25,}",        # raw AA runs in body text
+        r"[ACDEFGHIKLMNPQRSTVWY]{25,}",  # raw AA runs in body text
         "amino acid sequence",
         "sequence is available",
         "Supplementary Sequence",
@@ -95,9 +116,9 @@ STRUCTURAL = {
         "synthesized as a gBlock",
     ],
     "database_id": [
-        r"[OPQ][0-9][A-Z0-9]{3}[0-9]",         # UniProt, one form
-        r"[A-NR-Z][0-9][A-Z][A-Z0-9]{2}[0-9]", # UniProt, other form
-        r"[NX][MPR]_[0-9]{6,}",                # RefSeq
+        r"[OPQ][0-9][A-Z0-9]{3}[0-9]",  # UniProt, one form
+        r"[A-NR-Z][0-9][A-Z][A-Z0-9]{2}[0-9]",  # UniProt, other form
+        r"[NX][MPR]_[0-9]{6,}",  # RefSeq
         r"PDB[ :]?[0-9][A-Za-z0-9]{3}",
         r"EC [0-9]+\.[0-9]+\.[0-9]+\.[0-9]+",
         "Addgene",
@@ -126,68 +147,92 @@ STRUCTURAL = {
 # Stage 3: search, scraping the set ID
 # ----------------------------------------------------------------------
 
+
+def host_env() -> dict[str, str]:
+    """Keep Paperclip's launcher outside an active project virtualenv."""
+    env = dict(os.environ)
+    venv = env.pop("VIRTUAL_ENV", None)
+    env.pop("PYTHONHOME", None)
+    env.pop("PYTHONPATH", None)
+    if venv:
+        venv_bin = str(Path(venv) / "bin")
+        env["PATH"] = os.pathsep.join(
+            part
+            for part in env.get("PATH", "").split(os.pathsep)
+            if part and part != venv_bin
+        )
+    return env
+
+
 def run(cmd: list, dry: bool) -> str:
     print(f"  $ {' '.join(cmd)}", file=sys.stderr)
     if dry:
         return ""
-    p = subprocess.run(cmd, capture_output=True, text=True)
-    # paperclip, like grep, exits 1 to mean "no matches" -- not an error.
-    if p.returncode not in (0, 1):
+    p = subprocess.run(
+        cmd, capture_output=True, text=True, env=host_env(), timeout=420, check=False
+    )
+    if p.returncode != 0:
         sys.exit(f"FAILED ({p.returncode}):\n{p.stderr}")
     return p.stdout
 
 
-def search_all(phrases: list, n: int, dry: bool) -> list:
-    """One search per phrase; each returns its OWN set.
-
-    `paperclip search` has no --tag and does not accumulate, and `paperclip
-    merge` resolves only its first argument, so there is no server-side union
-    to lean on. Collect every set ID and fan the grep out over all of them.
-    """
-    set_ids = []
-    for phrase in phrases:
-        out = run(["paperclip", "search", "-s", "pmc",
-                   "-n", str(n), "-e", phrase], dry)
-        found = SET_ID_RE.findall(out)
-        if found:
-            set_ids.append(found[0])    # first mention = this search's set
-    return set_ids
+def search_all(
+    phrases: list[str], tag: str, n: int, sources: list[str], dry: bool
+) -> str | None:
+    set_id = None
+    for source in sources:
+        for phrase in phrases:
+            out = run(
+                [
+                    "paperclip",
+                    "search",
+                    "-s",
+                    source,
+                    "--tag",
+                    tag,
+                    "-n",
+                    str(n),
+                    "-e",
+                    phrase,
+                ],
+                dry,
+            )
+            found = SET_ID_RE.findall(out)
+            if found:
+                set_id = found[-1]  # last mention = accumulating tagged set
+    return set_id
 
 
 # ----------------------------------------------------------------------
 # Stage 4: categorized grep
 # ----------------------------------------------------------------------
 
-def build_kb(set_ids: list, mechanism: list, outpath: Path, dry: bool) -> None:
+
+def build_kb(set_id: str, mechanism: list, outpath: Path, dry: bool) -> None:
     categories = {"mechanism": mechanism, **STRUCTURAL}
     seen_global = set()
 
-    # The amino-acid classes in STRUCTURAL are case-significant: -i would let
-    # them match ordinary lowercase prose, so only the prose categories get it.
-    case_insensitive = {"mechanism", "quantitative"}
-
     with outpath.open("w") as fh:
-        fh.write(f"# knowledge base :: {len(set_ids)} sets "
-                 f"({', '.join(set_ids)}) :: "
-                 f"{datetime.now():%Y-%m-%d %H:%M}\n")
+        fh.write(
+            f"# knowledge base :: set {set_id} :: "
+            f"{datetime.now(timezone.utc):%Y-%m-%d %H:%M} UTC\n"
+        )
 
         for cat, patterns in categories.items():
-            out = ""
-            for set_id in set_ids:
-                cmd = ["paperclip", "grep", "--from", set_id, "-n"]
-                if cat in case_insensitive:
-                    cmd.append("-i")
-                for p in patterns:
-                    cmd += ["-e", p]
-                out += run(cmd, dry)
+            cmd = ["paperclip", "grep", "--from", set_id, "-i", "-n"]
+            for p in patterns:
+                cmd += ["-e", p]
+            out = run(cmd, dry)
 
-            fh.write(f"\n\n{'=' * 70}\n## {cat.upper()}  "
-                     f"({len(patterns)} patterns)\n{'=' * 70}\n")
+            fh.write(
+                f"\n\n{'=' * 70}\n## {cat.upper()}  "
+                f"({len(patterns)} patterns)\n{'=' * 70}\n"
+            )
             kept = 0
             for line in out.splitlines():
                 line = line.rstrip()
                 if not line or line in seen_global:
-                    continue           # a sentence can hit several categories
+                    continue  # a sentence can hit several categories
                 seen_global.add(line)
                 fh.write(line + "\n")
                 kept += 1
@@ -197,49 +242,98 @@ def build_kb(set_ids: list, mechanism: list, outpath: Path, dry: bool) -> None:
 
 # ----------------------------------------------------------------------
 
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("concept", type=Path, help="text file with the design task")
     ap.add_argument("--slug", required=True, help="short name; drives tag + outfile")
     ap.add_argument("-n", type=int, default=500)
-    ap.add_argument("--dry-run", action="store_true",
-                    help="print commands, run only the Claude planning step")
-    ap.add_argument("--set-id", action="append",
-                    help="skip search, grep an existing set (repeatable)")
-    ap.add_argument("--plan", type=Path,
-                    help="read a hand-written plan JSON instead of calling Claude")
+    ap.add_argument(
+        "--sources",
+        default="pmc,biorxiv",
+        help="comma-separated Paperclip sources; queried separately",
+    )
+    ap.add_argument(
+        "--output-dir",
+        type=Path,
+        default=Path("."),
+        help="directory for the plan, knowledge base, and manifest",
+    )
+    ap.add_argument(
+        "--plan-file",
+        type=Path,
+        help="reuse a reviewed plan JSON instead of asking Claude to plan again",
+    )
+    ap.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="print commands, run only the Claude planning step",
+    )
+    ap.add_argument("--set-id", help="skip search, grep an existing set")
     args = ap.parse_args()
 
+    if not SAFE_SLUG_RE.fullmatch(args.slug):
+        ap.error("--slug must contain only lowercase letters, digits, and hyphens")
+    sources = [source.strip() for source in args.sources.split(",") if source.strip()]
+    if not sources:
+        ap.error("--sources must contain at least one source")
+
     concept = args.concept.read_text()
+    tag = f"{args.slug}_literature"
+    args.output_dir.mkdir(parents=True, exist_ok=True)
+    plan_path = args.output_dir / f"plan_{args.slug}.json"
 
     print("[1/3] planning queries", file=sys.stderr)
-    if args.plan:
-        print(f"      reading {args.plan} (planner skipped)", file=sys.stderr)
-        plan = json.loads(args.plan.read_text())
+    if args.plan_file:
+        plan = validate_plan(json.loads(args.plan_file.read_text(encoding="utf-8")))
     else:
         plan = plan_queries(concept)
-    Path(f"plan_{args.slug}.json").write_text(json.dumps(plan, indent=2))
-    print(f"      {len(plan['search_phrases'])} phrases, "
-          f"{len(plan['mechanism_patterns'])} mechanism patterns", file=sys.stderr)
+    plan_path.write_text(json.dumps(plan, indent=2) + "\n", encoding="utf-8")
+    print(
+        f"      {len(plan['search_phrases'])} phrases, "
+        f"{len(plan['mechanism_patterns'])} mechanism patterns",
+        file=sys.stderr,
+    )
     print(f"      note: {plan.get('notes', '')}", file=sys.stderr)
 
     print("[2/3] searching", file=sys.stderr)
-    set_ids = args.set_id or search_all(
-        plan["search_phrases"], args.n, args.dry_run)
+    set_id = args.set_id or search_all(
+        plan["search_phrases"], tag, args.n, sources, args.dry_run
+    )
 
-    if not set_ids:
+    if not set_id:
         if args.dry_run:
-            print("\ndry run: inspect plan_%s.json, then rerun without --dry-run"
-                  % args.slug, file=sys.stderr)
+            print(
+                f"\ndry run: inspect {plan_path}, then rerun with "
+                f"--plan-file {plan_path}",
+                file=sys.stderr,
+            )
             return
-        sys.exit("no set ID found in search output -- check SET_ID_RE against "
-                 "what `paperclip search` actually prints")
-    print(f"      {len(set_ids)} sets: {', '.join(set_ids)}", file=sys.stderr)
+        sys.exit(
+            "no set ID found in search output -- check SET_ID_RE against "
+            "what `paperclip search` actually prints"
+        )
+    print(f"      set: {set_id}", file=sys.stderr)
 
     print("[3/3] building knowledge base", file=sys.stderr)
-    out = Path(f"knowledge_base_{args.slug}.txt")
-    build_kb(set_ids, plan["mechanism_patterns"], out, args.dry_run)
+    out = args.output_dir / f"knowledge_base_{args.slug}.txt"
+    build_kb(set_id, plan["mechanism_patterns"], out, args.dry_run)
+    manifest = {
+        "created_at": datetime.now(timezone.utc).isoformat(),
+        "concept_file": str(args.concept),
+        "slug": args.slug,
+        "model": MODEL,
+        "sources": sources,
+        "paper_limit_per_search": args.n,
+        "set_id": set_id,
+        "plan_file": str(plan_path),
+        "knowledge_base_file": str(out),
+        "evidence_status": "discovery_only_unverified",
+    }
+    manifest_path = args.output_dir / f"manifest_{args.slug}.json"
+    manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
     print(f"\n-> {out}", file=sys.stderr)
+    print(f"-> {manifest_path}", file=sys.stderr)
 
 
 if __name__ == "__main__":

@@ -1,0 +1,18 @@
+{
+  "name": "rfperfusion",
+  "description": "Skills for the RFPerfusion literature-grounded protein design pipeline.",
+  "owner": {
+    "name": "RFPerfusion"
+  },
+  "plugins": [
+    {
+      "name": "rfperfusion",
+      "description": "Literature mining, grounded formulation, proto-tools on Modal, proto-language program authoring, custom constraint implementation, and sequence design visualization.",
+      "author": {
+        "name": "RFPerfusion"
+      },
+      "category": "science",
+      "source": "./.claude"
+    }
+  ]
+}

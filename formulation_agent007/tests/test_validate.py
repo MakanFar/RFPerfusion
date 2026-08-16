@@ -1,0 +1,180 @@
+"""The validators earn their place only if they reject fluent, well-formed junk.
+
+Every test below feeds in something that parses cleanly, reads plausibly, and
+is wrong in a way that would waste real compute or send a downstream agent
+after a tool that does not exist.
+"""
+
+from __future__ import annotations
+
+import pytest
+
+from formulation_agent007.models import FitnessGate, GateState, Linker
+from formulation_agent007.validate import (
+    validate_assembly,
+    validate_frame,
+    validate_literature,
+    validate_proto,
+    validate_shards,
+)
+
+
+class TestProtoCascade:
+    def test_accepts_a_well_formed_cascade(self, proto):
+        assert validate_proto(proto) == []
+
+    def test_rejects_an_invented_tool_key(self, proto):
+        proto.gates[0].tool_keys = ["fieldsolver3d"]
+        problems = validate_proto(proto)
+        assert any("fieldsolver3d" in p for p in problems)
+
+    def test_rejects_an_invented_metric(self, proto):
+        proto.gates[0].metric = "switchiness"
+        problems = validate_proto(proto)
+        assert any("switchiness" in p for p in problems)
+
+    def test_rejects_cost_inverted_cascade(self, proto):
+        # bioemu (expensive) pulled to the front, esmfold pushed to the back.
+        proto.gates[0].order, proto.gates[3].order = 4, 1
+        problems = validate_proto(proto)
+        assert any("cheap-first" in p for p in problems)
+
+    def test_rejects_cascade_with_no_decisive_gate(self, proto):
+        for gate in proto.gates:
+            gate.decisive = False
+        problems = validate_proto(proto)
+        assert any("decisive" in p for p in problems)
+
+    def test_rejects_interface_metric_on_a_single_chain(self, proto):
+        proto.gates[1].state = GateState.SINGLE
+        problems = validate_proto(proto)
+        assert any("interface metric" in p for p in problems)
+
+    def test_rejects_mislabelled_cost_tier(self, proto):
+        proto.gates[3].cost_tier = "cheap"  # bioemu is not cheap
+        problems = validate_proto(proto)
+        assert any("cost_tier" in p for p in problems)
+
+    def test_rejects_between_without_upper_bound(self, proto):
+        proto.gates[3].threshold_upper = None
+        problems = validate_proto(proto)
+        assert any("threshold_upper" in p for p in problems)
+
+    def test_rejects_gate_that_kills_nothing(self, proto):
+        proto.gates[0].kill_rule = "   "
+        problems = validate_proto(proto)
+        assert any("kill_rule" in p for p in problems)
+
+    def test_rejects_non_contiguous_gate_orders(self, proto):
+        proto.gates[2].order = 9
+        problems = validate_proto(proto)
+        assert any("gate orders" in p for p in problems)
+
+
+class TestLiteraturePlan:
+    def test_accepts_a_well_formed_plan(self, literature):
+        assert validate_literature(literature) == []
+
+    def test_rejects_single_word_phrases(self, literature):
+        literature.search_phrases[0] = "protein"
+        problems = validate_literature(literature)
+        assert any("single word" in p for p in problems)
+
+    def test_rejects_question_form_phrases(self, literature):
+        literature.search_phrases[0] = "how does temperature affect folding"
+        problems = validate_literature(literature)
+        assert any("question" in p for p in problems)
+
+    def test_rejects_too_few_phrases(self, literature):
+        literature.search_phrases = literature.search_phrases[:3]
+        problems = validate_literature(literature)
+        assert any("search_phrases has 3" in p for p in problems)
+
+    def test_rejects_duplicate_phrases(self, literature):
+        literature.search_phrases[1] = literature.search_phrases[0].upper()
+        problems = validate_literature(literature)
+        assert any("duplicates" in p for p in problems)
+
+    def test_rejects_a_thin_concept_file(self, literature):
+        literature.concept_text = "make a switch"
+        problems = validate_literature(literature)
+        assert any("concept_text" in p for p in problems)
+
+
+class TestAssembly:
+    def test_accepts_a_well_formed_recipe(self, assembly, shards):
+        assert validate_assembly(assembly, shards) == []
+
+    def test_rejects_linker_between_non_adjacent_shards(self, assembly, shards):
+        assembly.linkers[0] = Linker(
+            after_shard="S1", before_shard="S3", sequence="GGGGS"
+        )
+        problems = validate_assembly(assembly, shards)
+        assert any("not adjacent" in p for p in problems)
+
+    def test_rejects_non_amino_acid_linker(self, assembly, shards):
+        assembly.linkers[0].sequence = "GGGG-SXB"
+        problems = validate_assembly(assembly, shards)
+        assert any("amino acids" in p for p in problems)
+
+    def test_rejects_dropped_required_shard(self, assembly, shards):
+        assembly.construct_order = ["S1", "S2"]
+        assembly.linkers = assembly.linkers[:1]
+        problems = validate_assembly(assembly, shards)
+        assert any("omits required shard" in p for p in problems)
+
+    def test_rejects_unknown_shard_in_construct(self, assembly, shards):
+        assembly.construct_order = ["S1", "S2", "S3", "S9"]
+        problems = validate_assembly(assembly, shards)
+        assert any("S9" in p for p in problems)
+
+
+class TestFrameAndShards:
+    def test_accepts_a_well_formed_frame(self, frame):
+        assert validate_frame(frame) == []
+
+    def test_rejects_a_slug_paperclip_kb_would_refuse(self, frame):
+        frame.slug = "Test Design"
+        problems = validate_frame(frame)
+        assert any("slug" in p for p in problems)
+
+    def test_requires_an_excluded_pathway(self, frame):
+        frame.excluded_pathways = []
+        problems = validate_frame(frame)
+        assert any("excluded_pathways" in p for p in problems)
+
+    def test_requires_a_simulability_note(self, frame):
+        frame.simulability_note = ""
+        problems = validate_frame(frame)
+        assert any("simulability_note" in p for p in problems)
+
+    def test_accepts_well_formed_shards(self, shards):
+        assert validate_shards(shards) == []
+
+    def test_rejects_shard_without_search_handles(self, shards):
+        shards[0].search_handles = []
+        problems = validate_shards(shards)
+        assert any("search_handles" in p for p in problems)
+
+    def test_rejects_duplicate_shard_ids(self, shards):
+        shards[1].id = "S1"
+        problems = validate_shards(shards)
+        assert any("duplicate" in p for p in problems)
+
+
+class TestNoUnsupportedConstraints:
+    """Structured-output backends strip string `maxLength` from the schema and
+    validate it client-side, so a response that misses the limit is discarded
+    *after* an expensive generation. Length guidance belongs in the prompt.
+    """
+
+    @pytest.mark.parametrize(
+        "model",
+        [
+            FitnessGate,
+            Linker,
+        ],
+    )
+    def test_no_max_length_on_response_models(self, model):
+        schema = model.model_json_schema()
+        assert "maxLength" not in str(schema)

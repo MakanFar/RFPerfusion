@@ -1,0 +1,13 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+*.egg-info/
+
+# Environments — uv recreates these from pyproject.toml + uv.lock
+.venv/
+.env
+
+# Agent output. Sessions record the full question, ideas and transcript, so they
+# are the user's working material rather than something to share by default.
+sessions/

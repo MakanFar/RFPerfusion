@@ -1,4 +1,5 @@
 # run artifacts — regenerate with the pipeline, don't version them
+outputs/
 rfp_search.json
 rfp_hits.json
 rfp_screen.json
@@ -7,4 +8,5 @@ rfp_evidence.json
 rfp_artifacts.json
 knowledge_base_*.txt
 __pycache__/
+tests/__pycache__/
 .venv/
