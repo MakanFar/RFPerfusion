@@ -98,7 +98,7 @@ def run(fasta, config_path=None, out_tsv="triage_results.tsv",
     smap = {}
     if structures and os.path.isdir(structures):
         for fn in os.listdir(structures):
-            if fn.endswith((".pdb", ".cif")):
+            if fn.endswith((".pdb", ".cif", ".mmcif")):
                 smap[os.path.splitext(fn)[0]] = os.path.join(structures, fn)
     master["structure_path"] = master["seq_id"].map(smap)
 

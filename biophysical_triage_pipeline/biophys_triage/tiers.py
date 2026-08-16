@@ -106,6 +106,7 @@ def t1_structure_audit(df, cfg):
     """
     import biotite.structure as struc
     import biotite.structure.io.pdb as pdb
+    import biotite.structure.io.pdbx as pdbx
 
     plddt_min = float(cfg.get("plddt_min", 70.0))
     sb_cut = float(cfg.get("salt_bridge_cutoff_a", 4.0))
@@ -119,8 +120,15 @@ def t1_structure_audit(df, cfg):
         try:
             # b_factor must be requested explicitly or biotite drops it, and
             # for AF2/ESMFold that column IS the pLDDT the gate depends on.
-            arr = pdb.PDBFile.read(path).get_structure(
-                model=1, extra_fields=["b_factor"])
+            lower = path.lower()
+            if lower.endswith(".cif") or lower.endswith(".mmcif"):
+                arr = pdbx.get_structure(pdbx.CIFFile.read(path),
+                    model=1, extra_fields=["b_factor"])
+            elif lower.endswith(".pdb"):
+                arr = pdb.PDBFile.read(path).get_structure(
+                    model=1, extra_fields=["b_factor"])
+            else:
+                raise ValueError(f"unsupported structure file extension: {path}")
             arr = arr[struc.filter_amino_acids(arr)]
             ca = arr[arr.atom_name == "CA"]
             if "b_factor" in arr.get_annotation_categories():
@@ -140,7 +148,11 @@ def t1_structure_audit(df, cfg):
             # well-predicted regions. In a pLDDT<cutoff loop the coordinate
             # error exceeds the 4 A criterion, so such a "salt bridge" is an
             # artifact of the prediction, not a property of the protein.
-            conf_res = {int(r) for r, ok in zip(ca.res_id, conf_ok) if ok} \
+            # Keyed on (chain_id, res_id): res_id alone collapses distinct
+            # inter-chain residues that share a number (e.g. every chain's
+            # own residue 1) into one, both for dedup and for the confidence
+            # set -- a multi-chain complex is exactly what T1 exists to audit.
+            conf_res = {(str(c), int(r)) for c, r, ok in zip(ca.chain_id, ca.res_id, conf_ok) if ok} \
                 if plddt_source == "b_factor" else None
             n_sb = n_sb_ungated = 0
             if acid.array_length() and base.array_length():
@@ -148,13 +160,15 @@ def t1_structure_audit(df, cfg):
                     acid.coord[:, None, :] - base.coord[None, :, :], axis=-1)
                 seen, seen_gated = set(), set()
                 for i, j in np.argwhere(d < sb_cut):
-                    ri, rj = int(acid.res_id[i]), int(base.res_id[j])
-                    if (ri, rj) not in seen:
-                        seen.add((ri, rj))
+                    ri = (str(acid.chain_id[i]), int(acid.res_id[i]))
+                    rj = (str(base.chain_id[j]), int(base.res_id[j]))
+                    key = (ri, rj)
+                    if key not in seen:
+                        seen.add(key)
                         n_sb_ungated += 1
                     if conf_res is None or (ri in conf_res and rj in conf_res):
-                        if (ri, rj) not in seen_gated:
-                            seen_gated.add((ri, rj))
+                        if key not in seen_gated:
+                            seen_gated.add(key)
                             n_sb += 1
             sasa = struc.sasa(arr, vdw_radii="Single")
             total_sasa = float(np.nansum(sasa))
@@ -184,13 +198,32 @@ def t1_structure_audit(df, cfg):
 
 # ---------------------------------------------------------------- filters
 def apply_filters(df, rules, tier):
-    """Apply {feature: {min/max}} rules; return df with pass flag + reason."""
+    """Apply {feature: {min/max}} rules; return df with pass flag + reason.
+
+    A feature that could not be computed is a filter failure, not an absent
+    constraint: a missing column fails every row, and a NaN value fails that
+    row, each with a reason naming what was missing. A `f"{tier}_error"`
+    column (e.g. `t1_error`, set when a structure fails to parse) is
+    consulted first and unconditionally fails the row with that error as the
+    reject reason -- "could not evaluate" must never read as "passed".
+    """
     keep = pd.Series(True, index=df.index)
     reasons = pd.Series("", index=df.index)
+    err_col = f"{tier}_error"
+    if err_col in df.columns:
+        err = df[err_col].fillna("").astype(str)
+        haserr = err.str.len() > 0
+        reasons[haserr & keep] = err[haserr & keep]
+        keep &= ~haserr
     for feat, rule in (rules or {}).items():
         if feat not in df.columns:
+            reasons[keep] = f"{feat} missing"
+            keep &= pd.Series(False, index=df.index)
             continue
         col = pd.to_numeric(df[feat], errors="coerce")
+        missing = col.isna()
+        reasons[missing & keep] = f"{feat} missing"
+        keep &= ~missing
         if "min" in rule:
             bad = col < float(rule["min"])
             reasons[bad & keep] = f"{feat}<{rule['min']}"
