@@ -223,39 +223,81 @@ def cmd_screen(args):
                 records.append(rec)
             print(f"  {cls['id']:<28} {s['set_id']} read", file=sys.stderr)
     flagged = reader.flagged_for_dig(records)
-    print(f"  {len(flagged)}/{len(records)} papers claim a sequence", file=sys.stderr)
-    _emit({"slug": found["slug"], "papers": records, "flagged": flagged}, args.out)
+    failed = reader.failed_extractions(records)
+    print(f"  {len(flagged)}/{len(records)} papers claim a sequence, "
+          f"{len(failed)} failed extraction", file=sys.stderr)
+    _emit({"slug": found["slug"], "papers": records, "flagged": flagged,
+           "failed": failed}, args.out)
+
+
+# Worker actually invoked by cmd_dig for both sequence and mutation reads --
+# named once here so the `extractor=` recorded on every draft_artifact this
+# command emits can never drift from the worker paperclip is actually asked
+# to run. exhaustive-extraction is gated to GXL testers on this account (see
+# cmd_screen and paperclip.py's map_papers default-worker comment); only
+# quick-reader runs here, so it is both the worker= passed below and the
+# extractor= credited on the artifact.
+DIG_WORKER = "quick-reader"
 
 
 def cmd_dig(args):
     screened = _load(args.screen)
     flagged = set(screened["flagged"])
-    by_set = {}
+    by_set, totals = {}, {}
     for rec in screened["papers"]:
+        totals[rec["set_id"]] = totals.get(rec["set_id"], 0) + 1
         if rec["doc_id"] in flagged:
             by_set.setdefault(rec["set_id"], []).append(rec["doc_id"])
 
     artifacts, n = [], 0
     for set_id, docs in by_set.items():
-        # exhaustive-extraction is likewise gated (see cmd_screen); omit
-        # worker= to fall back to quick-reader here too.
-        raw = map_papers(set_id, reader.DIG_QUERY, reader.DIG_SCHEMA, n=args.n)
+        # Controller ruling: this waste is unavoidable, not a bug -- make it
+        # visible instead. paperclip offers no way to scope a map to
+        # specific doc ids (map has no doc filter; refine filters only on
+        # metadata flags; intersect/subtract work on sets, not docs; merge
+        # is broken), so `map --from set_id` below re-reads every paper in
+        # the set even though only `docs` are flagged; the per-doc filter
+        # after parsing discards the rest.
+        print(f"  {set_id}  re-reading {totals[set_id]} papers for {len(docs)} flagged "
+              "(paperclip cannot scope a map to doc ids)", file=sys.stderr)
+        raw = map_papers(set_id, reader.DIG_QUERY, reader.DIG_SCHEMA,
+                         worker=DIG_WORKER, n=args.n)
         for rec in reader.parse_map_output(raw):
             if rec["doc_id"] not in flagged:
                 continue
             for seq in rec.get("sequences", []):
                 n += 1
-                artifacts.append(contracts.draft_artifact(n, seq, rec["doc_id"], set_id))
-    print(f"  {len(artifacts)} candidate sequences", file=sys.stderr)
+                artifacts.append(contracts.draft_artifact(
+                    n, seq, rec["doc_id"], set_id, extractor=DIG_WORKER))
+            # DIG_SCHEMA's mutations were paid for the same as sequences --
+            # they must not disappear with no trace. Each becomes a
+            # "mutation"-kind artifact; proto.bind_artifact has no tool that
+            # consumes a bare mutation, so it flows through `bind` and lands
+            # in rejections with reason unsupported_kind rather than
+            # vanishing silently.
+            for mut in rec.get("mutations", []):
+                n += 1
+                mut_record = {"value": mut["mutation"], "molecule": "protein",
+                              "name": mut["parent"], "verbatim": True}
+                artifacts.append(contracts.draft_artifact(
+                    n, mut_record, rec["doc_id"], set_id,
+                    extractor=DIG_WORKER, kind="mutation"))
+    n_seq = sum(1 for a in artifacts if a["kind"] != "mutation")
+    n_mut = len(artifacts) - n_seq
+    print(f"  {n_seq} candidate sequences, {n_mut} mutations", file=sys.stderr)
     _emit({"slug": screened["slug"], "artifacts": artifacts}, args.out)
 
 
 def cmd_bind(args):
     dug = _load(args.artifacts)
+    if not Path(args.registry).exists():
+        _fail([f"registry not found: {args.registry}",
+               "run `litkb proto-sync -o <registry>` first"])
     catalog = _load(args.registry)
     kept, rejections = [], []
 
     for art in dug["artifacts"]:
+        doc_id = art["provenance"]["doc_id"]
         # confirm_in_source's grep_fn is 2-arg (set_id, patterns) and cannot
         # itself request fixed-string matching -- so this closure asks for
         # it explicitly. A bare grep_set would send the sequence to
@@ -270,7 +312,7 @@ def cmd_bind(args):
         )
         if not art["provenance"]["confirmed_in_source"]:
             rejections.append({"kind": "not_confirmed_in_source", "id": art["id"],
-                               "doc_id": art["provenance"]["doc_id"],
+                               "doc_id": doc_id,
                                "reason": "sequence does not literally appear in its source document"})
             continue
         art["proto_binding"] = proto.bind_artifact(art, catalog)
@@ -279,11 +321,13 @@ def cmd_bind(args):
             kept.append(art)
         elif status == "unsupported_kind":
             rejections.append({"kind": f"proto_{status}", "id": art["id"],
+                               "doc_id": doc_id,
                                "reason": art["proto_binding"].get("reason",
                                          "no proto tool consumes this artifact kind")})
         else:
             rejections.append({"kind": f"proto_{status}",
                                "id": art["id"],
+                               "doc_id": doc_id,
                                "reason": art["proto_binding"]["rejected_by"] or
                                          art["proto_binding"]["unverified"]})
 
