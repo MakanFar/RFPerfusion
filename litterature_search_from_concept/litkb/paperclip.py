@@ -70,11 +70,13 @@ def search(phrase, sources="pmc", n=100, exact=False):
             "n_papers": int(found.group(1)) if found else 0}
 
 
-def grep_set(set_id, patterns, ignore_case=False):
+def grep_set(set_id, patterns, ignore_case=False, fixed=False):
     """Multi-pattern OR grep over one saved set. Returns flat hit dicts."""
     args = ["grep", "--from", set_id, "-n"]
     if ignore_case:
         args.append("-i")
+    if fixed:
+        args.append("-F")
     for p in patterns:
         args += ["-e", p]
     out = _run(args)

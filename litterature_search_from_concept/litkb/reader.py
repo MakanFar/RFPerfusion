@@ -190,8 +190,15 @@ def confirm_in_source(artifact, grep_fn):
 
     An LLM asked for a sequence will produce a plausible one, and a fabricated
     sequence passes every alphabet and length check perfectly. This is the only
-    check that distinguishes real from well-formed."""
+    check that distinguishes real from well-formed.
+
+    CRITICAL: grep_fn must perform LITERAL matching, not regex. A sequence is
+    not a regex — `*` (stop codon) and `.` (masked/ambiguous residue) occur in
+    real sequence listings and would otherwise change the pattern's meaning and
+    permit false confirmation. The call site should request fixed-string matching
+    (e.g., grep_set(..., fixed=True))."""
     if not artifact.get("verbatim"):
         return False
     hits = grep_fn(artifact["provenance"]["set_id"], [artifact["value"]])
-    return any(h["doc_id"] == artifact["provenance"]["doc_id"] for h in hits)
+    return any(h["doc_id"] == artifact["provenance"]["doc_id"] and
+               artifact["value"] in h["text"] for h in hits)
