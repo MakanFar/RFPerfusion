@@ -39,9 +39,15 @@ def _run(args):
     return p.stdout
 
 
-def count(phrase, sources="pmc"):
-    """Papers matching an exact phrase, without saving a set."""
-    out = _run(["search", "-s", sources, "-e", phrase, "-c"])
+def count(phrase, sources="pmc", exact=False):
+    """Papers matching a phrase, without saving a set.
+
+    `exact=False` uses hybrid ranking. `exact=True` requires verbatim match."""
+    args = ["search", "-s", sources, "-c"]
+    if exact:
+        args.append("-e")
+    args.append(phrase)
+    out = _run(args)
     m = FOUND_RE.search(out)
     return int(m.group(1)) if m else 0
 

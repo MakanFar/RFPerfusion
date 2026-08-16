@@ -116,20 +116,27 @@ def cmd_plan_validate(args):
         print("plan is invalid:", file=sys.stderr)
         _fail(errors)
 
+    exact = plan.get("search_mode") != "semantic"
     result = {"valid": True, "classes": [], "warnings": []}
     for c in plan["mechanism_classes"]:
         entry = {"id": c["id"], "n_phrases": len(c["search_phrases"])}
         if args.probe:
-            probes = [{"phrase": p, "n_papers": count(p, args.sources)}
+            probes = [{"phrase": p, "n_papers": count(p, args.sources, exact=exact)}
                       for p in c["search_phrases"]]
             entry["probes"] = probes
             entry["n_papers_estimated"] = sum(p["n_papers"] for p in probes)
             for p in probes:
                 if p["n_papers"] == 0:
-                    result["warnings"].append(
-                        f"{c['id']}: phrase '{p['phrase']}' returns 0 papers -- "
-                        "exact match is literal, rewrite it as something authors write"
-                    )
+                    if exact:
+                        warning = (
+                            f"{c['id']}: phrase '{p['phrase']}' returns 0 papers -- "
+                            "exact match is literal, rewrite it as something authors write"
+                        )
+                    else:
+                        warning = (
+                            f"{c['id']}: phrase '{p['phrase']}' returns 0 papers under hybrid ranking"
+                        )
+                    result["warnings"].append(warning)
         result["classes"].append(entry)
 
     if args.probe:
@@ -153,22 +160,27 @@ def cmd_search(args):
     if errors:
         _fail(errors)
 
+    exact = plan.get("search_mode") != "semantic"
     out = {"slug": plan["slug"], "sources": args.sources, "classes": [],
            "rejections": list(plan.get("exclusions", []))}
 
     for c in plan["mechanism_classes"]:
         sets = []
         for phrase in c["search_phrases"]:
-            r = search(phrase, args.sources, args.n, exact=plan.get("search_mode") != "semantic")
+            r = search(phrase, args.sources, args.n, exact=exact)
             print(f"  {c['id']:<28} {r['n_papers']:>4}  {phrase}", file=sys.stderr)
             if r["set_id"]:
                 sets.append(r)
             else:
+                reason = (
+                    "exact-phrase search returned no papers" if exact
+                    else "hybrid ranking returned no papers"
+                )
                 out["rejections"].append({
                     "kind": "phrase_zero_yield",
                     "class_id": c["id"],
                     "phrase": phrase,
-                    "reason": "exact-phrase search returned no papers",
+                    "reason": reason,
                 })
         entry = {
             "id": c["id"],
