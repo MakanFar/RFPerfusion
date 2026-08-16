@@ -62,6 +62,42 @@ TEMPLATE = {
 }
 
 
+def rows_to_plan(rows, objective, slug, groups):
+    """Turn curated keyword rows into a class-structured plan.
+
+    Rows are expert-written keyword bags, not verbatim phrases, so they are
+    searched semantically. An ungrouped row is an error rather than a silent
+    drop -- losing an expert query without saying so is the failure mode this
+    guards against."""
+    grouped = {r for rs in groups.values() for r in rs}
+    orphans = [r for r in rows if r not in grouped]
+    if orphans:
+        raise contracts.ContractError(
+            f"rows not assigned to any mechanism class: {orphans}")
+
+    return {
+        "objective": objective,
+        "slug": slug,
+        "search_mode": "semantic",
+        "mechanism_classes": [
+            {"id": cid,
+             "question": f"What does the literature say about {cid.replace('_', ' ')}?",
+             "candidate_evaluators": [],
+             "search_phrases": phrases,
+             "mechanism_patterns": ["mechanism"]}
+            for cid, phrases in groups.items()
+        ],
+        "exclusions": [],
+    }
+
+
+def cmd_plan_import(args):
+    rows = [line.strip() for line in Path(args.csv).read_text().splitlines()[1:]
+            if line.strip()]
+    groups = _load(args.groups)
+    _emit(rows_to_plan(rows, args.objective, args.slug, groups), args.out)
+
+
 def cmd_plan_template(args):
     _emit(TEMPLATE, args.out)
     print(
@@ -123,7 +159,7 @@ def cmd_search(args):
     for c in plan["mechanism_classes"]:
         sets = []
         for phrase in c["search_phrases"]:
-            r = search(phrase, args.sources, args.n)
+            r = search(phrase, args.sources, args.n, exact=plan.get("search_mode") != "semantic")
             print(f"  {c['id']:<28} {r['n_papers']:>4}  {phrase}", file=sys.stderr)
             if r["set_id"]:
                 sets.append(r)
@@ -314,6 +350,14 @@ def main(argv=None):
     p.add_argument("--sources", default="pmc")
     p.add_argument("-o", "--out")
     p.set_defaults(fn=cmd_plan_validate)
+
+    p = sub.add_parser("plan-import", help="curated keyword CSV -> class-structured plan")
+    p.add_argument("csv")
+    p.add_argument("groups", help="JSON mapping class id -> list of CSV rows")
+    p.add_argument("--objective", required=True)
+    p.add_argument("--slug", required=True)
+    p.add_argument("-o", "--out")
+    p.set_defaults(fn=cmd_plan_import)
 
     p = sub.add_parser("search", help="run every phrase, keep every set ID")
     p.add_argument("plan")

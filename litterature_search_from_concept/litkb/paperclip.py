@@ -46,18 +46,22 @@ def count(phrase, sources="pmc"):
     return int(m.group(1)) if m else 0
 
 
-def search(phrase, sources="pmc", n=100):
-    """One exact-phrase search. Returns its own set -- searches do not
-    accumulate, and `paperclip merge` cannot union them (it resolves only its
-    first argument), so callers must keep every set ID."""
-    out = _run(["search", "-s", sources, "-n", str(n), "-e", phrase])
+def search(phrase, sources="pmc", n=100, exact=False):
+    """One search. Returns its own set -- searches do not accumulate, and
+    `paperclip merge` cannot union them.
+
+    `exact=False` uses hybrid ranking. Curated keyword bags such as
+    "CraCRY ODMR" are not phrases any author writes verbatim, so exact
+    matching would return roughly nothing for them."""
+    args = ["search", "-s", sources, "-n", str(n)]
+    if exact:
+        args.append("-e")
+    args.append(phrase)
+    out = _run(args)
     found = FOUND_RE.search(out)
     ids = SET_ID_RE.findall(out)
-    return {
-        "phrase": phrase,
-        "set_id": ids[0] if ids else None,
-        "n_papers": int(found.group(1)) if found else 0,
-    }
+    return {"phrase": phrase, "set_id": ids[0] if ids else None,
+            "n_papers": int(found.group(1)) if found else 0}
 
 
 def grep_set(set_id, patterns, ignore_case=False):
