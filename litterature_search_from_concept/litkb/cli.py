@@ -206,17 +206,24 @@ def cmd_search(args):
 # ---------------------------------------------------------- screen / dig / bind
 
 
+# Worker actually invoked by cmd_screen for the mechanism sweep -- named
+# once here, the same pattern as DIG_WORKER below, so the `extracted_by`
+# threaded into the screen output (and from there into every EvidenceItem
+# cmd_evidence builds) can never drift from the worker paperclip is
+# actually asked to run. structured-extraction is gated to GXL testers on
+# this account (see litkb/paperclip.py's map_papers default-worker
+# comment); quick-reader is the only worker this account can actually run,
+# so it is passed explicitly below rather than left to map_papers's default.
+SCREEN_WORKER = "quick-reader"
+
+
 def cmd_screen(args):
     found = _load(args.search)
     records = []
     for cls in found["classes"]:
         for s in cls["sets"]:
-            # structured-extraction is gated to GXL testers on this account
-            # (see litkb/paperclip.py's map_papers default-worker comment);
-            # omit worker= so both passes run on quick-reader, the only
-            # worker this account can actually run.
             raw = map_papers(s["set_id"], reader.SCREEN_QUERY,
-                             reader.SCREEN_SCHEMA, n=args.n)
+                             reader.SCREEN_SCHEMA, worker=SCREEN_WORKER, n=args.n)
             for rec in reader.parse_map_output(raw):
                 rec["class_id"] = cls["id"]
                 rec["set_id"] = s["set_id"]
@@ -227,7 +234,7 @@ def cmd_screen(args):
     print(f"  {len(flagged)}/{len(records)} papers claim a sequence, "
           f"{len(failed)} failed extraction", file=sys.stderr)
     _emit({"slug": found["slug"], "papers": records, "flagged": flagged,
-           "failed": failed}, args.out)
+           "failed": failed, "extracted_by": SCREEN_WORKER}, args.out)
 
 
 # Worker actually invoked by cmd_dig for both sequence and mutation reads --
@@ -311,9 +318,21 @@ def cmd_bind(args):
             lambda set_id, patterns: grep_set(set_id, patterns, fixed=True),
         )
         if not art["provenance"]["confirmed_in_source"]:
+            if art["kind"] == "mutation":
+                # A genuine, paper-reported mutation whose notation the
+                # reader normalised (Val342Ala written as V342A, spacing,
+                # etc.) fails a literal grep for a reason quite different
+                # from fabrication -- say so, rather than reusing the
+                # sequence-fabrication wording on what may be a real finding.
+                reason = ("mutation notation as extracted does not appear "
+                          "verbatim in its source document -- a notation "
+                          "mismatch (e.g. three-letter vs one-letter amino-acid "
+                          "codes, or spacing) is a more likely cause than "
+                          "fabrication")
+            else:
+                reason = "sequence does not literally appear in its source document"
             rejections.append({"kind": "not_confirmed_in_source", "id": art["id"],
-                               "doc_id": doc_id,
-                               "reason": "sequence does not literally appear in its source document"})
+                               "doc_id": doc_id, "reason": reason})
             continue
         art["proto_binding"] = proto.bind_artifact(art, catalog)
         status = art["proto_binding"]["status"]
@@ -341,6 +360,12 @@ def cmd_bind(args):
 def cmd_evidence(args):
     screened = _load(args.screen)
     catalog = _load(args.registry) if Path(args.registry).exists() else {"tools": []}
+    # Record the worker that actually produced these mechanisms, not an
+    # assumed one -- cmd_screen threads its own SCREEN_WORKER through the
+    # screen output for exactly this. Falling back to SCREEN_WORKER only
+    # covers a screen.json written before this field existed; it is not a
+    # guess about a different pipeline run.
+    extracted_by = screened.get("extracted_by", SCREEN_WORKER)
     items, cache, n = [], {}, 0
 
     for rec in screened["papers"]:
@@ -349,7 +374,8 @@ def cmd_evidence(args):
             cache[doc] = contracts.citation_from_meta(meta(doc))
         for mech in rec.get("mechanisms", []):
             n += 1
-            item = contracts.item_from_mechanism(n, rec["class_id"], mech, doc, cache[doc])
+            item = contracts.item_from_mechanism(n, rec["class_id"], mech, doc, cache[doc],
+                                                 extracted_by=extracted_by)
             item["testable_by"] = {
                 "properties": mech.get("measurable_properties", []),
                 **proto.resolve_properties(mech.get("measurable_properties", []), catalog),

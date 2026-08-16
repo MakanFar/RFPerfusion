@@ -53,34 +53,6 @@ def validate_plan(plan):
     return errors
 
 
-def draft_item(index, class_id, hit, category, citation):
-    """One raw grep hit -> one draft EvidenceItem (PRD §6.2 shape).
-
-    Judgement fields are null by construction. `provenance` is the part this
-    tool can actually vouch for."""
-    return {
-        "id": f"ev_{index:03d}",
-        "question_id": class_id,
-        "claim": None,
-        "claim_type": None,
-        "quantitative": None,
-        "support": None,
-        "citation": citation,
-        "evidence_kind": None,
-        "extracted_by": "paperclip",
-        "confidence": None,
-        "provenance": {
-            "doc_id": hit["doc_id"],
-            "set_id": hit["set_id"],
-            "section": hit.get("section"),
-            "category": category,
-            "span": hit["text"],
-            "truncated_after": hit.get("truncated_after", 0),
-            "url": f"https://paperclip.gxl.ai/citations/papers/{hit['doc_id']}",
-        },
-    }
-
-
 def draft_artifact(index, record, doc_id, set_id, extractor="quick-reader", kind=None):
     """One extracted sequence (or mutation) -> one ProtoArtifact, unbound and
     unconfirmed.
@@ -117,12 +89,20 @@ def draft_artifact(index, record, doc_id, set_id, extractor="quick-reader", kind
     }
 
 
-def item_from_mechanism(index, class_id, mech, doc_id, citation):
+def item_from_mechanism(index, class_id, mech, doc_id, citation, extracted_by="quick-reader"):
     """One mechanism read out of a paper -> one EvidenceItem.
 
     `claim` arrives filled because `screen` is itself an LLM call. `support`
     stays null: how well established a claim is cannot be read off a single
-    paper's own wording."""
+    paper's own wording.
+
+    `extracted_by` must name the paperclip worker that actually produced
+    this mechanism, not an aspirational tier -- same rule as
+    `draft_artifact.extractor` above. Only quick-reader runs on this
+    account (see paperclip.py's map_papers default-worker comment), so
+    that is the correct default; callers that know the real worker (e.g.
+    `cmd_evidence`, which reads it back off `screen`'s own output) should
+    pass it explicitly rather than relying on this default."""
     return {
         "id": f"ev_{index:03d}",
         "question_id": class_id,
@@ -132,7 +112,7 @@ def item_from_mechanism(index, class_id, mech, doc_id, citation):
         "support": None,
         "citation": citation,
         "evidence_kind": None,
-        "extracted_by": "structured-extraction",
+        "extracted_by": extracted_by,
         "confidence": None,
         "testable_by": {"properties": mech.get("measurable_properties", []),
                         "tools": [], "requires_new_evaluator": True},

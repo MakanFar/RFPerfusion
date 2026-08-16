@@ -86,3 +86,28 @@ def test_unsupported_kind_binding_has_a_non_empty_string_reason(tmp_path, monkey
     assert isinstance(rej["reason"], str)
     assert rej["reason"] != ""
     assert rej["doc_id"] == "PMC1"
+
+
+def test_unconfirmed_mutation_gets_a_notation_specific_reason(tmp_path, monkeypatch):
+    """A real, paper-reported mutation whose notation the reader normalised
+    (Val342Ala written as V342A, spacing, etc.) fails the literal grep for a
+    reason that has nothing to do with fabrication. cmd_bind must not reuse
+    the sequence-fabrication wording ("sequence does not literally appear
+    in its source document") on a mutation -- that phrasing is a
+    fabrication signal applied to what may be a genuine finding."""
+    def fake_grep_set(set_id, patterns, ignore_case=False, fixed=False):
+        return []  # nothing matches -- could be notation mismatch, not fabrication
+
+    monkeypatch.setattr(cli, "grep_set", fake_grep_set)
+
+    mut_record = {"value": "V342A", "molecule": "protein", "name": "TRPV1",
+                  "verbatim": True}
+    art = contracts.draft_artifact(1, mut_record, "PMC1", "s_1", kind="mutation")
+    result = _run_bind(tmp_path, [art], [])
+
+    rejections = result["rejections"]
+    assert len(rejections) == 1
+    rej = rejections[0]
+    assert rej["kind"] == "not_confirmed_in_source"
+    assert "notation" in rej["reason"]
+    assert "sequence does not literally appear" not in rej["reason"]
