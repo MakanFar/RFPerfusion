@@ -129,7 +129,20 @@ def map_papers(set_id, query, schema, worker="quick-reader", n=None,
     if n:
         args += ["-n", str(n)]
     args.append(query)
-    return _run(args)
+    out = _run(args)
+    # `_run` treats exit 1 as "no matches" and returns stdout as-is -- but the
+    # worker-gating error (see the default-worker comment above) also exits 1,
+    # with its message on stderr, so a gated worker looks identical to a
+    # legitimate empty sweep unless we check for the map header we've actually
+    # observed on every successful run ("Map complete: N/M papers" -- see
+    # task-5-report.md Step 5 for the captured bytes).
+    if "Map complete" not in out:
+        raise PaperclipError(
+            f"`paperclip map --worker {worker}` returned no map output. "
+            "Non-default workers are gated to GXL testers on this account "
+            "and fail with exit 1 and an empty stdout."
+        )
+    return out
 
 
 def meta(doc_id):

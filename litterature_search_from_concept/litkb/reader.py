@@ -84,7 +84,15 @@ _TIMING_LINE_RE = re.compile(r"^\s*(?P<doc_id>\S+)\s+\S+\s+\d+ms\s*$")
 
 
 def parse_map_output(raw):
-    """Flatten `paperclip map --output-schema` stdout into per-paper records."""
+    """Flatten `paperclip map --output-schema` stdout into per-paper records.
+
+    A paper whose payload has no braces, or fails to parse, is NOT silently
+    folded into an empty `{}` -- that would be indistinguishable from "the
+    LLM validly reported nothing" and would vanish from `flagged_for_dig`
+    without a trace, contradicting this module's fail-loudly design. Instead
+    such a paper gets `extraction_failed: True` plus a `raw` snippet, and is
+    countable via `failed_extractions`.
+    """
     records = []
     lines = raw.splitlines()
     i = 0
@@ -100,16 +108,31 @@ def parse_map_output(raw):
             body_lines.append(lines[i])
             i += 1
         body = "\n".join(body_lines)
-        out = {}
+        out = None
         if "{" in body and "}" in body:
             try:
                 out = json.loads(body[body.index("{"):body.rindex("}") + 1])
             except (ValueError, json.JSONDecodeError):
-                out = {}
-        records.append({"doc_id": doc_id, **out})
+                out = None
+        if out is None:
+            records.append({"doc_id": doc_id, "extraction_failed": True,
+                            "raw": body[:300]})
+        else:
+            records.append({"doc_id": doc_id, "extraction_failed": False, **out})
     return records
 
 
 def flagged_for_dig(records):
-    """Papers worth the expensive worker: those claiming a sequence exists."""
+    """Papers worth the expensive worker: those claiming a sequence exists.
+
+    A record with `extraction_failed: True` has no `has_sequence` key, so it
+    is excluded here too -- a failed read never auto-triggers tier-2 spend.
+    See `failed_extractions` to surface it instead of losing it silently.
+    """
     return [r["doc_id"] for r in records if r.get("has_sequence")]
+
+
+def failed_extractions(records):
+    """Papers whose screen output could not be parsed. Never silently
+    folded into "no sequence" -- a failed read is not a negative result."""
+    return [r["doc_id"] for r in records if r.get("extraction_failed")]
