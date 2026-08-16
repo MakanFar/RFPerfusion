@@ -11,7 +11,7 @@ Use the repository's non-interactive `formulate-run` command. Its JSON and Markd
 
 1. Turn the request into one open biological design question. Keep desired behavior, operating conditions, and constraints explicit; do not bake a preferred mechanism into the question unless the user requires it.
 2. Create a unique output directory under `formulation_agent/sessions/` using a UTC timestamp and short slug.
-3. Confirm that `ANTHROPIC_API_KEY` is set without printing it and that `paperclip` resolves on `PATH`.
+3. Confirm that `paperclip` resolves on `PATH` and that the configured LLM backend is authenticated without printing secrets. The default `codex` backend uses the Codex subscription login and does not require `ANTHROPIC_API_KEY`; only require that variable when `FA_LLM_BACKEND=claude`.
 4. Run the formulation agent from the repository root:
 
    ```bash
