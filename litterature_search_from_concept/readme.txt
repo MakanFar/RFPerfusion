@@ -40,7 +40,7 @@ keeps only sequences a proto-tools tool can actually accept.  Emits typed
 EvidenceItem and ProtoArtifact records rather than grep lines.
 
 Agent-facing usage lives in .claude/skills/litkb/SKILL.md.
-Design: docs/superpowers/specs/2026-08-15-litkb-proto-extraction-design.md
+Design: docs/superpowers/plans/2026-08-15-litkb-proto-extraction.md
 
 Requires Python >= 3.10 and an authenticated `paperclip` (`paperclip config`
 should show Auth OK; `paperclip login` is an interactive browser flow).  No
