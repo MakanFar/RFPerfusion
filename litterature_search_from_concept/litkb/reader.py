@@ -136,3 +136,62 @@ def failed_extractions(records):
     """Papers whose screen output could not be parsed. Never silently
     folded into "no sequence" -- a failed read is not a negative result."""
     return [r["doc_id"] for r in records if r.get("extraction_failed")]
+
+
+DIG_SCHEMA = {
+    "type": "object",
+    "additionalProperties": False,
+    "required": ["sequences", "mutations"],
+    "properties": {
+        "sequences": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "additionalProperties": False,
+                "required": ["value", "molecule", "name", "region", "where", "verbatim"],
+                "properties": {
+                    "value": {"type": "string"},
+                    "molecule": {"type": "string", "enum": ["protein", "dna", "rna"]},
+                    "name": {"type": ["string", "null"]},
+                    "region": {"type": ["array", "null"], "items": {"type": "integer"}},
+                    "where": {"type": "string"},
+                    "verbatim": {"type": "boolean"},
+                },
+            },
+        },
+        "mutations": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "additionalProperties": False,
+                "required": ["parent", "mutation", "effect"],
+                "properties": {
+                    "parent": {"type": "string"},
+                    "mutation": {"type": "string"},
+                    "effect": {"type": "string"},
+                },
+            },
+        },
+    },
+}
+
+DIG_QUERY = (
+    "Extract every explicit amino-acid or nucleotide sequence in this paper, "
+    "including supplementary tables and figure captions. Copy each sequence "
+    "character for character from the source. If you cannot copy it exactly -- "
+    "if you would have to reconstruct, translate, or infer it -- set verbatim "
+    "to false. Do not produce a sequence that is not written in the paper. "
+    "Also list every point mutation and the effect the paper attributes to it."
+)
+
+
+def confirm_in_source(artifact, grep_fn):
+    """Re-grep an extracted sequence against its own source document.
+
+    An LLM asked for a sequence will produce a plausible one, and a fabricated
+    sequence passes every alphabet and length check perfectly. This is the only
+    check that distinguishes real from well-formed."""
+    if not artifact.get("verbatim"):
+        return False
+    hits = grep_fn(artifact["provenance"]["set_id"], [artifact["value"]])
+    return any(h["doc_id"] == artifact["provenance"]["doc_id"] for h in hits)
