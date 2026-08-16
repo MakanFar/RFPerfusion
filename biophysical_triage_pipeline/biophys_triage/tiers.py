@@ -17,6 +17,10 @@ IVYWREL = set("IVYWREL")
 THERMOLABILE = set("QNCMDST")   # deamidation / oxidation prone
 CHARGED = set("DEKR")
 POLAR_UNCHARGED = set("NQSTY")
+# The classic CvP-bias discriminator is defined over N,Q,S,T only (no Tyr) --
+# kept distinct from POLAR_UNCHARGED, which is also reported as its own
+# feature and includes Y there deliberately.
+CVP_POLAR = set("NQST")
 
 
 # ---------------------------------------------------------------- T0
@@ -31,6 +35,10 @@ def t0_descriptors(records, cfg):
         clean = "".join(c for c in seq if c.isalpha())
         L = len(clean)
         if L == 0:
+            # Still one row per input sequence -- record why it could not be
+            # scored instead of dropping it off the funnel silently.
+            rows.append({"seq_id": sid, "length": 0,
+                         "t0_error": "empty sequence after cleaning", "seq": clean})
             continue
         pep = peptides.Peptide(clean)
         counts = {a: clean.count(a) for a in set(clean)}
@@ -38,6 +46,7 @@ def t0_descriptors(records, cfg):
 
         charged_f = f(CHARGED)
         polar_f = f(POLAR_UNCHARGED)
+        cvp_polar_f = f(CVP_POLAR)
         try:
             instability = pep.instability_index()
         except Exception:
@@ -52,7 +61,7 @@ def t0_descriptors(records, cfg):
             "polar_uncharged_frac": polar_f,
             # CvP bias: (D+E+K+R) - (N+Q+S+T) per 100 residues. A classic
             # thermal-adaptation discriminator.
-            "cvp_bias": 100.0 * (charged_f - polar_f),
+            "cvp_bias": 100.0 * (charged_f - cvp_polar_f),
             "ek_over_qh": (counts.get("E", 0) + counts.get("K", 0)) /
                           max(1, counts.get("Q", 0) + counts.get("H", 0)),
             "aliphatic_index": pep.aliphatic_index(),
@@ -79,19 +88,31 @@ def t0_score(df, cfg):
     ref = cfg.get("t0_reference", {})
     z = np.zeros(len(df), dtype=float)
     used = 0
+    sources = []  # per-feature actually-used source, so the mode flag can't lie
     for f in feats:
         if f not in df.columns:
             continue
         col = df[f].astype(float)
-        mu = ref.get(f, {}).get("mean", col.mean())
-        sd = ref.get(f, {}).get("sd", col.std(ddof=0))
+        ref_f = ref.get(f, {})
+        has_external = "mean" in ref_f and "sd" in ref_f
+        mu = ref_f["mean"] if has_external else col.mean()
+        sd = ref_f["sd"] if has_external else col.std(ddof=0)
         if not sd or math.isnan(sd) or sd == 0:
             continue
         z = z + float(signs.get(f, 1.0)) * ((col - mu) / sd).to_numpy()
         used += 1
+        sources.append("external" if has_external else "batch")
     out = df.copy()
     out["t0_composite_z"] = z / max(1, used)
-    out["t0_reference_mode"] = "external" if ref else "batch_relative"
+    if not sources:
+        mode = "batch_relative"
+    elif all(s == "external" for s in sources):
+        mode = "external"
+    elif all(s == "batch" for s in sources):
+        mode = "batch_relative"
+    else:
+        mode = "mixed"
+    out["t0_reference_mode"] = mode
     return out
 
 
@@ -239,14 +260,27 @@ def apply_filters(df, rules, tier):
 
 
 def top_fraction(df, col, frac, tier):
-    """Keep the top `frac` by `col` — the rank-based alternative to hard cuts."""
+    """Keep the top `frac` by `col` — the rank-based alternative to hard cuts.
+
+    Ranked within the rows that already pass this tier's other filters, not
+    the whole batch -- otherwise rows already rejected upstream eat into the
+    fraction and `keep_top_fraction: 0.60` can retain far fewer than 60% of
+    the rows actually still in play (or zero).
+    """
     out = df.copy()
-    n_keep = max(1, int(round(len(df) * float(frac))))
-    thresh = out[col].nlargest(n_keep).min()
-    passed = out[col] >= thresh
     prev = out.get(f"{tier}_pass", pd.Series(True, index=out.index))
-    out[f"{tier}_pass"] = (prev.to_numpy() & passed.to_numpy())
+    prev_arr = prev.to_numpy()
+    survivors = out.loc[prev_arr]
+    if len(survivors):
+        n_keep = max(1, int(round(len(survivors) * float(frac))))
+        thresh = survivors[col].nlargest(n_keep).min()
+        passed = out[col] >= thresh
+    else:
+        passed = pd.Series(False, index=out.index)
+    passed_arr = passed.to_numpy()
+    out[f"{tier}_pass"] = (prev_arr & passed_arr)
     rr = out.get(f"{tier}_reject_reason", pd.Series("", index=out.index)).to_numpy().copy()
-    rr[(~passed.to_numpy()) & (rr == "")] = f"{col} below top-{frac:g} cutoff"
+    newly_rejected = prev_arr & (~passed_arr)
+    rr[newly_rejected & (rr == "")] = f"{col} below top-{frac:g} cutoff"
     out[f"{tier}_reject_reason"] = rr
     return out

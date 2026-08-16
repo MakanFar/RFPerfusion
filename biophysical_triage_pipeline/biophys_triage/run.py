@@ -19,9 +19,21 @@ import json
 import os
 import sys
 import time
+from collections import Counter
 import pandas as pd
 
 from . import tiers
+
+# Tier rank for sorting the output TSV, most-advanced first. `final_tier_reached`
+# is a string ("passed_T0_pending_T1" sorts above "passed_T1" alphabetically),
+# so an explicit rank is required or the funnel's real survivors end up buried
+# under rows nobody has evaluated yet.
+TIER_RANK = {
+    "passed_T1": 0,
+    "passed_T0_pending_T1": 1,
+    "rejected_T1": 2,
+    "rejected_T0": 3,
+}
 
 
 def read_fasta(path):
@@ -32,7 +44,8 @@ def read_fasta(path):
             if line.startswith(">"):
                 if sid is not None:
                     recs.append((sid, "".join(buf)))
-                sid = line[1:].split()[0]
+                tokens = line[1:].split()
+                sid = tokens[0] if tokens else f"unnamed_{len(recs) + 1}"
                 buf = []
             elif line:
                 buf.append(line)
@@ -80,6 +93,16 @@ def run(fasta, config_path=None, out_tsv="triage_results.tsv",
     log = lambda m: verbose and print(m, file=sys.stderr, flush=True)
     log(f"[triage] loaded {len(records)} sequences from {fasta}")
 
+    if not records:
+        sys.exit(f"[triage] {fasta} contains no sequences -- nothing to triage")
+
+    id_counts = Counter(sid for sid, _ in records)
+    dupes = sorted(sid for sid, c in id_counts.items() if c > 1)
+    if dupes:
+        sys.exit(f"[triage] duplicate seq_id(s) in {fasta}: {dupes} -- "
+                  "disambiguate the FASTA headers and re-run; a duplicate id "
+                  "fans out the T1 merge and mis-attributes features")
+
     # ---- T0 --------------------------------------------------------------
     t0 = tiers.t0_descriptors(records, cfg)
     t0 = tiers.t0_score(t0, cfg)
@@ -108,14 +131,28 @@ def run(fasta, config_path=None, out_tsv="triage_results.tsv",
         t1 = tiers.apply_filters(t1, cfg.get("t1_filters"), "t1")
         master = master.merge(t1, on="seq_id", how="left")
         master["t1_pass"] = master["t1_pass"].fillna(False)
-        master.loc[~master["t0_pass"], "t1_reject_reason"] = "not evaluated (failed T0)"
-        master.loc[master["t0_pass"] & master["structure_path"].isna(),
-                   "t1_reject_reason"] = "no structure supplied"
         log(f"[triage] T1 structure filters: {int(master['t1_pass'].sum())}/{len(survivors)} pass")
     else:
         master["t1_pass"] = False
-        master["t1_reject_reason"] = "not evaluated (no structures supplied)"
-        log("[triage] T1 skipped -- no structures supplied")
+        master["t1_reject_reason"] = ""
+        if smap:
+            log("[triage] T1 skipped -- structures were supplied but no T0 "
+                "survivor's seq_id matched a structure filename")
+        else:
+            log("[triage] T1 skipped -- no structures supplied")
+
+    # Per-row reject reason, set uniformly whether or not any protein reached
+    # T1: distinguishing "never got to T1 because T0 rejected it" from "T0
+    # survivor but no matching structure file" -- and, within the latter,
+    # whether structures were supplied at all -- so the no-survivors case
+    # cannot misdiagnose "structures supplied but nothing matched" as
+    # "no structures supplied".
+    master.loc[~master["t0_pass"], "t1_reject_reason"] = "not evaluated (failed T0)"
+    no_struct_mask = master["t0_pass"] & master["structure_path"].isna()
+    if smap:
+        master.loc[no_struct_mask, "t1_reject_reason"] = "no structure supplied for this seq_id"
+    else:
+        master.loc[no_struct_mask, "t1_reject_reason"] = "not evaluated (no structures supplied)"
 
     # ---- verdict ---------------------------------------------------------
     def verdict(r):
@@ -135,8 +172,12 @@ def run(fasta, config_path=None, out_tsv="triage_results.tsv",
     cols = [c for c in front if c in master.columns] + \
            [c for c in master.columns if c not in front and c != "seq"] + \
            (["seq"] if "seq" in master.columns else [])
-    master = master[cols].sort_values(
-        ["final_tier_reached", "t0_composite_z"], ascending=[True, False])
+    # Sort by tier rank (most-advanced first), not the "final_tier_reached"
+    # string -- alphabetically "passed_T0_pending_T1" < "passed_T1", which
+    # buries real T1 survivors under rows nobody has evaluated yet.
+    tier_rank = master["final_tier_reached"].map(TIER_RANK).fillna(len(TIER_RANK))
+    master = master[cols].assign(_tier_rank=tier_rank.to_numpy()).sort_values(
+        ["_tier_rank", "t0_composite_z"], ascending=[True, False]).drop(columns="_tier_rank")
     master.to_csv(out_tsv, sep="\t", index=False, float_format="%.5g")
     log(f"[triage] wrote {out_tsv} ({len(master)} rows, {master.shape[1]} cols) "
         f"in {time.time()-t_start:.1f}s")
