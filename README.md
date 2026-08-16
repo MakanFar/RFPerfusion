@@ -8,6 +8,24 @@ that >1500 nm (SWIR) light produces in water. See [`docs/PRD.md`](docs/PRD.md).
 The judged artifact is the **sequence set** (`outputs/candidates.json`); the
 pipeline is *how we got there*.
 
+## Hackathon pitch
+
+[PowerPoint deck](RFPerfusion_Hackathon_Pitch_Final.pptx) · [PDF deck](output/pdf/RFPerfusion_Hackathon_Pitch_Final.pdf)
+
+![Slide 1 — We asked AI to design an impossible protein](docs/hackathon-pitch/slide-01.png)
+
+![Slide 2 — One scientist and three coordinated scientific agents](docs/hackathon-pitch/slide-02.png)
+
+![Slide 3 — The formulation agent turns goals into testable routes](docs/hackathon-pitch/slide-03.png)
+
+![Slide 4 — The literature agent turns papers into usable artifacts](docs/hackathon-pitch/slide-04.png)
+
+![Slide 5 — Proto-tools co-folding demonstration](docs/hackathon-pitch/slide-05.png)
+
+![Slide 6 — The scientist stays in control at every handoff](docs/hackathon-pitch/slide-06.png)
+
+![Slide 7 — Make the impossible scientifically actionable](docs/hackathon-pitch/slide-07.png)
+
 ## Quick start
 
 ```bash
