@@ -1,0 +1,11 @@
+target_temperature_c: 70.0
+target_ph: 7.0
+plddt_min: 70.0
+salt_bridge_cutoff_a: 4.0
+t0_filters:
+  length: {min: 50, max: 2000}
+  instability_index: {max: 60.0}
+t0_keep_top_fraction: 0.60
+t1_filters:
+  mean_plddt: {min: 70.0}
+  salt_bridges_per_100aa: {min: 1.0}
