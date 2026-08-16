@@ -1,0 +1,165 @@
+{
+  "created_at": "2026-08-16T04:53:00.328127+00:00",
+  "slug": "rfp",
+  "objective": null,
+  "evidence_status": "discovery_only_unverified",
+  "sources": "pmc,biorxiv",
+  "n": 20,
+  "set_ids": [
+    {
+      "class_id": "cryptochrome_rf",
+      "phrase": "CraCRY ODMR",
+      "set_id": "s_a9e5e726",
+      "n_papers": 20
+    },
+    {
+      "class_id": "cryptochrome_rf",
+      "phrase": "cryptochrome RF radical pair FAD",
+      "set_id": "s_8c17dc9d",
+      "n_papers": 19
+    },
+    {
+      "class_id": "cryptochrome_rf",
+      "phrase": "CraCRY C-terminal extension conformational change",
+      "set_id": "s_0e007400",
+      "n_papers": 18
+    },
+    {
+      "class_id": "cryptochrome_rf",
+      "phrase": "cryptochrome flavin redox conformational switching",
+      "set_id": "s_3a17e02e",
+      "n_papers": 19
+    },
+    {
+      "class_id": "cryptochrome_rf",
+      "phrase": "cryptochrome ODMR heating artifact",
+      "set_id": "s_e296eab2",
+      "n_papers": 18
+    },
+    {
+      "class_id": "cryptochrome_rf",
+      "phrase": "RF cryptochrome null result",
+      "set_id": "s_a631e058",
+      "n_papers": 19
+    },
+    {
+      "class_id": "cryptochrome_rf",
+      "phrase": "radical pair conformational coupling",
+      "set_id": "s_8e506dc3",
+      "n_papers": 20
+    },
+    {
+      "class_id": "cryptochrome_rf",
+      "phrase": "cryptochrome magnetic effect reproducibility",
+      "set_id": "s_5fdabf1e",
+      "n_papers": 20
+    },
+    {
+      "class_id": "lov_radical_pair",
+      "phrase": "MagLOV ODMR",
+      "set_id": "s_45db16fe",
+      "n_papers": 20
+    },
+    {
+      "class_id": "lov_radical_pair",
+      "phrase": "AsLOV2 C450A radical pair",
+      "set_id": "s_939ebbc5",
+      "n_papers": 18
+    },
+    {
+      "class_id": "lov_radical_pair",
+      "phrase": "iLOV ODMR",
+      "set_id": "s_dbcf34e5",
+      "n_papers": 20
+    },
+    {
+      "class_id": "lov_radical_pair",
+      "phrase": "LOV2 Jalpha helix conformational change",
+      "set_id": "s_ea60fe83",
+      "n_papers": 19
+    },
+    {
+      "class_id": "lov_radical_pair",
+      "phrase": "FMN radical pair allostery",
+      "set_id": "s_0678eafd",
+      "n_papers": 20
+    },
+    {
+      "class_id": "lov_radical_pair",
+      "phrase": "C450A LOV signaling loss",
+      "set_id": "s_e416fb9a",
+      "n_papers": 20
+    },
+    {
+      "class_id": "lov_radical_pair",
+      "phrase": "LOV radical pair not involved signaling",
+      "set_id": "s_03ac4980",
+      "n_papers": 20
+    },
+    {
+      "class_id": "lov_radical_pair",
+      "phrase": "MagLOV ODMR artifact",
+      "set_id": "s_baed0f89",
+      "n_papers": 19
+    },
+    {
+      "class_id": "lov_radical_pair",
+      "phrase": "RF flavoprotein conformational change",
+      "set_id": "s_2da74dff",
+      "n_papers": 20
+    },
+    {
+      "class_id": "magnetothermal",
+      "phrase": "radiofrequency thermolysin nanoparticle",
+      "set_id": "s_116a5162",
+      "n_papers": 19
+    },
+    {
+      "class_id": "magnetothermal",
+      "phrase": "magnetothermal protein switch",
+      "set_id": "s_5bd0a93f",
+      "n_papers": 17
+    },
+    {
+      "class_id": "magnetothermal",
+      "phrase": "magnetic nanoparticle local heating protein",
+      "set_id": "s_fc1affef",
+      "n_papers": 20
+    },
+    {
+      "class_id": "magnetothermal",
+      "phrase": "nanoscale heating controversy magnetic nanoparticles",
+      "set_id": "s_04eaf4fd",
+      "n_papers": 20
+    },
+    {
+      "class_id": "magnetothermal",
+      "phrase": "specific absorption rate protein conjugate",
+      "set_id": "s_ff243d0e",
+      "n_papers": 19
+    },
+    {
+      "class_id": "magnetothermal",
+      "phrase": "bulk heating control RF nanoparticle",
+      "set_id": "s_4510d7d8",
+      "n_papers": 20
+    }
+  ],
+  "extracted_by": {
+    "screen": "quick-reader",
+    "dig": null
+  },
+  "artifact_paths": {
+    "search": "outputs/20260816T043704Z-rfp/search_rfp.json",
+    "screen": "outputs/20260816T043704Z-rfp/screen_rfp.json",
+    "artifacts": "outputs/20260816T043704Z-rfp/artifacts_rfp.json",
+    "evidence": "outputs/20260816T043704Z-rfp/evidence_rfp.json"
+  },
+  "counts": {
+    "papers_screened": 69,
+    "papers_flagged": 18,
+    "failed_extractions": 0,
+    "artifacts_runnable": 20,
+    "artifacts_rejected": 226
+  }
+}

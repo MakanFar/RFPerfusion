@@ -1,0 +1,2684 @@
+{
+  "slug": "rfp",
+  "papers": [
+    {
+      "doc_id": "PMC7698612",
+      "extraction_failed": false,
+      "mechanisms": [],
+      "has_sequence": false,
+      "sequence_location": "none",
+      "named_proteins": [],
+      "class_id": "cryptochrome_rf",
+      "set_id": "s_a9e5e726"
+    },
+    {
+      "doc_id": "PMC8807746",
+      "extraction_failed": false,
+      "mechanisms": [],
+      "has_sequence": false,
+      "sequence_location": "none",
+      "named_proteins": [],
+      "class_id": "cryptochrome_rf",
+      "set_id": "s_a9e5e726"
+    },
+    {
+      "doc_id": "PMC8163787",
+      "extraction_failed": false,
+      "has_sequence": false,
+      "mechanisms": [],
+      "named_proteins": [],
+      "sequence_location": "none",
+      "class_id": "cryptochrome_rf",
+      "set_id": "s_a9e5e726"
+    },
+    {
+      "doc_id": "PMC4894384",
+      "extraction_failed": false,
+      "mechanisms": [
+        {
+          "chain": "Flavin cofactor (FAD) and tryptophan triad (W400, W377, W324)",
+          "claim": "Light-induced sequential electron transfer, assisted by the rearrangement of polar side groups in the cryptochrome interior and hydrogen bond formation, yields radical pair states ([FAD.- + W377.+] or [FAD.- + W324.+]) with radical partners separated beyond a functionally critical distance (12.2 \u00c5 or 18.2 \u00c5), weakening distance-dependent exchange and dipole-dipole interactions to achieve sensitivity to the geomagnetic field.",
+          "measurable_properties": [
+            "radical pair separation distance",
+            "electron transfer rates",
+            "reorganization energy",
+            "driving force \u0394G",
+            "hydrogen bond lengths (e.g., T404 OG1 ...W377 HE1)",
+            "chlorine anion binding/deprotonation rates"
+          ]
+        }
+      ],
+      "has_sequence": false,
+      "sequence_location": "none",
+      "named_proteins": [
+        {
+          "name": "Arabidopsis thaliana cryptochrome-1",
+          "accession": "1U3C"
+        },
+        {
+          "name": "DNA photolyase",
+          "accession": null
+        },
+        {
+          "name": "Drosophila cryptochrome",
+          "accession": null
+        },
+        {
+          "name": "Mouse cryptochrome1",
+          "accession": null
+        },
+        {
+          "name": "Human cryptochrome",
+          "accession": null
+        },
+        {
+          "name": "Acropora millepora cryptochrome",
+          "accession": null
+        }
+      ],
+      "class_id": "cryptochrome_rf",
+      "set_id": "s_8c17dc9d"
+    },
+    {
+      "doc_id": "PMC9008703",
+      "extraction_failed": false,
+      "has_sequence": true,
+      "mechanisms": [
+        {
+          "chain": "Conserved asparagine and amino acids around the tryptophan radical",
+          "claim": "Photoactivation leads to structural changes where a conserved asparagine moves toward the semiquinone FAD chromophore and stabilizes it by hydrogen bonding, while amino acids around the tryptophan radical rearrange to open it up to the solvent.",
+          "measurable_properties": [
+            "Hydrogen bonding distances",
+            "Solvent accessibility",
+            "Chromophore oxidation state absorbance changes",
+            "Structural displacement"
+          ]
+        }
+      ],
+      "named_proteins": [
+        {
+          "accession": "7QUT",
+          "name": "animal (6-4) photolyase"
+        },
+        {
+          "accession": null,
+          "name": "cryptochrome"
+        }
+      ],
+      "sequence_location": "methods",
+      "class_id": "cryptochrome_rf",
+      "set_id": "s_8c17dc9d"
+    },
+    {
+      "doc_id": "PMC2040520",
+      "extraction_failed": false,
+      "mechanisms": [
+        {
+          "chain": "Blue light excitation -> radical pair formation -> spin-correlated interconversion (S<->T mixing) -> recombination reactions sensitive to magnetic field orientation",
+          "claim": "Absorption of blue light excites the protein, resulting in intra-protein electron transfer that forms long-lived spin-correlated radical pairs capable of acting as a magnetic compass sensor.",
+          "measurable_properties": [
+            "radical pair lifetime",
+            "spin-correlation persistence",
+            "transient absorption spectra",
+            "magnetic field-sensitivity of the radical pair lifetime",
+            "time-resolved EPR"
+          ]
+        }
+      ],
+      "has_sequence": true,
+      "sequence_location": "methods",
+      "named_proteins": [
+        {
+          "accession": "AJ632120",
+          "name": "gw Cry1a"
+        },
+        {
+          "accession": "DQ838738",
+          "name": "gw Cry1b"
+        },
+        {
+          "accession": "AY585716",
+          "name": "European robin Cry1a"
+        },
+        {
+          "accession": "Q43125",
+          "name": "Arabidopsis thaliana Cry1"
+        },
+        {
+          "accession": "P00914",
+          "name": "Escherichia coli DNA photolyase"
+        },
+        {
+          "accession": null,
+          "name": "gw Cry1-PHR"
+        },
+        {
+          "accession": null,
+          "name": "human La/SSB autoantigen"
+        },
+        {
+          "accession": null,
+          "name": "hen lysozyme"
+        }
+      ],
+      "class_id": "cryptochrome_rf",
+      "set_id": "s_8c17dc9d"
+    },
+    {
+      "doc_id": "PMC4927292",
+      "extraction_failed": false,
+      "mechanisms": [
+        {
+          "chain": "complexin-1",
+          "claim": "Complexin-1 binds to the ternary SNARE complex in a cis conformation where its N-terminal, accessory, and central domains cooperate to induce a conformational change at the membrane-proximal C-terminal end of the ternary SNARE complex. In a trans conformation, complexin-1 simultaneously interacts with a ternary SNARE complex via its central domain and a binary SNARE complex via its accessory domain.",
+          "measurable_properties": [
+            "FRET efficiency",
+            "fluorescence resonance energy transfer (smFRET)",
+            "dissociation rate (k_off)",
+            "association rate (k_on)",
+            "dissociation constant (K_D)",
+            "fluorescence anisotropy"
+          ]
+        }
+      ],
+      "has_sequence": true,
+      "sequence_location": "methods",
+      "named_proteins": [
+        {
+          "name": "complexin-1",
+          "accession": null
+        },
+        {
+          "name": "syntaxin-1A",
+          "accession": null
+        },
+        {
+          "name": "SNAP-25A",
+          "accession": null
+        },
+        {
+          "name": "synaptobrevin-2",
+          "accession": null
+        },
+        {
+          "name": "synaptotagmin-1",
+          "accession": null
+        },
+        {
+          "name": "BirA",
+          "accession": null
+        },
+        {
+          "name": "TEV protease",
+          "accession": null
+        },
+        {
+          "name": "thrombin",
+          "accession": null
+        },
+        {
+          "name": "alphaSNAP",
+          "accession": null
+        },
+        {
+          "name": "HOPS complex",
+          "accession": null
+        }
+      ],
+      "class_id": "cryptochrome_rf",
+      "set_id": "s_0e007400"
+    },
+    {
+      "doc_id": "PMC6951262",
+      "extraction_failed": false,
+      "mechanisms": [],
+      "has_sequence": false,
+      "sequence_location": "none",
+      "named_proteins": [
+        {
+          "name": "heliorhodopsin 48C12",
+          "accession": null
+        },
+        {
+          "name": "Acetabularia Rhodopsin II",
+          "accession": "3AM6"
+        },
+        {
+          "name": "ChRmine",
+          "accession": null
+        },
+        {
+          "name": "GPR",
+          "accession": null
+        },
+        {
+          "name": "Ta HeR",
+          "accession": "6IS6"
+        }
+      ],
+      "class_id": "cryptochrome_rf",
+      "set_id": "s_0e007400"
+    },
+    {
+      "doc_id": "PMC7114459",
+      "extraction_failed": false,
+      "has_sequence": false,
+      "mechanisms": [],
+      "named_proteins": [
+        {
+          "accession": "P003668.2",
+          "name": "DENR"
+        },
+        {
+          "accession": "P41214.3",
+          "name": "eIF2D"
+        },
+        {
+          "accession": "P41567.1",
+          "name": "eIF1"
+        },
+        {
+          "accession": "P47089.1",
+          "name": "MCTS1"
+        },
+        {
+          "accession": "P47089.1",
+          "name": "MCT-1"
+        },
+        {
+          "accession": null,
+          "name": "aIF1"
+        },
+        {
+          "accession": "VWQ02336.1",
+          "name": "YciH"
+        },
+        {
+          "accession": null,
+          "name": "IF3"
+        },
+        {
+          "accession": null,
+          "name": "ABCE1"
+        }
+      ],
+      "sequence_location": "none",
+      "class_id": "cryptochrome_rf",
+      "set_id": "s_0e007400"
+    },
+    {
+      "doc_id": "PMC2443192",
+      "extraction_failed": false,
+      "mechanisms": [
+        {
+          "chain": "W342F / W397F",
+          "claim": "Light activation of animal-type cryptochromes occurs via flavin photoreduction from oxidized flavin to accumulate a radical intermediate signaling state (specifically an anionic flavin radical) through an intraprotein electron transfer chain.",
+          "measurable_properties": [
+            "flavin redox state via fluorescence emission spectra monitoring oxidized flavin levels (peak at 450 nm)",
+            "radical accumulation via electron paramagnetic resonance (EPR) spectroscopy",
+            "pulsed ENDOR spectroscopy",
+            "cryptochrome protein degradation/levels in living organisms via western blot analysis"
+          ]
+        }
+      ],
+      "has_sequence": true,
+      "sequence_location": "methods",
+      "named_proteins": [
+        {
+          "name": "Drosophila cryptochrome",
+          "accession": null
+        },
+        {
+          "name": "human cryptochrome-1",
+          "accession": null
+        },
+        {
+          "name": "Arabidopsis thaliana cryptochrome 1",
+          "accession": null
+        },
+        {
+          "name": "Arabidopsis thaliana cryptochrome 2",
+          "accession": null
+        },
+        {
+          "name": "Escherichia coli DNA photolyase",
+          "accession": null
+        },
+        {
+          "name": "monarch butterfly cryptochrome 1",
+          "accession": null
+        },
+        {
+          "name": "mosquito cryptochrome 1",
+          "accession": null
+        },
+        {
+          "name": "silk moth cryptochrome 1",
+          "accession": null
+        }
+      ],
+      "class_id": "cryptochrome_rf",
+      "set_id": "s_3a17e02e"
+    },
+    {
+      "doc_id": "PMC10940379",
+      "extraction_failed": false,
+      "mechanisms": [
+        {
+          "chain": "Light -> Flavin reduction (FADox to FADH\u2022 via Trp triad) -> Conformational change (C-terminal domain dissociation/unfolding and oligomerization) -> Biological activation",
+          "claim": "Light absorption triggers flavin reduction to the neutral radical (FADH\u2022) state via intraprotein electron transfer through the conserved Trp triad, inducing structural changes in the protein that lead to the biologically active 'lit' state.",
+          "measurable_properties": [
+            "flavin redox states",
+            "protein diffusion rate",
+            "C-terminal domain dissociation",
+            "oligomerization"
+          ]
+        }
+      ],
+      "has_sequence": false,
+      "sequence_location": "none",
+      "named_proteins": [
+        {
+          "accession": null,
+          "name": "Cry1"
+        },
+        {
+          "accession": null,
+          "name": "Cry2"
+        },
+        {
+          "accession": null,
+          "name": "Photolyase"
+        },
+        {
+          "accession": null,
+          "name": "CIB1"
+        },
+        {
+          "accession": null,
+          "name": "BIC2"
+        },
+        {
+          "accession": null,
+          "name": "MagR"
+        },
+        {
+          "accession": null,
+          "name": "IscA1"
+        },
+        {
+          "accession": null,
+          "name": "CraCry"
+        },
+        {
+          "accession": null,
+          "name": "Fus"
+        },
+        {
+          "accession": null,
+          "name": "glucose oxidase"
+        },
+        {
+          "accession": null,
+          "name": "D-amino acid oxidase"
+        },
+        {
+          "accession": null,
+          "name": "catalase"
+        },
+        {
+          "accession": null,
+          "name": "FOXO"
+        }
+      ],
+      "class_id": "cryptochrome_rf",
+      "set_id": "s_3a17e02e"
+    },
+    {
+      "doc_id": "PMC3299647",
+      "extraction_failed": false,
+      "named_proteins": [
+        {
+          "name": "Homo sapiens cryptochrome-1",
+          "accession": null
+        },
+        {
+          "name": "Drosophila cryptochrome",
+          "accession": null
+        },
+        {
+          "name": "Arabidopsis cryptochrome 2",
+          "accession": null
+        },
+        {
+          "name": "COP1",
+          "accession": null
+        },
+        {
+          "name": "timeless",
+          "accession": null
+        },
+        {
+          "name": "daughterless",
+          "accession": null
+        },
+        {
+          "name": "Drosomycin3",
+          "accession": null
+        },
+        {
+          "name": "White",
+          "accession": null
+        },
+        {
+          "name": "Endopeptidase",
+          "accession": null
+        },
+        {
+          "name": "CG7906",
+          "accession": null
+        },
+        {
+          "name": "RP49",
+          "accession": null
+        }
+      ],
+      "sequence_location": "figure",
+      "mechanisms": [
+        {
+          "chain": "electron transfer from a nearby trp residue in the protein, which in turn is reduced through a chain of at least three conserved trp residues (known as the trp triad) by external reductant at the protein surface",
+          "claim": "Light activation of cryptochromes involves photoreduction from oxidized flavin to form a relatively stable radical intermediate, which is the presumed signaling state.",
+          "measurable_properties": [
+            "flavin radical stability",
+            "UV-visible absorbance spectra",
+            "EPR spectra",
+            "fluorescence spectra"
+          ]
+        }
+      ],
+      "has_sequence": true,
+      "class_id": "cryptochrome_rf",
+      "set_id": "s_3a17e02e"
+    },
+    {
+      "doc_id": "PMC7698612",
+      "extraction_failed": false,
+      "mechanisms": [],
+      "has_sequence": false,
+      "sequence_location": "none",
+      "named_proteins": [],
+      "class_id": "cryptochrome_rf",
+      "set_id": "s_e296eab2"
+    },
+    {
+      "doc_id": "bio_fde38824",
+      "extraction_failed": false,
+      "mechanisms": [
+        {
+          "chain": "Optical excitation generates spin-correlated radical pairs (SCRPs) involving a flavin cofactor and a nearby amino acid residue; spin interconversion between singlet and triplet states is influenced by external magnetic fields and radiofrequency (RF) fields, altering recombination kinetics and photochemical equilibrium to produce optically detected magnetic resonance (ODMR) contrast.",
+          "claim": "Radical pair chemistry and spin-selective recombination kinetics controlled by radio waves / optical detection (spin chemistry / SCRP mechanism).",
+          "measurable_properties": [
+            "Photoluminescence intensity changes",
+            "ODMR contrast / resonance spectra",
+            "Magnetic field effect (MFE) contrast",
+            "Transient absorption lifetime / triplet state lifetime of the flavin cofactor"
+          ]
+        }
+      ],
+      "has_sequence": false,
+      "sequence_location": "none",
+      "named_proteins": [
+        {
+          "accession": "5ZM0",
+          "name": "Cra Cry"
+        },
+        {
+          "accession": "4EET",
+          "name": "iLOV"
+        },
+        {
+          "accession": null,
+          "name": "CraCry"
+        },
+        {
+          "accession": null,
+          "name": "AtCry"
+        },
+        {
+          "accession": null,
+          "name": "DmCry"
+        }
+      ],
+      "class_id": "cryptochrome_rf",
+      "set_id": "s_e296eab2"
+    },
+    {
+      "doc_id": "PMC5296725",
+      "extraction_failed": false,
+      "mechanisms": [
+        {
+          "chain": "Photo-induced electron transfer reactions and radical pair mechanism involving a photocycle with a fourth tryptophan electron donor (tryptophan tetrad)",
+          "claim": "Photo-induced electron transfer reactions in Drosophila melanogaster cryptochrome are influenced by millitesla magnetic fields via the radical pair mechanism involving a tetrad of tryptophan residues.",
+          "measurable_properties": [
+            "Transient absorption kinetics (time constants of radical deprotonation and electron transfer, such as TrpH+ deprotonation and electron hopping rates)",
+            "Magnetic field effect amplitude and response profile (such as B1/2 values or percentage change in transient/cavity-enhanced absorption signals)"
+          ]
+        }
+      ],
+      "has_sequence": false,
+      "sequence_location": "none",
+      "named_proteins": [
+        {
+          "accession": null,
+          "name": "Drosophila melanogaster cryptochrome"
+        },
+        {
+          "accession": null,
+          "name": "Arabidopsis thaliana cryptochrome 1"
+        },
+        {
+          "accession": null,
+          "name": "Escherichia coli DNA photolyase"
+        },
+        {
+          "accession": null,
+          "name": "Xenopus laevis (6-4) photolyase"
+        }
+      ],
+      "class_id": "cryptochrome_rf",
+      "set_id": "s_e296eab2"
+    },
+    {
+      "doc_id": "PMC7347919",
+      "extraction_failed": false,
+      "mechanisms": [
+        {
+          "chain": "Arabidopsis cryptochrome (cry1)",
+          "claim": "The radical pair mechanism, where magnetic fields (such as weak radiofrequency fields or low-level fields) alter spin characteristics and reaction rates (specifically the flavin reoxidation rate constant k2b) of radical pairs formed by the flavoprotein photoreceptor during its photocycle.",
+          "measurable_properties": [
+            "Phosphorylation state of cryptochrome",
+            "Hypocotyl length (growth inhibition)",
+            "Cryptochrome-regulated gene expression levels (IAA, PIN1, PIN3)"
+          ]
+        }
+      ],
+      "named_proteins": [
+        {
+          "accession": null,
+          "name": "cryptochrome"
+        },
+        {
+          "accession": null,
+          "name": "cry1"
+        },
+        {
+          "accession": null,
+          "name": "CRY2"
+        },
+        {
+          "accession": null,
+          "name": "phyA"
+        },
+        {
+          "accession": null,
+          "name": "phyB"
+        },
+        {
+          "accession": null,
+          "name": "casein kinase1"
+        },
+        {
+          "accession": null,
+          "name": "CK1.3"
+        },
+        {
+          "accession": null,
+          "name": "CK1.4"
+        },
+        {
+          "accession": null,
+          "name": "AUX1"
+        },
+        {
+          "accession": null,
+          "name": "IAA"
+        },
+        {
+          "accession": null,
+          "name": "PIN1"
+        },
+        {
+          "accession": null,
+          "name": "PIN3"
+        },
+        {
+          "accession": null,
+          "name": "GADPH"
+        },
+        {
+          "accession": null,
+          "name": "XBAT35.2"
+        }
+      ],
+      "has_sequence": false,
+      "sequence_location": "none",
+      "class_id": "cryptochrome_rf",
+      "set_id": "s_a631e058"
+    },
+    {
+      "doc_id": "PMC5357904",
+      "extraction_failed": false,
+      "mechanisms": [
+        {
+          "chain": "Type II animal cryptochromes lack structural features (such as specific stabilizing residues and a lid-forming loop) to securely bind the photoactive FAD cofactor, causing them to be predominantly cofactor-free under physiological conditions and acting as vestigial flavoproteins rather than functioning via light-dependent FAD photoexcitation and radical pair formation.",
+          "claim": "Type II vertebrate/animal cryptochromes are vestigial flavoproteins that predominantly lack bound FAD under physiological conditions and are unlikely to function as light-activated photoreceptors.",
+          "measurable_properties": [
+            "FAD binding affinity (dissociation constant, K_D)",
+            "FAD occupancy percentage",
+            "UV-visible absorption spectra for vibrational fine structure"
+          ]
+        }
+      ],
+      "has_sequence": true,
+      "sequence_location": "methods",
+      "named_proteins": [
+        {
+          "name": "DmCRY",
+          "accession": null
+        },
+        {
+          "name": "HsCRY1",
+          "accession": null
+        },
+        {
+          "name": "HsCRY2",
+          "accession": null
+        },
+        {
+          "name": "MmCRY1",
+          "accession": null
+        },
+        {
+          "name": "MmCRY2",
+          "accession": null
+        },
+        {
+          "name": "SbCRY1a",
+          "accession": null
+        },
+        {
+          "name": "alcohol oxidase",
+          "accession": null
+        },
+        {
+          "name": "FBXL3",
+          "accession": null
+        }
+      ],
+      "class_id": "cryptochrome_rf",
+      "set_id": "s_a631e058"
+    },
+    {
+      "doc_id": "PMC5522499",
+      "extraction_failed": false,
+      "mechanisms": [
+        {
+          "chain": "Cryptochrome (Cry)",
+          "claim": "Photo-activated radical pair formation through light-induced electron transfer (affecting spin multiplicity/singlet-triplet interconversion), which can be perturbed by external static and radio-frequency magnetic fields.",
+          "measurable_properties": [
+            "spin-correlation time",
+            "hyperfine interaction frequencies",
+            "binding affinity for the flavin co-factor",
+            "rotational motion/anchoring to cellular structures"
+          ]
+        }
+      ],
+      "has_sequence": false,
+      "sequence_location": "none",
+      "named_proteins": [
+        {
+          "accession": null,
+          "name": "Cry1"
+        },
+        {
+          "accession": null,
+          "name": "Cry1a"
+        },
+        {
+          "accession": null,
+          "name": "Cry1b"
+        },
+        {
+          "accession": null,
+          "name": "Cry2"
+        },
+        {
+          "accession": null,
+          "name": "Cry4"
+        },
+        {
+          "accession": null,
+          "name": "MagR (IscA1)"
+        }
+      ],
+      "class_id": "cryptochrome_rf",
+      "set_id": "s_a631e058"
+    },
+    {
+      "doc_id": "PMC4375724",
+      "extraction_failed": false,
+      "mechanisms": [
+        {
+          "chain": "Radical pair connected by a photoswitchable azobenzene bridge",
+          "claim": "Optically switching between isomeric conformations of the bridging molecule controls the distance between the radicals, the instant of their re-encounter, and the reaction kinetics.",
+          "measurable_properties": [
+            "chemical yield of the radical pair products",
+            "singlet yield"
+          ]
+        }
+      ],
+      "has_sequence": false,
+      "sequence_location": "none",
+      "named_proteins": [],
+      "class_id": "cryptochrome_rf",
+      "set_id": "s_8e506dc3"
+    },
+    {
+      "doc_id": "bio_825a091c",
+      "extraction_failed": false,
+      "mechanisms": [],
+      "has_sequence": false,
+      "sequence_location": "none",
+      "named_proteins": [
+        {
+          "name": "cryptochrome",
+          "accession": null
+        }
+      ],
+      "class_id": "cryptochrome_rf",
+      "set_id": "s_8e506dc3"
+    },
+    {
+      "doc_id": "PMC9811481",
+      "extraction_failed": false,
+      "mechanisms": [
+        {
+          "chain": "Photo-excitation of the FAD cofactor followed by sequential electron transfers along a chain of four tryptophan (TrpH) residues, resulting in the [FAD\u02d7 \u2212 TrpH\u02d7 +] radical pair whose singlet-triplet interconversion and recombination kinetics are modulated by magnetic fields.",
+          "claim": "Competition between singlet radical pair recombination and Trp\u02d7 + deprotonation results in magnetic field effects on the quantum yield of a relatively long-lived form of the protein which could act as a signalling state.",
+          "measurable_properties": [
+            "B_1/2 (half-field parameter)",
+            "Quantum yield of reaction products \u03a6(B)"
+          ]
+        }
+      ],
+      "has_sequence": false,
+      "sequence_location": "none",
+      "named_proteins": [
+        {
+          "accession": null,
+          "name": "cryptochrome"
+        },
+        {
+          "accession": null,
+          "name": "avian Cry4a"
+        },
+        {
+          "accession": null,
+          "name": "DNA photolyase"
+        },
+        {
+          "accession": null,
+          "name": "At Cry1"
+        },
+        {
+          "accession": null,
+          "name": "Ec PL"
+        },
+        {
+          "accession": null,
+          "name": "Er Cry4a"
+        },
+        {
+          "accession": null,
+          "name": "Dm Cry"
+        }
+      ],
+      "class_id": "cryptochrome_rf",
+      "set_id": "s_8e506dc3"
+    },
+    {
+      "doc_id": "PMC5296725",
+      "extraction_failed": false,
+      "has_sequence": false,
+      "mechanisms": [
+        {
+          "chain": "Radical pair mechanism involving photo-induced electron transfer reactions and a photocycle with a tryptophan tetrad (fourth tryptophan electron donor)",
+          "claim": "Photo-induced electron transfer reactions in Drosophila melanogaster cryptochrome are influenced by millitesla magnetic fields via the radical pair mechanism involving a tryptophan tetrad.",
+          "measurable_properties": [
+            "Transient absorption spectra and kinetics (\u0394A and \u0394\u0394A responses, such as decay lifetimes of radical pairs and deprotonation rates)",
+            "Broadband cavity-enhanced absorption spectroscopy (BBCEAS) magnetic response profiles and half-effect field strength (B1/2)"
+          ]
+        }
+      ],
+      "named_proteins": [
+        {
+          "accession": null,
+          "name": "Drosophila melanogaster cryptochrome"
+        },
+        {
+          "accession": null,
+          "name": "Arabidopsis thaliana cryptochrome 1"
+        },
+        {
+          "accession": null,
+          "name": "Escherichia coli DNA photolyase"
+        },
+        {
+          "accession": null,
+          "name": "Xenopus laevis (6-4) photolyase"
+        }
+      ],
+      "sequence_location": "none",
+      "class_id": "cryptochrome_rf",
+      "set_id": "s_5fdabf1e"
+    },
+    {
+      "doc_id": "PMC8171495",
+      "extraction_failed": false,
+      "mechanisms": [
+        {
+          "chain": "Cryptochrome (specifically Cry1a / FAD)",
+          "claim": "The avian magnetic compass relies on a radical pair process based on spin-chemical processes in photo-pigments (cryptochrome) that interact with the geomagnetic field, where photon absorption leads to radical pair formation during photo-reduction and re-oxidation.",
+          "measurable_properties": [
+            "Flavin redox states / redox cycle",
+            "Absorbance spectrum",
+            "Radical pair singlet/triplet ratio",
+            "Re-oxidation kinetics"
+          ]
+        }
+      ],
+      "has_sequence": false,
+      "sequence_location": "none",
+      "named_proteins": [
+        {
+          "name": "Cryptochrome 1a",
+          "accession": null
+        },
+        {
+          "name": "Cryptochrome 1b",
+          "accession": null
+        },
+        {
+          "name": "Cryptochrome 2",
+          "accession": null
+        },
+        {
+          "name": "Cryptochrome 4a",
+          "accession": null
+        },
+        {
+          "name": "Cryptochrome 4b",
+          "accession": null
+        },
+        {
+          "name": "UV-opsin",
+          "accession": null
+        },
+        {
+          "name": "Violet opsin",
+          "accession": null
+        },
+        {
+          "name": "Iodopsin",
+          "accession": null
+        }
+      ],
+      "class_id": "cryptochrome_rf",
+      "set_id": "s_5fdabf1e"
+    },
+    {
+      "doc_id": "PMC10475740",
+      "extraction_failed": false,
+      "mechanisms": [
+        {
+          "chain": "Cryptochromes (mammalian CRY1, CRY2)",
+          "claim": "Mammalian cryptochromes could form light-induced radical pairs in particular cellular milieus, act as magnetoreceptors in darkness, or act as secondary players in a magnetoreception signalling cascade via the radical pair mechanism or redox coupling.",
+          "measurable_properties": [
+            "FAD-binding affinity / stoichiometric levels of FAD bound",
+            "Redox state / stability of the anionic flavin radical",
+            "Light-dependent radical pair formation and photoreactivity"
+          ]
+        }
+      ],
+      "has_sequence": false,
+      "sequence_location": "none",
+      "named_proteins": [
+        {
+          "name": "CRY1",
+          "accession": null
+        },
+        {
+          "name": "CRY2",
+          "accession": null
+        },
+        {
+          "name": "CRY4",
+          "accession": null
+        },
+        {
+          "name": "dCRY",
+          "accession": null
+        },
+        {
+          "name": "CLOCK",
+          "accession": null
+        },
+        {
+          "name": "BMAL1",
+          "accession": null
+        },
+        {
+          "name": "PERIOD",
+          "accession": null
+        },
+        {
+          "name": "Neuropsin",
+          "accession": null
+        },
+        {
+          "name": "FBXL3",
+          "accession": null
+        },
+        {
+          "name": "melanopsin",
+          "accession": null
+        }
+      ],
+      "class_id": "cryptochrome_rf",
+      "set_id": "s_5fdabf1e"
+    },
+    {
+      "doc_id": "PMC7698612",
+      "extraction_failed": false,
+      "mechanisms": [],
+      "has_sequence": false,
+      "sequence_location": "none",
+      "named_proteins": [],
+      "class_id": "lov_radical_pair",
+      "set_id": "s_45db16fe"
+    },
+    {
+      "doc_id": "PMC9920683",
+      "extraction_failed": false,
+      "mechanisms": [],
+      "has_sequence": false,
+      "sequence_location": "none",
+      "named_proteins": [],
+      "class_id": "lov_radical_pair",
+      "set_id": "s_45db16fe"
+    },
+    {
+      "doc_id": "bio_fde38824",
+      "extraction_failed": false,
+      "mechanisms": [
+        {
+          "chain": "Optical excitation generates spin-correlated radical pairs (SCRPs) whose recombination kinetics and equilibrium states are modulated by external magnetic fields and radiofrequency (RF) fields via spin-selective interconversion (optically detected magnetic resonance / radical pair mechanism).",
+          "claim": "Optically detected and radio wave-controlled spin chemistry / radical pair mechanism in flavoproteins",
+          "measurable_properties": [
+            "Photoluminescence (PL) intensity changes",
+            "Magnetic field effects (MFE)",
+            "Optically detected magnetic resonance (ODMR) spectra and contrast",
+            "Resonance linewidth",
+            "Triplet state lifetime via transient absorption spectroscopy"
+          ]
+        }
+      ],
+      "named_proteins": [
+        {
+          "accession": "5ZM0",
+          "name": "Cra Cry"
+        },
+        {
+          "accession": "4EET",
+          "name": "iLOV"
+        },
+        {
+          "accession": null,
+          "name": "AtCry"
+        },
+        {
+          "accession": null,
+          "name": "DmCry"
+        },
+        {
+          "accession": null,
+          "name": "phototropin"
+        }
+      ],
+      "has_sequence": false,
+      "sequence_location": "none",
+      "class_id": "lov_radical_pair",
+      "set_id": "s_45db16fe"
+    },
+    {
+      "doc_id": "PMC7058016",
+      "extraction_failed": false,
+      "has_sequence": true,
+      "mechanisms": [
+        {
+          "chain": "Blue light irradiation induces oxidation of amino acids (such as cysteine 450) near the isoalloxazine ring, causing steric and/or conformational clashes that trigger the dissociation/release of the FMN cofactor into the solvent, thereby unlocking its full capacity as a singlet oxygen generator.",
+          "claim": "Irradiation-induced oxidation of amino acids near the chromophore binding site leads to steric/volume clashes or structural repulsion that dissociates the flavin cofactor from the protein matrix, enhancing singlet oxygen production.",
+          "measurable_properties": [
+            "FMN fluorescence in filtrate after centrifugal ultrafiltration/cutoff filtration",
+            "FMN triplet state lifetime and absorption amplitudes via flash photolysis",
+            "Singlet oxygen phosphorescence kinetics and amplitude",
+            "Adduct formation recovery kinetics via flash-induced absorbance changes at 447 nm"
+          ]
+        }
+      ],
+      "named_proteins": [
+        {
+          "accession": null,
+          "name": "AsLOV2"
+        },
+        {
+          "accession": null,
+          "name": "AsLOV2 wt"
+        },
+        {
+          "accession": null,
+          "name": "AsLOV2 C450A"
+        },
+        {
+          "accession": null,
+          "name": "miniSOG"
+        },
+        {
+          "accession": null,
+          "name": "SOPP"
+        },
+        {
+          "accession": null,
+          "name": "SOPP3"
+        },
+        {
+          "accession": null,
+          "name": "Phototropin 1"
+        },
+        {
+          "accession": null,
+          "name": "Phototropin 2"
+        },
+        {
+          "accession": null,
+          "name": "Cytochrome c"
+        },
+        {
+          "accession": null,
+          "name": "Lysozyme"
+        }
+      ],
+      "sequence_location": "supplementary",
+      "class_id": "lov_radical_pair",
+      "set_id": "s_939ebbc5"
+    },
+    {
+      "doc_id": "PMC9008703",
+      "extraction_failed": false,
+      "mechanisms": [
+        {
+          "chain": "Conserved asparigine and amino acids around the final tryptophan radical",
+          "claim": "Photoactivation leads to structural changes where a conserved asparigine moves towards the semiquinone FAD chromophore and stabilizes it by hydrogen bonding, while amino acids around the final tryptophan radical rearrange to open it up to the solvent, stabilizing the radical pair state.",
+          "measurable_properties": [
+            "Hydrogen bonding distance between the conserved asparagine and the semiquinone FAD",
+            "Solvent accessibility of the tryptophan radical"
+          ]
+        }
+      ],
+      "has_sequence": true,
+      "sequence_location": "methods",
+      "named_proteins": [
+        {
+          "accession": "7QUT",
+          "name": "Dm(6-4) photolyase"
+        }
+      ],
+      "class_id": "lov_radical_pair",
+      "set_id": "s_939ebbc5"
+    },
+    {
+      "doc_id": "bio_741f3ddc",
+      "extraction_failed": false,
+      "mechanisms": [
+        {
+          "chain": "Upon light activation, an FMN chromophore forms a covalent adduct with an internal cysteine (C450), which initiates a cascade of conformational changes culminating in the unfolding of a peripheral Jalpha-helix; this process is modulated by hydrogen-bonding patterns and stress transmission involving residue Q513.",
+          "claim": "Light activation triggers chromophore adduct formation that drives long-range mechanical unfolding of the Jalpha-helix, a process modulated by the Q513 residue and internal cysteine C450.",
+          "measurable_properties": [
+            "Inter-residue distances and distance distributions between labeled sites (e.g., residues 406 and 537)",
+            "cwEPR lineshape narrowing/dipolar broadening",
+            "Chromophore kinetics and relaxation time constants measured via UV-Vis absorbance"
+          ]
+        }
+      ],
+      "named_proteins": [
+        {
+          "accession": null,
+          "name": "AsLOV2"
+        },
+        {
+          "accession": null,
+          "name": "phototropin 1 LOV2 domain from Avena sativa"
+        },
+        {
+          "accession": null,
+          "name": "Q513A variant of AsLOV2"
+        },
+        {
+          "accession": null,
+          "name": "C450A DL AsLOV2"
+        },
+        {
+          "accession": null,
+          "name": "Q513L AsLOV2"
+        }
+      ],
+      "has_sequence": false,
+      "sequence_location": "none",
+      "class_id": "lov_radical_pair",
+      "set_id": "s_939ebbc5"
+    },
+    {
+      "doc_id": "PMC7698612",
+      "extraction_failed": false,
+      "mechanisms": [],
+      "has_sequence": false,
+      "sequence_location": "none",
+      "named_proteins": [],
+      "class_id": "lov_radical_pair",
+      "set_id": "s_dbcf34e5"
+    },
+    {
+      "doc_id": "PMC12251757",
+      "extraction_failed": false,
+      "mechanisms": [],
+      "has_sequence": false,
+      "sequence_location": "none",
+      "named_proteins": [],
+      "class_id": "lov_radical_pair",
+      "set_id": "s_dbcf34e5"
+    },
+    {
+      "doc_id": "PMC8807746",
+      "extraction_failed": false,
+      "mechanisms": [],
+      "has_sequence": false,
+      "sequence_location": "none",
+      "named_proteins": [],
+      "class_id": "lov_radical_pair",
+      "set_id": "s_dbcf34e5"
+    },
+    {
+      "doc_id": "PMC6648828",
+      "extraction_failed": false,
+      "mechanisms": [
+        {
+          "chain": "The paper establishes that the length and presence of the N-terminal A'\u03b1 helix modulate the structural response and undocking/unfolding of the C-terminal J\u03b1 helix in the LOV2 domain. Specifically, the A'\u03b1 helix locks the J\u03b1 helix in its dark state and induces its undocking/unfolding upon light activation, whereas extensions of the A'\u03b1 helix attenuate this structural change (L24-L25).",
+          "claim": "N-terminal A'\u03b1 helix extensions or truncations mediate the light-activated conformational change and J\u03b1 helix unfolding of the AsLOV2 domain.",
+          "measurable_properties": [
+            "Photocycle time constant (\u03c4_FMN) measured by UV-vis absorbance recovery at ~450 nm",
+            "Light-activated structural changes and J\u03b1 helix undocking/unfolding measured by Fourier-transform infrared (FTIR) difference spectroscopy (specifically amplitude changes around 1645 cm^-1)"
+          ]
+        }
+      ],
+      "has_sequence": true,
+      "sequence_location": "figure",
+      "named_proteins": [
+        {
+          "accession": null,
+          "name": "Avena sativa phototropin 1 LOV2 (AsLOV2)"
+        },
+        {
+          "accession": null,
+          "name": "Arabidopsis thaliana LOV2 (AtLOV2)"
+        },
+        {
+          "accession": null,
+          "name": "Chlamydomonas phototropin / Chlamydomonas reinhardtii phot"
+        },
+        {
+          "accession": null,
+          "name": "LovK LOV-histidine kinase photoreceptor"
+        },
+        {
+          "accession": null,
+          "name": "vivid"
+        },
+        {
+          "accession": null,
+          "name": "YF1 sensor histidine kinase"
+        },
+        {
+          "accession": null,
+          "name": "phytochromes"
+        },
+        {
+          "accession": null,
+          "name": "FixL"
+        },
+        {
+          "accession": null,
+          "name": "Adiantum phytochrome 3"
+        }
+      ],
+      "class_id": "lov_radical_pair",
+      "set_id": "s_ea60fe83"
+    },
+    {
+      "doc_id": "bio_32a3c40f",
+      "extraction_failed": false,
+      "mechanisms": [
+        {
+          "chain": "N414-Q513-FMN-Jalpha",
+          "claim": "Light excitation forms a Cys-FMN adduct, inducing a lever-like rotation of conserved Gln (Q513) that breaks its dark-state hydrogen bond with N414 and forms a transient hydrogen bond, driving conformational changes and unfolding of the C-terminal Jalpha helix.",
+          "measurable_properties": [
+            "Jalpha helix unfolding dynamics (measured by time-resolved infrared spectroscopy bleach at 1626 cm-1 or tryptophan side chain chemical shifts via 15N/1H-HSQC NMR)",
+            "plasma membrane dissociation / cellular dimerization kinetics via the LOVTRAP assay"
+          ]
+        }
+      ],
+      "has_sequence": false,
+      "sequence_location": "none",
+      "named_proteins": [
+        {
+          "name": "Avena sativa LOV domain 2",
+          "accession": null
+        },
+        {
+          "name": "Zdk2",
+          "accession": null
+        },
+        {
+          "name": "Histidine kinase YF1",
+          "accession": null
+        },
+        {
+          "name": "GTPase Rac1",
+          "accession": null
+        },
+        {
+          "name": "YtvA",
+          "accession": null
+        },
+        {
+          "name": "OdAureo1a",
+          "accession": null
+        }
+      ],
+      "class_id": "lov_radical_pair",
+      "set_id": "s_ea60fe83"
+    },
+    {
+      "doc_id": "PMC4401697",
+      "extraction_failed": false,
+      "mechanisms": [
+        {
+          "chain": "Blue-light perception by the LOV2 domain (involving FMN-cysteinyl adduct formation and Gln575 flipping) propagates structural changes through the beta-sheet to unfold/dissociate the Jalpha-helix. This structural signal then passes through the A'alpha/Abeta gap (specifically via residues like Glu474 and Lys475 acting as a joint) and alters interactions with the linker region to activate the C-terminal serine/threonine kinase (STK) domain.",
+          "claim": "The paper establishes that blue light perception by LOV2 induces conformational changes in the Jalpha-helix that propagate to the A'alpha/Abeta gap (acting as a mechanical joint via conserved residues Glu474 and Lys475) to actuate/activate the downstream serine/threonine kinase (STK) domain.",
+          "measurable_properties": [
+            "Kinase autophosphorylation activity using an artificial substrate (P1Nt)",
+            "Dark reversion kinetics (half-decay time) of the S390 FMN-cysteinyl adduct via UV-Vis absorption spectroscopy",
+            "Susceptibility to limited trypsin proteolysis (peptide mapping)",
+            "Radius of gyration (Rg) via small-angle X-ray scattering (SAXS)"
+          ]
+        }
+      ],
+      "has_sequence": true,
+      "sequence_location": "supplementary",
+      "named_proteins": [
+        {
+          "accession": null,
+          "name": "Arabidopsis thaliana phototropin 1 (At phot1)"
+        },
+        {
+          "accession": null,
+          "name": "Arabidopsis thaliana phototropin 2 (At phot2)"
+        },
+        {
+          "accession": null,
+          "name": "Avena sativa phototropin 1 (As phot1)"
+        },
+        {
+          "accession": null,
+          "name": "Adiantum neochrome1 (or adiantum phytochrome3)"
+        },
+        {
+          "accession": null,
+          "name": "Chlamydomonas reinhardtii phototropin (Cr phot)"
+        },
+        {
+          "accession": null,
+          "name": "Oryza sativa phototropin (Os phot)"
+        },
+        {
+          "accession": null,
+          "name": "Adiantum capillus-veneris phototropin (Ac phot)"
+        },
+        {
+          "accession": null,
+          "name": "Marchantia polymorpha phototropin (Mp phot)"
+        },
+        {
+          "accession": null,
+          "name": "YtvA"
+        },
+        {
+          "accession": null,
+          "name": "EL222"
+        },
+        {
+          "accession": null,
+          "name": "PpSB1-LOV"
+        },
+        {
+          "accession": null,
+          "name": "Brucella abortus light-activated histidine kinase"
+        },
+        {
+          "accession": null,
+          "name": "ABCB19"
+        },
+        {
+          "accession": null,
+          "name": "PKS4"
+        },
+        {
+          "accession": null,
+          "name": "BLUS1"
+        }
+      ],
+      "class_id": "lov_radical_pair",
+      "set_id": "s_ea60fe83"
+    },
+    {
+      "doc_id": "PMC9008703",
+      "extraction_failed": false,
+      "mechanisms": [
+        {
+          "chain": "Conserved asparagine and amino acids around the final tryptophan radical",
+          "claim": "Photoactivation leads to structural rearrangements where a conserved asparagine moves toward the semiquinone FAD chromophore to stabilize it via hydrogen bonding, and amino acids around the final tryptophan radical rearrange, opening it up to the solvent.",
+          "measurable_properties": [
+            "Hydrogen bonding distance",
+            "Solvent accessibility of the tryptophan radical",
+            "Structural position changes via crystallography"
+          ]
+        }
+      ],
+      "has_sequence": true,
+      "sequence_location": "methods",
+      "named_proteins": [
+        {
+          "accession": "7QUT",
+          "name": "animal (6-4) photolyase"
+        },
+        {
+          "accession": "7QUT",
+          "name": "Dm(6-4) photolyase"
+        }
+      ],
+      "class_id": "lov_radical_pair",
+      "set_id": "s_0678eafd"
+    },
+    {
+      "doc_id": "PMC4305418",
+      "extraction_failed": false,
+      "mechanisms": [
+        {
+          "chain": "Radical pair mechanism (RPM)",
+          "claim": "Thermally driven, flavoenzyme-catalysed reactions are unlikely to be influenced by exposure to external magnetic fields.",
+          "measurable_properties": [
+            "Reaction kinetics",
+            "Reaction rate (k)",
+            "Relative rates (k+MF / k-MF)"
+          ]
+        }
+      ],
+      "has_sequence": false,
+      "sequence_location": "none",
+      "named_proteins": [
+        {
+          "name": "cytochrome P450 reductase",
+          "accession": null
+        },
+        {
+          "name": "nitric oxide synthase",
+          "accession": null
+        },
+        {
+          "name": "apoptosis-inducing factor 1",
+          "accession": null
+        },
+        {
+          "name": "apoptosis-inducing factor 2",
+          "accession": null
+        },
+        {
+          "name": "soluble NADH-cytochrome b5 reductase",
+          "accession": null
+        },
+        {
+          "name": "dihydroorotate dehydrogenase",
+          "accession": null
+        },
+        {
+          "name": "pyranose 2-oxidase",
+          "accession": null
+        }
+      ],
+      "class_id": "lov_radical_pair",
+      "set_id": "s_0678eafd"
+    },
+    {
+      "doc_id": "PMC4894384",
+      "extraction_failed": false,
+      "named_proteins": [
+        {
+          "name": "cryptochrome-1",
+          "accession": "1U3C"
+        },
+        {
+          "name": "cryptochrome",
+          "accession": null
+        },
+        {
+          "name": "DNA photolyase",
+          "accession": null
+        },
+        {
+          "name": "photolyase",
+          "accession": null
+        }
+      ],
+      "mechanisms": [
+        {
+          "chain": "flavin cofactor (FAD) -> tryptophan triad (W400, W377, W324) via sequential electron transfer",
+          "claim": "Photo-induced sequential electron transfer through the tryptophan triad, assisted by structural rearrangements of polar side groups and protein interior, separates radical pair partners to a functionally critical distance (12.2 \u00c5 for [FAD.- + W377.+] or 18.2 \u00c5 for [FAD.- + W324.+]) to weaken exchange and dipole-dipole interactions, enabling geomagnetic field sensitivity.",
+          "measurable_properties": [
+            "radical pair separation distance",
+            "electron transfer rate",
+            "excitation spectra / energy profiles",
+            "hydrogen bond length",
+            "chlorine anion binding distance"
+          ]
+        }
+      ],
+      "has_sequence": false,
+      "sequence_location": "none",
+      "class_id": "lov_radical_pair",
+      "set_id": "s_0678eafd"
+    },
+    {
+      "doc_id": "PMC4428443",
+      "extraction_failed": false,
+      "has_sequence": false,
+      "sequence_location": "none",
+      "mechanisms": [
+        {
+          "chain": "Blue-light absorption promotes the LOV ground state into a singlet-excited state that undergoes intersystem crossing to a triplet state, inducing electron and proton transfer from the active site cysteine to form a C4a flavin-cysteine adduct (S390). This adduct formation is coupled to N5 protonation and an increase in electron density/charge within the isoalloxazine ring, which alters local hydrogen-bonding and steric/electronic interactions (such as via Q101 and re-face residues). These chemical events drive allosteric conformational changes\u2014such as the rotation of conserved glutamines, changes in helical tilt or unfolding of N- and C-terminal caps (e.g., the J\u03b1 helix)\u2014that relieve steric constraints or expose surfaces to activate downstream effectors, modulate protein-protein interactions, or drive dimerization.",
+          "claim": "Light absorption triggers a flavin-cysteine C4a adduct formation and N5 protonation, causing local electronic/steric changes and subsequent conformational rearrangements (such as unfolding or reorientation of terminal helical caps) that regulate downstream signaling and interactions.",
+          "measurable_properties": [
+            "Adduct decay kinetics (thermal reversion rate / lifetime \u03c4)",
+            "Absorbance spectra (bleaching of 450 nm band and appearance of 390 nm peak)",
+            "Quantum yields of adduct formation",
+            "Protein-protein binding affinity / interaction changes",
+            "DNA-binding affinity",
+            "Kinase activity"
+          ]
+        }
+      ],
+      "named_proteins": [
+        {
+          "name": "Avena sativa phototropin 1",
+          "accession": null
+        },
+        {
+          "name": "Vivid (VVD)",
+          "accession": null
+        },
+        {
+          "name": "Bacillus subtilis stress response protein YtvA",
+          "accession": null
+        },
+        {
+          "name": "FLAVIN-BINDING, KELCH REPEAT, F-BOX 1 (FKF1)",
+          "accession": null
+        },
+        {
+          "name": "EL222",
+          "accession": null
+        },
+        {
+          "name": "Neo1-LOV2",
+          "accession": null
+        },
+        {
+          "name": "LOVK",
+          "accession": null
+        },
+        {
+          "name": "Gigantea (GI)",
+          "accession": null
+        },
+        {
+          "name": "FixL",
+          "accession": null
+        },
+        {
+          "name": "FixJ",
+          "accession": null
+        },
+        {
+          "name": "Vinculin",
+          "accession": null
+        },
+        {
+          "name": "Rac1",
+          "accession": null
+        },
+        {
+          "name": "Tet repressor",
+          "accession": null
+        }
+      ],
+      "class_id": "lov_radical_pair",
+      "set_id": "s_e416fb9a"
+    },
+    {
+      "doc_id": "bio_97c7963c",
+      "extraction_failed": false,
+      "mechanisms": [
+        {
+          "chain": "Steric interactions due to C4a hybridization changes push against Gln154, rotating it from an exposed conformation to a buried conformation. This conformational change propagates to the Ncap and Ccap elements (specifically through the CGF and QFF motifs and the Cys45-Gly46-Phe47/Gln154-Phe155-Phe156 regions), disrupting sulfur-pi interactions, facilitating Cys45 disulfide bond formation, and triggering a 180-degree rotation about the central beta-sheet surface to reorganize the LOV domain dimer interface from antiparallel to parallel, while also ordering N- and C-terminal elements and stabilizing a salt bridge between Arg125 and Glu158.",
+          "claim": "Steric interactions at Gln154 induced by C4a hybridization changes drive global reorganization of the LOV domain dimer interface and ordering of terminal signaling elements.",
+          "measurable_properties": [
+            "dimer interface orientation (parallel vs antiparallel 180 degree rotation)",
+            "spatial coordinates and crystal structures via X-ray crystallography",
+            "molecular weight and oligomeric state in solution via SEC-SAXS",
+            "protein-protein interaction with GIGANTEA (GI) via co-immunoprecipitation",
+            "conformation/orientation of Gln154",
+            "N- and C-terminal ordering"
+          ]
+        }
+      ],
+      "named_proteins": [
+        {
+          "accession": "6WLP",
+          "name": "ZTL G46S:G80R variant"
+        },
+        {
+          "accession": "6WLE",
+          "name": "ZTL G46A:G80R variant"
+        },
+        {
+          "accession": "null",
+          "name": "ZEITLUPE"
+        },
+        {
+          "accession": "null",
+          "name": "ZTL"
+        },
+        {
+          "accession": "null",
+          "name": "FLAVIN-BINDING, KELCH REPEAT, F-BOX 1"
+        },
+        {
+          "accession": "null",
+          "name": "FKF1"
+        },
+        {
+          "accession": "null",
+          "name": "LOV KELCH PROTEIN 2"
+        },
+        {
+          "accession": "null",
+          "name": "LKP2"
+        },
+        {
+          "accession": "null",
+          "name": "GIGANTEA"
+        },
+        {
+          "accession": "null",
+          "name": "GI"
+        },
+        {
+          "accession": "null",
+          "name": "VIVID"
+        },
+        {
+          "accession": "null",
+          "name": "VVD"
+        },
+        {
+          "accession": "null",
+          "name": "YF1"
+        },
+        {
+          "accession": "null",
+          "name": "YtvA"
+        },
+        {
+          "accession": "null",
+          "name": "PRR5"
+        },
+        {
+          "accession": "null",
+          "name": "TOC1"
+        },
+        {
+          "accession": "null",
+          "name": "TEV protease"
+        }
+      ],
+      "sequence_location": "none",
+      "has_sequence": false,
+      "class_id": "lov_radical_pair",
+      "set_id": "s_e416fb9a"
+    },
+    {
+      "doc_id": "PMC4416707",
+      "extraction_failed": false,
+      "has_sequence": true,
+      "mechanisms": [
+        {
+          "chain": "Light activation causes the absorption of blue-light by a flavin cofactor to form a covalent cysteinyl-flavin C4a adduct with a conserved Cysteine residue, leading to a conformational change that enables allosteric regulation and functional dimer formation.",
+          "claim": "Photochemical and structural signaling via cysteinyl-flavin C4a adduct formation and competitive dimerization.",
+          "measurable_properties": [
+            "Absorption spectra (bleaching of the 450 nm absorption band and appearance of a 390 nm peak)",
+            "Adduct decay kinetics and rate constants under dark-state conditions",
+            "Oligomeric state via size exclusion chromatography (SEC)"
+          ]
+        }
+      ],
+      "named_proteins": [
+        {
+          "accession": null,
+          "name": "McLOVn"
+        },
+        {
+          "accession": null,
+          "name": "McLOVr"
+        },
+        {
+          "accession": null,
+          "name": "337-TF"
+        }
+      ],
+      "sequence_location": "supplementary",
+      "class_id": "lov_radical_pair",
+      "set_id": "s_e416fb9a"
+    },
+    {
+      "doc_id": "PMC5645311",
+      "extraction_failed": false,
+      "has_sequence": true,
+      "mechanisms": [
+        {
+          "chain": "Blue-light absorption triggers the excited singlet state, conversion to the excited triplet state (LOV715), electron transfer (eT) from conserved Tyr/Trp residues (such as W467) to form a radical pair, followed by rapid proton transfer (pT) from an engineered or natural proton donor (such as Asp489) to the FMN N5 atom, stabilizing the neutral semiquinone radical (FMNH \u25cf ) for signal transduction.",
+          "claim": "Photoreduction of FMN to the neutral semiquinone radical via sequential electron and proton transfer is sufficient for functional signal transduction in LOV proteins lacking the photoactive cysteine.",
+          "measurable_properties": [
+            "Photoreduction yield of FMNH \u25cf (measured by the rise in absorbance at 615 nm using steady-state UV/Vis spectroscopy)",
+            "Photoreduction lifetime (\u03c4 Sq )",
+            "Transient absorption (TA) decay associated difference spectra (DADS)",
+            "Electron paramagnetic resonance (EPR) spectra and inter-spin distance",
+            "Fluorescence lifetime (\u03c4 fl )",
+            "Reoxidation lifetime (\u03c4 FMNox )"
+          ]
+        }
+      ],
+      "named_proteins": [
+        {
+          "accession": "26587",
+          "name": "iLOV"
+        },
+        {
+          "accession": null,
+          "name": "iLOV-Q489D"
+        },
+        {
+          "accession": null,
+          "name": "iLOV-Q489D/Y416F"
+        },
+        {
+          "accession": null,
+          "name": "iLOV-Q489D/Y459F"
+        },
+        {
+          "accession": null,
+          "name": "iLOV-Q489D/Y484F"
+        },
+        {
+          "accession": null,
+          "name": "iLOV-Q489D/W467F"
+        },
+        {
+          "accession": null,
+          "name": "AtPhot2"
+        },
+        {
+          "accession": null,
+          "name": "VVD"
+        },
+        {
+          "accession": null,
+          "name": "YF1"
+        },
+        {
+          "accession": null,
+          "name": "CrLOV1"
+        },
+        {
+          "accession": null,
+          "name": "Escherichia coli DNA photolyase"
+        },
+        {
+          "accession": null,
+          "name": "Chlamydomonas photolyase homologue 1"
+        },
+        {
+          "accession": null,
+          "name": "Arabidopsis thaliana cryptochrome 1"
+        },
+        {
+          "accession": null,
+          "name": "Slr1694"
+        },
+        {
+          "accession": null,
+          "name": "CRYD"
+        },
+        {
+          "accession": null,
+          "name": "Pp2FbFP"
+        }
+      ],
+      "sequence_location": "supplementary",
+      "class_id": "lov_radical_pair",
+      "set_id": "s_03ac4980"
+    },
+    {
+      "doc_id": "PMC4416707",
+      "extraction_failed": false,
+      "has_sequence": true,
+      "mechanisms": [
+        {
+          "chain": "LOV proteins (such as McLOVn and McLOVr)",
+          "claim": "Transient ordered water may function as an intrinsic base in LOV proteins, activated by imidazole acting in a single site of low affinity, while an active site Thr (such as Thr27) can increase the occupancy of ordered water near N5 and render external base catalysis inefficient.",
+          "measurable_properties": [
+            "adduct decay rate constant",
+            "kinetics of adduct scission as a function of imidazole concentration"
+          ]
+        }
+      ],
+      "named_proteins": [
+        {
+          "name": "McLOVn",
+          "accession": null
+        },
+        {
+          "name": "McLOVn-TF",
+          "accession": null
+        },
+        {
+          "name": "McLOVr",
+          "accession": "WP_018406994"
+        },
+        {
+          "name": "337-TF",
+          "accession": null
+        }
+      ],
+      "sequence_location": "supplementary",
+      "class_id": "lov_radical_pair",
+      "set_id": "s_03ac4980"
+    },
+    {
+      "doc_id": "PMC12797116",
+      "extraction_failed": false,
+      "mechanisms": [
+        {
+          "chain": "J\u03b1-helix / kinase module",
+          "claim": "Light-induced signal transmission occurs via cysteine-adduct formation which directly triggers structural adaptations such as the splaying apart of LOV domain anchor points, supercoiling of the J\u03b1-helices, and subsequent rotation/rearrangement of the histidine kinase effector module.",
+          "measurable_properties": [
+            "amide I infrared band changes",
+            "transient infrared spectra",
+            "J\u03b1-helix vibrational frequency shifts"
+          ]
+        }
+      ],
+      "has_sequence": false,
+      "sequence_location": "none",
+      "named_proteins": [
+        {
+          "name": "Bs LOV",
+          "accession": null
+        },
+        {
+          "name": "YF1",
+          "accession": "4GCZ"
+        },
+        {
+          "name": "PAL",
+          "accession": "6HMJ"
+        },
+        {
+          "name": "FixL",
+          "accession": null
+        },
+        {
+          "name": "YtvA",
+          "accession": null
+        },
+        {
+          "name": "lumiflavin",
+          "accession": null
+        }
+      ],
+      "class_id": "lov_radical_pair",
+      "set_id": "s_03ac4980"
+    },
+    {
+      "doc_id": "PMC7698612",
+      "extraction_failed": false,
+      "has_sequence": false,
+      "mechanisms": [],
+      "named_proteins": [],
+      "sequence_location": "none",
+      "class_id": "lov_radical_pair",
+      "set_id": "s_baed0f89"
+    },
+    {
+      "doc_id": "PMC11116463",
+      "extraction_failed": false,
+      "has_sequence": false,
+      "mechanisms": [],
+      "named_proteins": [],
+      "sequence_location": "none",
+      "class_id": "lov_radical_pair",
+      "set_id": "s_baed0f89"
+    },
+    {
+      "doc_id": "bio_7dbc24d1",
+      "extraction_failed": false,
+      "mechanisms": [],
+      "has_sequence": false,
+      "sequence_location": "none",
+      "named_proteins": [],
+      "class_id": "lov_radical_pair",
+      "set_id": "s_baed0f89"
+    },
+    {
+      "doc_id": "bio_738fc521",
+      "extraction_failed": false,
+      "mechanisms": [
+        {
+          "chain": "L19",
+          "claim": "hydrogen bonding to the neutral semiquinone, either directly by the side-chain or a protein-penetrating water, contributes significantly to the potential crossing",
+          "measurable_properties": [
+            "redox potential separation",
+            "one-electron reduction potentials",
+            "water occupancy near N5 and O4'",
+            "hydrogen bonding interactions"
+          ]
+        }
+      ],
+      "named_proteins": [
+        {
+          "accession": null,
+          "name": "improved light-oxygen-voltage sensing protein (iLOV)"
+        },
+        {
+          "accession": "1O96",
+          "name": "Methylophilus methylotrophus non-bifurcating electron transfer flavoprotein (ETF)"
+        },
+        {
+          "accession": "5JFC",
+          "name": "Pyrococcus furiosus NfnI"
+        },
+        {
+          "accession": null,
+          "name": "Arabidopsis thaliana phototropin 2"
+        },
+        {
+          "accession": null,
+          "name": "Chlamydomonas reinhardtii LOV1 C57G"
+        },
+        {
+          "accession": null,
+          "name": "Avena sativa LOV2"
+        },
+        {
+          "accession": null,
+          "name": "Desulfovibrio vulgaris flavodoxin"
+        },
+        {
+          "accession": null,
+          "name": "Clostridium beijerinckii flavodoxin"
+        },
+        {
+          "accession": null,
+          "name": "Pyrococcus furiosus rubredoxin"
+        }
+      ],
+      "has_sequence": true,
+      "sequence_location": "supplementary",
+      "class_id": "lov_radical_pair",
+      "set_id": "s_2da74dff"
+    },
+    {
+      "doc_id": "PMC11536132",
+      "extraction_failed": false,
+      "mechanisms": [
+        {
+          "chain": "ETF's head and base domains connected by polypeptide linkers",
+          "claim": "Flavin reduction triggers a conformational equilibrium shift, and extended conformations provide paths for rapid interconversion of open and closed compact conformations by disengaging interactions between the base and head domains.",
+          "measurable_properties": [
+            "radius of gyration (Rg)",
+            "maximum dimension (Dmax)",
+            "scattering profile via SANS/SAXS"
+          ]
+        }
+      ],
+      "has_sequence": false,
+      "sequence_location": "none",
+      "named_proteins": [
+        {
+          "name": "bifurcating electron transfer flavoprotein from Acidaminococcus fermentans (Afe ETF)",
+          "accession": null
+        },
+        {
+          "name": "butyryl-CoA dehydrogenase (BCD)",
+          "accession": null
+        },
+        {
+          "name": "EtfB",
+          "accession": null
+        },
+        {
+          "name": "EtfA",
+          "accession": null
+        },
+        {
+          "name": "electron transfer flavoprotein (ETF) from Clostridium difficile (Cdi ETF)",
+          "accession": "5OL2"
+        },
+        {
+          "name": "Acetobacterium woodii Bf-ETF in complex with caffeoyl-CoA dehydrogenase (Awo ETF CAR)",
+          "accession": "6FAH"
+        },
+        {
+          "name": "A. woodii's lactate dehydrogenase complex Bf-ETF (Awo ETF LDH)",
+          "accession": "7QH2"
+        },
+        {
+          "name": "human canonical ETF",
+          "accession": null
+        },
+        {
+          "name": "medium chain acyl CoA dehydrogenase",
+          "accession": null
+        },
+        {
+          "name": "ETF from Thermotoga maritima (Tma ETF)",
+          "accession": null
+        },
+        {
+          "name": "cytochrome P450 reductase (CPR)",
+          "accession": null
+        },
+        {
+          "name": "NADPH-dependent sulphite reductases",
+          "accession": null
+        },
+        {
+          "name": "respiratory chain bc1 complex",
+          "accession": null
+        },
+        {
+          "name": "fatty acyl CoA dehydrogenases",
+          "accession": null
+        },
+        {
+          "name": "FixAB from Rhodopseudomonas palustris",
+          "accession": null
+        },
+        {
+          "name": "EtfABCX from Pyrobaculum aerophilum",
+          "accession": null
+        },
+        {
+          "name": "EtfABCX from Thermotoga maritima",
+          "accession": null
+        }
+      ],
+      "class_id": "lov_radical_pair",
+      "set_id": "s_2da74dff"
+    },
+    {
+      "doc_id": "PMC12422283",
+      "extraction_failed": false,
+      "mechanisms": [
+        {
+          "chain": "Protein electrostatics and proton-coupled electron transfer (PCET)",
+          "claim": "Introduction of negative charges near the flavin enhances potential inversion by destabilizing the anionic semiquinone reactant (lowering the E2 electrochemical potential), whereas positive charges favor normally ordered potentials. Furthermore, a conserved arginine acts as a proton acceptor to promote proton-coupled electron transfer and enhance potential inversion.",
+          "measurable_properties": [
+            "Flavin reduction/electrochemical potentials (E1, E2, E1')",
+            "Transient protonation state of the conserved arginine",
+            "Experimental pKa values of the bifurcating flavin and conserved arginine"
+          ]
+        }
+      ],
+      "has_sequence": false,
+      "sequence_location": "none",
+      "named_proteins": [
+        {
+          "name": "flavodoxins",
+          "accession": null
+        },
+        {
+          "name": "bifurcating flavins",
+          "accession": null
+        },
+        {
+          "name": "Nfn1",
+          "accession": null
+        },
+        {
+          "name": "azurin",
+          "accession": null
+        },
+        {
+          "name": "rubredoxin",
+          "accession": null
+        },
+        {
+          "name": "lignin peroxidase",
+          "accession": null
+        },
+        {
+          "name": "T. versicolor laccase T1",
+          "accession": null
+        }
+      ],
+      "class_id": "lov_radical_pair",
+      "set_id": "s_2da74dff"
+    },
+    {
+      "doc_id": "PMC7971047",
+      "extraction_failed": false,
+      "mechanisms": [
+        {
+          "chain": "Thermolysin is attached to 6.1 nm gold-coated magnetite nanoparticles via covalent peptide bond formation between carboxylic acid terminated ligands on the particles and solvent accessible free lysine residues on the enzyme (L24-L25, L33). Under a 17.76 MHz radiofrequency (RF) field, the superparamagnetic magnetite cores heat up due to the magnetic field torquing the magnetic moments and the particles relaxing via N\u00e9el relaxation mechanisms, transferring local heat to the attached enzyme without raising the bulk solution temperature (L6, L14-L15, L37). This creates a 'hot enzyme, cold substrate' state that accelerates conformational sampling and facilitates an induced fit (L6, L43, L46).",
+          "claim": "Radiofrequency remote control of thermolysin activity via nanoparticle-mediated localized heating, resulting in a 'hot enzyme, cold substrate' kinetic state.",
+          "measurable_properties": [
+            "Enzymatic activity / reaction velocity",
+            "Michaelis-Menten kinetic parameters (Vmax, Km, kcat)",
+            "Bulk and effective local temperature"
+          ]
+        }
+      ],
+      "has_sequence": false,
+      "sequence_location": "none",
+      "named_proteins": [
+        {
+          "accession": null,
+          "name": "thermolysin"
+        }
+      ],
+      "class_id": "magnetothermal",
+      "set_id": "s_116a5162"
+    },
+    {
+      "doc_id": "PMC7809408",
+      "extraction_failed": false,
+      "mechanisms": [],
+      "has_sequence": false,
+      "sequence_location": "none",
+      "named_proteins": [],
+      "class_id": "magnetothermal",
+      "set_id": "s_116a5162"
+    },
+    {
+      "doc_id": "PMC3215156",
+      "extraction_failed": false,
+      "mechanisms": [],
+      "has_sequence": false,
+      "sequence_location": "none",
+      "named_proteins": [],
+      "class_id": "magnetothermal",
+      "set_id": "s_116a5162"
+    },
+    {
+      "doc_id": "bio_6580d414",
+      "extraction_failed": false,
+      "mechanisms": [
+        {
+          "chain": "Alternating magnetic fields (AMF) cause local temperature increases in regions with SPIONs, which regulate temperature-sensitive repressors (TSRs) of bacterial transcription (magnetothermal control / magnetic hyperthermia).",
+          "claim": "Thermal energy transfer / heating from SPIONs exposed to alternating magnetic fields (AMF) induces activation of the temperature-sensitive repressor.",
+          "measurable_properties": [
+            "luciferase activity (bioluminescence)",
+            "reporter transcripts / mRNA levels (luxB and tlpa39R transcript fold change)"
+          ]
+        }
+      ],
+      "has_sequence": true,
+      "sequence_location": "supplementary",
+      "named_proteins": [
+        {
+          "accession": "86116",
+          "name": "TlpA39"
+        },
+        {
+          "accession": null,
+          "name": "luxA-E"
+        },
+        {
+          "accession": null,
+          "name": "luxA"
+        },
+        {
+          "accession": null,
+          "name": "luxB"
+        },
+        {
+          "accession": null,
+          "name": "luxC"
+        },
+        {
+          "accession": null,
+          "name": "luxD"
+        },
+        {
+          "accession": null,
+          "name": "luxE"
+        },
+        {
+          "accession": null,
+          "name": "alkanal monooxygenase"
+        },
+        {
+          "accession": null,
+          "name": "luciferase"
+        }
+      ],
+      "class_id": "magnetothermal",
+      "set_id": "s_5bd0a93f"
+    },
+    {
+      "doc_id": "PMC5779110",
+      "extraction_failed": false,
+      "mechanisms": [
+        {
+          "chain": "Alternating magnetic field (AMF) -> magnetic nanoparticle heating -> local temperature increase near membrane -> activation of heat-sensitive TRPV1 channels",
+          "claim": "Applying an alternating magnetic field heats superparamagnetic nanoparticles on the neuronal membrane, generating a local temperature rise that activates temperature-sensitive TRPV1 channels (magnetothermal genetics).",
+          "measurable_properties": [
+            "Specific loss in power (SLP) in W/g",
+            "Magnetization",
+            "Magnetic field strength and frequency (H and f)",
+            "Temperature dependence of fluorophore fluorescence intensity"
+          ]
+        }
+      ],
+      "has_sequence": true,
+      "sequence_location": "methods",
+      "named_proteins": [
+        {
+          "name": "TRPV1",
+          "accession": null
+        },
+        {
+          "name": "GCaMP6f",
+          "accession": null
+        },
+        {
+          "name": "NeutrAvidin",
+          "accession": null
+        },
+        {
+          "name": "A2B5 antibody",
+          "accession": null
+        },
+        {
+          "name": "CD56 (Thy-1)",
+          "accession": null
+        },
+        {
+          "name": "CD90 (NCAM)",
+          "accession": null
+        },
+        {
+          "name": "BirA enzyme",
+          "accession": null
+        },
+        {
+          "name": "HA-hM4D(Gi)-mCherry",
+          "accession": "50475"
+        },
+        {
+          "name": "MAP2",
+          "accession": null
+        }
+      ],
+      "class_id": "magnetothermal",
+      "set_id": "s_5bd0a93f"
+    },
+    {
+      "doc_id": "bio_9eb635cb",
+      "extraction_failed": false,
+      "mechanisms": [
+        {
+          "chain": "TREK1 channel",
+          "claim": "Magnetothermal silencing entails applying alternating magnetic fields to heat superparamagnetic nanoparticles at target cells, resulting in a slight, rapid, and reversible temperature elevation that thermosensitively activates endogenous or overexpressed TREK1 potassium channels to suppress neuronal firing.",
+          "measurable_properties": [
+            "temperature rise / temperature transition rates",
+            "neuronal calcium signal changes / fluorescence intensity changes (GCaMP)",
+            "neuronal firing rate / action potential rate / spike frequency"
+          ]
+        }
+      ],
+      "has_sequence": false,
+      "sequence_location": "none",
+      "named_proteins": [
+        {
+          "name": "TREK-1",
+          "accession": null
+        },
+        {
+          "name": "TREK1",
+          "accession": null
+        },
+        {
+          "name": "ANO1",
+          "accession": null
+        },
+        {
+          "name": "TEM16A",
+          "accession": null
+        },
+        {
+          "name": "TMEM16A",
+          "accession": null
+        },
+        {
+          "name": "TRPV1",
+          "accession": null
+        },
+        {
+          "name": "GCaMP6s",
+          "accession": null
+        },
+        {
+          "name": "GCaMP6f",
+          "accession": null
+        },
+        {
+          "name": "GCaMP7f",
+          "accession": null
+        },
+        {
+          "name": "Tyrosine Hydroxylase",
+          "accession": null
+        },
+        {
+          "name": "TH",
+          "accession": null
+        },
+        {
+          "name": "Dopamine D2 Receptors",
+          "accession": null
+        },
+        {
+          "name": "AdipoR1",
+          "accession": null
+        },
+        {
+          "name": "GABA(A) alpha Receptor",
+          "accession": null
+        }
+      ],
+      "class_id": "magnetothermal",
+      "set_id": "s_5bd0a93f"
+    },
+    {
+      "doc_id": "PMC9513098",
+      "extraction_failed": false,
+      "has_sequence": false,
+      "mechanisms": [],
+      "named_proteins": [],
+      "sequence_location": "none",
+      "class_id": "magnetothermal",
+      "set_id": "s_fc1affef"
+    },
+    {
+      "doc_id": "PMC6835341",
+      "extraction_failed": false,
+      "has_sequence": false,
+      "mechanisms": [
+        {
+          "chain": "L7",
+          "claim": "heat generation mechanism of magnetoferritin nanoparticles is dominated by the N\u00e9el relaxation",
+          "measurable_properties": [
+            "viscosity",
+            "relaxation time",
+            "specific loss power"
+          ]
+        }
+      ],
+      "named_proteins": [
+        {
+          "accession": null,
+          "name": "magnetoferritin"
+        },
+        {
+          "accession": null,
+          "name": "recombinant human ferritin"
+        },
+        {
+          "accession": null,
+          "name": "HFn"
+        },
+        {
+          "accession": null,
+          "name": "human heavy-chain ferritin"
+        }
+      ],
+      "sequence_location": "none",
+      "class_id": "magnetothermal",
+      "set_id": "s_fc1affef"
+    },
+    {
+      "doc_id": "PMC8272029",
+      "extraction_failed": false,
+      "has_sequence": false,
+      "mechanisms": [
+        {
+          "chain": "The paper establishes that the heat generated locally by magnetic nanoparticles upon the application of an alternating magnetic field (magnetic hyperthermia) causes a modification of the protein's three-dimensional structure and denaturation (loss of function/fluorescence).",
+          "claim": "protein denaturation through magnetic hyperthermia local heating",
+          "measurable_properties": [
+            "fluorescence intensity",
+            "three-dimensional structure configuration",
+            "fluorescence loss"
+          ]
+        }
+      ],
+      "named_proteins": [
+        {
+          "accession": null,
+          "name": "green fluorescent protein"
+        },
+        {
+          "accession": null,
+          "name": "GFP"
+        },
+        {
+          "accession": null,
+          "name": "ovalbumin"
+        },
+        {
+          "accession": null,
+          "name": "OVA"
+        },
+        {
+          "accession": null,
+          "name": "lysozyme"
+        },
+        {
+          "accession": null,
+          "name": "Lyz"
+        },
+        {
+          "accession": null,
+          "name": "vascular endothelial growth factor"
+        },
+        {
+          "accession": null,
+          "name": "basic fibroblast growth factor"
+        },
+        {
+          "accession": null,
+          "name": "dysopsonic proteins"
+        }
+      ],
+      "sequence_location": "none",
+      "class_id": "magnetothermal",
+      "set_id": "s_fc1affef"
+    },
+    {
+      "doc_id": "PMC8585339",
+      "extraction_failed": false,
+      "mechanisms": [
+        {
+          "chain": "L155",
+          "claim": "Activation of thermophilic enzymes or thermosensitive membrane channels (such as TRPV1) via magnetothermal multiplexing/selective magnetic nanoheating.",
+          "measurable_properties": [
+            "temperature-dependent activity",
+            "thermal activation thresholds"
+          ]
+        }
+      ],
+      "named_proteins": [
+        {
+          "accession": null,
+          "name": "TPRV1"
+        },
+        {
+          "accession": null,
+          "name": "thermophilic enzymes"
+        }
+      ],
+      "sequence_location": "none",
+      "has_sequence": false,
+      "class_id": "magnetothermal",
+      "set_id": "s_04eaf4fd"
+    },
+    {
+      "doc_id": "PMC9513098",
+      "extraction_failed": false,
+      "mechanisms": [],
+      "has_sequence": false,
+      "sequence_location": "none",
+      "named_proteins": [],
+      "class_id": "magnetothermal",
+      "set_id": "s_04eaf4fd"
+    },
+    {
+      "doc_id": "PMC4046777",
+      "extraction_failed": false,
+      "mechanisms": [],
+      "has_sequence": false,
+      "sequence_location": "none",
+      "named_proteins": [],
+      "class_id": "magnetothermal",
+      "set_id": "s_04eaf4fd"
+    },
+    {
+      "doc_id": "PMC10698186",
+      "extraction_failed": false,
+      "mechanisms": [
+        {
+          "chain": "L22",
+          "claim": "Copper(II) coordinates with a histidine anchoring residue and the amide nitrogen at the reaction site within a specific peptide sequence to catalyze a Chan-Lam coupling reaction that transfers an alkenyl group from a boronic acid to the main chain amide nitrogen.",
+          "measurable_properties": [
+            "reaction kinetics",
+            "second-order rate constant",
+            "reaction yield"
+          ]
+        }
+      ],
+      "has_sequence": true,
+      "sequence_location": "methods",
+      "named_proteins": [
+        {
+          "name": "SMT3",
+          "accession": null
+        },
+        {
+          "name": "nanobody",
+          "accession": null
+        },
+        {
+          "name": "maltose-binding protein",
+          "accession": null
+        },
+        {
+          "name": "MBP",
+          "accession": null
+        },
+        {
+          "name": "trigger factor",
+          "accession": null
+        },
+        {
+          "name": "sortase",
+          "accession": null
+        },
+        {
+          "name": "trastuzumab",
+          "accession": null
+        },
+        {
+          "name": "Fc",
+          "accession": null
+        },
+        {
+          "name": "human serum albumin",
+          "accession": null
+        },
+        {
+          "name": "HSA",
+          "accession": null
+        },
+        {
+          "name": "HER2",
+          "accession": null
+        },
+        {
+          "name": "ACE2",
+          "accession": null
+        }
+      ],
+      "class_id": "magnetothermal",
+      "set_id": "s_ff243d0e"
+    },
+    {
+      "doc_id": "PMC6223930",
+      "extraction_failed": false,
+      "mechanisms": [],
+      "named_proteins": [
+        {
+          "name": "Bovine Serum Albumin",
+          "accession": null
+        },
+        {
+          "name": "Human Serum Albumin",
+          "accession": null
+        },
+        {
+          "name": "yeast alcohol dehydrogenase",
+          "accession": null
+        }
+      ],
+      "has_sequence": false,
+      "sequence_location": "none",
+      "class_id": "magnetothermal",
+      "set_id": "s_ff243d0e"
+    },
+    {
+      "doc_id": "bio_894e821a",
+      "extraction_failed": false,
+      "mechanisms": [],
+      "has_sequence": false,
+      "sequence_location": "none",
+      "named_proteins": [
+        {
+          "name": "EcoKI",
+          "accession": null
+        }
+      ],
+      "class_id": "magnetothermal",
+      "set_id": "s_ff243d0e"
+    },
+    {
+      "doc_id": "PMC12498135",
+      "extraction_failed": false,
+      "has_sequence": false,
+      "mechanisms": [],
+      "named_proteins": [],
+      "sequence_location": "none",
+      "class_id": "magnetothermal",
+      "set_id": "s_4510d7d8"
+    },
+    {
+      "doc_id": "bio_461c3a7b",
+      "extraction_failed": false,
+      "mechanisms": [
+        {
+          "chain": "The superparamagnetic 4.5 nm magnetite cores heat under radiofrequency (RF) irradiation at 17.76 MHz, as the magnetic field torques the magnetic moments and the particles relax via Neel relaxation mechanisms [ 20 \u2013 24 ].",
+          "claim": "Without raising the bulk solution temperature, we observe enzyme activity as if the solution was 16 \u00b1 2 \u00b0C warmer in RF fields, or an increase in enzymatic rate of 129 \u00b8%. Kinetics studies show that the activity increase of the enzyme is consistent with the induced fit of a hot enzyme with cold substrate.",
+          "measurable_properties": [
+            "enzyme velocity",
+            "V max",
+            "K M",
+            "k cat"
+          ]
+        }
+      ],
+      "has_sequence": false,
+      "sequence_location": "none",
+      "named_proteins": [
+        {
+          "accession": null,
+          "name": "thermolysin"
+        }
+      ],
+      "class_id": "magnetothermal",
+      "set_id": "s_4510d7d8"
+    },
+    {
+      "doc_id": "bio_0f1ce0b1",
+      "extraction_failed": false,
+      "has_sequence": false,
+      "mechanisms": [],
+      "named_proteins": [
+        {
+          "accession": null,
+          "name": "Cas9"
+        }
+      ],
+      "sequence_location": "none",
+      "class_id": "magnetothermal",
+      "set_id": "s_4510d7d8"
+    }
+  ],
+  "flagged": [
+    "PMC9008703",
+    "PMC2040520",
+    "PMC4927292",
+    "PMC2443192",
+    "PMC3299647",
+    "PMC5357904",
+    "PMC7058016",
+    "PMC9008703",
+    "PMC6648828",
+    "PMC4401697",
+    "PMC9008703",
+    "PMC4416707",
+    "PMC5645311",
+    "PMC4416707",
+    "bio_738fc521",
+    "bio_6580d414",
+    "PMC5779110",
+    "PMC10698186"
+  ],
+  "failed": [],
+  "extracted_by": "quick-reader"
+}

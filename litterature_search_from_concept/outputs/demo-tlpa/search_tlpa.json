@@ -1,0 +1,98 @@
+{
+  "slug": "tlpa",
+  "sources": "pmc,biorxiv",
+  "n": 4,
+  "classes": [
+    {
+      "id": "tlpa",
+      "sets": [
+        {
+          "phrase": "thermal bioswitch",
+          "set_id": "s_6b5491fb",
+          "n_papers": 4
+        },
+        {
+          "phrase": "parallel homodimeric coiled coil",
+          "set_id": "s_8ca581e1",
+          "n_papers": 1
+        },
+        {
+          "phrase": "knobs-into-holes packing",
+          "set_id": "s_7c4c6301",
+          "n_papers": 4
+        },
+        {
+          "phrase": "GCN4 leucine zipper",
+          "set_id": "s_21053a49",
+          "n_papers": 4
+        },
+        {
+          "phrase": "SpyTag SpyCatcher conjugation",
+          "set_id": "s_58b2f577",
+          "n_papers": 4
+        },
+        {
+          "phrase": "isopeptide bond formation",
+          "set_id": "s_e76baa04",
+          "n_papers": 4
+        },
+        {
+          "phrase": "magnetic nanoparticle hyperthermia",
+          "set_id": "s_774b95c5",
+          "n_papers": 4
+        },
+        {
+          "phrase": "alternating magnetic field heating",
+          "set_id": "s_39a9915c",
+          "n_papers": 4
+        },
+        {
+          "phrase": "magnetite nanoparticle mineralization",
+          "set_id": "s_03082edb",
+          "n_papers": 1
+        },
+        {
+          "phrase": "temperature-sensitive repressor",
+          "set_id": "s_1a363326",
+          "n_papers": 3
+        },
+        {
+          "phrase": "split luciferase complementation",
+          "set_id": "s_2d95ac79",
+          "n_papers": 3
+        }
+      ],
+      "n_papers_total": 36,
+      "status": "covered"
+    }
+  ],
+  "rejections": [
+    {
+      "excluded": "Deliberately excluded phrases about direct RF/electromagnetic field effects on proteins, ferritin-TRPV1 magnetogenetics, and photoreceptor/chromophore retuning, since those pathways are out of scope and would flood the corpus with non-construct papers; also avoided generic thermostability-engineering terms that return no depositable coiled-coil sequences. Patterns are reserved for two-state switching physics, register/packing determinants, and failure modes (aggregation, avidity, constitutive output) rather than built-in quantity or sequence regexes.",
+      "reason": "carried verbatim from the design-brief plan's `notes` field by `plan-adopt`, so the planner's reasoning is not lost"
+    },
+    {
+      "kind": "phrase_zero_yield",
+      "class_id": "tlpa",
+      "phrase": "coiled-coil thermosensor",
+      "reason": "exact-phrase search returned no papers"
+    },
+    {
+      "kind": "phrase_zero_yield",
+      "class_id": "tlpa",
+      "phrase": "temperature-sensitive coiled coil",
+      "reason": "exact-phrase search returned no papers"
+    },
+    {
+      "kind": "phrase_zero_yield",
+      "class_id": "tlpa",
+      "phrase": "designed coiled-coil dimer",
+      "reason": "exact-phrase search returned no papers"
+    }
+  ],
+  "coverage": {
+    "classes_covered": 1,
+    "classes_total": 1,
+    "meets_framework_minimum": false
+  }
+}

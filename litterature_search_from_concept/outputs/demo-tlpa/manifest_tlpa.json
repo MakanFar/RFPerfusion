@@ -1,0 +1,92 @@
+{
+  "created_at": "2026-08-16T14:20:25.765024+00:00",
+  "slug": "tlpa",
+  "objective": null,
+  "evidence_status": "discovery_only_unverified",
+  "sources": "pmc,biorxiv",
+  "n": 4,
+  "set_ids": [
+    {
+      "class_id": "tlpa",
+      "phrase": "thermal bioswitch",
+      "set_id": "s_6b5491fb",
+      "n_papers": 4
+    },
+    {
+      "class_id": "tlpa",
+      "phrase": "parallel homodimeric coiled coil",
+      "set_id": "s_8ca581e1",
+      "n_papers": 1
+    },
+    {
+      "class_id": "tlpa",
+      "phrase": "knobs-into-holes packing",
+      "set_id": "s_7c4c6301",
+      "n_papers": 4
+    },
+    {
+      "class_id": "tlpa",
+      "phrase": "GCN4 leucine zipper",
+      "set_id": "s_21053a49",
+      "n_papers": 4
+    },
+    {
+      "class_id": "tlpa",
+      "phrase": "SpyTag SpyCatcher conjugation",
+      "set_id": "s_58b2f577",
+      "n_papers": 4
+    },
+    {
+      "class_id": "tlpa",
+      "phrase": "isopeptide bond formation",
+      "set_id": "s_e76baa04",
+      "n_papers": 4
+    },
+    {
+      "class_id": "tlpa",
+      "phrase": "magnetic nanoparticle hyperthermia",
+      "set_id": "s_774b95c5",
+      "n_papers": 4
+    },
+    {
+      "class_id": "tlpa",
+      "phrase": "alternating magnetic field heating",
+      "set_id": "s_39a9915c",
+      "n_papers": 4
+    },
+    {
+      "class_id": "tlpa",
+      "phrase": "magnetite nanoparticle mineralization",
+      "set_id": "s_03082edb",
+      "n_papers": 1
+    },
+    {
+      "class_id": "tlpa",
+      "phrase": "temperature-sensitive repressor",
+      "set_id": "s_1a363326",
+      "n_papers": 3
+    },
+    {
+      "class_id": "tlpa",
+      "phrase": "split luciferase complementation",
+      "set_id": "s_2d95ac79",
+      "n_papers": 3
+    }
+  ],
+  "extracted_by": {
+    "screen": "quick-reader",
+    "dig": null
+  },
+  "artifact_paths": {
+    "search": "outputs/demo-tlpa/search_tlpa.json",
+    "screen": "outputs/demo-tlpa/screen_tlpa.json",
+    "evidence": "outputs/demo-tlpa/evidence_tlpa.json"
+  },
+  "counts": {
+    "papers_screened": 11,
+    "papers_flagged": 7,
+    "failed_extractions": 0,
+    "artifacts_runnable": null,
+    "artifacts_rejected": null
+  }
+}

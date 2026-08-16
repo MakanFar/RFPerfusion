@@ -1,165 +1,142 @@
 # RFPerfusion
 
-A literature-grounded agentic pipeline that designs a **SWIR-actuated protein
-thermal switch** — novel engineered **TlpA** variants whose coiled-coil transition
-midpoint is tuned to ~41 °C, so they can be flipped by the tiny, localized heating
-that >1500 nm (SWIR) light produces in water. See [`docs/PRD.md`](docs/PRD.md).
+An agentic pipeline that turns an underspecified protein design question into
+evidence-grounded, computationally evaluable candidates — and says plainly what
+it could not check.
 
-The judged artifact is the **sequence set** (`outputs/candidates.json`); the
-pipeline is *how we got there*.
+Two documents define it. [`docs/PRD-framework.md`](docs/PRD-framework.md) is the
+framework: ideation → falsification → specification → generation → evaluation,
+with a mandatory human gate at spec approval.
+[`docs/PRD-(outdated).md`](<docs/PRD-(outdated).md>) is instance #1, the
+SWIR-actuated **TlpA** thermal switch, kept because its data contracts (§6) are
+still the ones the code implements.
 
-## Hackathon pitch
-
-[PowerPoint deck](RFPerfusion_Hackathon_Pitch_Final.pptx) · [PDF deck](output/pdf/RFPerfusion_Hackathon_Pitch_Final.pdf)
-
-![Slide 1 — We asked AI to design an impossible protein](docs/hackathon-pitch/slide-01.png)
-
-![Slide 2 — One scientist and three coordinated scientific agents](docs/hackathon-pitch/slide-02.png)
-
-![Slide 3 — The formulation agent turns goals into testable routes](docs/hackathon-pitch/slide-03.png)
-
-![Slide 4 — The literature agent turns papers into usable artifacts](docs/hackathon-pitch/slide-04.png)
-
-![Slide 5 — Proto-tools co-folding demonstration](docs/hackathon-pitch/slide-05.png)
-
-![Slide 6 — The scientist stays in control at every handoff](docs/hackathon-pitch/slide-06.png)
-
-![Slide 7 — Make the impossible scientifically actionable](docs/hackathon-pitch/slide-07.png)
-
-## Quick start
 
 ```bash
-uv run design.py --offline     # run the pipeline (skips live Paperclip searches)
-uv run design.py               # full run with real Paperclip literature searches
+FA7_LLM_BACKEND=claude uv run --project formulation_agent007 formulate007-run \
+  --question "Design a protein that changes conformation in response to radiofrequency fields" \
+  --output-dir formulation_agent007/briefs/rf-switch --json-progress
 ```
 
-Outputs land in `outputs/`:
-- `design_record.json` — the orchestrator's single source of truth (PRD §6.1)
-- `candidates.json` — the ranked top-5 novel variants (the judged artifact)
+Emits a concept file, a validated `plan_<slug>.json`, a per-shard harvest
+contract, and a runbook whose every gate names a real proto-tools key, a real
+metric, and a number. Six staged LLM calls; treat a rerun as expensive.
+Backends: `claude` (Claude Code login) or `codex` (default; needs the `codex`
+CLI). Neither uses `ANTHROPIC_API_KEY`.
+Details: [formulation_agent007/README.md](formulation_agent007/README.md).
 
-## Architecture
+### 2 — Literature
 
-Deterministic orchestrator (the DAG in code) → each stage is a pure typed
-function `f(in) -> out`. The LLM-driven orchestrator + agent workers wrap these
-same functions later; control flow and data contracts do not change.
+Two consumers of the same brief plan, with different outputs.
 
-```
-design.py → orchestrator.run()
-  1 formulate   goal            → DesignRecord v0        (config-driven)
-  2 literature  sub-questions   → EvidenceItem[]         [Paperclip]  ← L1 negative result + redirect
-  3 scaffold    resolve TlpA    → sequence + DBD bounds  [Paperclip /proteins/]
-  4 generate    DesignRecord    → Candidate[]            [heuristic | Proto ESM2→Modal]
-  5 evaluate    Candidate[]     → ScoredCandidate[]      [free checks + Proto ESMFold/PyRosetta→Modal]
-  6 rank        by ci_low       → top-5
-  7 report      console + JSON artifacts
-```
+`mine-literature-from-concept` runs `paperclip_kb.py` and produces a categorized
+grep knowledge base for a human to read.
 
-### Layout
-```
-src/rfperfusion/
-  schemas.py      frozen DTOs (PRD §6): DesignRecord, EvidenceItem, Constraint, ScoredCandidate
-  config.py       design target, sub-questions, constraint set
-  orchestrator.py the deterministic DAG
-  tools/
-    paperclip.py  CLI bridge (literature + protein DB)
-    proto.py      isolated proto-tools/Modal bridge (discovery free; execution guarded + billable)
-  stages/         one file per stage
-formulation_agent/                open design question → ranked, claim-verified research directions
-formulation_agent007/             design question → shards, mining plan, assembly recipe, scoring cascade
-litterature_search_from_concept/  concept → broad Paperclip corpus + categorized knowledge base
-proto/            isolated proto-tools MCP runtime (uv, py3.12) — Modal-backed heavy compute
-outputs/          generated artifacts (gitignored)
+`litkb` reads full text with an LLM and produces typed `EvidenceItem` records
+plus sequence artifacts checked against the proto-tools constraint table. It
+takes the brief's flat plan directly:
+
+```bash
+cd litterature_search_from_concept
+uv run --project . python -m litkb plan-adopt <brief>/plan_<slug>.json \
+    --objective "<question>" --slug <slug> --output-dir outputs/<run>
+uv run --project . python -m litkb search  outputs/<run>/plan_<slug>.json -n 4 --output-dir outputs/<run>
+uv run --project . python -m litkb screen  outputs/<run>/search_<slug>.json -n 1 --output-dir outputs/<run>
 ```
 
-## Agent skills
+`-n` is the cost lever: `screen` and `dig` are LLM passes over full text, capped
+at 100 map operations per day by Paperclip. Then `dig` → `bind` → `evidence` →
+`report` → `manifest`. Every run declares
+`evidence_status: discovery_only_unverified`.
+Contract: [.claude/skills/litkb/references/output-contract.md](.claude/skills/litkb/references/output-contract.md).
 
-Seven skills in `.claude/skills/` cover the pipeline end to end. `.agents` is a
-symlink to `.claude`, so the same definitions work with either convention, and
-each skill ships an `agents/openai.yaml` for the Codex backend.
+### 3 — Scoring
 
-| Skill | Stage | Role |
-|---|---|---|
-| `formulate-grounded-directions` | 0 | Ranked research directions with claim-level literature verification |
-| `design-brief-007` | 1 | Design question → shards, a mining plan, an assembly recipe, and a scoring cascade |
-| `mine-literature-from-concept` | 2 | Concept → broad Paperclip corpus and categorized knowledge base |
-| `write-program` | 3–5 | Author a proto-language design program — iterative search under weighted constraints |
-| `implement-constraint` | 4 | Implement, calibrate, and register a scoring function that does not ship with Proto |
-| `proto-tools` | infra | Single tool invocations against the proto-tools catalogue on Modal |
-| `visualize-sequence-design` | demo | Compare input and designed sequences and visualize the differences |
+`proto-tools` runs one model on one input. `write-program` runs the iterative
+search. `implement-constraint` builds a scoring function that does not ship.
 
-**Scope boundary.** `proto-tools` covers *one model, one input, one result*.
-Iterative design — propose, score, select, repeat — belongs in `write-program`,
-where the search runs in an optimizer rather than as an agent loop. A missing
-scoring function goes to `implement-constraint` first.
+Discovery is free and local. Execution on Modal is **billable** and needs
+`modal token new` first; `registry/proto_catalog.json` is the generated
+constraint table `litkb bind` checks sequences against.
 
-### Installing the skills as a plugin
+## Skills
 
-The repo doubles as a local plugin marketplace, so the skills load outside this
-directory (Claude Desktop chat, other projects) as well as inside it:
+Nine skills in `.claude/skills/`. `.agents` symlinks to `.claude`, so both
+conventions work, and each skill ships an `agents/openai.yaml` for Codex.
+
+| Skill | Role |
+|---|---|
+| `formulate-grounded-directions` | Ranked research directions with claim-level verification |
+| `design-brief-007` | Question → shards, mining plan, assembly recipe, fitness cascade |
+| `mine-literature-from-concept` | Concept → Paperclip corpus + categorized knowledge base |
+| `litkb` | Concept → typed evidence + proto-runnable sequence artifacts |
+| `paperclip` | Full-text search over papers, trials, and regulatory documents |
+| `write-program` | Proto-language design program — search under weighted constraints |
+| `implement-constraint` | Implement, calibrate, register a missing scoring function |
+| `proto-tools` | Single tool invocations against the proto-tools catalogue |
+| `visualize-sequence-design` | Compare an input and a designed sequence |
+
+**Scope boundary.** `proto-tools` is one model, one input, one result. Iterative
+design belongs in `write-program`. A missing scoring function goes to
+`implement-constraint` first.
+
+### As a plugin
 
 ```bash
 claude plugin marketplace add .
 claude plugin install rfperfusion@rfperfusion
+claude plugin marketplace update rfperfusion   # after editing any skill
 ```
 
-Installed skills are a **snapshot**, not a live link. After editing any skill:
+Installed skills are a snapshot. Inside this repo they load live from
+`.claude/skills/` and need no install.
 
-```bash
-claude plugin marketplace update rfperfusion
+## Layout
+
 ```
-
-Inside this repo the skills load live from `.claude/skills/` at project scope
-and need no install.
+.claude/skills/                   nine agent skills (.agents → .claude)
+docs/                             PRD-framework (the loop), PRD-(outdated) (instance #1)
+formulation_agent/                open question → ranked, claim-verified directions
+formulation_agent007/             question → shards, mining plan, cascade; briefs/ holds runs
+litterature_search_from_concept/  paperclip_kb.py (grep) + litkb/ (typed); outputs/ holds runs
+proto/                            isolated proto-tools MCP runtime (uv, py3.12); outputs/ gitignored
+registry/proto_catalog.json       generated proto-tools constraint table
+```
 
 ## Formulation agent
 
-From the repository root:
-
 ```bash
-codex login                                # one-time subscription sign-in
-export FA_LLM_BACKEND=codex                # default; or: claude
+export FA_LLM_BACKEND=claude              # or: codex
 uv run --project formulation_agent formulate-web
 ```
 
-Opens a local browser UI. `formulate` runs the same engine in the terminal.
-For Claude, run `claude auth login` once and set `FA_LLM_BACKEND=claude`.
-Details, guarantees and known corpus limitations: [formulation_agent/README.md](formulation_agent/README.md).
-
-## Design brief agent (007)
-
-```bash
-uv run --project formulation_agent007 formulate007-run \
-  --question "Design a protein that changes conformation in response to radiofrequency fields" \
-  --output-dir formulation_agent007/briefs/rf-switch
-```
-
-Emits a `concept_<slug>.txt` and reviewed `plan_<slug>.json` that drop straight
-into `paperclip_kb.py`, an extraction contract for the Paperclip agent, and a
-runbook for the Proto agent whose every gate names a real proto-tools key, a
-real metric, and a number. Details: [formulation_agent007/README.md](formulation_agent007/README.md).
+Opens a local browser UI; `formulate` is the terminal equivalent.
+Details: [formulation_agent/README.md](formulation_agent/README.md).
 
 ## Tools
 
 | Tool | Role | Cost |
 |---|---|---|
-| **Paperclip** | Literature (L1–L4) + resolve TlpA sequence | free (laptop) |
-| **Proto** (`proto-tools`→Modal) | ESM2 generation, ESMFold/PyRosetta/DSSP scoring | **billable**; per-tool deploy approval required |
-| Claude Agent SDK *(next)* | LLM orchestrator + isolated agent workers | — |
+| **Paperclip** | Full-text literature; protein/structure records | free; 100 LLM map operations per day |
+| **proto-tools** → Modal | Generation, folding, scoring | **billable**; per-tool deploy approval |
 
-`.mcp.json` holds the project-scoped MCP server configuration for `proto-tools`.
+`.mcp.json` holds the project-scoped MCP configuration for `proto-tools`.
 
-**Guardrails:** `tools.proto.run_tool` refuses to execute unless `allow_deploy=True`
-— a first run of an undeployed tool triggers a billable Modal deploy. The pipeline
-never fabricates ESMFold/PyRosetta numbers; unresolved scores are flagged
-`pending_modal`.
+**Guardrails.** Nothing fabricates a score: an unresolved evaluation is reported
+as unresolved. Literature output is discovery, never verified evidence. A
+`litkb` artifact accepted by a proto tool passed a *schema* check — molecule,
+alphabet, length — not a run.
 
-## Status (POC v0)
+## Status
 
-- ✅ Runs end-to-end; 4 demo beats print; artifacts written
-- ✅ Frozen schemas, deterministic orchestrator, tool bridges
-- ✅ L1 negative result → photothermal redirect assembled into the Design Record
-- ✅ Skills cover all pipeline stages; installable as a plugin
-- 🔜 Real TlpA sequence resolution (in progress) → unblocks real variant generation
-- 🔜 Real Proto ESM2 generation + ESMFold/PyRosetta scoring (Modal, needs deploy approval)
-- 🔜 Piraner held-out Tm benchmark (the M3 go/no-go gate)
-- 🔜 LLM-orchestrator + agent workers on top of the stage functions
+- ✅ Design brief → literature → evidence runs end to end, artifact to artifact
+- ✅ Frozen data contracts (PRD §6); nine skills; installable as a plugin
+- ✅ TlpA resolved to UniProt `A0A0H3P187`, 371 aa (AlphaFold mean pLDDT 82.9)
+- ⚠️ `litkb bind` can mark an artifact runnable against only one catalogue tool
+  (`esmfold-prediction`); every other entry lacks parseable constraints and
+  returns `unverified`
+- ⚠️ Paperclip's specialised `map` workers are gated on this account, so both
+  literature passes run `quick-reader`; supplement-borne sequences are out of reach
+- 🔜 Modal authentication → generation and the GPU gates in the cascade
+- 🔜 Piraner held-out Tm benchmark — the calibration gate
+- 🔜 LLM orchestrator over the stage functions

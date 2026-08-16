@@ -1,5 +1,4 @@
 # run artifacts — regenerate with the pipeline, don't version them
-outputs/
 rfp_search.json
 rfp_hits.json
 rfp_screen.json

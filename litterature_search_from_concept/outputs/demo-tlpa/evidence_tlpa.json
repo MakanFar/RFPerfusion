@@ -1,0 +1,278 @@
+{
+  "slug": "tlpa",
+  "items": [
+    {
+      "id": "ev_001",
+      "question_id": "tlpa",
+      "claim": "The parallel homodimeric coiled-coil domain positions the N-terminal TOG domains in proximity to one another to potentially promote longitudinal and/or lateral tubulin:tubulin contacts and drive microtubule polymerization cooperatively.",
+      "claim_type": "mechanism",
+      "quantitative": null,
+      "support": null,
+      "citation": {
+        "doi": "10.1091/mbc.E17-01-0057",
+        "title": "Stu2 uses a 15-nm parallel coiled coil for kinetochore localization and concomitant regulation of the mitotic spindle",
+        "year": 2018,
+        "journal": "Molecular Biology of the Cell",
+        "authors": "Karen P. Haase, Jaime C. Fox, Amy E. Byrnes, Rebecca C. Adikes, Sarah K. Speed, Julian Haase, Brandon Friedman, Diana M. Cook, Kerry Bloom, Nasser M. Rusan, Kevin C. Slep"
+      },
+      "evidence_kind": null,
+      "extracted_by": "quick-reader",
+      "confidence": null,
+      "testable_by": {
+        "properties": [
+          "tubulin-binding affinity",
+          "microtubule polymerization rate",
+          "thermal stability (Tm)",
+          "oligomeric state"
+        ],
+        "tools": [],
+        "requires_new_evaluator": true
+      },
+      "provenance": {
+        "doc_id": "PMC5996958",
+        "section": null,
+        "category": "mechanism",
+        "span": "Stu2",
+        "url": "https://paperclip.gxl.ai/citations/papers/PMC5996958"
+      }
+    },
+    {
+      "id": "ev_002",
+      "question_id": "tlpa",
+      "claim": "Introduction of polar/ionisable residues (such as Glu) into the hydrophobic core allows a pH-dependent switch where varying pH and charge states control stability, hydration, and structural transitions between collapsed and open barrel states.",
+      "claim_type": "mechanism",
+      "quantitative": null,
+      "support": null,
+      "citation": {
+        "doi": "10.1038/s41467-018-06391-y",
+        "title": "Maintaining and breaking symmetry in homomeric coiled-coil assemblies",
+        "year": 2018,
+        "journal": "Nature Communications",
+        "authors": "Guto G. Rhys, Christopher W. Wood, Eric J. M. Lang, Adrian J. Mulholland, R. Leo Brady, Andrew R. Thomson, Derek N. Woolfson"
+      },
+      "evidence_kind": null,
+      "extracted_by": "quick-reader",
+      "confidence": null,
+      "testable_by": {
+        "properties": [
+          "thermal unfolding transitions (melting temperature, Tm)",
+          "circular dichroism (CD) spectra/alpha-helicity",
+          "hydrophobic dye binding (DPH / TMA-DPH fluorescence)"
+        ],
+        "tools": [],
+        "requires_new_evaluator": true
+      },
+      "provenance": {
+        "doc_id": "PMC6175849",
+        "section": null,
+        "category": "mechanism",
+        "span": "pH-dependent oligomerization and structural switching via protonation of buried glutamic acid residues (Glu-17)",
+        "url": "https://paperclip.gxl.ai/citations/papers/PMC6175849"
+      }
+    },
+    {
+      "id": "ev_003",
+      "question_id": "tlpa",
+      "claim": "Polymorphic interactions between heptad repeat regions provide a reservoir of free energy that can be released to drive structural transitions in a precise temporal sequence required for membrane fusion, and conserved charged residues at e and g positions impart a negative design element to disfavor thermodynamically more stable antiparallel tetramers.",
+      "claim_type": "mechanism",
+      "quantitative": null,
+      "support": null,
+      "citation": {
+        "doi": "10.1016/j.str.2005.10.010",
+        "title": "Antiparallel Four-Stranded Coiled Coil Specified by a 3-3-1 Hydrophobic Heptad Repeat",
+        "year": 2006,
+        "journal": "Structure (London, England : 1993)",
+        "authors": "Yiqun Deng, Jie Liu, Qi Zheng, David Eliezer, Neville R. Kallenbach, Min Lu"
+      },
+      "evidence_kind": null,
+      "extracted_by": "quick-reader",
+      "confidence": null,
+      "testable_by": {
+        "properties": [
+          "thermal stability (Tm)",
+          "molecular weight / oligomeric state via sedimentation equilibrium",
+          "circular dichroism (CD) ellipticity"
+        ],
+        "tools": [],
+        "requires_new_evaluator": true
+      },
+      "provenance": {
+        "doc_id": "PMC7126439",
+        "section": null,
+        "category": "mechanism",
+        "span": "Viral envelope proteins / GCN4 mutants",
+        "url": "https://paperclip.gxl.ai/citations/papers/PMC7126439"
+      }
+    },
+    {
+      "id": "ev_004",
+      "question_id": "tlpa",
+      "claim": "SpyTag/SpyCatcher-mediated covalent conjugation improves Split-GFP dimerization, which promotes stable dimerization of NCre/CCre halves to reconstitute Cre recombinase activity.",
+      "claim_type": "mechanism",
+      "quantitative": null,
+      "support": null,
+      "citation": {
+        "doi": "10.1016/j.jbc.2021.101119",
+        "title": "A Split-Cre system designed to detect simultaneous expression of two genes based on SpyTag/SpyCatcher conjugation and Split-GFP dimerization",
+        "year": 2021,
+        "journal": "The Journal of Biological Chemistry",
+        "authors": "Xundong Wei, Jianhua Zhang, Jian Cui, Wei Xu, Xuyu Zhou, Jie Ma"
+      },
+      "evidence_kind": null,
+      "extracted_by": "quick-reader",
+      "confidence": null,
+      "testable_by": {
+        "properties": [
+          "fluorescence intensity of GFP",
+          "frequency of TdTomato+ cells",
+          "recombinase activity",
+          "luciferase activity"
+        ],
+        "tools": [],
+        "requires_new_evaluator": true
+      },
+      "provenance": {
+        "doc_id": "PMC8455372",
+        "section": null,
+        "category": "mechanism",
+        "span": "SpyTag/SpyCatcher conjugation and Split-GFP dimerization",
+        "url": "https://paperclip.gxl.ai/citations/papers/PMC8455372"
+      }
+    },
+    {
+      "id": "ev_005",
+      "question_id": "tlpa",
+      "claim": "Isopeptide bond formation is mediated by a \u03b4-selenolysine residue (via \u03b4-selenolysine-mediated ligation followed by one-pot deselenization), which allows traceless isopeptide bond formation without desulfurizing native cysteine residues.",
+      "claim_type": "mechanism",
+      "quantitative": null,
+      "support": null,
+      "citation": {
+        "doi": "10.3389/fchem.2023.1307254",
+        "title": "Isopeptide bond formation mediated by \u03b4-selenolysine for chemical ubiquitination",
+        "year": 2023,
+        "journal": "Frontiers in Chemistry",
+        "authors": "Tatsunari Akiyama, Yusuke Tanaka, Ryo Okamoto, Yasuhiro Kajihara, Masayuki Izumi"
+      },
+      "evidence_kind": null,
+      "extracted_by": "quick-reader",
+      "confidence": null,
+      "testable_by": {
+        "properties": [
+          "Retention time on reversed-phase (RP) HPLC",
+          "Molecular weight via ESI-MS / LC-MS",
+          "Tryptic digestion fragment masses"
+        ],
+        "tools": [],
+        "requires_new_evaluator": true
+      },
+      "provenance": {
+        "doc_id": "PMC10702597",
+        "section": null,
+        "category": "mechanism",
+        "span": "Ub (46\u201376) / ubiquitin",
+        "url": "https://paperclip.gxl.ai/citations/papers/PMC10702597"
+      }
+    },
+    {
+      "id": "ev_006",
+      "question_id": "tlpa",
+      "claim": "Inactivation of the lambda CI repressor can be initiated either by heat treatment of a temperature-sensitive repressor (causing direct denaturation) or by DNA damage activating the host SOS response where RecA promotes auto-cleavage.",
+      "claim_type": "mechanism",
+      "quantitative": null,
+      "support": null,
+      "citation": {
+        "doi": "10.1111/j.1365-2958.2008.06119.x",
+        "title": "Host responses influence on the induction of lambda prophage",
+        "year": 2008,
+        "journal": "Molecular Microbiology",
+        "authors": "Assaf Rokney, Oren Kobiler, Amnon Amir, Donald L Court, Joel Stavans, Sankar Adhya, Amos B Oppenheim"
+      },
+      "evidence_kind": null,
+      "extracted_by": "quick-reader",
+      "confidence": null,
+      "testable_by": {
+        "properties": [
+          "fluorescence levels from promoter-gfp fusions",
+          "promoter activity",
+          "phage yield"
+        ],
+        "tools": [],
+        "requires_new_evaluator": true
+      },
+      "provenance": {
+        "doc_id": "PMC2327240",
+        "section": null,
+        "category": "mechanism",
+        "span": "bacteriophage lambda CI repressor",
+        "url": "https://paperclip.gxl.ai/citations/papers/PMC2327240"
+      }
+    },
+    {
+      "id": "ev_007",
+      "question_id": "tlpa",
+      "claim": "CII function is eliminated/downregulated following prophage induction (via FtsH/HflKC proteases after heat induction, or post-transcriptional downregulation overcoming Cro regulation).",
+      "claim_type": "mechanism",
+      "quantitative": null,
+      "support": null,
+      "citation": {
+        "doi": "10.1111/j.1365-2958.2008.06119.x",
+        "title": "Host responses influence on the induction of lambda prophage",
+        "year": 2008,
+        "journal": "Molecular Microbiology",
+        "authors": "Assaf Rokney, Oren Kobiler, Amnon Amir, Donald L Court, Joel Stavans, Sankar Adhya, Amos B Oppenheim"
+      },
+      "evidence_kind": null,
+      "extracted_by": "quick-reader",
+      "confidence": null,
+      "testable_by": {
+        "properties": [
+          "pE-gfp expression levels",
+          "CII protein levels by Western blot"
+        ],
+        "tools": [],
+        "requires_new_evaluator": true
+      },
+      "provenance": {
+        "doc_id": "PMC2327240",
+        "section": null,
+        "category": "mechanism",
+        "span": "lambda CII transcriptional activator",
+        "url": "https://paperclip.gxl.ai/citations/papers/PMC2327240"
+      }
+    },
+    {
+      "id": "ev_008",
+      "question_id": "tlpa",
+      "claim": "Supramolecular split-luciferase complementation and on-off switching via Q8 host-guest binding and competitive inhibitors.",
+      "claim_type": "mechanism",
+      "quantitative": null,
+      "support": null,
+      "citation": {
+        "doi": "10.1002/anie.201602807",
+        "title": "Supramolecular Control over Split\u2010Luciferase Complementation",
+        "year": 2016,
+        "journal": "Angewandte Chemie (International Ed. in English)",
+        "authors": "Ralph P. G. Bosmans, Jeroen M. Briels, Lech\u2010Gustav Milroy, Tom F. A. de\u2005Greef, Maarten Merkx, Luc Brunsveld"
+      },
+      "evidence_kind": null,
+      "extracted_by": "quick-reader",
+      "confidence": null,
+      "testable_by": {
+        "properties": [
+          "luminescence intensity",
+          "enzymatic activity"
+        ],
+        "tools": [],
+        "requires_new_evaluator": true
+      },
+      "provenance": {
+        "doc_id": "PMC5113697",
+        "section": null,
+        "category": "mechanism",
+        "span": "The paper establishes supramolecular split-enzyme complementation through host-guest binding, where split-luciferase fragment pairs functionalized with an N-terminal FGG sequence are brought together via cucurbit[8]uril (Q8) binding to restore enzymatic activity (on-off switching).",
+        "url": "https://paperclip.gxl.ai/citations/papers/PMC5113697"
+      }
+    }
+  ],
+  "unlabelled": 8
+}
