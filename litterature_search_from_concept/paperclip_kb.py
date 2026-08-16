@@ -5,8 +5,10 @@ paperclip_kb.py -- concept -> corpus -> knowledge base
 Pipeline:
   1. Domain expert writes a protein-design concept (free text).
   2. Claude turns it into (a) phrase-search shards, (b) mechanism grep patterns.
-  3. paperclip search  -> accumulating tagged set, ID scraped from stdout.
-  4. paperclip grep    -> categorized hits into knowledge_base_<slug>.txt
+  3. paperclip search  -> one result set PER phrase (searches do not
+     accumulate), every set ID scraped from stdout and kept.
+  4. paperclip grep    -> categorized hits, grepped across every set from
+     step 3 and concatenated, into knowledge_base_<slug>.txt
 
 Structural patterns (sequences, accessions, PDB, mutations) are hardcoded --
 they do not vary by concept and an LLM only degrades them.
@@ -171,15 +173,37 @@ def run(cmd: list, dry: bool) -> str:
     p = subprocess.run(
         cmd, capture_output=True, text=True, env=host_env(), timeout=420, check=False
     )
-    if p.returncode != 0:
+    # A crashed paperclip is indistinguishable from a genuine no-match unless
+    # this is checked for specifically (same failure mode litkb/paperclip.py's
+    # `_run` was fixed for: under `uv run`, paperclip's shebang can pick up
+    # this project's venv Python first on PATH, which lacks paperclip's own
+    # deps, so it crashes at import, prints a traceback to stderr, produces
+    # EMPTY stdout, and exits 1 -- the same code grep-style "no matches" uses).
+    # A genuine "ran fine, matched nothing" result either has something on
+    # stdout or has no stderr at all -- only nonzero exit + empty stdout +
+    # nonempty stderr is a real crash.
+    if p.returncode != 0 and not p.stdout and p.stderr:
+        tail = p.stderr[-2000:]
+        sys.exit(
+            f"CRASHED ({p.returncode}), no stdout, stderr present -- this is "
+            f"a crash, not a genuine no-match (stderr tail):\n{tail}"
+        )
+    # Exit 1 means "no matches" for grep-style commands (search included) --
+    # only exit codes >= 2 are real failures.
+    if p.returncode >= 2:
         sys.exit(f"FAILED ({p.returncode}):\n{p.stderr}")
     return p.stdout
 
 
 def search_all(
-    phrases: list[str], tag: str, n: int, sources: list[str], dry: bool
-) -> str | None:
-    set_id = None
+    phrases: list[str], n: int, sources: list[str], dry: bool
+) -> list[str]:
+    """Run one `paperclip search` per (source, phrase). Each search returns
+    its OWN result set -- there is no accumulation across calls, and
+    `paperclip merge` cannot union them (it only resolves its first
+    argument) -- so every set id seen is collected and returned, not just
+    the last one. `build_kb` then greps across all of them."""
+    set_ids: list[str] = []
     for source in sources:
         for phrase in phrases:
             out = run(
@@ -188,8 +212,6 @@ def search_all(
                     "search",
                     "-s",
                     source,
-                    "--tag",
-                    tag,
                     "-n",
                     str(n),
                     "-e",
@@ -199,8 +221,8 @@ def search_all(
             )
             found = SET_ID_RE.findall(out)
             if found:
-                set_id = found[-1]  # last mention = accumulating tagged set
-    return set_id
+                set_ids.append(found[-1])
+    return set_ids
 
 
 # ----------------------------------------------------------------------
@@ -208,34 +230,41 @@ def search_all(
 # ----------------------------------------------------------------------
 
 
-def build_kb(set_id: str, mechanism: list, outpath: Path, dry: bool) -> None:
+def build_kb(set_ids: list[str], mechanism: list, outpath: Path, dry: bool) -> None:
+    """Grep every category's patterns against EVERY set in `set_ids` and
+    concatenate the results. `paperclip search` does not accumulate results
+    across calls and `paperclip merge` cannot union sets (it only resolves
+    its first argument), so each set from stage 3 must be grepped
+    individually here rather than assuming one representative set covers
+    everything found."""
     categories = {"mechanism": mechanism, **STRUCTURAL}
     seen_global = set()
 
     with outpath.open("w") as fh:
         fh.write(
-            f"# knowledge base :: set {set_id} :: "
+            f"# knowledge base :: sets {', '.join(set_ids)} :: "
             f"{datetime.now(timezone.utc):%Y-%m-%d %H:%M} UTC\n"
         )
 
         for cat, patterns in categories.items():
-            cmd = ["paperclip", "grep", "--from", set_id, "-i", "-n"]
-            for p in patterns:
-                cmd += ["-e", p]
-            out = run(cmd, dry)
-
             fh.write(
                 f"\n\n{'=' * 70}\n## {cat.upper()}  "
                 f"({len(patterns)} patterns)\n{'=' * 70}\n"
             )
             kept = 0
-            for line in out.splitlines():
-                line = line.rstrip()
-                if not line or line in seen_global:
-                    continue  # a sentence can hit several categories
-                seen_global.add(line)
-                fh.write(line + "\n")
-                kept += 1
+            for set_id in set_ids:
+                cmd = ["paperclip", "grep", "--from", set_id, "-i", "-n"]
+                for p in patterns:
+                    cmd += ["-e", p]
+                out = run(cmd, dry)
+
+                for line in out.splitlines():
+                    line = line.rstrip()
+                    if not line or line in seen_global:
+                        continue  # a sentence can hit several categories/sets
+                    seen_global.add(line)
+                    fh.write(line + "\n")
+                    kept += 1
             fh.write(f"\n[{kept} unique lines]\n")
             print(f"  {cat:<14} {kept} lines", file=sys.stderr)
 
@@ -246,7 +275,7 @@ def build_kb(set_id: str, mechanism: list, outpath: Path, dry: bool) -> None:
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("concept", type=Path, help="text file with the design task")
-    ap.add_argument("--slug", required=True, help="short name; drives tag + outfile")
+    ap.add_argument("--slug", required=True, help="short name; drives outfile names")
     ap.add_argument("-n", type=int, default=500)
     ap.add_argument(
         "--sources",
@@ -279,7 +308,6 @@ def main() -> None:
         ap.error("--sources must contain at least one source")
 
     concept = args.concept.read_text()
-    tag = f"{args.slug}_literature"
     args.output_dir.mkdir(parents=True, exist_ok=True)
     plan_path = args.output_dir / f"plan_{args.slug}.json"
 
@@ -297,11 +325,11 @@ def main() -> None:
     print(f"      note: {plan.get('notes', '')}", file=sys.stderr)
 
     print("[2/3] searching", file=sys.stderr)
-    set_id = args.set_id or search_all(
-        plan["search_phrases"], tag, args.n, sources, args.dry_run
+    set_ids = [args.set_id] if args.set_id else search_all(
+        plan["search_phrases"], args.n, sources, args.dry_run
     )
 
-    if not set_id:
+    if not set_ids:
         if args.dry_run:
             print(
                 f"\ndry run: inspect {plan_path}, then rerun with "
@@ -313,11 +341,11 @@ def main() -> None:
             "no set ID found in search output -- check SET_ID_RE against "
             "what `paperclip search` actually prints"
         )
-    print(f"      set: {set_id}", file=sys.stderr)
+    print(f"      sets: {', '.join(set_ids)}", file=sys.stderr)
 
     print("[3/3] building knowledge base", file=sys.stderr)
     out = args.output_dir / f"knowledge_base_{args.slug}.txt"
-    build_kb(set_id, plan["mechanism_patterns"], out, args.dry_run)
+    build_kb(set_ids, plan["mechanism_patterns"], out, args.dry_run)
     manifest = {
         "created_at": datetime.now(timezone.utc).isoformat(),
         "concept_file": str(args.concept),
@@ -325,7 +353,7 @@ def main() -> None:
         "model": MODEL,
         "sources": sources,
         "paper_limit_per_search": args.n,
-        "set_id": set_id,
+        "set_ids": set_ids,
         "plan_file": str(plan_path),
         "knowledge_base_file": str(out),
         "evidence_status": "discovery_only_unverified",
