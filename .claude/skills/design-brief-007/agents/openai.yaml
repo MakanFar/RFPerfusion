@@ -1,0 +1,4 @@
+interface:
+  display_name: "Design Brief 007"
+  short_description: "Plan shards, sequences, and a scoring cascade"
+  default_prompt: "Use $design-brief-007 to turn my protein design question into a build plan with a proto-tools fitness cascade."

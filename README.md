@@ -47,6 +47,7 @@ src/rfperfusion/
     proto.py      isolated proto-tools/Modal bridge (discovery free; execution guarded + billable)
   stages/         one file per stage
 formulation_agent/                open design question → ranked, claim-verified research directions
+formulation_agent007/             design question → shards, mining plan, assembly recipe, scoring cascade
 litterature_search_from_concept/  concept → broad Paperclip corpus + categorized knowledge base
 proto/            isolated proto-tools MCP runtime (uv, py3.12) — Modal-backed heavy compute
 outputs/          generated artifacts (gitignored)
@@ -54,13 +55,14 @@ outputs/          generated artifacts (gitignored)
 
 ## Agent skills
 
-Six skills in `.claude/skills/` cover the pipeline end to end. `.agents` is a
+Seven skills in `.claude/skills/` cover the pipeline end to end. `.agents` is a
 symlink to `.claude`, so the same definitions work with either convention, and
 each skill ships an `agents/openai.yaml` for the Codex backend.
 
 | Skill | Stage | Role |
 |---|---|---|
 | `formulate-grounded-directions` | 0 | Ranked research directions with claim-level literature verification |
+| `design-brief-007` | 1 | Design question → shards, a mining plan, an assembly recipe, and a scoring cascade |
 | `mine-literature-from-concept` | 2 | Concept → broad Paperclip corpus and categorized knowledge base |
 | `write-program` | 3–5 | Author a proto-language design program — iterative search under weighted constraints |
 | `implement-constraint` | 4 | Implement, calibrate, and register a scoring function that does not ship with Proto |
@@ -104,6 +106,19 @@ uv run --project formulation_agent formulate-web
 Opens a local browser UI. `formulate` runs the same engine in the terminal.
 For Claude, run `claude auth login` once and set `FA_LLM_BACKEND=claude`.
 Details, guarantees and known corpus limitations: [formulation_agent/README.md](formulation_agent/README.md).
+
+## Design brief agent (007)
+
+```bash
+uv run --project formulation_agent007 formulate007-run \
+  --question "Design a protein that changes conformation in response to radiofrequency fields" \
+  --output-dir formulation_agent007/briefs/rf-switch
+```
+
+Emits a `concept_<slug>.txt` and reviewed `plan_<slug>.json` that drop straight
+into `paperclip_kb.py`, an extraction contract for the Paperclip agent, and a
+runbook for the Proto agent whose every gate names a real proto-tools key, a
+real metric, and a number. Details: [formulation_agent007/README.md](formulation_agent007/README.md).
 
 ## Tools
 
