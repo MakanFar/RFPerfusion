@@ -54,7 +54,7 @@ outputs/          generated artifacts (gitignored)
 
 ## Agent skills
 
-Six skills in `.claude/skills/` cover the pipeline end to end. `.agents` is a
+Seven skills in `.claude/skills/` cover the pipeline end to end. `.agents` is a
 symlink to `.claude`, so the same definitions work with either convention, and
 each skill ships an `agents/openai.yaml` for the Codex backend.
 
@@ -66,6 +66,7 @@ each skill ships an `agents/openai.yaml` for the Codex backend.
 | `implement-constraint` | 4 | Implement, calibrate, and register a scoring function that does not ship with Proto |
 | `proto-tools` | infra | Single tool invocations against the proto-tools catalogue on Modal |
 | `visualize-sequence-design` | demo | Compare input and designed sequences and visualize the differences |
+| `paperclip` | infra | Paperclip CLI bootstrap — literature retrieval and protein-database lookups |
 
 **Scope boundary.** `proto-tools` covers *one model, one input, one result*.
 Iterative design — propose, score, select, repeat — belongs in `write-program`,
