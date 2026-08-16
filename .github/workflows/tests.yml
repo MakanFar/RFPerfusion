@@ -1,0 +1,18 @@
+name: tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  litkb:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - name: Run the litkb suite
+        working-directory: litterature_search_from_concept
+        # No credentials needed: every test is offline, with paperclip and
+        # proto-tools calls monkeypatched.
+        run: uv run --project . pytest -q

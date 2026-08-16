@@ -1,0 +1,17 @@
+# agent scratch — internal ledgers, task briefs, review diffs
+.superpowers/
+
+# generated artifacts
+proto/outputs/
+**/__pycache__/
+*.pyc
+
+# environments
+.venv/
+**/.venv/
+
+# credentials — never commit
+.env
+.modal.toml
+
+.DS_Store

@@ -7,10 +7,70 @@ it could not check.
 Two documents define it. [`docs/PRD-framework.md`](docs/PRD-framework.md) is the
 framework: ideation → falsification → specification → generation → evaluation,
 with a mandatory human gate at spec approval.
-[`docs/PRD-(outdated).md`](<docs/PRD-(outdated).md>) is instance #1, the
+[`docs/PRD-instance-tlpa.md`](docs/PRD-instance-tlpa.md) is instance #1, the
 SWIR-actuated **TlpA** thermal switch, kept because its data contracts (§6) are
 still the ones the code implements.
 
+
+## Prerequisites
+
+Two accounts are required. Without them the pipeline searches nothing and
+scores nothing.
+
+**Paperclip** — every literature stage. Sign in once; it is an interactive
+browser flow:
+
+```bash
+paperclip login
+paperclip config          # expect: Auth OK
+```
+
+Paperclip needs Python >= 3.10 and its own dependencies on the interpreter that
+runs it. Its launcher is `#!/usr/bin/env python3`, so invoking it from inside a
+project venv picks the wrong interpreter and it crashes on import — see
+`host_env()` in `litterature_search_from_concept/paperclip_kb.py`. LLM reading
+is capped at **100 map operations per day**.
+
+**Modal** — every proto-tools execution, and billable:
+
+```bash
+uv sync --project proto
+uv run --project proto modal setup     # writes ~/.modal.toml
+```
+
+`proto-tools` discovery (`search_tools`, `get_tool_schema`) is free and needs no
+account. A few tools answer in-process with no GPU and no billing —
+`uniprot-fetch`, `alphafold-db-fetch` — so a real sequence and a real pLDDT are
+reachable before you authenticate anything.
+
+The tests need neither:
+
+```bash
+cd litterature_search_from_concept && uv run --project . pytest
+```
+
+119 tests, fully offline, with paperclip and proto-tools monkeypatched.
+
+## What runs today
+
+The product is a chain of agent skills plus two standalone agents. There is no
+single-command pipeline: each stage is invoked on its own, and its output is the
+next stage's input.
+
+```
+design question
+   │
+   ├─ formulate-grounded-directions ─→ ranked directions, claim-verified
+   │
+   └─ design-brief-007 ─→ shards · mining plan · assembly recipe · fitness cascade
+          │
+          ├─ plan_<slug>.json ─→ mine-literature-from-concept  (grep knowledge base)
+          │                   └─ litkb                          (typed evidence + artifacts)
+          │
+          └─ proto_brief_<slug>.md ─→ write-program / proto-tools ─→ scores
+```
+
+### 1 — Design brief
 
 ```bash
 FA7_LLM_BACKEND=claude uv run --project formulation_agent007 formulate007-run \
@@ -95,7 +155,7 @@ Installed skills are a snapshot. Inside this repo they load live from
 
 ```
 .claude/skills/                   nine agent skills (.agents → .claude)
-docs/                             PRD-framework (the loop), PRD-(outdated) (instance #1)
+docs/                             PRD-framework (the loop), PRD-instance-tlpa (instance #1)
 formulation_agent/                open question → ranked, claim-verified directions
 formulation_agent007/             question → shards, mining plan, cascade; briefs/ holds runs
 litterature_search_from_concept/  paperclip_kb.py (grep) + litkb/ (typed); outputs/ holds runs

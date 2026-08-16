@@ -7,7 +7,7 @@
 | Date | 2026-08-15 |
 | Status | Approved design, not yet implemented |
 | Supersedes | the `extract` and `evidence` stages of litkb 0.1.0 |
-| Related | `docs/PRD-framework.md` §4 §77, `docs/PRD-(outdated).md` §6.2 |
+| Related | `docs/PRD-framework.md` §4 §77, `docs/PRD-instance-tlpa.md` §6.2 |
 
 ---
 
