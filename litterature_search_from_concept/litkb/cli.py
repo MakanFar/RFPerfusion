@@ -14,7 +14,7 @@ import json
 import sys
 from pathlib import Path
 
-from . import contracts, patterns, report
+from . import contracts, patterns, proto, report
 from .paperclip import PaperclipError, count, grep_set, meta, search
 
 
@@ -25,6 +25,7 @@ def _load(path):
 def _emit(data, out):
     text = json.dumps(data, indent=2)
     if out:
+        Path(out).parent.mkdir(parents=True, exist_ok=True)
         Path(out).write_text(text + "\n")
         print(f"-> {out}", file=sys.stderr)
     else:
@@ -234,37 +235,17 @@ def cmd_validate(args):
 # ------------------------------------------------------------- registry
 
 
-def cmd_registry_check(args):
-    """Framework §77: the registry constrains ideation, so it is an INPUT.
-    Classes with no evaluator come back `requires_new_evaluator` -- a
-    legitimate output, not a discard."""
-    plan = _load(args.plan)
-    registry_path = Path(args.registry)
+def resolve_coverage(plan, catalog):
+    """Resolve each mechanism class against the proto catalogue.
 
-    if not registry_path.exists():
-        _emit({
-            "registry": str(registry_path),
-            "status": "missing",
-            "classes": [{"id": c["id"], "evaluator_coverage": "unknown"}
-                        for c in plan["mechanism_classes"]],
-            "note": "No evaluator registry on disk, so coverage cannot be resolved. "
-                    "registry/evaluators.json was removed in commit 945164f with the "
-                    "Tamarind integration and has no replacement yet.",
-        }, args.out)
-        return
-
-    raw = _load(registry_path)
-    entries = raw if isinstance(raw, list) else raw.get("evaluators", [])
-    known = {e.get("evaluator_id"): e for e in entries}
-
+    §6: an uncalibrated evaluator may run but may not rank, so a class is
+    `full` only when every tool it names is both known and validated."""
+    known = {t["key"]: t for t in catalog["tools"]}
     classes = []
     for c in plan["mechanism_classes"]:
         wanted = c.get("candidate_evaluators", [])
         bound = [w for w in wanted if w in known]
         usable = [b for b in bound if known[b].get("status") == "validated"]
-        # §6: uncalibrated evaluators may run, but their scores may not rank
-        # candidates -- so a class is only "full" once every bound evaluator
-        # is validated and nothing it asked for is unresolved.
         if not wanted or not bound:
             coverage = "none"
         elif len(bound) == len(wanted) and len(usable) == len(bound):
@@ -279,8 +260,30 @@ def cmd_registry_check(args):
             "uncalibrated": [b for b in bound if b not in usable],
             "requires_new_evaluator": coverage == "none",
         })
-    _emit({"registry": str(registry_path), "status": "loaded", "classes": classes},
-          args.out)
+    return classes
+
+
+def cmd_proto_sync(args):
+    tools = proto.fetch_tools(args.project)
+    print(f"  {len(tools)} tools from proto-tools", file=sys.stderr)
+    catalog = proto.build_catalog(tools, lambda k: proto.fetch_input_doc(k, args.project))
+    parsed = sum(1 for t in catalog["tools"] if t["max_length"] is not None)
+    print(f"  {parsed}/{len(tools)} have a parseable length cap", file=sys.stderr)
+    _emit(catalog, args.out)
+
+
+def cmd_registry_check(args):
+    plan = _load(args.plan)
+    path = Path(args.registry)
+    if not path.exists():
+        _emit({"registry": str(path), "status": "missing",
+               "classes": [{"id": c["id"], "evaluator_coverage": "unknown"}
+                           for c in plan["mechanism_classes"]],
+               "note": "run `litkb proto-sync -o registry/proto_catalog.json` first"},
+              args.out)
+        return
+    _emit({"registry": str(path), "status": "loaded",
+           "classes": resolve_coverage(plan, _load(path))}, args.out)
 
 
 # --------------------------------------------------------------- report
@@ -340,9 +343,14 @@ def main(argv=None):
     p.add_argument("evidence")
     p.set_defaults(fn=cmd_validate)
 
+    p = sub.add_parser("proto-sync", help="regenerate the proto-tools constraint catalogue")
+    p.add_argument("--project", default="../proto")
+    p.add_argument("-o", "--out")
+    p.set_defaults(fn=cmd_proto_sync)
+
     p = sub.add_parser("registry-check", help="resolve mechanism classes against the evaluator registry")
     p.add_argument("plan")
-    p.add_argument("--registry", default="registry/evaluators.json")
+    p.add_argument("--registry", default="../registry/proto_catalog.json")
     p.add_argument("-o", "--out")
     p.set_defaults(fn=cmd_registry_check)
 
