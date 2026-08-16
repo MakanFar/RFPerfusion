@@ -1,7 +1,16 @@
-# RFPerfusion
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="assets/logo/resolve-wide-dark.svg">
+    <img src="assets/logo/resolve-wide.svg" alt="RFPerfusion" width="200">
+  </picture>
+</p>
 
-**Turn a protein design question into cited evidence and scored candidates —
-and get told, explicitly, what could not be checked.**
+<h1 align="center">RFPerfusion</h1>
+
+<p align="center">
+  <b>Turn a protein design question into cited evidence and scored candidates —<br>
+  and get told, explicitly, what could not be checked.</b>
+</p>
 
 Ask it *"design a protein that changes conformation in response to
 radiofrequency fields"* and it decomposes the question into buildable parts,

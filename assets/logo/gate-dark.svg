@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="RFPerfusion">
+  <path d="M15.5 24.2A9 9 0 0 1 15.5 39.8" stroke="#F1F5F9" stroke-width="3.3"/>
+  <path d="M18.8 18.6A15.5 15.5 0 0 1 18.8 45.4" stroke="#F1F5F9" stroke-width="3.3"/>
+  <path d="M22.0 12.9A22 22 0 0 1 22.0 51.1" stroke="#F1F5F9" stroke-width="3.3"/>
+  <path d="M42 7v17.5M42 39.5V57" stroke="#F1F5F9" stroke-width="3.3"/>
+  <circle cx="56" cy="32" r="4.4" fill="#EA580C" stroke="none"/>
+</svg>
