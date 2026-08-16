@@ -101,6 +101,68 @@ def test_map_papers_defaults_to_quick_reader_because_other_workers_are_gated():
     assert captured_args[0][i + 1] == "quick-reader"
 
 
+def _artifact(value="TAGTTCCTTCTTTCAGCAGTTT", verbatim=True,
+              set_id="s_abc123", doc_id="PMC2040520"):
+    return {"value": value, "verbatim": verbatim,
+            "provenance": {"set_id": set_id, "doc_id": doc_id}}
+
+
+def test_confirm_in_source_literal_trusts_doc_id_match_even_if_text_snippet_differs():
+    """Regression for the live art_001/PMC2040520 case: `paperclip grep`'s
+    `text` field is a truncated display snippet and can legitimately come
+    from a different paragraph than the actual hit. With literal=True (the
+    caller asserting it used `-F`), a doc_id match alone must confirm --
+    requiring the value to also appear in `text` produced false rejections
+    of sequences that ARE in the paper."""
+    art = _artifact()
+
+    def grep_fn(set_id, patterns):
+        return [{"doc_id": "PMC2040520",
+                 "text": "To probe for potential influences of the C-terminal extensi..."}]
+
+    assert reader.confirm_in_source(art, grep_fn, literal=True) is True
+
+
+def test_confirm_in_source_literal_still_fails_on_different_doc():
+    art = _artifact(doc_id="PMC2040520")
+
+    def grep_fn(set_id, patterns):
+        return [{"doc_id": "PMC9999999", "text": "some unrelated snippet"}]
+
+    assert reader.confirm_in_source(art, grep_fn, literal=True) is False
+
+
+def test_confirm_in_source_fails_before_grep_when_not_verbatim():
+    art = _artifact(verbatim=False)
+    calls = []
+
+    def grep_fn(set_id, patterns):
+        calls.append((set_id, patterns))
+        return [{"doc_id": art["provenance"]["doc_id"], "text": art["value"]}]
+
+    assert reader.confirm_in_source(art, grep_fn, literal=True) is False
+    assert calls == []
+
+
+def test_confirm_in_source_non_literal_keeps_old_substring_behaviour():
+    art = _artifact()
+
+    # Same doc_id, but the text snippet does not contain the value -- under
+    # the conservative (default, non-literal) fallback this must still fail,
+    # since the grep itself cannot be trusted to have matched literally.
+    def grep_fn(set_id, patterns):
+        return [{"doc_id": "PMC2040520",
+                 "text": "To probe for potential influences of the C-terminal extensi..."}]
+
+    assert reader.confirm_in_source(art, grep_fn) is False
+    assert reader.confirm_in_source(art, grep_fn, literal=False) is False
+
+    def grep_fn_with_value(set_id, patterns):
+        return [{"doc_id": "PMC2040520", "text": f"context {art['value']} context"}]
+
+    assert reader.confirm_in_source(art, grep_fn_with_value, literal=False) is True
+
+
 def test_map_papers_raises_when_output_has_no_map_header():
     """The worker-gating error also exits 1 with an empty stdout (its
     message is on stderr) -- see task-5-report.md Fix round 2 for the

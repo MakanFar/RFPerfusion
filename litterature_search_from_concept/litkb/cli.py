@@ -351,11 +351,16 @@ def cmd_bind(args):
         # `paperclip grep -e` as a REGEX, and a sequence containing `*`
         # (stop codon) or `.` (masked residue) could then match text that
         # is not actually the sequence, producing a false confirmation --
-        # exactly what this check exists to prevent.
+        # exactly what this check exists to prevent. `literal=True` below is
+        # the other half of that same guarantee: it asserts to
+        # confirm_in_source that this closure did in fact request `-F`, so
+        # confirm_in_source can trust a doc_id match without also requiring
+        # the value to appear in grep's (truncated, unreliable) text snippet.
         art["provenance"]["confirmed_in_source"] = reader.confirm_in_source(
             {"value": art["value"], "verbatim": art["provenance"]["verbatim"],
              "provenance": art["provenance"]},
             lambda set_id, patterns: grep_set(set_id, patterns, fixed=True),
+            literal=True,
         )
         if not art["provenance"]["confirmed_in_source"]:
             if art["kind"] == "mutation":

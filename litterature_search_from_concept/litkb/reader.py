@@ -185,20 +185,41 @@ DIG_QUERY = (
 )
 
 
-def confirm_in_source(artifact, grep_fn):
+def confirm_in_source(artifact, grep_fn, literal=False):
     """Re-grep an extracted sequence against its own source document.
 
     An LLM asked for a sequence will produce a plausible one, and a fabricated
     sequence passes every alphabet and length check perfectly. This is the only
     check that distinguishes real from well-formed.
 
-    CRITICAL: grep_fn must perform LITERAL matching, not regex. A sequence is
-    not a regex — `*` (stop codon) and `.` (masked/ambiguous residue) occur in
-    real sequence listings and would otherwise change the pattern's meaning and
-    permit false confirmation. The call site should request fixed-string matching
-    (e.g., grep_set(..., fixed=True))."""
+    `literal` tells this function what kind of matching `grep_fn` actually
+    performed -- it cannot infer that from the hits alone, so the caller must
+    assert it:
+
+    - `literal=True`: the caller ran a fixed-string grep (e.g.
+      `grep_set(..., fixed=True)`, i.e. `paperclip grep -F`). A hit whose
+      `doc_id` matches the claimed document is trusted outright -- `-F`
+      already guarantees the matched span equals the pattern byte for byte.
+      We deliberately do NOT also require `artifact["value"] in h["text"]`
+      here: confirmed live (art_001, TAGTTCCTTCTTTCAGCAGTTT in PMC2040520),
+      `paperclip grep`'s `text` field is a truncated, elided DISPLAY SNIPPET
+      that can come from a different paragraph than the actual match --
+      not an authoritative carrier of the matched span. Requiring the
+      substring there produced false rejections of genuinely present
+      sequences.
+    - `literal=False` (default): grep_fn's matching mode is unknown or
+      regex-based, so the grep itself cannot be trusted -- a sequence
+      containing `*` (stop codon) or `.` (masked/ambiguous residue) is not
+      a literal string and could match text that is not actually the
+      sequence. As a conservative fallback we additionally require
+      `artifact["value"] in h["text"]`, accepting that this will sometimes
+      false-reject a real match (per the truncation issue above) in
+      exchange for never false-confirming a fabricated one.
+    """
     if not artifact.get("verbatim"):
         return False
     hits = grep_fn(artifact["provenance"]["set_id"], [artifact["value"]])
+    if literal:
+        return any(h["doc_id"] == artifact["provenance"]["doc_id"] for h in hits)
     return any(h["doc_id"] == artifact["provenance"]["doc_id"] and
                artifact["value"] in h["text"] for h in hits)
