@@ -25,17 +25,33 @@ claude plugin install rfperfusion@rfperfusion
 
 Inside this repo the nine agent skills load automatically and need no install.
 
-Two accounts unlock the pipeline:
+### Dependencies
 
-| | Used for | Cost |
+Three pieces of software and two accounts.
+
+| | What it is | Setup |
 |---|---|---|
-| [Paperclip](https://paperclip.gxl.ai) | Literature search and reading | Free · 100 LLM reads/day |
-| [Modal](https://modal.com) | Structure prediction, scoring, generation | Billable, per-tool approval |
+| [**uv**](https://docs.astral.sh/uv/) | Runs every project here | `curl -LsSf https://astral.sh/uv/install.sh \| sh` |
+| [**Paperclip**](https://paperclip.gxl.ai) | Literature CLI (`gxl-paperclip`) | Install from paperclip.gxl.ai, then `paperclip login` |
+| [**proto-tools**](https://github.com/evo-design/proto-tools) | Computational biology tool catalogue | `uv sync --project proto` |
+| [**Paperclip account**](https://paperclip.gxl.ai) | Search and full-text reading | Free · 100 LLM reads/day |
+| [**Modal account**](https://modal.com) | GPU compute for prediction and scoring | Billable · per-tool approval |
 
 ```bash
+uv sync --project proto                  # installs proto-tools
 paperclip login                          # interactive browser sign-in
-uv sync --project proto && uv run --project proto modal setup
+uv run --project proto modal setup       # interactive; writes ~/.modal.toml
 ```
+
+Verify:
+
+```bash
+paperclip config                         # expect an authenticated account
+uv run --project proto proto-tools list  # 140 tools in the catalogue
+```
+
+proto-tools is what reaches Modal — the catalogue and its schemas are readable
+without a Modal account, and only execution needs one.
 
 You can try a lot before signing up for either: the test suite, tool discovery,
 and a few database tools that run locally — see [Without an
