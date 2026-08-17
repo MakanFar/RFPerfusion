@@ -117,3 +117,44 @@ def test_validate_plan_exception_types_are_unchanged():
         kb.validate_plan(dict(GOOD, mechanism_patterns=[1, 2]))
 
     assert kb.validate_plan(GOOD) == GOOD
+
+
+def test_first_violation_wins_not_any_type_violation():
+    """`validate_plan` must select its exception from the FIRST violation
+    (matching the old, single-raise-on-first-hit behaviour), not from
+    whether ANY violation across the whole plan is type-kind. A plan can
+    fail a value-kind check (e.g. empty search_phrases) AND a type-kind
+    check (bad notes) at once; the old code raised ValueError for that case
+    because it hit the value-kind problem first and never got to `notes`."""
+    kb = _load_paperclip_kb()
+
+    with pytest.raises(ValueError):
+        kb.validate_plan(dict(GOOD, search_phrases=[], notes=123))
+
+    with pytest.raises(ValueError):
+        kb.validate_plan(dict(GOOD, mechanism_patterns=[1, 2], notes=123))
+
+    # type-kind first still wins when it genuinely is first.
+    with pytest.raises(TypeError):
+        kb.validate_plan("not a dict")
+
+    # a notes-only violation is still a TypeError.
+    with pytest.raises(TypeError):
+        kb.validate_plan(dict(GOOD, notes=123))
+
+
+def test_check_emits_errors_in_the_documented_evaluation_order():
+    """Pins the order `check()` must emit errors in for a plan with several
+    simultaneous violations: search_phrases, then mechanism_patterns, then
+    notes -- matching the old inline checks' evaluation order. `validate_plan`
+    relies on `errors[0]` naming the FIRST violation; if this order ever
+    drifts, this test must fail loudly rather than let that drift by
+    silently, since it would flip which exception type gets raised."""
+    plan = {"search_phrases": [], "mechanism_patterns": [1, 2], "notes": 123}
+    errors = plan_contract.check(plan)
+    assert [msg for _, msg in errors] == [
+        "brief plan.search_phrases must be a non-empty list",
+        "brief plan.mechanism_patterns must contain non-empty strings",
+        "brief plan.notes must be a string",
+    ]
+    assert [kind for kind, _ in errors] == ["value", "value", "type"]
