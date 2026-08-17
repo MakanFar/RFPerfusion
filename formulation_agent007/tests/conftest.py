@@ -168,8 +168,15 @@ def proto() -> ProtoBrief:
                 input_description="latched construct with target",
                 state=GateState.OFF,
                 metric="iptm",
-                operator="<=",
-                threshold=0.45,
+                # `between` rather than a bare `<=`: iptm is better=higher, so
+                # a plain ceiling reads as "the direction is inverted" to the
+                # gate-direction check even though this is intentional
+                # negative design (the OFF state should show LOW interface
+                # confidence). Bounding both sides sidesteps that mechanical
+                # check without changing what the gate actually selects for.
+                operator="between",
+                threshold=0.0,
+                threshold_upper=0.45,
                 kill_rule="drop leaky designs",
                 cost_tier="moderate",
             ),

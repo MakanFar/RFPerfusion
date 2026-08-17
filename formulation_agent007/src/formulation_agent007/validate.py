@@ -25,6 +25,7 @@ import re
 
 from .catalog import (
     INTERFACE_METRICS,
+    METRIC_DIRECTION,
     PROTO_METRICS,
     cost_rank,
     gate_cost_tier,
@@ -281,6 +282,24 @@ def validate_proto(proto: ProtoBrief) -> list[str]:
                 f"metric these tools emit; choose one of: "
                 f"{', '.join(sorted(PROTO_METRICS))}"
             )
+        # A gate thresholding a better=higher metric with `<=` keeps the worst
+        # candidates and kills the best. The cascade still reads fluently, which
+        # is exactly why this needs checking mechanically.
+        direction = METRIC_DIRECTION.get(gate.metric)
+        if direction and gate.operator != "between":
+            floor = gate.operator in (">=", ">")
+            if direction == "higher" and not floor:
+                problems.append(
+                    f"gate {gate.order} keeps {gate.metric!r} {gate.operator} "
+                    f"{gate.threshold:g}, but higher is better for that metric; "
+                    f"the direction is inverted"
+                )
+            elif direction == "lower" and floor:
+                problems.append(
+                    f"gate {gate.order} keeps {gate.metric!r} {gate.operator} "
+                    f"{gate.threshold:g}, but lower is better for that metric; "
+                    f"the direction is inverted"
+                )
         if gate.operator == "between":
             if gate.threshold_upper is None:
                 problems.append(

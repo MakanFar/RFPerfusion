@@ -41,11 +41,47 @@ METRIC_DIRECTION: dict[str, str] = {
 }
 TOOLS_BY_CATEGORY: dict[str, list[str]] = _SNAPSHOT["categories"]
 
+# `proto_catalog.json` is the fuller per-tool schema the snapshot above was
+# distilled from. It is read only for the one thing the distilled snapshot
+# doesn't carry: which metrics a tool's own schema flags `primary` -- "the
+# number you actually look at" rather than a secondary readout bundled
+# alongside it. Read-only; never modified, per the same offline-snapshot
+# contract as _SNAPSHOT_PATH above.
+_CATALOG_PATH = Path(__file__).resolve().parents[3] / "registry" / "proto_catalog.json"
+
+with _CATALOG_PATH.open() as _fh:
+    _CATALOG = json.load(_fh)
+
+_PRIMARY_METRICS: frozenset[str] = frozenset(
+    measure["metric"]
+    for tool in _CATALOG["tools"]
+    for measure in tool.get("measures", [])
+    if measure.get("primary")
+)
+
+# A metric counts as "widely shared" when several unrelated tools emit it --
+# these are the confidence signals a design is likely to lean on regardless
+# of which specific predictor ends up in the cascade.
+_WIDELY_SHARED_MIN_TOOLS = 5
+_WIDELY_SHARED_METRICS: frozenset[str] = frozenset(
+    name for name, spec in _SNAPSHOT["metrics"].items()
+    if len(spec["tools"]) >= _WIDELY_SHARED_MIN_TOOLS
+)
+
 # A metric is an interface metric when every tool emitting it is a complex
 # scorer. Derived rather than listed, so it cannot drift independently.
+#
+# "iptm" is checked as a substring, not a prefix: `protein_iptm`, `ligand_iptm`
+# and `pair_chains_iptm` (boltz2-prediction) are all interface-predicted-TM
+# variants that happen to put a qualifier in front. `chains_` (plural) and
+# `i_` catch boltz2's per-chain-pair `chains_ptm` and germinal-design's
+# `i_ptm` / `i_pae` -- both tools' own naming for "this value is about the
+# interface, not a single chain" (contrast `chain_ptm`, singular, which is a
+# per-chain fold-confidence value and deliberately NOT matched here).
 INTERFACE_METRICS: frozenset[str] = frozenset(
     name for name in _SNAPSHOT["metrics"]
-    if name.startswith(("iptm", "chain_pair_iptm", "ipsae", "pdockq"))
+    if "iptm" in name
+    or name.startswith(("ipsae", "pdockq", "chains_", "i_"))
     or "interface" in name
     or "iplddt" in name
 )
@@ -117,4 +153,29 @@ def catalogue_digest() -> str:
     lines = []
     for category, keys in sorted(TOOLS_BY_CATEGORY.items()):
         lines.append(f"{category.replace('_', ' ')}: {', '.join(sorted(keys))}")
+    return "\n".join(lines)
+
+
+def metric_digest() -> str:
+    """Compact, direction-grouped metric listing for a prompt.
+
+    Deliberately NOT the full 170-metric snapshot -- dumping all of it would
+    swamp the prompt and get skimmed rather than read. This renders the
+    subset a model designing a cascade is actually likely to need: metrics
+    the registry flags `primary` for at least one tool, plus metrics several
+    different tools emit (the shared confidence vocabulary -- avg_plddt,
+    iptm, and the like). Grouped by `better=` direction so a gate cannot
+    threshold one backwards without the prompt itself having said which way
+    is which.
+    """
+    selected = (_PRIMARY_METRICS | _WIDELY_SHARED_METRICS) & PROTO_METRICS
+    by_direction: dict[str, list[str]] = {}
+    for name in selected:
+        by_direction.setdefault(METRIC_DIRECTION.get(name, "context-dependent"), []).append(name)
+
+    lines = []
+    for direction in ("higher", "lower", "context-dependent"):
+        names = sorted(by_direction.get(direction, []))
+        if names:
+            lines.append(f"better={direction}: {', '.join(names)}")
     return "\n".join(lines)

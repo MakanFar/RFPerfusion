@@ -27,7 +27,13 @@ shows it says so explicitly.
 
 from __future__ import annotations
 
-from .catalog import catalogue_digest
+from .catalog import (
+    CHEAP_FAMILIES,
+    EXPENSIVE_FAMILIES,
+    MODERATE_FAMILIES,
+    catalogue_digest,
+    metric_digest,
+)
 
 # --------------------------------------------------------------------------
 # shared context block
@@ -268,19 +274,36 @@ Rules, all enforced by a validator that will reject your answer:
   * `tool_keys` must be keys from the catalogue above, spelled exactly. If the
     capability you want is not in the list, the design cannot use it — pick a
     different gate. Do not invent a key.
-  * `metric` must be something those tools actually emit: plddt, mean_plddt,
-    ptm, iptm, pae, ipsae, pdockq2, tm_score, rmsd, backbone_rmsd, ddg,
-    dg_fold, binding_affinity, vina_score, population_fraction, cluster_count,
-    ensemble_rmsf, sequence_recovery, pseudo_perplexity, log_likelihood,
-    sequence_identity, metal_site_probability, sasa, contact_count,
-    helix_fraction, radius_of_gyration.
+  * `metric` must be something these tools actually emit. The registry has
+    170 real metrics in total; a representative subset, grouped by which
+    direction is good (get this backwards and the validator rejects the
+    gate -- see the direction rule below), is:
+    {metric_digest()}
+    This is not exhaustive and not every tool emits every metric on it --
+    confirm what a SPECIFIC tool emits before gating on it.
+  * The comparison direction must agree with the metric's own `better`
+    direction: a `better=higher` metric (like avg_plddt or iptm) needs a
+    floor (`>=`/`>`), a `better=lower` metric (like avg_pae or perplexity)
+    needs a ceiling (`<=`/`<`). Getting this backwards keeps the WORST
+    candidates and kills the best -- the cascade still reads fluently, which
+    is exactly why a validator checks it mechanically. `between` is exempt
+    from this rule because it names both bounds explicitly; use `between`
+    for a metric where you deliberately want the "bad" end of its own scale
+    -- an OFF-state negative-design gate wanting LOW iptm is `iptm between
+    0.0 and 0.45`, not `iptm <= 0.45`, precisely because iptm is
+    better=higher and a bare ceiling would flag as inverted even though
+    the low value is the intended, deliberate target here.
   * `threshold` is a real number you are prepared to defend. Use 'between' with
     `threshold_upper` where a window is what matters — marginal stability is a
     window, not a maximum, and getting that right is often the whole design.
-  * `cost_tier` must match the tools: cheap (esmfold, esm2, esmc, proteinmpnn,
-    esm_if1, dssp, alignment, retrieval), moderate (boltz2, chai1, protenix,
-    ligandmpnn, metal3d, pdockq2, ipsae, vina, pyrosetta), expensive
-    (alphafold2, alphafold3, rf3, bioemu, bindcraft).
+  * `cost_tier` is decided by the tool key's MODEL FAMILY -- the part before
+    the first `-` (so `boltz2-prediction` and `boltz2-affinity` are both
+    family `boltz2`). Cheap families: {', '.join(sorted(CHEAP_FAMILIES))}.
+    Moderate families: {', '.join(sorted(MODERATE_FAMILIES))}. Expensive
+    families: {', '.join(sorted(EXPENSIVE_FAMILIES))}. A family on none of
+    these lists defaults to expensive. Declare the tier the family actually
+    resolves to -- the validator recomputes it from `tool_keys` and rejects
+    a mismatch.
   * The cascade MUST be ordered cheap-first. Expensive tools only ever see
     candidates that already survived the cheap ones. This is not a style
     preference; it is the difference between a run that finishes and one that
@@ -292,8 +315,9 @@ Rules, all enforced by a validator that will reject your answer:
     fail to do the thing. Most designs die there, and a cascade without it
     ranks constitutively-on constructs at the top.
   * `state` says which structure is being scored: single, on, off, or contrast.
-    Interface metrics (iptm, ipsae, pdockq2, binding_affinity, vina_score)
-    require a complex, so they can never be state='single'.
+    Interface metrics (iptm and its variants, ipsae, pdockq2, pdockq,
+    interface_dG and the rest of the interface_* family) require a complex,
+    so they can never be state='single'.
   * `kill_rule` says what happens to a candidate that fails. It must actually
     kill or demote something.
 
@@ -314,12 +338,28 @@ Then:
                        evidence and not a calibrated ranking signal.
 
 EXAMPLE OF THE FORM ONLY (a two-state binder-release design):
-  1 esmfold  mean_plddt >= 75      cheap      kill outright
-  2 boltz2   iptm <= 0.45  OFF     moderate   negative design; most deaths here
-  3 boltz2   iptm >= 0.80  ON      moderate   decisive
-  4 bioemu   population_fraction between 0.15 and 0.85, two clusters at
-             tm_score <= 0.6                  expensive
-  5 pyrosetta ddg between 0.5 and 2.5         moderate  <-- WRONG: this comes
-             after an expensive gate. Move it before bioemu.
-Note both what that example gets right and the deliberate ordering error in it. \
-Do not reuse its content unless the question calls for it."""
+  1 esmfold-prediction                       avg_plddt >= 0.75
+      single    cheap     kill outright
+  2 boltz2-prediction                        iptm between 0.0 and 0.45
+      OFF       moderate  negative design against the target; most deaths
+                          here. `between`, not a bare `iptm <= 0.45`: iptm is
+                          better=higher, so a ceiling alone reads as an
+                          inverted gate even though LOW confidence is the
+                          deliberate, intended target for a state that must
+                          not bind.
+  3 boltz2-prediction                        iptm >= 0.80
+      ON        moderate  decisive: this is the function that was asked for.
+  4 pyrosetta-interface-analyzer             interface_dG <= -10.0
+      ON        moderate  binding must also be energetically favourable, not
+                          just confident.
+
+What this cascade deliberately does NOT contain: a gate on the population
+balance between the ON and OFF conformations. bioemu-sample is the tool that
+samples the conformational ensemble, but the current registry snapshot shows
+it publishing no metrics block at all -- no relative-population weighting
+between conformers, no count of clusters found, nothing to threshold on.
+That is a real gap in what this toolchain can score today, not an oversight
+in this example. State that gap plainly in `known_limitations` rather than
+inventing a metric to paper over it.
+
+Do not reuse this example's content unless the question calls for it."""

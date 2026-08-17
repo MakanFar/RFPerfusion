@@ -42,11 +42,60 @@ def test_cost_tier_resolves_by_model_family():
     # stay hand-maintained -- but keyed by family so real keys resolve.
     assert catalog.cost_tier("esmfold-prediction") == "cheap"
     assert catalog.cost_tier("boltz2-prediction") == "moderate"
-    assert catalog.cost_tier("bioemu-sampling") == "expensive"
+    assert catalog.cost_tier("bioemu-sample") == "expensive"
 
 
 def test_unknown_family_is_treated_as_costly():
     assert catalog.cost_tier("never-heard-of-it") == "expensive"
+
+
+def test_interface_metrics_catches_qualified_iptm_variants():
+    # These are real boltz2-prediction / germinal-design metrics that a
+    # prefix-only heuristic (startswith "iptm") used to miss because the
+    # qualifier comes first: protein_iptm, ligand_iptm, pair_chains_iptm,
+    # chains_ptm, i_ptm, i_pae.
+    for present in (
+        "protein_iptm", "ligand_iptm", "pair_chains_iptm", "chains_ptm",
+        "i_ptm", "i_pae",
+    ):
+        assert present in catalog.INTERFACE_METRICS, present
+
+
+def test_metric_digest_only_names_real_metrics():
+    digest = catalog.metric_digest()
+    # crude tokenizer: comma/space separated, strip the "better=..." labels
+    for line in digest.splitlines():
+        _, _, rest = line.partition(":")
+        for token in rest.split(","):
+            name = token.strip()
+            if name:
+                assert name in catalog.PROTO_METRICS, name
+
+
+def test_metric_digest_is_grouped_by_direction():
+    digest = catalog.metric_digest()
+    assert "better=higher" in digest
+    assert "better=lower" in digest
+
+
+def test_metric_digest_does_not_dump_the_whole_snapshot():
+    digest = catalog.metric_digest()
+    named = sum(len(line.partition(":")[2].split(",")) for line in digest.splitlines())
+    assert named < len(catalog.PROTO_METRICS)
+
+
+def test_metric_digest_prefers_primary_and_shared_metrics():
+    digest = catalog.metric_digest()
+    for present in ("avg_plddt", "iptm", "avg_pae", "perplexity", "confidence_score"):
+        assert present in digest
+
+
+def test_interface_metrics_does_not_catch_single_chain_confidence():
+    # chain_ptm/chain_plddt are per-chain fold-confidence values, not
+    # interface-specific -- the "chains_" (plural) / "i_" heuristic must not
+    # widen to swallow the singular "chain_" family or the bare metrics.
+    for absent in ("ptm", "plddt", "chain_ptm", "chain_plddt", "pae"):
+        assert absent not in catalog.INTERFACE_METRICS, absent
 
 
 @pytest.mark.slow
