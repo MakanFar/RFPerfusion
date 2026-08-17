@@ -155,22 +155,40 @@ def merge_constraints(from_schema, from_doc):
     return merged
 
 
-def build_catalog(tools, doc_fetcher):
-    """tools: parsed `proto-tools list --json`. doc_fetcher: key -> input doc."""
-    entries = []
+CATALOG_SCHEMA_VERSION = 2
+
+
+def build_catalog(tools, doc_fetcher, schema_fetcher, output_fetcher):
+    """tools: parsed `proto-tools list --json`.
+
+    Three sources now, in descending order of trustworthiness: the JSON
+    Schema, the metric-spec table, and the prose input doc. `measures` is
+    derived rather than curated -- the previous hand-curated column was
+    empty for all 140 tools, which made `resolve_properties` a check that
+    could not return false.
+    """
+    entries, failures = [], []
     for t in tools:
-        parsed = parse_input_doc(doc_fetcher(t["key"]))
+        key = t["key"]
+        constraints = merge_constraints(
+            parse_input_schema(schema_fetcher(key)),
+            parse_input_doc(doc_fetcher(key)),
+        )
+        parsed_metrics = parse_metrics_doc(output_fetcher(key))
+        failures.extend({"key": key, "line": line}
+                        for line in parsed_metrics["failures"])
         entries.append({
-            "key": t["key"],
+            "key": key,
             "category": t.get("category"),
             "uses_gpu": t.get("uses_gpu"),
-            # measures/status are curated by hand -- proto-tools cannot supply
-            # them, and framework §6 forbids ranking on an uncalibrated tool.
-            "measures": [],
+            "measures": parsed_metrics["measures"],
+            # Derived capability, never calibration: framework section 6
+            # still forbids ranking on an uncalibrated tool.
             "status": "needs_calibration",
-            **parsed,
+            **constraints,
         })
-    return {"tools": entries, "n_tools": len(entries)}
+    return {"schema_version": CATALOG_SCHEMA_VERSION, "tools": entries,
+            "n_tools": len(entries), "parse_failures": failures}
 
 
 def fetch_tools(project="../proto"):
@@ -184,6 +202,40 @@ def fetch_input_doc(key, project="../proto"):
     return subprocess.run(
         ["uv", "run", "--project", project, "proto-tools", "input", key],
         capture_output=True, text=True).stdout
+
+
+def fetch_schema(key, project="../proto"):
+    out = subprocess.run(
+        ["uv", "run", "--project", project, "proto-tools", "schema", key],
+        capture_output=True, text=True).stdout
+    try:
+        return json.loads(out[out.index("{"):out.rindex("}") + 1])
+    except (ValueError, json.JSONDecodeError):
+        return {}
+
+
+def fetch_output_doc(key, project="../proto"):
+    return subprocess.run(
+        ["uv", "run", "--project", project, "proto-tools", "output", key],
+        capture_output=True, text=True).stdout
+
+
+def load_catalog(path):
+    """Read a registry, refusing anything but the current schema version.
+
+    Coercing a v1 registry would silently reinstate the empty `measures`
+    column this work exists to remove, and a silently mis-read constraint
+    is exactly the fail-open behaviour `check()` refuses.
+    """
+    with open(path) as fh:
+        catalog = json.load(fh)
+    version = catalog.get("schema_version")
+    if version != CATALOG_SCHEMA_VERSION:
+        raise ValueError(
+            f"{path}: schema_version {version!r}, expected "
+            f"{CATALOG_SCHEMA_VERSION}. Regenerate with `litkb proto-sync`."
+        )
+    return catalog
 
 
 _SEQUENCE_KINDS = ("sequence", "subsequence")

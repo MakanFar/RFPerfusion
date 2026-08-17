@@ -12,6 +12,7 @@ Feeds L1 of docs/PRD-framework.md. Requires Python >= 3.10.
 import argparse
 import json
 import sys
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 from . import contracts, proto, reader, report
@@ -490,11 +491,58 @@ def resolve_coverage(plan, catalog):
 
 
 def cmd_proto_sync(args):
+    """Sync the proto-tools catalogue and rebuild the registry.
+
+    `build_catalog` itself stays serial and side-effect-free (its unit
+    tests hand it plain dict-backed lambdas). The three proto-tools calls
+    per tool are ~1.36s each; run one at a time across 140 tools x 3 verbs
+    that is ~9.5 minutes, well past what "re-run when the catalogue moves"
+    should cost. So here -- and only here -- every doc/schema/output call
+    is prefetched concurrently into plain dicts first, and `build_catalog`
+    is handed lambdas that just read from them.
+    """
     tools = proto.fetch_tools(args.project)
     print(f"  {len(tools)} tools from proto-tools", file=sys.stderr)
-    catalog = proto.build_catalog(tools, lambda k: proto.fetch_input_doc(k, args.project))
-    parsed = sum(1 for t in catalog["tools"] if t["max_length"] is not None)
-    print(f"  {parsed}/{len(tools)} have a parseable length cap", file=sys.stderr)
+
+    docs, schemas, outputs = {}, {}, {}
+    # (destination dict, fetcher, value on failure, label for the warning)
+    fetch_specs = (
+        (docs, proto.fetch_input_doc, "", "input doc"),
+        (schemas, proto.fetch_schema, {}, "schema"),
+        (outputs, proto.fetch_output_doc, "", "output doc"),
+    )
+
+    def _fetch_one(dest, fetcher, default, label, key):
+        try:
+            dest[key] = fetcher(key, args.project)
+        except Exception as exc:
+            # A fetch that raises degrades to "unknown" constraints -- never
+            # to a false one -- and must not abort the whole sync.
+            dest[key] = default
+            print(f"  warning: {label} fetch failed for {key}: {exc}", file=sys.stderr)
+
+    with ThreadPoolExecutor(max_workers=8) as pool:
+        futures = [
+            pool.submit(_fetch_one, dest, fetcher, default, label, t["key"])
+            for dest, fetcher, default, label in fetch_specs
+            for t in tools
+        ]
+        for future in futures:
+            future.result()
+
+    catalog = proto.build_catalog(
+        tools,
+        doc_fetcher=lambda k: docs.get(k, ""),
+        schema_fetcher=lambda k: schemas.get(k, {}),
+        output_fetcher=lambda k: outputs.get(k, ""),
+    )
+    capped = sum(1 for t in catalog["tools"] if t["max_length"] is not None)
+    scoring = sum(1 for t in catalog["tools"] if t["measures"])
+    print(f"  {capped}/{len(tools)} have a parseable length cap", file=sys.stderr)
+    print(f"  {scoring}/{len(tools)} publish metrics", file=sys.stderr)
+    if catalog["parse_failures"]:
+        print(f"  {len(catalog['parse_failures'])} metric rows did not parse "
+              f"(recorded in parse_failures)", file=sys.stderr)
     _emit(catalog, args.out)
 
 

@@ -53,7 +53,12 @@ def test_unparseable_length_is_none_not_zero():
 
 def test_build_catalog_carries_key_and_category():
     tools = [{"key": "esm2-score", "category": "sequence_scoring", "uses_gpu": True}]
-    cat = proto.build_catalog(tools, lambda key: ESM2_DOC)
+    cat = proto.build_catalog(
+        tools,
+        doc_fetcher=lambda key: ESM2_DOC,
+        schema_fetcher=lambda key: {},
+        output_fetcher=lambda key: "",
+    )
     entry = cat["tools"][0]
     assert entry["key"] == "esm2-score"
     assert entry["category"] == "sequence_scoring"

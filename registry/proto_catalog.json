@@ -1,4 +1,5 @@
 {
+  "schema_version": 2,
   "tools": [
     {
       "key": "ablang-embedding",
@@ -10,7 +11,7 @@
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": []
     },
     {
       "key": "ablang-gradient",
@@ -22,7 +23,7 @@
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": []
     },
     {
       "key": "ablang-sample",
@@ -34,69 +35,365 @@
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": []
     },
     {
       "key": "ablang-score",
       "category": "masked_models",
       "uses_gpu": true,
-      "measures": [],
+      "measures": [
+        {
+          "metric": "log_likelihood",
+          "type": "float",
+          "range": [
+            null,
+            0.0
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "avg_log_likelihood",
+          "type": "float",
+          "range": [
+            null,
+            0.0
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "perplexity",
+          "type": "float",
+          "range": [
+            1.0,
+            null
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "lower",
+          "primary": true
+        }
+      ],
       "status": "needs_calibration",
       "input_kind": null,
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": []
     },
     {
       "key": "alphafold-db-fetch",
       "category": "database_retrieval",
       "uses_gpu": false,
-      "measures": [],
+      "measures": [
+        {
+          "metric": "avg_plddt",
+          "type": "float",
+          "range": [
+            0.0,
+            100.0
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "higher",
+          "primary": true
+        },
+        {
+          "metric": "plddt_per_residue",
+          "type": "list[float]",
+          "range": [
+            0.0,
+            100.0
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "pae",
+          "type": "list[list[float]]",
+          "range": [
+            0.0,
+            null
+          ],
+          "unit": "",
+          "availability": "when include_pae=True",
+          "better": "lower",
+          "primary": false
+        }
+      ],
       "status": "needs_calibration",
       "input_kind": null,
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": []
     },
     {
       "key": "alphafold2-gradient",
       "category": "structure_prediction",
       "uses_gpu": true,
-      "measures": [],
+      "measures": [
+        {
+          "metric": "avg_plddt",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "higher",
+          "primary": true
+        },
+        {
+          "metric": "ptm",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "iptm",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "multi-chain input only",
+          "availability": "",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "avg_pae",
+          "type": "float",
+          "range": [
+            0.0,
+            null
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "lower",
+          "primary": false
+        },
+        {
+          "metric": "pae",
+          "type": "list[list[float]]",
+          "range": [
+            0.0,
+            null
+          ],
+          "unit": "",
+          "availability": "when include_pae_matrix=True",
+          "better": "lower",
+          "primary": false
+        }
+      ],
       "status": "needs_calibration",
       "input_kind": "structure",
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "schema"
+      ]
     },
     {
       "key": "alphafold2-prediction",
       "category": "structure_prediction",
       "uses_gpu": true,
-      "measures": [],
+      "measures": [
+        {
+          "metric": "avg_plddt",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "higher",
+          "primary": true
+        },
+        {
+          "metric": "ptm",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "iptm",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "multi-chain input only",
+          "availability": "",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "avg_pae",
+          "type": "float",
+          "range": [
+            0.0,
+            null
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "lower",
+          "primary": false
+        },
+        {
+          "metric": "pae",
+          "type": "list[list[float]]",
+          "range": [
+            0.0,
+            null
+          ],
+          "unit": "",
+          "availability": "when include_pae_matrix=True",
+          "better": "lower",
+          "primary": false
+        }
+      ],
       "status": "needs_calibration",
       "input_kind": "complex",
       "molecules": [
-        "protein"
+        "dna",
+        "ligand",
+        "protein",
+        "rna"
       ],
       "alphabet": "ACDEFGHIKLMNPQRSTVWYXBZUO",
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "schema",
+        "docstring"
+      ]
     },
     {
       "key": "alphafold3-prediction",
       "category": "structure_prediction",
       "uses_gpu": true,
-      "measures": [],
+      "measures": [
+        {
+          "metric": "avg_plddt",
+          "type": "float",
+          "range": [
+            0.0,
+            100.0
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "higher",
+          "primary": true
+        },
+        {
+          "metric": "avg_pae",
+          "type": "float",
+          "range": [
+            0.0,
+            null
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "lower",
+          "primary": false
+        },
+        {
+          "metric": "pae",
+          "type": "list[list[float]]",
+          "range": [
+            0.0,
+            null
+          ],
+          "unit": "",
+          "availability": "when include_pae_matrix=True",
+          "better": "lower",
+          "primary": false
+        },
+        {
+          "metric": "ptm",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "",
+          "availability": "depends on model output",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "iptm",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "",
+          "availability": "depends on model output",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "chain_pair_iptm",
+          "type": "list[list[float]]",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "",
+          "availability": "depends on model output",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "ranking_score",
+          "type": "float",
+          "range": [
+            null,
+            null
+          ],
+          "unit": "",
+          "availability": "depends on model output",
+          "better": "higher",
+          "primary": false
+        }
+      ],
       "status": "needs_calibration",
       "input_kind": "complex",
-      "molecules": null,
+      "molecules": [
+        "dna",
+        "ligand",
+        "protein",
+        "rna"
+      ],
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "schema"
+      ]
     },
     {
       "key": "alphagenome-predict-intervals",
@@ -108,7 +405,7 @@
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": []
     },
     {
       "key": "alphagenome-predict-sequences",
@@ -120,7 +417,9 @@
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "schema"
+      ]
     },
     {
       "key": "alphagenome-predict-variants",
@@ -132,7 +431,7 @@
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": []
     },
     {
       "key": "alphagenome-score-intervals",
@@ -144,7 +443,7 @@
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": []
     },
     {
       "key": "alphagenome-score-ism-variants-batch",
@@ -156,7 +455,7 @@
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": []
     },
     {
       "key": "alphagenome-score-variants",
@@ -168,7 +467,7 @@
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": []
     },
     {
       "key": "alphamissense-db-fetch",
@@ -180,19 +479,442 @@
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": []
     },
     {
       "key": "bindcraft-design",
       "category": "binder_design",
       "uses_gpu": true,
-      "measures": [],
+      "measures": [
+        {
+          "metric": "avg_plddt",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "fraction",
+          "availability": "",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "avg_ptm",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "fraction",
+          "availability": "",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "avg_iptm",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "fraction",
+          "availability": "",
+          "better": "higher",
+          "primary": true
+        },
+        {
+          "metric": "avg_pae",
+          "type": "float",
+          "range": [
+            0.0,
+            null
+          ],
+          "unit": "\u00c5",
+          "availability": "",
+          "better": "lower",
+          "primary": false
+        },
+        {
+          "metric": "avg_ipae",
+          "type": "float",
+          "range": [
+            0.0,
+            null
+          ],
+          "unit": "\u00c5",
+          "availability": "",
+          "better": "lower",
+          "primary": false
+        },
+        {
+          "metric": "avg_iplddt",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "fraction",
+          "availability": "",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "avg_ss_plddt",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "fraction",
+          "availability": "",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "avg_binder_plddt",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "fraction",
+          "availability": "",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "avg_binder_ptm",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "fraction",
+          "availability": "",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "avg_binder_pae",
+          "type": "float",
+          "range": [
+            0.0,
+            null
+          ],
+          "unit": "\u00c5",
+          "availability": "",
+          "better": "lower",
+          "primary": false
+        },
+        {
+          "metric": "binder_energy_score",
+          "type": "float",
+          "range": [
+            null,
+            null
+          ],
+          "unit": "REU",
+          "availability": "",
+          "better": "lower",
+          "primary": false
+        },
+        {
+          "metric": "dG",
+          "type": "float",
+          "range": [
+            null,
+            null
+          ],
+          "unit": "REU",
+          "availability": "",
+          "better": "lower",
+          "primary": false
+        },
+        {
+          "metric": "dSASA",
+          "type": "float",
+          "range": [
+            0.0,
+            null
+          ],
+          "unit": "\u00c5^2",
+          "availability": "",
+          "better": "context-dependent",
+          "primary": false
+        },
+        {
+          "metric": "dG_per_dSASA",
+          "type": "float",
+          "range": [
+            null,
+            null
+          ],
+          "unit": "REU/\u00c5^2",
+          "availability": "",
+          "better": "lower",
+          "primary": false
+        },
+        {
+          "metric": "interface_sasa_pct",
+          "type": "float",
+          "range": [
+            0.0,
+            100.0
+          ],
+          "unit": "percent",
+          "availability": "",
+          "better": "context-dependent",
+          "primary": false
+        },
+        {
+          "metric": "interface_hydrophobicity",
+          "type": "float",
+          "range": [
+            0.0,
+            100.0
+          ],
+          "unit": "percent",
+          "availability": "",
+          "better": "context-dependent",
+          "primary": false
+        },
+        {
+          "metric": "surface_hydrophobicity",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "fraction",
+          "availability": "",
+          "better": "lower",
+          "primary": false
+        },
+        {
+          "metric": "shape_complementarity",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "fraction",
+          "availability": "",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "packstat",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "fraction",
+          "availability": "",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "n_interface_hbonds",
+          "type": "float",
+          "range": [
+            0.0,
+            null
+          ],
+          "unit": "count",
+          "availability": "",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "interface_hbonds_pct",
+          "type": "float",
+          "range": [
+            0.0,
+            100.0
+          ],
+          "unit": "percent",
+          "availability": "",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "n_interface_unsat_hbonds",
+          "type": "float",
+          "range": [
+            0.0,
+            null
+          ],
+          "unit": "count",
+          "availability": "",
+          "better": "lower",
+          "primary": false
+        },
+        {
+          "metric": "interface_unsat_hbonds_pct",
+          "type": "float",
+          "range": [
+            0.0,
+            100.0
+          ],
+          "unit": "percent",
+          "availability": "",
+          "better": "lower",
+          "primary": false
+        },
+        {
+          "metric": "n_interface_residues",
+          "type": "float",
+          "range": [
+            0.0,
+            null
+          ],
+          "unit": "count",
+          "availability": "",
+          "better": "context-dependent",
+          "primary": false
+        },
+        {
+          "metric": "binder_helix_pct",
+          "type": "float",
+          "range": [
+            0.0,
+            100.0
+          ],
+          "unit": "percent",
+          "availability": "",
+          "better": "context-dependent",
+          "primary": false
+        },
+        {
+          "metric": "binder_betasheet_pct",
+          "type": "float",
+          "range": [
+            0.0,
+            100.0
+          ],
+          "unit": "percent",
+          "availability": "",
+          "better": "context-dependent",
+          "primary": false
+        },
+        {
+          "metric": "binder_loop_pct",
+          "type": "float",
+          "range": [
+            0.0,
+            100.0
+          ],
+          "unit": "percent",
+          "availability": "",
+          "better": "context-dependent",
+          "primary": false
+        },
+        {
+          "metric": "interface_helix_pct",
+          "type": "float",
+          "range": [
+            0.0,
+            100.0
+          ],
+          "unit": "percent",
+          "availability": "",
+          "better": "context-dependent",
+          "primary": false
+        },
+        {
+          "metric": "interface_betasheet_pct",
+          "type": "float",
+          "range": [
+            0.0,
+            100.0
+          ],
+          "unit": "percent",
+          "availability": "",
+          "better": "context-dependent",
+          "primary": false
+        },
+        {
+          "metric": "interface_loop_pct",
+          "type": "float",
+          "range": [
+            0.0,
+            100.0
+          ],
+          "unit": "percent",
+          "availability": "",
+          "better": "context-dependent",
+          "primary": false
+        },
+        {
+          "metric": "hotspot_rmsd",
+          "type": "float",
+          "range": [
+            0.0,
+            null
+          ],
+          "unit": "\u00c5",
+          "availability": "",
+          "better": "lower",
+          "primary": false
+        },
+        {
+          "metric": "target_rmsd",
+          "type": "float",
+          "range": [
+            0.0,
+            null
+          ],
+          "unit": "\u00c5",
+          "availability": "",
+          "better": "lower",
+          "primary": false
+        },
+        {
+          "metric": "binder_rmsd",
+          "type": "float",
+          "range": [
+            0.0,
+            null
+          ],
+          "unit": "\u00c5",
+          "availability": "",
+          "better": "lower",
+          "primary": false
+        },
+        {
+          "metric": "unrelaxed_clashes",
+          "type": "float",
+          "range": [
+            0.0,
+            null
+          ],
+          "unit": "count",
+          "availability": "",
+          "better": "lower",
+          "primary": false
+        },
+        {
+          "metric": "relaxed_clashes",
+          "type": "float",
+          "range": [
+            0.0,
+            null
+          ],
+          "unit": "count",
+          "availability": "",
+          "better": "lower",
+          "primary": false
+        }
+      ],
       "status": "needs_calibration",
       "input_kind": "structure",
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "schema"
+      ]
     },
     {
       "key": "bioemu-sample",
@@ -201,10 +923,17 @@
       "measures": [],
       "status": "needs_calibration",
       "input_kind": "complex",
-      "molecules": null,
+      "molecules": [
+        "dna",
+        "ligand",
+        "protein",
+        "rna"
+      ],
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "schema"
+      ]
     },
     {
       "key": "blast-create-db",
@@ -216,7 +945,7 @@
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": []
     },
     {
       "key": "blast-search",
@@ -228,25 +957,88 @@
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "docstring"
+      ]
     },
     {
       "key": "boltz2-affinity",
       "category": "structure_prediction",
       "uses_gpu": true,
-      "measures": [],
-      "status": "needs_calibration",
-      "input_kind": "complex",
-      "molecules": null,
-      "alphabet": null,
-      "max_length": null,
-      "constraint_source": "docstring"
-    },
-    {
-      "key": "boltz2-prediction",
-      "category": "structure_prediction",
-      "uses_gpu": true,
-      "measures": [],
+      "measures": [
+        {
+          "metric": "affinity_pred_value",
+          "type": "float",
+          "range": [
+            null,
+            null
+          ],
+          "unit": "log10(IC50 \u03bcM)",
+          "availability": "always",
+          "better": "lower",
+          "primary": true
+        },
+        {
+          "metric": "affinity_probability_binary",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "affinity_pred_value1",
+          "type": "float",
+          "range": [
+            null,
+            null
+          ],
+          "unit": "log10(IC50 \u03bcM)",
+          "availability": "when ensemble emits per-model values",
+          "better": "lower",
+          "primary": false
+        },
+        {
+          "metric": "affinity_probability_binary1",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "",
+          "availability": "when ensemble emits per-model values",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "affinity_pred_value2",
+          "type": "float",
+          "range": [
+            null,
+            null
+          ],
+          "unit": "log10(IC50 \u03bcM)",
+          "availability": "when ensemble emits per-model values",
+          "better": "lower",
+          "primary": false
+        },
+        {
+          "metric": "affinity_probability_binary2",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "",
+          "availability": "when ensemble emits per-model values",
+          "better": "higher",
+          "primary": false
+        }
+      ],
       "status": "needs_calibration",
       "input_kind": "complex",
       "molecules": [
@@ -257,7 +1049,185 @@
       ],
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "schema"
+      ]
+    },
+    {
+      "key": "boltz2-prediction",
+      "category": "structure_prediction",
+      "uses_gpu": true,
+      "measures": [
+        {
+          "metric": "confidence_score",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "higher",
+          "primary": true
+        },
+        {
+          "metric": "ptm",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "iptm",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "chains_ptm",
+          "type": "list[float]",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "pair_chains_iptm",
+          "type": "list[list[float]]",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "avg_pae",
+          "type": "float",
+          "range": [
+            0.0,
+            32.0
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "lower",
+          "primary": false
+        },
+        {
+          "metric": "pae",
+          "type": "list[list[float]]",
+          "range": [
+            0.0,
+            32.0
+          ],
+          "unit": "",
+          "availability": "when include_pae_matrix=True",
+          "better": "lower",
+          "primary": false
+        },
+        {
+          "metric": "ligand_iptm",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "",
+          "availability": "depends on complex composition",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "protein_iptm",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "",
+          "availability": "depends on complex composition",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "complex_plddt",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "",
+          "availability": "depends on complex composition",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "complex_iplddt",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "",
+          "availability": "depends on complex composition",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "complex_pde",
+          "type": "float",
+          "range": [
+            0.0,
+            null
+          ],
+          "unit": "",
+          "availability": "depends on complex composition",
+          "better": "lower",
+          "primary": false
+        },
+        {
+          "metric": "complex_ipde",
+          "type": "float",
+          "range": [
+            0.0,
+            null
+          ],
+          "unit": "",
+          "availability": "depends on complex composition",
+          "better": "lower",
+          "primary": false
+        }
+      ],
+      "status": "needs_calibration",
+      "input_kind": "complex",
+      "molecules": [
+        "dna",
+        "ligand",
+        "protein",
+        "rna"
+      ],
+      "alphabet": null,
+      "max_length": null,
+      "constraint_source": [
+        "schema"
+      ]
     },
     {
       "key": "borzoi-ensemble",
@@ -269,7 +1239,9 @@
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "schema"
+      ]
     },
     {
       "key": "borzoi-prediction",
@@ -281,7 +1253,9 @@
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "schema"
+      ]
     },
     {
       "key": "ccd-lookup",
@@ -293,22 +1267,100 @@
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": []
     },
     {
       "key": "chai1-prediction",
       "category": "structure_prediction",
       "uses_gpu": true,
-      "measures": [],
+      "measures": [
+        {
+          "metric": "avg_plddt",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "higher",
+          "primary": true
+        },
+        {
+          "metric": "ptm",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "iptm",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "avg_pae",
+          "type": "float",
+          "range": [
+            0.0,
+            null
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "lower",
+          "primary": false
+        },
+        {
+          "metric": "pae",
+          "type": "list[list[float]]",
+          "range": [
+            0.0,
+            null
+          ],
+          "unit": "",
+          "availability": "when include_pae_matrix=True",
+          "better": "lower",
+          "primary": false
+        },
+        {
+          "metric": "confidence_score",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "higher",
+          "primary": false
+        }
+      ],
       "status": "needs_calibration",
       "input_kind": "complex",
       "molecules": [
+        "dna",
         "ligand",
-        "protein"
+        "protein",
+        "rna"
       ],
       "alphabet": null,
       "max_length": 2048,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "schema",
+        "docstring"
+      ]
     },
     {
       "key": "codonfm-embedding",
@@ -320,7 +1372,9 @@
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "schema"
+      ]
     },
     {
       "key": "codonfm-fitness",
@@ -332,7 +1386,9 @@
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "schema"
+      ]
     },
     {
       "key": "codonfm-gradient",
@@ -344,7 +1400,7 @@
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": []
     },
     {
       "key": "codonfm-sample",
@@ -356,7 +1412,9 @@
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "schema"
+      ]
     },
     {
       "key": "codonfm-score",
@@ -364,11 +1422,13 @@
       "uses_gpu": true,
       "measures": [],
       "status": "needs_calibration",
-      "input_kind": null,
+      "input_kind": "sequence",
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "schema"
+      ]
     },
     {
       "key": "crispr-tracr-rna",
@@ -380,7 +1440,9 @@
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "schema"
+      ]
     },
     {
       "key": "deeppbs-specificity",
@@ -392,19 +1454,60 @@
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "docstring"
+      ]
     },
     {
       "key": "dssp-secondary-structure",
       "category": "structure_scoring",
       "uses_gpu": false,
-      "measures": [],
+      "measures": [
+        {
+          "metric": "helix_pct",
+          "type": "float",
+          "range": [
+            0.0,
+            100.0
+          ],
+          "unit": "%",
+          "availability": "always",
+          "better": "context-dependent",
+          "primary": false
+        },
+        {
+          "metric": "sheet_pct",
+          "type": "float",
+          "range": [
+            0.0,
+            100.0
+          ],
+          "unit": "%",
+          "availability": "always",
+          "better": "context-dependent",
+          "primary": false
+        },
+        {
+          "metric": "loop_pct",
+          "type": "float",
+          "range": [
+            0.0,
+            100.0
+          ],
+          "unit": "%",
+          "availability": "always",
+          "better": "context-dependent",
+          "primary": false
+        }
+      ],
       "status": "needs_calibration",
       "input_kind": "structure",
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "schema"
+      ]
     },
     {
       "key": "enformer-prediction",
@@ -416,7 +1519,9 @@
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "schema"
+      ]
     },
     {
       "key": "ensembl-lookup",
@@ -428,7 +1533,7 @@
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": []
     },
     {
       "key": "ensembl-overlap",
@@ -440,7 +1545,7 @@
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": []
     },
     {
       "key": "ensembl-sequence",
@@ -452,7 +1557,7 @@
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": []
     },
     {
       "key": "ensembl-vep",
@@ -464,7 +1569,7 @@
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": []
     },
     {
       "key": "ensembl-xrefs",
@@ -476,7 +1581,7 @@
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": []
     },
     {
       "key": "esm-if1-sample",
@@ -488,19 +1593,60 @@
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "schema"
+      ]
     },
     {
       "key": "esm-if1-score",
       "category": "inverse_folding",
       "uses_gpu": true,
-      "measures": [],
+      "measures": [
+        {
+          "metric": "log_likelihood",
+          "type": "float",
+          "range": [
+            null,
+            0.0
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "avg_log_likelihood",
+          "type": "float",
+          "range": [
+            null,
+            0.0
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "perplexity",
+          "type": "float",
+          "range": [
+            1.0,
+            null
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "lower",
+          "primary": true
+        }
+      ],
       "status": "needs_calibration",
       "input_kind": "structure",
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "schema"
+      ]
     },
     {
       "key": "esm2-embedding",
@@ -512,7 +1658,10 @@
       "molecules": null,
       "alphabet": null,
       "max_length": 1022,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "schema",
+        "docstring"
+      ]
     },
     {
       "key": "esm2-gradient",
@@ -524,7 +1673,7 @@
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": []
     },
     {
       "key": "esm2-sample",
@@ -536,19 +1685,62 @@
       "molecules": null,
       "alphabet": null,
       "max_length": 1022,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "schema",
+        "docstring"
+      ]
     },
     {
       "key": "esm2-score",
       "category": "masked_models",
       "uses_gpu": true,
-      "measures": [],
+      "measures": [
+        {
+          "metric": "log_likelihood",
+          "type": "float",
+          "range": [
+            null,
+            0.0
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "avg_log_likelihood",
+          "type": "float",
+          "range": [
+            null,
+            0.0
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "perplexity",
+          "type": "float",
+          "range": [
+            1.0,
+            null
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "lower",
+          "primary": true
+        }
+      ],
       "status": "needs_calibration",
       "input_kind": "sequence",
       "molecules": null,
       "alphabet": null,
       "max_length": 1022,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "schema",
+        "docstring"
+      ]
     },
     {
       "key": "esm3-embedding",
@@ -560,7 +1752,9 @@
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "schema"
+      ]
     },
     {
       "key": "esm3-sample",
@@ -572,19 +1766,60 @@
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "schema"
+      ]
     },
     {
       "key": "esm3-score",
       "category": "masked_models",
       "uses_gpu": true,
-      "measures": [],
+      "measures": [
+        {
+          "metric": "log_likelihood",
+          "type": "float",
+          "range": [
+            null,
+            0.0
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "avg_log_likelihood",
+          "type": "float",
+          "range": [
+            null,
+            0.0
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "perplexity",
+          "type": "float",
+          "range": [
+            1.0,
+            null
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "lower",
+          "primary": true
+        }
+      ],
       "status": "needs_calibration",
       "input_kind": "sequence",
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "schema"
+      ]
     },
     {
       "key": "esmc-embedding",
@@ -596,7 +1831,9 @@
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "schema"
+      ]
     },
     {
       "key": "esmc-sae-features",
@@ -608,45 +1845,219 @@
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "schema"
+      ]
     },
     {
       "key": "esmfold-gradient",
       "category": "structure_prediction",
       "uses_gpu": true,
-      "measures": [],
+      "measures": [
+        {
+          "metric": "avg_plddt",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "higher",
+          "primary": true
+        },
+        {
+          "metric": "ptm",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "",
+          "availability": "depends on model output",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "avg_pae",
+          "type": "float",
+          "range": [
+            0.0,
+            null
+          ],
+          "unit": "",
+          "availability": "depends on model output",
+          "better": "lower",
+          "primary": false
+        },
+        {
+          "metric": "pae",
+          "type": "list[list[float]]",
+          "range": [
+            0.0,
+            null
+          ],
+          "unit": "",
+          "availability": "when include_pae_matrix=True",
+          "better": "lower",
+          "primary": false
+        }
+      ],
       "status": "needs_calibration",
       "input_kind": null,
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": []
     },
     {
       "key": "esmfold-prediction",
       "category": "structure_prediction",
       "uses_gpu": true,
-      "measures": [],
+      "measures": [
+        {
+          "metric": "avg_plddt",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "higher",
+          "primary": true
+        },
+        {
+          "metric": "ptm",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "",
+          "availability": "depends on model output",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "avg_pae",
+          "type": "float",
+          "range": [
+            0.0,
+            null
+          ],
+          "unit": "",
+          "availability": "depends on model output",
+          "better": "lower",
+          "primary": false
+        },
+        {
+          "metric": "pae",
+          "type": "list[list[float]]",
+          "range": [
+            0.0,
+            null
+          ],
+          "unit": "",
+          "availability": "when include_pae_matrix=True",
+          "better": "lower",
+          "primary": false
+        }
+      ],
       "status": "needs_calibration",
       "input_kind": "complex",
       "molecules": [
-        "protein"
+        "dna",
+        "ligand",
+        "protein",
+        "rna"
       ],
       "alphabet": "ACDEFGHIKLMNPQRSTVWYXBZUO",
       "max_length": 2400,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "schema",
+        "docstring"
+      ]
     },
     {
       "key": "esmfold2-prediction",
       "category": "structure_prediction",
       "uses_gpu": true,
-      "measures": [],
+      "measures": [
+        {
+          "metric": "plddt",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "higher",
+          "primary": true
+        },
+        {
+          "metric": "ptm",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "iptm",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "",
+          "availability": "depends on complex composition",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "avg_pae",
+          "type": "float",
+          "range": [
+            0.0,
+            32.0
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "lower",
+          "primary": false
+        },
+        {
+          "metric": "pae",
+          "type": "list[list[float]]",
+          "range": [
+            0.0,
+            32.0
+          ],
+          "unit": "",
+          "availability": "when include_pae_matrix=True",
+          "better": "lower",
+          "primary": false
+        }
+      ],
       "status": "needs_calibration",
       "input_kind": "complex",
-      "molecules": null,
+      "molecules": [
+        "dna",
+        "ligand",
+        "protein",
+        "rna"
+      ],
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "schema"
+      ]
     },
     {
       "key": "evo1-sample",
@@ -658,19 +2069,58 @@
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": []
     },
     {
       "key": "evo1-score",
       "category": "causal_models",
       "uses_gpu": true,
-      "measures": [],
+      "measures": [
+        {
+          "metric": "log_likelihood",
+          "type": "float",
+          "range": [
+            null,
+            0.0
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "avg_log_likelihood",
+          "type": "float",
+          "range": [
+            null,
+            0.0
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "perplexity",
+          "type": "float",
+          "range": [
+            1.0,
+            null
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "lower",
+          "primary": true
+        }
+      ],
       "status": "needs_calibration",
       "input_kind": "sequence",
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "schema"
+      ]
     },
     {
       "key": "evo2-sample",
@@ -682,19 +2132,58 @@
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": []
     },
     {
       "key": "evo2-score",
       "category": "causal_models",
       "uses_gpu": true,
-      "measures": [],
+      "measures": [
+        {
+          "metric": "log_likelihood",
+          "type": "float",
+          "range": [
+            null,
+            0.0
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "avg_log_likelihood",
+          "type": "float",
+          "range": [
+            null,
+            0.0
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "perplexity",
+          "type": "float",
+          "range": [
+            1.0,
+            null
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "lower",
+          "primary": true
+        }
+      ],
       "status": "needs_calibration",
       "input_kind": "sequence",
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "schema"
+      ]
     },
     {
       "key": "fampnn-pack",
@@ -706,7 +2195,9 @@
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "schema"
+      ]
     },
     {
       "key": "fampnn-sample",
@@ -718,7 +2209,9 @@
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "schema"
+      ]
     },
     {
       "key": "fampnn-score",
@@ -726,11 +2219,13 @@
       "uses_gpu": true,
       "measures": [],
       "status": "needs_calibration",
-      "input_kind": null,
+      "input_kind": "structure",
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "schema"
+      ]
     },
     {
       "key": "fampnn-score-all-mutations",
@@ -742,7 +2237,9 @@
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "schema"
+      ]
     },
     {
       "key": "foldmason-msa",
@@ -754,7 +2251,9 @@
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "schema"
+      ]
     },
     {
       "key": "foldmason-score-msa",
@@ -766,7 +2265,9 @@
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "schema"
+      ]
     },
     {
       "key": "foldseek-cluster",
@@ -778,7 +2279,9 @@
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "schema"
+      ]
     },
     {
       "key": "foldseek-multimer-search",
@@ -790,7 +2293,9 @@
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "schema"
+      ]
     },
     {
       "key": "foldseek-multimercluster",
@@ -802,7 +2307,9 @@
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "schema"
+      ]
     },
     {
       "key": "foldseek-rbh",
@@ -814,7 +2321,9 @@
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "schema"
+      ]
     },
     {
       "key": "foldseek-search",
@@ -826,31 +2335,1059 @@
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "schema"
+      ]
     },
     {
       "key": "freebindcraft-design",
       "category": "binder_design",
       "uses_gpu": true,
-      "measures": [],
+      "measures": [
+        {
+          "metric": "avg_plddt",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "fraction",
+          "availability": "",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "avg_ptm",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "fraction",
+          "availability": "",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "avg_iptm",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "fraction",
+          "availability": "",
+          "better": "higher",
+          "primary": true
+        },
+        {
+          "metric": "avg_pae",
+          "type": "float",
+          "range": [
+            0.0,
+            null
+          ],
+          "unit": "\u00c5",
+          "availability": "",
+          "better": "lower",
+          "primary": false
+        },
+        {
+          "metric": "avg_ipae",
+          "type": "float",
+          "range": [
+            0.0,
+            null
+          ],
+          "unit": "\u00c5",
+          "availability": "",
+          "better": "lower",
+          "primary": false
+        },
+        {
+          "metric": "avg_ipsae",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "fraction",
+          "availability": "",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "avg_iplddt",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "fraction",
+          "availability": "",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "avg_ss_plddt",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "fraction",
+          "availability": "",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "avg_binder_plddt",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "fraction",
+          "availability": "",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "avg_binder_ptm",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "fraction",
+          "availability": "",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "avg_binder_pae",
+          "type": "float",
+          "range": [
+            0.0,
+            null
+          ],
+          "unit": "\u00c5",
+          "availability": "",
+          "better": "lower",
+          "primary": false
+        },
+        {
+          "metric": "dSASA",
+          "type": "float",
+          "range": [
+            0.0,
+            null
+          ],
+          "unit": "\u00c5^2",
+          "availability": "",
+          "better": "context-dependent",
+          "primary": false
+        },
+        {
+          "metric": "interface_sasa_pct",
+          "type": "float",
+          "range": [
+            0.0,
+            100.0
+          ],
+          "unit": "percent",
+          "availability": "",
+          "better": "context-dependent",
+          "primary": false
+        },
+        {
+          "metric": "interface_hydrophobicity",
+          "type": "float",
+          "range": [
+            0.0,
+            100.0
+          ],
+          "unit": "percent",
+          "availability": "",
+          "better": "context-dependent",
+          "primary": false
+        },
+        {
+          "metric": "surface_hydrophobicity",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "fraction",
+          "availability": "",
+          "better": "lower",
+          "primary": false
+        },
+        {
+          "metric": "shape_complementarity",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "fraction",
+          "availability": "",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "n_interface_residues",
+          "type": "float",
+          "range": [
+            0.0,
+            null
+          ],
+          "unit": "count",
+          "availability": "",
+          "better": "context-dependent",
+          "primary": false
+        },
+        {
+          "metric": "binder_helix_pct",
+          "type": "float",
+          "range": [
+            0.0,
+            100.0
+          ],
+          "unit": "percent",
+          "availability": "",
+          "better": "context-dependent",
+          "primary": false
+        },
+        {
+          "metric": "binder_betasheet_pct",
+          "type": "float",
+          "range": [
+            0.0,
+            100.0
+          ],
+          "unit": "percent",
+          "availability": "",
+          "better": "context-dependent",
+          "primary": false
+        },
+        {
+          "metric": "binder_loop_pct",
+          "type": "float",
+          "range": [
+            0.0,
+            100.0
+          ],
+          "unit": "percent",
+          "availability": "",
+          "better": "context-dependent",
+          "primary": false
+        },
+        {
+          "metric": "interface_helix_pct",
+          "type": "float",
+          "range": [
+            0.0,
+            100.0
+          ],
+          "unit": "percent",
+          "availability": "",
+          "better": "context-dependent",
+          "primary": false
+        },
+        {
+          "metric": "interface_betasheet_pct",
+          "type": "float",
+          "range": [
+            0.0,
+            100.0
+          ],
+          "unit": "percent",
+          "availability": "",
+          "better": "context-dependent",
+          "primary": false
+        },
+        {
+          "metric": "interface_loop_pct",
+          "type": "float",
+          "range": [
+            0.0,
+            100.0
+          ],
+          "unit": "percent",
+          "availability": "",
+          "better": "context-dependent",
+          "primary": false
+        },
+        {
+          "metric": "hotspot_rmsd",
+          "type": "float",
+          "range": [
+            0.0,
+            null
+          ],
+          "unit": "\u00c5",
+          "availability": "",
+          "better": "lower",
+          "primary": false
+        },
+        {
+          "metric": "target_rmsd",
+          "type": "float",
+          "range": [
+            0.0,
+            null
+          ],
+          "unit": "\u00c5",
+          "availability": "",
+          "better": "lower",
+          "primary": false
+        },
+        {
+          "metric": "binder_rmsd",
+          "type": "float",
+          "range": [
+            0.0,
+            null
+          ],
+          "unit": "\u00c5",
+          "availability": "",
+          "better": "lower",
+          "primary": false
+        },
+        {
+          "metric": "unrelaxed_clashes",
+          "type": "float",
+          "range": [
+            0.0,
+            null
+          ],
+          "unit": "count",
+          "availability": "",
+          "better": "lower",
+          "primary": false
+        },
+        {
+          "metric": "relaxed_clashes",
+          "type": "float",
+          "range": [
+            0.0,
+            null
+          ],
+          "unit": "count",
+          "availability": "",
+          "better": "lower",
+          "primary": false
+        }
+      ],
       "status": "needs_calibration",
       "input_kind": "structure",
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "schema"
+      ]
     },
     {
       "key": "germinal-design",
       "category": "binder_design",
       "uses_gpu": true,
-      "measures": [],
+      "measures": [
+        {
+          "metric": "plddt",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "ptm",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "i_ptm",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "higher",
+          "primary": true
+        },
+        {
+          "metric": "i_pae",
+          "type": "float",
+          "range": [
+            0.0,
+            null
+          ],
+          "unit": "\u00c5",
+          "availability": "always",
+          "better": "lower",
+          "primary": false
+        },
+        {
+          "metric": "pae",
+          "type": "float",
+          "range": [
+            0.0,
+            null
+          ],
+          "unit": "\u00c5",
+          "availability": "always",
+          "better": "lower",
+          "primary": false
+        },
+        {
+          "metric": "loss",
+          "type": "float",
+          "range": [
+            null,
+            null
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "lower",
+          "primary": false
+        },
+        {
+          "metric": "lm_ll",
+          "type": "float",
+          "range": [
+            null,
+            null
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "helix",
+          "type": "float",
+          "range": [
+            null,
+            null
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "context-dependent",
+          "primary": false
+        },
+        {
+          "metric": "beta_strand",
+          "type": "float",
+          "range": [
+            null,
+            null
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "context-dependent",
+          "primary": false
+        },
+        {
+          "metric": "clashes",
+          "type": "int",
+          "range": [
+            0.0,
+            null
+          ],
+          "unit": "after filtering",
+          "availability": "",
+          "better": "lower",
+          "primary": false
+        },
+        {
+          "metric": "sc_rmsd",
+          "type": "float",
+          "range": [
+            0.0,
+            null
+          ],
+          "unit": "\u00c5, after filtering",
+          "availability": "",
+          "better": "lower",
+          "primary": false
+        },
+        {
+          "metric": "binder_near_hotspot",
+          "type": "bool",
+          "range": [
+            null,
+            null
+          ],
+          "unit": "after filtering",
+          "availability": "",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "cdr3_hotspot_contacts",
+          "type": "int",
+          "range": [
+            0.0,
+            null
+          ],
+          "unit": "after filtering",
+          "availability": "",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "percent_interface_cdr",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "after filtering",
+          "availability": "",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "interface_shape_comp",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "after filtering",
+          "availability": "",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "interface_hbonds",
+          "type": "int",
+          "range": [
+            0.0,
+            null
+          ],
+          "unit": "after filtering",
+          "availability": "",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "surface_hydrophobicity",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "after filtering",
+          "availability": "",
+          "better": "lower",
+          "primary": false
+        },
+        {
+          "metric": "interface_hydrophobicity",
+          "type": "float",
+          "range": [
+            0.0,
+            null
+          ],
+          "unit": "after filtering",
+          "availability": "",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "pdockq2",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "after filtering",
+          "availability": "",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "external_plddt",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "after validation",
+          "availability": "",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "external_iptm",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "after validation",
+          "availability": "",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "external_ptm",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "after validation",
+          "availability": "",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "external_pae",
+          "type": "float",
+          "range": [
+            0.0,
+            null
+          ],
+          "unit": "\u00c5, after validation",
+          "availability": "",
+          "better": "lower",
+          "primary": false
+        },
+        {
+          "metric": "external_i_pae",
+          "type": "float",
+          "range": [
+            0.0,
+            null
+          ],
+          "unit": "\u00c5, after validation",
+          "availability": "",
+          "better": "lower",
+          "primary": false
+        },
+        {
+          "metric": "external_i_plddt",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "after validation",
+          "availability": "",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "external_plddt_binder",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "after validation",
+          "availability": "",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "external_chain_ptm",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "after validation",
+          "availability": "",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "external_binder_pae",
+          "type": "float",
+          "range": [
+            0.0,
+            null
+          ],
+          "unit": "\u00c5, after validation",
+          "availability": "",
+          "better": "lower",
+          "primary": false
+        },
+        {
+          "metric": "external_aggregate_score",
+          "type": "float",
+          "range": [
+            null,
+            null
+          ],
+          "unit": "after validation",
+          "availability": "",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "ipsae",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "after validation",
+          "availability": "",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "ipsae_pdockq2",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "after validation",
+          "availability": "",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "lis_lis",
+          "type": "float",
+          "range": [
+            null,
+            null
+          ],
+          "unit": "after validation",
+          "availability": "",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "lis_lia",
+          "type": "float",
+          "range": [
+            null,
+            null
+          ],
+          "unit": "after validation",
+          "availability": "",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "binder_score",
+          "type": "float",
+          "range": [
+            null,
+            null
+          ],
+          "unit": "REU, after filtering",
+          "availability": "",
+          "better": "lower",
+          "primary": false
+        },
+        {
+          "metric": "interface_packstat",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "after filtering",
+          "availability": "",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "interface_dG",
+          "type": "float",
+          "range": [
+            null,
+            null
+          ],
+          "unit": "REU, after filtering",
+          "availability": "",
+          "better": "lower",
+          "primary": false
+        },
+        {
+          "metric": "interface_dSASA",
+          "type": "float",
+          "range": [
+            0.0,
+            null
+          ],
+          "unit": "\u00c5\u00b2, after filtering",
+          "availability": "",
+          "better": "context-dependent",
+          "primary": false
+        },
+        {
+          "metric": "interface_dG_SASA_ratio",
+          "type": "float",
+          "range": [
+            null,
+            null
+          ],
+          "unit": "REU/\u00c5\u00b2, after filtering",
+          "availability": "",
+          "better": "lower",
+          "primary": false
+        },
+        {
+          "metric": "interface_fraction",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "after filtering",
+          "availability": "",
+          "better": "context-dependent",
+          "primary": false
+        },
+        {
+          "metric": "interface_nres",
+          "type": "int",
+          "range": [
+            0.0,
+            null
+          ],
+          "unit": "after filtering",
+          "availability": "",
+          "better": "context-dependent",
+          "primary": false
+        },
+        {
+          "metric": "interface_hbond_percentage",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "after filtering",
+          "availability": "",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "interface_delta_unsat_hbonds",
+          "type": "int",
+          "range": [
+            0.0,
+            null
+          ],
+          "unit": "after filtering",
+          "availability": "",
+          "better": "lower",
+          "primary": false
+        },
+        {
+          "metric": "interface_delta_unsat_hbonds_percentage",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "after filtering",
+          "availability": "",
+          "better": "lower",
+          "primary": false
+        },
+        {
+          "metric": "clashes_unrelaxed",
+          "type": "int",
+          "range": [
+            0.0,
+            null
+          ],
+          "unit": "after filtering",
+          "availability": "",
+          "better": "lower",
+          "primary": false
+        },
+        {
+          "metric": "hydrophobic_patches_binder",
+          "type": "int",
+          "range": [
+            0.0,
+            null
+          ],
+          "unit": "after filtering",
+          "availability": "",
+          "better": "lower",
+          "primary": false
+        },
+        {
+          "metric": "hydrophobic_patches_struct",
+          "type": "int",
+          "range": [
+            0.0,
+            null
+          ],
+          "unit": "after filtering",
+          "availability": "",
+          "better": "lower",
+          "primary": false
+        },
+        {
+          "metric": "sap_score",
+          "type": "float",
+          "range": [
+            null,
+            null
+          ],
+          "unit": "after filtering",
+          "availability": "",
+          "better": "lower",
+          "primary": false
+        },
+        {
+          "metric": "cdr_sap",
+          "type": "float",
+          "range": [
+            null,
+            null
+          ],
+          "unit": "after filtering",
+          "availability": "",
+          "better": "lower",
+          "primary": false
+        },
+        {
+          "metric": "cdr_hotspot_contacts",
+          "type": "int",
+          "range": [
+            0.0,
+            null
+          ],
+          "unit": "after filtering",
+          "availability": "",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "percent_interface_cdr3",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "after filtering",
+          "availability": "",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "alpha_interface",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "after filtering",
+          "availability": "",
+          "better": "context-dependent",
+          "primary": false
+        },
+        {
+          "metric": "beta_interface",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "after filtering",
+          "availability": "",
+          "better": "context-dependent",
+          "primary": false
+        },
+        {
+          "metric": "loops_interface",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "after filtering",
+          "availability": "",
+          "better": "context-dependent",
+          "primary": false
+        },
+        {
+          "metric": "alpha_all",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "after filtering",
+          "availability": "",
+          "better": "context-dependent",
+          "primary": false
+        },
+        {
+          "metric": "beta_all",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "after filtering",
+          "availability": "",
+          "better": "context-dependent",
+          "primary": false
+        },
+        {
+          "metric": "loops_all",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "after filtering",
+          "availability": "",
+          "better": "context-dependent",
+          "primary": false
+        },
+        {
+          "metric": "n_framework_mutations",
+          "type": "int",
+          "range": [
+            0.0,
+            null
+          ],
+          "unit": "after filtering",
+          "availability": "",
+          "better": "lower",
+          "primary": false
+        }
+      ],
       "status": "needs_calibration",
       "input_kind": "structure",
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "schema"
+      ]
     },
     {
       "key": "interproscan-fetch",
@@ -862,19 +3399,84 @@
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "schema"
+      ]
     },
     {
       "key": "ipsae-scoring",
       "category": "structure_scoring",
       "uses_gpu": false,
-      "measures": [],
+      "measures": [
+        {
+          "metric": "ipsae",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "higher",
+          "primary": true
+        },
+        {
+          "metric": "pdockq2",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "lis",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "pdockq",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "iptm_d0chn",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "higher",
+          "primary": false
+        }
+      ],
       "status": "needs_calibration",
       "input_kind": "structure",
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "schema"
+      ]
     },
     {
       "key": "ligandmpnn-sample",
@@ -886,19 +3488,60 @@
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "schema"
+      ]
     },
     {
       "key": "ligandmpnn-score",
       "category": "inverse_folding",
       "uses_gpu": true,
-      "measures": [],
+      "measures": [
+        {
+          "metric": "log_likelihood",
+          "type": "float",
+          "range": [
+            null,
+            0.0
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "avg_log_likelihood",
+          "type": "float",
+          "range": [
+            null,
+            0.0
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "perplexity",
+          "type": "float",
+          "range": [
+            1.0,
+            null
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "lower",
+          "primary": true
+        }
+      ],
       "status": "needs_calibration",
       "input_kind": "structure",
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "schema"
+      ]
     },
     {
       "key": "mafft-align",
@@ -910,31 +3553,121 @@
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "schema"
+      ]
     },
     {
       "key": "malinois-gradient",
       "category": "sequence_scoring",
       "uses_gpu": true,
-      "measures": [],
+      "measures": [
+        {
+          "metric": "loss",
+          "type": "float",
+          "range": [
+            0.0,
+            null
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "lower",
+          "primary": true
+        },
+        {
+          "metric": "K562",
+          "type": "float",
+          "range": [
+            null,
+            null
+          ],
+          "unit": "",
+          "availability": "when requested",
+          "better": "context-dependent",
+          "primary": false
+        },
+        {
+          "metric": "HepG2",
+          "type": "float",
+          "range": [
+            null,
+            null
+          ],
+          "unit": "",
+          "availability": "when requested",
+          "better": "context-dependent",
+          "primary": false
+        },
+        {
+          "metric": "SKNSH",
+          "type": "float",
+          "range": [
+            null,
+            null
+          ],
+          "unit": "",
+          "availability": "when requested",
+          "better": "context-dependent",
+          "primary": false
+        }
+      ],
       "status": "needs_calibration",
       "input_kind": null,
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": []
     },
     {
       "key": "malinois-score",
       "category": "sequence_scoring",
       "uses_gpu": true,
-      "measures": [],
+      "measures": [
+        {
+          "metric": "K562",
+          "type": "float",
+          "range": [
+            null,
+            null
+          ],
+          "unit": "",
+          "availability": "when requested",
+          "better": "context-dependent",
+          "primary": false
+        },
+        {
+          "metric": "HepG2",
+          "type": "float",
+          "range": [
+            null,
+            null
+          ],
+          "unit": "",
+          "availability": "when requested",
+          "better": "context-dependent",
+          "primary": false
+        },
+        {
+          "metric": "SKNSH",
+          "type": "float",
+          "range": [
+            null,
+            null
+          ],
+          "unit": "",
+          "availability": "when requested",
+          "better": "context-dependent",
+          "primary": false
+        }
+      ],
       "status": "needs_calibration",
       "input_kind": "sequence",
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "schema"
+      ]
     },
     {
       "key": "meme-fimo-scan",
@@ -946,19 +3679,36 @@
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "schema"
+      ]
     },
     {
       "key": "metal3d-prediction",
       "category": "structure_scoring",
       "uses_gpu": true,
-      "measures": [],
+      "measures": [
+        {
+          "metric": "pmetal",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "higher",
+          "primary": true
+        }
+      ],
       "status": "needs_calibration",
       "input_kind": "structure",
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "schema"
+      ]
     },
     {
       "key": "minced-crispr",
@@ -970,7 +3720,9 @@
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "schema"
+      ]
     },
     {
       "key": "miranda-scan",
@@ -982,7 +3734,9 @@
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "schema"
+      ]
     },
     {
       "key": "mmseqs2-clustering",
@@ -994,7 +3748,9 @@
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "schema"
+      ]
     },
     {
       "key": "mmseqs2-homology-search",
@@ -1002,11 +3758,13 @@
       "uses_gpu": true,
       "measures": [],
       "status": "needs_calibration",
-      "input_kind": null,
+      "input_kind": "sequence",
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "schema"
+      ]
     },
     {
       "key": "mmseqs2-search-genomes",
@@ -1018,7 +3776,7 @@
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": []
     },
     {
       "key": "mmseqs2-search-proteins",
@@ -1030,7 +3788,9 @@
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "schema"
+      ]
     },
     {
       "key": "na-mpnn-specificity",
@@ -1042,7 +3802,9 @@
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "docstring"
+      ]
     },
     {
       "key": "ncbi-efetch",
@@ -1054,7 +3816,7 @@
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": []
     },
     {
       "key": "ncbi-esearch",
@@ -1066,7 +3828,9 @@
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "docstring"
+      ]
     },
     {
       "key": "ncbi-esummary",
@@ -1078,23 +3842,125 @@
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "docstring"
+      ]
     },
     {
       "key": "opendde-prediction",
       "category": "structure_prediction",
       "uses_gpu": true,
-      "measures": [],
+      "measures": [
+        {
+          "metric": "avg_plddt",
+          "type": "float",
+          "range": [
+            0.0,
+            100.0
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "higher",
+          "primary": true
+        },
+        {
+          "metric": "ptm",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "iptm",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "gpde",
+          "type": "float",
+          "range": [
+            0.0,
+            null
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "lower",
+          "primary": false
+        },
+        {
+          "metric": "ranking_score",
+          "type": "float",
+          "range": [
+            null,
+            null
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "has_clash",
+          "type": "bool",
+          "range": [
+            null,
+            null
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "lower",
+          "primary": false
+        },
+        {
+          "metric": "avg_pae",
+          "type": "float",
+          "range": [
+            0.0,
+            32.0
+          ],
+          "unit": "",
+          "availability": "when include_pae_matrix=True",
+          "better": "lower",
+          "primary": false
+        },
+        {
+          "metric": "pae",
+          "type": "list[list[float]]",
+          "range": [
+            0.0,
+            32.0
+          ],
+          "unit": "",
+          "availability": "when include_pae_matrix=True",
+          "better": "lower",
+          "primary": false
+        }
+      ],
       "status": "needs_calibration",
       "input_kind": "complex",
       "molecules": [
         "dna",
+        "ligand",
         "protein",
         "rna"
       ],
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "schema"
+      ]
     },
     {
       "key": "orfipy-prediction",
@@ -1106,7 +3972,9 @@
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "schema"
+      ]
     },
     {
       "key": "pangolin-predict",
@@ -1118,55 +3986,259 @@
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "schema"
+      ]
     },
     {
       "key": "pangolin-score-variants",
       "category": "rna_splicing",
       "uses_gpu": true,
-      "measures": [],
+      "measures": [
+        {
+          "metric": "max_gain",
+          "type": "float",
+          "range": [
+            -1.0,
+            1.0
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "context-dependent",
+          "primary": true
+        },
+        {
+          "metric": "max_loss",
+          "type": "float",
+          "range": [
+            -1.0,
+            1.0
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "context-dependent",
+          "primary": false
+        }
+      ],
       "status": "needs_calibration",
-      "input_kind": null,
+      "input_kind": "sequence",
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "schema"
+      ]
     },
     {
       "key": "parade-activity",
       "category": "sequence_scoring",
       "uses_gpu": true,
-      "measures": [],
+      "measures": [
+        {
+          "metric": "c1",
+          "type": "float",
+          "range": [
+            null,
+            null
+          ],
+          "unit": "",
+          "availability": "when requested",
+          "better": "context-dependent",
+          "primary": false
+        },
+        {
+          "metric": "c2",
+          "type": "float",
+          "range": [
+            null,
+            null
+          ],
+          "unit": "",
+          "availability": "when requested",
+          "better": "context-dependent",
+          "primary": false
+        },
+        {
+          "metric": "c4",
+          "type": "float",
+          "range": [
+            null,
+            null
+          ],
+          "unit": "",
+          "availability": "when requested",
+          "better": "context-dependent",
+          "primary": false
+        },
+        {
+          "metric": "c6",
+          "type": "float",
+          "range": [
+            null,
+            null
+          ],
+          "unit": "",
+          "availability": "when requested",
+          "better": "context-dependent",
+          "primary": false
+        },
+        {
+          "metric": "c17",
+          "type": "float",
+          "range": [
+            null,
+            null
+          ],
+          "unit": "",
+          "availability": "when requested",
+          "better": "context-dependent",
+          "primary": false
+        },
+        {
+          "metric": "c13",
+          "type": "float",
+          "range": [
+            null,
+            null
+          ],
+          "unit": "",
+          "availability": "when requested",
+          "better": "context-dependent",
+          "primary": false
+        }
+      ],
       "status": "needs_calibration",
       "input_kind": "sequence",
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "schema"
+      ]
     },
     {
       "key": "parade-gradient",
       "category": "sequence_scoring",
       "uses_gpu": true,
-      "measures": [],
+      "measures": [
+        {
+          "metric": "loss",
+          "type": "float",
+          "range": [
+            0.0,
+            null
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "lower",
+          "primary": true
+        },
+        {
+          "metric": "c1",
+          "type": "float",
+          "range": [
+            null,
+            null
+          ],
+          "unit": "",
+          "availability": "when requested",
+          "better": "context-dependent",
+          "primary": false
+        },
+        {
+          "metric": "c2",
+          "type": "float",
+          "range": [
+            null,
+            null
+          ],
+          "unit": "",
+          "availability": "when requested",
+          "better": "context-dependent",
+          "primary": false
+        },
+        {
+          "metric": "c4",
+          "type": "float",
+          "range": [
+            null,
+            null
+          ],
+          "unit": "",
+          "availability": "when requested",
+          "better": "context-dependent",
+          "primary": false
+        },
+        {
+          "metric": "c6",
+          "type": "float",
+          "range": [
+            null,
+            null
+          ],
+          "unit": "",
+          "availability": "when requested",
+          "better": "context-dependent",
+          "primary": false
+        },
+        {
+          "metric": "c17",
+          "type": "float",
+          "range": [
+            null,
+            null
+          ],
+          "unit": "",
+          "availability": "when requested",
+          "better": "context-dependent",
+          "primary": false
+        },
+        {
+          "metric": "c13",
+          "type": "float",
+          "range": [
+            null,
+            null
+          ],
+          "unit": "",
+          "availability": "when requested",
+          "better": "context-dependent",
+          "primary": false
+        }
+      ],
       "status": "needs_calibration",
       "input_kind": null,
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": []
     },
     {
       "key": "parade-stability",
       "category": "sequence_scoring",
       "uses_gpu": true,
-      "measures": [],
+      "measures": [
+        {
+          "metric": "log_ratio",
+          "type": "float",
+          "range": [
+            null,
+            null
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "higher",
+          "primary": true
+        }
+      ],
       "status": "needs_calibration",
       "input_kind": "sequence",
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "schema"
+      ]
     },
     {
       "key": "pdb-fetch-entry",
@@ -1178,7 +4250,9 @@
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "docstring"
+      ]
     },
     {
       "key": "pdb-fetch-fasta",
@@ -1190,19 +4264,72 @@
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "docstring"
+      ]
     },
     {
       "key": "pdockq2",
       "category": "structure_scoring",
       "uses_gpu": false,
-      "measures": [],
+      "measures": [
+        {
+          "metric": "pdockq2",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "higher",
+          "primary": true
+        },
+        {
+          "metric": "avg_interface_plddt",
+          "type": "float",
+          "range": [
+            0.0,
+            100.0
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "avg_interface_pae",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "num_interface_contacts",
+          "type": "int",
+          "range": [
+            0.0,
+            null
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "context-dependent",
+          "primary": false
+        }
+      ],
       "status": "needs_calibration",
       "input_kind": "structure",
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "schema"
+      ]
     },
     {
       "key": "primer3-thermodynamics",
@@ -1210,11 +4337,13 @@
       "uses_gpu": false,
       "measures": [],
       "status": "needs_calibration",
-      "input_kind": null,
+      "input_kind": "sequence",
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "schema"
+      ]
     },
     {
       "key": "prodigal-prediction",
@@ -1226,7 +4355,9 @@
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "schema"
+      ]
     },
     {
       "key": "progen2-sample",
@@ -1238,19 +4369,58 @@
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": []
     },
     {
       "key": "progen2-score",
       "category": "causal_models",
       "uses_gpu": true,
-      "measures": [],
+      "measures": [
+        {
+          "metric": "log_likelihood",
+          "type": "float",
+          "range": [
+            null,
+            0.0
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "avg_log_likelihood",
+          "type": "float",
+          "range": [
+            null,
+            0.0
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "perplexity",
+          "type": "float",
+          "range": [
+            1.0,
+            null
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "lower",
+          "primary": true
+        }
+      ],
       "status": "needs_calibration",
       "input_kind": "sequence",
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "schema"
+      ]
     },
     {
       "key": "progen3-sample",
@@ -1262,19 +4432,58 @@
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": []
     },
     {
       "key": "progen3-score",
       "category": "causal_models",
       "uses_gpu": true,
-      "measures": [],
+      "measures": [
+        {
+          "metric": "log_likelihood",
+          "type": "float",
+          "range": [
+            null,
+            0.0
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "avg_log_likelihood",
+          "type": "float",
+          "range": [
+            null,
+            0.0
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "perplexity",
+          "type": "float",
+          "range": [
+            1.0,
+            null
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "lower",
+          "primary": true
+        }
+      ],
       "status": "needs_calibration",
       "input_kind": "sequence",
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "schema"
+      ]
     },
     {
       "key": "promoter-calculator",
@@ -1286,7 +4495,9 @@
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "schema"
+      ]
     },
     {
       "key": "proteinmpnn-gradient",
@@ -1298,7 +4509,9 @@
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "schema"
+      ]
     },
     {
       "key": "proteinmpnn-sample",
@@ -1310,25 +4523,199 @@
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "schema"
+      ]
     },
     {
       "key": "proteinmpnn-score",
       "category": "inverse_folding",
       "uses_gpu": true,
-      "measures": [],
+      "measures": [
+        {
+          "metric": "log_likelihood",
+          "type": "float",
+          "range": [
+            null,
+            0.0
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "avg_log_likelihood",
+          "type": "float",
+          "range": [
+            null,
+            0.0
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "perplexity",
+          "type": "float",
+          "range": [
+            1.0,
+            null
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "lower",
+          "primary": true
+        }
+      ],
       "status": "needs_calibration",
       "input_kind": "structure",
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "schema"
+      ]
     },
     {
       "key": "protenix-prediction",
       "category": "structure_prediction",
       "uses_gpu": true,
-      "measures": [],
+      "measures": [
+        {
+          "metric": "confidence_score",
+          "type": "float",
+          "range": [
+            null,
+            null
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "higher",
+          "primary": true
+        },
+        {
+          "metric": "ptm",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "iptm",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "avg_plddt",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "gpde",
+          "type": "float",
+          "range": [
+            0.0,
+            null
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "lower",
+          "primary": false
+        },
+        {
+          "metric": "avg_pae",
+          "type": "float",
+          "range": [
+            0.0,
+            null
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "lower",
+          "primary": false
+        },
+        {
+          "metric": "pae",
+          "type": "list[list[float]]",
+          "range": [
+            0.0,
+            null
+          ],
+          "unit": "",
+          "availability": "when include_pae_matrix=True",
+          "better": "lower",
+          "primary": false
+        },
+        {
+          "metric": "chain_ptm",
+          "type": "list[float]",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "",
+          "availability": "depends on model output",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "chain_plddt",
+          "type": "list[float]",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "",
+          "availability": "depends on model output",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "chain_pair_iptm",
+          "type": "list[list[float]]",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "",
+          "availability": "depends on model output",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "has_clash",
+          "type": "bool",
+          "range": [
+            null,
+            null
+          ],
+          "unit": "",
+          "availability": "depends on model output",
+          "better": "lower",
+          "primary": false
+        }
+      ],
       "status": "needs_calibration",
       "input_kind": "complex",
       "molecules": [
@@ -1339,7 +4726,9 @@
       ],
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "schema"
+      ]
     },
     {
       "key": "pubchem-fetch",
@@ -1351,7 +4740,7 @@
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": []
     },
     {
       "key": "puffin-interpretation",
@@ -1363,7 +4752,9 @@
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "schema"
+      ]
     },
     {
       "key": "puffin-prediction",
@@ -1375,7 +4766,9 @@
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "schema"
+      ]
     },
     {
       "key": "pyhmmer-hmmscan",
@@ -1387,7 +4780,9 @@
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "schema"
+      ]
     },
     {
       "key": "pyhmmer-hmmsearch",
@@ -1399,7 +4794,9 @@
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "schema"
+      ]
     },
     {
       "key": "pyhmmer-jackhmmer",
@@ -1411,7 +4808,9 @@
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "schema"
+      ]
     },
     {
       "key": "pyhmmer-nhmmer",
@@ -1423,7 +4822,9 @@
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "schema"
+      ]
     },
     {
       "key": "pyhmmer-phmmer",
@@ -1435,79 +4836,339 @@
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "schema"
+      ]
     },
     {
       "key": "pymol-rmsd-alignment",
       "category": "structure_alignment",
       "uses_gpu": false,
-      "measures": [],
+      "measures": [
+        {
+          "metric": "rmsd",
+          "type": "float",
+          "range": [
+            0.0,
+            null
+          ],
+          "unit": "angstrom",
+          "availability": "always",
+          "better": "lower",
+          "primary": true
+        },
+        {
+          "metric": "aligned_length",
+          "type": "int",
+          "range": [
+            0.0,
+            null
+          ],
+          "unit": "cealign only",
+          "availability": "",
+          "better": "context-dependent",
+          "primary": false
+        },
+        {
+          "metric": "aligned_atoms",
+          "type": "int",
+          "range": [
+            0.0,
+            null
+          ],
+          "unit": "align only",
+          "availability": "",
+          "better": "context-dependent",
+          "primary": false
+        },
+        {
+          "metric": "alignment_cycles",
+          "type": "int",
+          "range": [
+            0.0,
+            null
+          ],
+          "unit": "align only",
+          "availability": "",
+          "better": "context-dependent",
+          "primary": false
+        },
+        {
+          "metric": "alignment_score",
+          "type": "float",
+          "range": [
+            null,
+            null
+          ],
+          "unit": "align only",
+          "availability": "",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "pre_refinement_rmsd",
+          "type": "float",
+          "range": [
+            0.0,
+            null
+          ],
+          "unit": "angstrom, align only",
+          "availability": "",
+          "better": "lower",
+          "primary": false
+        },
+        {
+          "metric": "pre_refinement_aligned_atoms",
+          "type": "int",
+          "range": [
+            0.0,
+            null
+          ],
+          "unit": "align only",
+          "availability": "",
+          "better": "context-dependent",
+          "primary": false
+        },
+        {
+          "metric": "aligned_residues",
+          "type": "int",
+          "range": [
+            0.0,
+            null
+          ],
+          "unit": "align only",
+          "availability": "",
+          "better": "context-dependent",
+          "primary": false
+        }
+      ],
       "status": "needs_calibration",
       "input_kind": "structure",
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "schema"
+      ]
     },
     {
       "key": "pyrosetta-energy",
       "category": "structure_scoring",
       "uses_gpu": false,
-      "measures": [],
+      "measures": [
+        {
+          "metric": "total_energy",
+          "type": "float",
+          "range": [
+            null,
+            null
+          ],
+          "unit": "REU",
+          "availability": "always",
+          "better": "lower",
+          "primary": true
+        }
+      ],
       "status": "needs_calibration",
       "input_kind": "structure",
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "schema"
+      ]
     },
     {
       "key": "pyrosetta-interface-analyzer",
       "category": "structure_scoring",
       "uses_gpu": false,
-      "measures": [],
+      "measures": [
+        {
+          "metric": "interface_sc",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "interface_hbonds",
+          "type": "int",
+          "range": [
+            0.0,
+            null
+          ],
+          "unit": "count",
+          "availability": "always",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "interface_dG",
+          "type": "float",
+          "range": [
+            null,
+            null
+          ],
+          "unit": "REU",
+          "availability": "always",
+          "better": "lower",
+          "primary": true
+        },
+        {
+          "metric": "interface_dSASA",
+          "type": "float",
+          "range": [
+            0.0,
+            null
+          ],
+          "unit": "\u00c5\u00b2",
+          "availability": "always",
+          "better": "context-dependent",
+          "primary": false
+        },
+        {
+          "metric": "interface_packstat",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "interface_hydrophobicity",
+          "type": "float",
+          "range": [
+            0.0,
+            100.0
+          ],
+          "unit": "%",
+          "availability": "always",
+          "better": "context-dependent",
+          "primary": false
+        },
+        {
+          "metric": "surface_hydrophobicity",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "lower",
+          "primary": false
+        },
+        {
+          "metric": "delta_unsat_hbonds",
+          "type": "int",
+          "range": [
+            0.0,
+            null
+          ],
+          "unit": "count",
+          "availability": "optional",
+          "better": "lower",
+          "primary": false
+        }
+      ],
       "status": "needs_calibration",
       "input_kind": "structure",
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "schema"
+      ]
     },
     {
       "key": "pyrosetta-relax",
       "category": "structure_scoring",
       "uses_gpu": false,
-      "measures": [],
+      "measures": [
+        {
+          "metric": "total_score",
+          "type": "float",
+          "range": [
+            null,
+            null
+          ],
+          "unit": "REU",
+          "availability": "always",
+          "better": "lower",
+          "primary": true
+        }
+      ],
       "status": "needs_calibration",
       "input_kind": "structure",
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "schema"
+      ]
     },
     {
       "key": "pyrosetta-sap",
       "category": "structure_scoring",
       "uses_gpu": false,
-      "measures": [],
+      "measures": [
+        {
+          "metric": "sap_score",
+          "type": "float",
+          "range": [
+            0.0,
+            null
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "lower",
+          "primary": true
+        }
+      ],
       "status": "needs_calibration",
       "input_kind": "structure",
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "schema"
+      ]
     },
     {
       "key": "pyrosetta-sasa",
       "category": "structure_scoring",
       "uses_gpu": false,
-      "measures": [],
+      "measures": [
+        {
+          "metric": "total_sasa",
+          "type": "float",
+          "range": [
+            0.0,
+            null
+          ],
+          "unit": "\u00c5\u00b2",
+          "availability": "always",
+          "better": "context-dependent",
+          "primary": true
+        }
+      ],
       "status": "needs_calibration",
       "input_kind": "structure",
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "schema"
+      ]
     },
     {
       "key": "random-nucleotide-sample",
@@ -1519,7 +5180,9 @@
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "schema"
+      ]
     },
     {
       "key": "random-protein-sample",
@@ -1531,23 +5194,173 @@
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "schema"
+      ]
     },
     {
       "key": "rf3-prediction",
       "category": "structure_prediction",
       "uses_gpu": true,
-      "measures": [],
+      "measures": [
+        {
+          "metric": "avg_plddt",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "ptm",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "iptm",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "multi-chain input only",
+          "availability": "",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "avg_pae",
+          "type": "float",
+          "range": [
+            0.0,
+            32.0
+          ],
+          "unit": "\u00c5",
+          "availability": "always",
+          "better": "lower",
+          "primary": false
+        },
+        {
+          "metric": "pde",
+          "type": "float",
+          "range": [
+            0.0,
+            32.0
+          ],
+          "unit": "\u00c5",
+          "availability": "always",
+          "better": "lower",
+          "primary": false
+        },
+        {
+          "metric": "ranking_score",
+          "type": "float",
+          "range": [
+            null,
+            null
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "higher",
+          "primary": true
+        },
+        {
+          "metric": "chain_ptm",
+          "type": "list[float]",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "chain_pair_pae",
+          "type": "list[list[float]]",
+          "range": [
+            0.0,
+            32.0
+          ],
+          "unit": "\u00c5",
+          "availability": "always (empty list for single-chain inputs)",
+          "better": "lower",
+          "primary": false
+        },
+        {
+          "metric": "chain_pair_pae_min",
+          "type": "list[list[float]]",
+          "range": [
+            0.0,
+            32.0
+          ],
+          "unit": "\u00c5",
+          "availability": "always (empty list for single-chain inputs)",
+          "better": "lower",
+          "primary": false
+        },
+        {
+          "metric": "chain_pair_pde",
+          "type": "list[list[float]]",
+          "range": [
+            0.0,
+            32.0
+          ],
+          "unit": "\u00c5",
+          "availability": "always (empty list for single-chain inputs)",
+          "better": "lower",
+          "primary": false
+        },
+        {
+          "metric": "chain_pair_pde_min",
+          "type": "list[list[float]]",
+          "range": [
+            0.0,
+            32.0
+          ],
+          "unit": "\u00c5",
+          "availability": "always (empty list for single-chain inputs)",
+          "better": "lower",
+          "primary": false
+        },
+        {
+          "metric": "has_clash",
+          "type": "bool",
+          "range": [
+            null,
+            null
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "lower",
+          "primary": false
+        }
+      ],
       "status": "needs_calibration",
       "input_kind": "complex",
       "molecules": [
         "dna",
+        "ligand",
         "protein",
         "rna"
       ],
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "schema"
+      ]
     },
     {
       "key": "rfdiffusion3-design",
@@ -1555,23 +5368,64 @@
       "uses_gpu": true,
       "measures": [],
       "status": "needs_calibration",
-      "input_kind": null,
+      "input_kind": "structure",
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "schema"
+      ]
     },
     {
       "key": "segmasker-score",
       "category": "sequence_scoring",
       "uses_gpu": false,
-      "measures": [],
+      "measures": [
+        {
+          "metric": "low_complexity_fraction",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "lower",
+          "primary": true
+        },
+        {
+          "metric": "low_complexity_count",
+          "type": "int",
+          "range": [
+            0.0,
+            null
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "lower",
+          "primary": false
+        },
+        {
+          "metric": "sequence_length",
+          "type": "int",
+          "range": [
+            1.0,
+            null
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "context-dependent",
+          "primary": false
+        }
+      ],
       "status": "needs_calibration",
       "input_kind": "sequence",
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "schema"
+      ]
     },
     {
       "key": "sequence-fetch",
@@ -1583,7 +5437,9 @@
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "schema"
+      ]
     },
     {
       "key": "splice-transformer-prediction",
@@ -1595,7 +5451,7 @@
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": []
     },
     {
       "key": "spliceai-predict",
@@ -1607,43 +5463,148 @@
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "schema"
+      ]
     },
     {
       "key": "spliceai-score",
       "category": "rna_splicing",
       "uses_gpu": true,
-      "measures": [],
+      "measures": [
+        {
+          "metric": "max_delta_score",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "present for scored variants overlapping an annotated gene",
+          "availability": "",
+          "better": "context-dependent",
+          "primary": true
+        }
+      ],
       "status": "needs_calibration",
       "input_kind": null,
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": []
     },
     {
       "key": "structure-metrics",
       "category": "structure_scoring",
       "uses_gpu": false,
-      "measures": [],
+      "measures": [
+        {
+          "metric": "longest_alpha_helix",
+          "type": "int",
+          "range": [
+            0.0,
+            null
+          ],
+          "unit": "residues",
+          "availability": "always",
+          "better": "context-dependent",
+          "primary": false
+        },
+        {
+          "metric": "gyration_radius",
+          "type": "float",
+          "range": [
+            0.0,
+            null
+          ],
+          "unit": "\u00c5",
+          "availability": "always",
+          "better": "context-dependent",
+          "primary": false
+        },
+        {
+          "metric": "helix_pct",
+          "type": "float",
+          "range": [
+            0.0,
+            100.0
+          ],
+          "unit": "%",
+          "availability": "always",
+          "better": "context-dependent",
+          "primary": false
+        },
+        {
+          "metric": "sheet_pct",
+          "type": "float",
+          "range": [
+            0.0,
+            100.0
+          ],
+          "unit": "%",
+          "availability": "always",
+          "better": "context-dependent",
+          "primary": false
+        },
+        {
+          "metric": "loop_pct",
+          "type": "float",
+          "range": [
+            0.0,
+            100.0
+          ],
+          "unit": "%",
+          "availability": "always",
+          "better": "context-dependent",
+          "primary": false
+        }
+      ],
       "status": "needs_calibration",
       "input_kind": "structure",
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "schema"
+      ]
     },
     {
       "key": "tmalign-alignment",
       "category": "structure_alignment",
       "uses_gpu": false,
-      "measures": [],
+      "measures": [
+        {
+          "metric": "tm_score_chain_1",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "tm_score_chain_2",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "higher",
+          "primary": false
+        }
+      ],
       "status": "needs_calibration",
       "input_kind": "structure",
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "schema"
+      ]
     },
     {
       "key": "uniprot-fetch",
@@ -1655,19 +5616,48 @@
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "docstring"
+      ]
     },
     {
       "key": "usalign-alignment",
       "category": "structure_alignment",
       "uses_gpu": false,
-      "measures": [],
+      "measures": [
+        {
+          "metric": "tm_score_structure_1",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "higher",
+          "primary": false
+        },
+        {
+          "metric": "tm_score_structure_2",
+          "type": "float",
+          "range": [
+            0.0,
+            1.0
+          ],
+          "unit": "",
+          "availability": "always",
+          "better": "higher",
+          "primary": false
+        }
+      ],
       "status": "needs_calibration",
       "input_kind": "structure",
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "schema"
+      ]
     },
     {
       "key": "viennarna-prediction",
@@ -1679,19 +5669,62 @@
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "schema"
+      ]
     },
     {
       "key": "vina-docking",
       "category": "molecular_docking",
       "uses_gpu": false,
-      "measures": [],
+      "measures": [
+        {
+          "metric": "affinity",
+          "type": "float",
+          "range": [
+            null,
+            null
+          ],
+          "unit": "kcal/mol",
+          "availability": "always",
+          "better": "lower",
+          "primary": true
+        },
+        {
+          "metric": "rmsd_lower_bound",
+          "type": "float",
+          "range": [
+            0.0,
+            null
+          ],
+          "unit": "angstrom",
+          "availability": "always",
+          "better": "context-dependent",
+          "primary": false
+        },
+        {
+          "metric": "rmsd_upper_bound",
+          "type": "float",
+          "range": [
+            0.0,
+            null
+          ],
+          "unit": "angstrom",
+          "availability": "always",
+          "better": "context-dependent",
+          "primary": false
+        }
+      ],
       "status": "needs_calibration",
       "input_kind": "structure",
-      "molecules": null,
+      "molecules": [
+        "ligand"
+      ],
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "schema"
+      ]
     },
     {
       "key": "x3dna-fiber",
@@ -1703,8 +5736,11 @@
       "molecules": null,
       "alphabet": null,
       "max_length": null,
-      "constraint_source": "docstring"
+      "constraint_source": [
+        "schema"
+      ]
     }
   ],
-  "n_tools": 140
+  "n_tools": 140,
+  "parse_failures": []
 }
