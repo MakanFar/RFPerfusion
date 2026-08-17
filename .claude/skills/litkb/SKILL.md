@@ -23,6 +23,38 @@ Read [references/output-contract.md](references/output-contract.md) before inter
 5. `search` → `screen` → `dig` → `bind`, then `evidence` → `label` → `validate` → `report`, then `manifest`.
 6. Report the coverage summary, what was rejected and why, and the evidence status. Link every emitted file.
 
+## Labelling `testable_by`
+
+`evidence` drafts each item with `testable_by.requires_new_evaluator: "unassessed"` — the label has not run yet, so no claim is made about what can test the claim. This is not a fourth judgement field to fill in directly; it is resolved for you when you assign `vocabulary`.
+
+`label` accepts a `vocabulary` field per item: a list of term ids from `registry/property_vocabulary.json` (a closed 9-term vocabulary — `fold_confidence`, `interface_confidence`, `predicted_error`, `sequence_likelihood`, `structural_validity`, `interface_energetics`, `interface_geometry`, `surface_character`, `design_ranking`). Read the evidence item's `claim` and its drafted `testable_by.properties` (free text lifted from the paper, e.g. "time-resolved EPR"), decide which vocabulary term(s) actually cover what was measured, and pass those ids. `label` then resolves `testable_by.tools` against `registry/proto_catalog.json` and sets `requires_new_evaluator` to one of three values:
+
+- `"unassessed"` — no `vocabulary` has been assigned yet (the draft state; never set this yourself).
+- `false` — vocabulary terms were assigned and at least one tool in the catalogue measures them. `testable_by.tools` is non-empty.
+- `true` — vocabulary terms were assigned and nothing in the catalogue measures them.
+
+Assigning an **empty** `vocabulary` list is a real, deliberate assessment — "I looked at the catalogue and nothing in it measures this claim" — and resolves to `requires_new_evaluator: true`. That is different from never labelling the item, which leaves it at `"unassessed"` forever. Do not assign vocabulary terms you are not confident actually match what the paper measured just to avoid leaving an item unassessed — an unmatched term raises an error (`vocabulary.UnknownTerm`), and a wrongly-matched term produces a false `tools` binding.
+
+`label` invocation:
+
+```bash
+uv run --project . python -m litkb label <evidence.json> <labels.json> \
+    --registry ../registry/proto_catalog.json \
+    --vocabulary ../registry/property_vocabulary.json
+```
+
+`labels.json` is either a bare list or `{"labels": [...]}`, each entry keyed by evidence `id`:
+
+```json
+{"labels": [
+  {"id": "ev_001", "vocabulary": ["fold_confidence"],
+   "claim_type": "mechanism", "support": "established",
+   "evidence_kind": "computational", "confidence": 0.8}
+]}
+```
+
+`--registry` and `--vocabulary` default to `../registry/proto_catalog.json` and `../registry/property_vocabulary.json` (relative to `litterature_search_from_concept/`, the directory these commands run from) and rarely need overriding.
+
 Run from `litterature_search_from_concept/` as `uv run --project . python -m litkb <cmd>`. Every command reads JSON and writes JSON, so any stage can be inspected or retried alone.
 
 ## Cost
@@ -51,4 +83,4 @@ Verified against 0.7.36. Re-check if that version moves.
 - Never accept a sequence that failed source confirmation, whatever its constraint status. A fabricated sequence passes every alphabet and length check.
 - Never fill `support` yourself from memory. Read the span and label it, or leave it unlabelled and let `validate` block it.
 - Never rewrite an empty category as evidence that the literature contains nothing. Zero-yield phrases and empty classes are diagnostics.
-- Regenerate `registry/proto_catalog.json` with `proto-sync` rather than hand-editing it; `measures` and `status` are the only curated fields.
+- Regenerate `registry/proto_catalog.json` with `proto-sync` rather than hand-editing it. `measures` is derived by `proto-sync` from `proto-tools output <key>`, not curated — every `proto-sync` run overwrites it. `status` is the only field a human curates by hand afterward (`proto-sync` always writes `needs_calibration`; promoting a tool to `validated` is a deliberate, separate act).

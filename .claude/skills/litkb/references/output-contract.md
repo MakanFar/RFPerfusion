@@ -7,7 +7,7 @@ The run directory contains:
 - `<slug>_screen.json`: one record per paper read — mechanisms with their measurable properties, a `has_sequence` flag, where the sequence lives, and named proteins. Papers whose output could not be parsed appear under `failed`, never folded into "no sequence".
 - `<slug>_dug.json`: candidate sequences and mutations extracted from the flagged papers.
 - `<slug>_artifacts.json`: `artifacts[]` (proto-runnable) and `rejections[]` (everything else, each carrying the check it failed).
-- `<slug>_evidence.json`: typed `EvidenceItem[]` per PRD §6.2, with `testable_by` resolved against the proto catalogue.
+- `<slug>_evidence.json`: typed `EvidenceItem[]` per PRD §6.2. `testable_by` starts `"unassessed"` on every freshly drafted item and is resolved against the proto catalogue only once `label` assigns `vocabulary` terms to it.
 - `knowledge_base_<slug>.txt`: the human read.
 - `manifest_<slug>.json`: sources, limits, every set ID, the workers actually used, artifact paths, counts, and evidence status.
 
@@ -29,6 +29,8 @@ A mutation rejected this way is reported as a notation mismatch rather than a fa
 
 ## Judgement is the caller's
 
-`litkb` never invents a claim or a support level. `screen` writes the claim it read; `support`, `claim_type`, `evidence_kind` and `confidence` start null and are supplied by the calling agent through `label`. `validate` refuses items that are still unlabelled. `support` is `established | contested | speculative`, and nothing speculative may become a hard constraint downstream.
+`litkb` never invents a claim or a support level. `screen` writes the claim it read; `support`, `claim_type`, `evidence_kind`, `confidence` and `vocabulary` start null/empty and are supplied by the calling agent through `label`. `validate` refuses items that are still unlabelled. `support` is `established | contested | speculative`, and nothing speculative may become a hard constraint downstream.
+
+`vocabulary` is a list of term ids from `registry/property_vocabulary.json`, the closed set of properties the proto catalogue can actually address. Assigning it re-resolves `testable_by.tools` and `testable_by.requires_new_evaluator` against `registry/proto_catalog.json`. An empty list is a real, distinct assessment ("nothing in the catalogue measures this") that resolves to `requires_new_evaluator: true`; never labelling `vocabulary` at all leaves the item at `requires_new_evaluator: "unassessed"` indefinitely.
 
 Empty categories, zero-yield phrases, classes with no corpus, and failed extractions are all preserved as rejections. They are search diagnostics and must not be rewritten as evidence that the literature contains nothing.

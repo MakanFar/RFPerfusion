@@ -52,14 +52,26 @@ def _snapshot_from_catalog(catalog):
     recording it here means formulation_agent007 can build a metric digest
     from this ONE small file instead of also reading the full 140-tool
     catalogue, which is the entire point of having a snapshot.
+
+    `better` is resolved across every tool that emits the metric, not taken
+    first-wins from whichever tool `catalog["tools"]` happens to iterate to
+    first. When tools disagree -- e.g. `interface_hydrophobicity`, which
+    three tools call `context-dependent` and one (`germinal-design`) calls
+    `higher` -- the disagreement itself is the honest answer, so it resolves
+    to `context-dependent` deliberately. Landing there by iteration order
+    would have been correct today only by accident: `validate.py` exempts
+    `context-dependent` from its direction check, so first-wins happened to
+    be safe, but a catalog reorder could just as easily have first-wins land
+    on `higher` and make it wrongly reject a legitimate `<=` gate.
     """
     metrics = {}
     for t in catalog["tools"]:
         for m in t["measures"]:
             entry = metrics.setdefault(
                 m["metric"],
-                {"better": m["better"], "tools": [], "primary": False, "primary_tools": []},
+                {"better": set(), "tools": [], "primary": False, "primary_tools": []},
             )
+            entry["better"].add(m["better"])
             entry["tools"].append(t["key"])
             if m.get("primary"):
                 entry["primary"] = True
@@ -82,7 +94,8 @@ def _snapshot_from_catalog(catalog):
         "tool_keys": sorted(t["key"] for t in catalog["tools"]),
         "metrics": {
             k: {
-                "better": v["better"],
+                "better": next(iter(v["better"])) if len(v["better"]) == 1
+                          else "context-dependent",
                 "tools": sorted(v["tools"]),
                 "primary": v["primary"],
                 "primary_tools": sorted(v["primary_tools"]),

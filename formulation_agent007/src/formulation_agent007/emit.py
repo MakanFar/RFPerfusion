@@ -187,6 +187,13 @@ def _run_script(brief: DesignBrief, directory: Path) -> str:
     return f"""#!/usr/bin/env bash
 # Literature mining for: {brief.question}
 # Run from the repository root. Requires `paperclip` on PATH.
+#
+# This file has TWO alternative paths below (DEFAULT and ALTERNATIVE) --
+# run ONE of them, not both. A plain `bash run_literature.sh` executes both
+# back to back and doubles the cost for no benefit. Use the DEFAULT path
+# unless the daily LLM read quota is the binding constraint, in which case
+# use the ALTERNATIVE path instead (see its own header below for what it
+# trades away).
 set -euo pipefail
 
 # ---------------------------------------------------------------------------

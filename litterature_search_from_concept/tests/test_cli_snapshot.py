@@ -68,3 +68,39 @@ def test_tool_keys_and_categories_are_unaffected():
 def test_a_tool_with_no_measures_contributes_no_metrics():
     snapshot = _snapshot_from_catalog(CATALOG)
     assert set(snapshot["metrics"]) == {"iptm", "avg_pae"}
+
+
+DISAGREEING_CATALOG = {
+    "tools": [
+        {
+            "key": "some-design-tool",
+            "category": "structure_design",
+            "measures": [
+                {"metric": "interface_hydrophobicity", "better": "context-dependent",
+                 "primary": False},
+            ],
+        },
+        {
+            "key": "germinal-design",
+            "category": "structure_design",
+            "measures": [
+                {"metric": "interface_hydrophobicity", "better": "higher",
+                 "primary": False},
+            ],
+        },
+    ],
+}
+
+
+def test_better_resolves_to_context_dependent_when_tools_disagree():
+    """Real-world case: `interface_hydrophobicity` is `context-dependent`
+    per three tools and `higher` per `germinal-design`. The resolution must
+    be deliberate, not an accident of catalog iteration order -- so it must
+    come out `context-dependent` regardless of which tool is listed first."""
+    snapshot = _snapshot_from_catalog(DISAGREEING_CATALOG)
+    assert snapshot["metrics"]["interface_hydrophobicity"]["better"] == "context-dependent"
+
+    reordered = {"tools": list(reversed(DISAGREEING_CATALOG["tools"]))}
+    snapshot_reordered = _snapshot_from_catalog(reordered)
+    assert snapshot_reordered["metrics"]["interface_hydrophobicity"]["better"] == \
+        "context-dependent"
