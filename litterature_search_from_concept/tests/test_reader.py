@@ -1,6 +1,6 @@
 from unittest.mock import patch
 
-from litkb import paperclip, reader
+from litkb import contracts, paperclip, reader
 
 # Real `paperclip map` stdout is human-formatted text, not a JSON envelope
 # (confirmed live against PMC6200754 -- see reader.py comment above
@@ -103,8 +103,70 @@ def test_map_papers_defaults_to_quick_reader_because_other_workers_are_gated():
 
 def _artifact(value="TAGTTCCTTCTTTCAGCAGTTT", verbatim=True,
               set_id="s_abc123", doc_id="PMC2040520"):
-    return {"value": value, "verbatim": verbatim,
-            "provenance": {"set_id": set_id, "doc_id": doc_id}}
+    """Built through the REAL builder, never hand-rolled.
+
+    The hand-rolled version of this fixture put `verbatim` at the TOP level,
+    but `contracts.draft_artifact` nests it under `provenance`. So
+    `confirm_in_source`'s `artifact.get("verbatim")` guard was satisfied in
+    every test and `None` on every artifact the pipeline actually produces --
+    the fabrication check returned False without ever calling grep, and
+    `confirmed_in_source` was False for 56/56 artifacts of a live run while
+    the suite stayed green. Constructing the fixture through the real
+    function is what stops that drift recurring.
+    """
+    return contracts.draft_artifact(
+        1,
+        {"value": value, "molecule": "dna", "name": None, "region": None,
+         "where": "methods", "verbatim": verbatim},
+        doc_id, set_id,
+    )
+
+
+def test_confirm_in_source_reads_verbatim_from_provenance():
+    """Regression for the nesting bug above: a real artifact carries
+    `provenance.verbatim`, and confirm_in_source must consult THAT. If it
+    reads a top-level key, this artifact looks non-verbatim and grep is
+    never called."""
+    art = _artifact(verbatim=True)
+    assert "verbatim" not in art, "builder shape changed -- retarget this test"
+    assert art["provenance"]["verbatim"] is True
+
+    calls = []
+
+    def grep_fn(set_id, patterns):
+        calls.append((set_id, patterns))
+        return [{"doc_id": art["provenance"]["doc_id"], "text": art["value"]}]
+
+    assert reader.confirm_in_source(art, grep_fn, literal=True) is True
+    assert calls, "grep was never called -- the guard short-circuited"
+
+
+def test_confirm_in_source_matches_map_truncated_doc_id_against_full_grep_id():
+    """`paperclip map`'s per-paper timing line abbreviates bioRxiv doc ids --
+    it printed `bio_f583cade` where `paperclip grep` returns
+    `bio_f583cade7157` for the same paper (confirmed live; PMC ids are
+    unaffected). `parse_map_output` records what map printed, so an
+    artifact's stored id can be a strict prefix of the id a grep hit
+    carries, and an `==` comparison rejected every bioRxiv sequence however
+    plainly present it was."""
+    art = _artifact(doc_id="bio_f583cade")
+
+    def grep_fn(set_id, patterns):
+        return [{"doc_id": "bio_f583cade7157", "text": "snippet"}]
+
+    assert reader.confirm_in_source(art, grep_fn, literal=True) is True
+
+
+def test_confirm_in_source_does_not_let_a_stub_doc_id_match_everything():
+    """Prefix acceptance must stay bounded: a truncated-to-nothing id would
+    otherwise be a prefix of every document in the set and confirm all of
+    them."""
+    art = _artifact(doc_id="bio_")
+
+    def grep_fn(set_id, patterns):
+        return [{"doc_id": "bio_f583cade7157", "text": "snippet"}]
+
+    assert reader.confirm_in_source(art, grep_fn, literal=True) is False
 
 
 def test_confirm_in_source_literal_trusts_doc_id_match_even_if_text_snippet_differs():

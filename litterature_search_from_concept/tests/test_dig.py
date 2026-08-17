@@ -1,9 +1,24 @@
-from litkb import reader
+from litkb import contracts, reader
 
-REAL = {"value": "MKVAALLPQR", "provenance": {"doc_id": "PMC1", "set_id": "s_1"},
-        "verbatim": True}
-FABRICATED = {"value": "QQQWWWEEEE", "provenance": {"doc_id": "PMC1", "set_id": "s_1"},
-              "verbatim": True}
+
+def _art(value, verbatim=True, doc_id="PMC1", set_id="s_1"):
+    """Real builder, not a hand-rolled dict.
+
+    These fixtures used to place `verbatim` at the top level while
+    contracts.draft_artifact nests it under `provenance`, so every test here
+    exercised a shape the pipeline never emits and the fabrication guard
+    passed its tests while silently returning False on all real input.
+    """
+    return contracts.draft_artifact(
+        1,
+        {"value": value, "molecule": "protein", "name": None, "region": None,
+         "where": "methods", "verbatim": verbatim},
+        doc_id, set_id,
+    )
+
+
+REAL = _art("MKVAALLPQR")
+FABRICATED = _art("QQQWWWEEEE")
 
 
 def grep_fn(set_id, patterns):
@@ -25,7 +40,7 @@ def test_sequence_absent_from_source_is_not_confirmed():
 
 
 def test_non_verbatim_sequence_is_never_confirmed():
-    claimed = dict(REAL, verbatim=False)
+    claimed = _art("MKVAALLPQR", verbatim=False)
     assert reader.confirm_in_source(claimed, grep_fn) is False
 
 

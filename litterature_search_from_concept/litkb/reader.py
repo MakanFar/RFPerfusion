@@ -185,6 +185,32 @@ DIG_QUERY = (
 )
 
 
+_MIN_DOC_ID_PREFIX = 8
+
+
+def _same_doc(hit_doc_id, claimed_doc_id):
+    """Do these two ids name the same document? Not always string equality.
+
+    `paperclip map`'s per-paper timing line abbreviates bioRxiv doc ids: it
+    printed `bio_f583cade` where `paperclip grep` returns `bio_f583cade7157`
+    for the same paper (confirmed live; PMC ids are unaffected).
+    `parse_map_output` faithfully records what map printed, so the id stored
+    on an artifact can be a strict prefix of the id carried by a grep hit.
+    Comparing with `==` therefore rejected every bioRxiv sequence no matter
+    how plainly present it was.
+
+    Prefix acceptance is deliberately bounded by `_MIN_DOC_ID_PREFIX`: a
+    stub or empty id would otherwise prefix-match every document in the set
+    and confirm all of them.
+    """
+    if hit_doc_id == claimed_doc_id:
+        return True
+    if min(len(hit_doc_id), len(claimed_doc_id)) < _MIN_DOC_ID_PREFIX:
+        return False
+    return (hit_doc_id.startswith(claimed_doc_id)
+            or claimed_doc_id.startswith(hit_doc_id))
+
+
 def confirm_in_source(artifact, grep_fn, literal=False):
     """Re-grep an extracted sequence against its own source document.
 
@@ -216,10 +242,19 @@ def confirm_in_source(artifact, grep_fn, literal=False):
       false-reject a real match (per the truncation issue above) in
       exchange for never false-confirming a fabricated one.
     """
-    if not artifact.get("verbatim"):
+    prov = artifact["provenance"]
+    # `verbatim` lives under `provenance` -- that is where
+    # contracts.draft_artifact puts it. Reading a TOP-LEVEL "verbatim" here
+    # made this return False before ever calling grep, on every artifact the
+    # pipeline produces: a live run had confirmed_in_source False for 56/56
+    # while the suite stayed green, because the test fixture hand-rolled the
+    # top-level shape. The guard that "distinguishes real from well-formed"
+    # was not running at all -- the same never-fires-but-looks-fine failure
+    # the README documents for the pLDDT gate.
+    if not prov.get("verbatim"):
         return False
-    hits = grep_fn(artifact["provenance"]["set_id"], [artifact["value"]])
+    hits = grep_fn(prov["set_id"], [artifact["value"]])
     if literal:
-        return any(h["doc_id"] == artifact["provenance"]["doc_id"] for h in hits)
-    return any(h["doc_id"] == artifact["provenance"]["doc_id"] and
+        return any(_same_doc(h["doc_id"], prov["doc_id"]) for h in hits)
+    return any(_same_doc(h["doc_id"], prov["doc_id"]) and
                artifact["value"] in h["text"] for h in hits)
