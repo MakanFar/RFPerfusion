@@ -41,22 +41,20 @@ METRIC_DIRECTION: dict[str, str] = {
 }
 TOOLS_BY_CATEGORY: dict[str, list[str]] = _SNAPSHOT["categories"]
 
-# `proto_catalog.json` is the fuller per-tool schema the snapshot above was
-# distilled from. It is read only for the one thing the distilled snapshot
-# doesn't carry: which metrics a tool's own schema flags `primary` -- "the
-# number you actually look at" rather than a secondary readout bundled
-# alongside it. Read-only; never modified, per the same offline-snapshot
-# contract as _SNAPSHOT_PATH above.
-_CATALOG_PATH = Path(__file__).resolve().parents[3] / "registry" / "proto_catalog.json"
-
-with _CATALOG_PATH.open() as _fh:
-    _CATALOG = json.load(_fh)
-
+# `primary` is True on a metric's snapshot entry when at least one tool
+# emitting it flags it primary in the tool's own schema -- "the number you
+# actually look at" rather than a secondary readout bundled alongside it.
+# This lives in the snapshot itself (schema_version >= 3, via
+# `litkb proto-sync`'s `_snapshot_from_catalog`) precisely so this module
+# reads exactly ONE registry file. It used to also read the much larger full
+# tool catalogue this snapshot is distilled from just for this one flag,
+# which defeated the point of having a snapshot: this project would
+# hard-fail on import if that other file were ever pruned while the
+# snapshot remained. Older snapshots without the field degrade to "no
+# metric is primary" via `.get(..., False)` rather than raising.
 _PRIMARY_METRICS: frozenset[str] = frozenset(
-    measure["metric"]
-    for tool in _CATALOG["tools"]
-    for measure in tool.get("measures", [])
-    if measure.get("primary")
+    name for name, spec in _SNAPSHOT["metrics"].items()
+    if spec.get("primary", False)
 )
 
 # A metric counts as "widely shared" when several unrelated tools emit it --
