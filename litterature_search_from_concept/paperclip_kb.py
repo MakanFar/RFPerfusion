@@ -65,20 +65,36 @@ fences, with exactly these keys:
 
 
 def validate_plan(plan: object) -> dict:
+    """Delegates to the shared, import-nothing `plan_contract.check`, which
+    tags every problem with its KIND ("type" or "value") rather than leaving
+    this function to sniff message wording to recover which exception type
+    to raise. Same raising contract as before the delegation: a non-dict
+    plan or a non-string `notes` raise TypeError; every other rejection
+    raises ValueError -- callers (see
+    formulation_agent007/tests/test_emit.py) depend on that distinction.
+
+    `plan_contract` is loaded from its own file next to this script rather
+    than via a plain `import plan_contract`, because this function must keep
+    working when paperclip_kb.py itself is loaded by path from a project
+    whose sys.path never includes this directory --
+    formulation_agent007/tests/conftest.py does exactly that to check its
+    emitted plan against the real function."""
+    import importlib.util
+    import pathlib
+
+    plan_contract_path = pathlib.Path(__file__).resolve().with_name("plan_contract.py")
+    spec = importlib.util.spec_from_file_location("plan_contract", plan_contract_path)
+    plan_contract = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(plan_contract)
+
     if not isinstance(plan, dict):
         raise TypeError("plan must be a JSON object")
-    required = {"search_phrases", "mechanism_patterns", "notes"}
-    missing = required - plan.keys()
-    if missing:
-        raise ValueError(f"plan is missing keys: {', '.join(sorted(missing))}")
-    for key in ("search_phrases", "mechanism_patterns"):
-        values = plan[key]
-        if not isinstance(values, list) or not values:
-            raise ValueError(f"{key} must be a non-empty list")
-        if not all(isinstance(value, str) and value.strip() for value in values):
-            raise ValueError(f"{key} must contain non-empty strings")
-    if not isinstance(plan["notes"], str):
-        raise TypeError("notes must be a string")
+    errors = plan_contract.check(plan)
+    if errors:
+        messages = "; ".join(message for _, message in errors)
+        if any(kind == "type" for kind, _ in errors):
+            raise TypeError(messages)
+        raise ValueError(messages)
     return plan
 
 

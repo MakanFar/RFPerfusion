@@ -62,27 +62,17 @@ def validate_plan(plan):
 # design-brief-007 hands off a FLAT plan (exactly three keys:
 # search_phrases/mechanism_patterns/notes), already validated against
 # paperclip_kb.py's own `validate_plan` -- see
-# .claude/skills/design-brief-007/references/handoff-contract.md. This is
-# the same three-key check mirrored here rather than imported, so litkb has
-# no import dependency on the sibling script; a plan that fails it names
-# exactly which key is missing, per that handoff contract.
-BRIEF_PLAN_KEYS = ("search_phrases", "mechanism_patterns", "notes")
+# .claude/skills/design-brief-007/references/handoff-contract.md. The check
+# itself lives in the sibling, import-nothing `plan_contract` module rather
+# than being mirrored here by hand, so litkb still has no import dependency
+# on the sibling script -- `plan_contract` imports nothing either, which is
+# the whole point; a plan that fails it names exactly which key is missing,
+# per that handoff contract.
+from plan_contract import BRIEF_PLAN_KEYS, check as _check_brief_plan
 
 
 def validate_brief_plan(plan):
-    if not isinstance(plan, dict):
-        return ["brief plan must be a JSON object"]
-    missing = [k for k in BRIEF_PLAN_KEYS if k not in plan]
-    if missing:
-        return [f"brief plan is missing required key(s): {', '.join(missing)}"]
-    errors = []
-    for key in ("search_phrases", "mechanism_patterns"):
-        values = plan[key]
-        if not isinstance(values, list) or not values:
-            errors.append(f"brief plan.{key} must be a non-empty list")
-    if not isinstance(plan.get("notes"), str):
-        errors.append("brief plan.notes must be a string")
-    return errors
+    return [message for _, message in _check_brief_plan(plan)]
 
 
 def adopt_brief_plan(plan, objective, slug, source_path):
