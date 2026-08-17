@@ -406,7 +406,6 @@ def cmd_bind(args):
 
 def cmd_evidence(args):
     screened = _load(args.screen)
-    catalog = _load(args.registry) if Path(args.registry).exists() else {"tools": []}
     # Record the worker that actually produced these mechanisms, not an
     # assumed one -- cmd_screen threads its own SCREEN_WORKER through the
     # screen output for exactly this. Falling back to SCREEN_WORKER only
@@ -423,15 +422,11 @@ def cmd_evidence(args):
             n += 1
             item = contracts.item_from_mechanism(n, rec["class_id"], mech, doc, cache[doc],
                                                  extracted_by=extracted_by)
-            item["testable_by"] = {
-                "properties": mech.get("measurable_properties", []),
-                **proto.resolve_properties(mech.get("measurable_properties", []), catalog),
-            }
             items.append(item)
 
-    need_eval = sum(1 for i in items if i["testable_by"]["requires_new_evaluator"])
-    print(f"  {len(items)} items, {need_eval} need a new evaluator", file=sys.stderr)
-    _emit({"slug": screened["slug"], "items": items,
+    print(f"  {len(items)} items drafted, all testable_by unassessed until "
+          f"`litkb label` runs", file=sys.stderr)
+    _emit({"schema_version": 2, "slug": screened["slug"], "items": items,
            "unlabelled": len(contracts.validate_items(items))},
           _resolve_out(args, f"evidence_{screened['slug']}.json"))
 
@@ -701,7 +696,6 @@ def main(argv=None):
 
     p = sub.add_parser("evidence", help="screen output -> draft EvidenceItems (judgement fields null)")
     p.add_argument("screen")
-    p.add_argument("--registry", default="../registry/proto_catalog.json")
     p.add_argument("-o", "--out")
     p.add_argument("--output-dir")
     p.set_defaults(fn=cmd_evidence)

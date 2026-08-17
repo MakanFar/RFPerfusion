@@ -252,8 +252,12 @@ def item_from_mechanism(index, class_id, mech, doc_id, citation, extracted_by="q
         "evidence_kind": None,
         "extracted_by": extracted_by,
         "confidence": None,
+        # `vocabulary` is filled by `litkb label`, like every other
+        # judgement field -- the tool drafts, the agent judges. Until then
+        # the assessment is unmade, and says so.
         "testable_by": {"properties": mech.get("measurable_properties", []),
-                        "tools": [], "requires_new_evaluator": True},
+                        "vocabulary": [], "tools": [],
+                        "requires_new_evaluator": "unassessed"},
         "provenance": {
             "doc_id": doc_id,
             "section": None,

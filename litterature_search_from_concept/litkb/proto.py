@@ -10,6 +10,8 @@ import json
 import re
 import subprocess
 
+from . import vocabulary
+
 PROTEIN_ALPHABET = "ACDEFGHIKLMNPQRSTVWYXBZUO"
 NUCLEOTIDE_ALPHABET = "ACGTUN"
 
@@ -387,15 +389,29 @@ def bind_artifact(artifact, catalog):
             "unverified": unverified, "rejected_by": rejected}
 
 
-def resolve_properties(properties, catalog):
-    """Map measurable properties onto tools that measure them.
+UNASSESSED = "unassessed"
 
-    Framework §77: a class nothing can evaluate returns
-    requires_new_evaluator, which is a legitimate output to hand back to the
-    scientist rather than a discard."""
-    wanted = set(properties or [])
-    tools = sorted(t["key"] for t in catalog["tools"]
-                   if wanted & set(t.get("measures") or []))
+
+def resolve_properties(term_ids, catalog, vocab):
+    """Map assigned vocabulary terms onto tools that measure them.
+
+    Three-valued on purpose. The old version intersected free-text
+    properties against an all-empty `measures` column and so returned
+    `True` unconditionally -- an answer that happened to be right for the
+    RF corpus and could not have been wrong for any corpus.
+
+    Framework section 77: a class nothing can evaluate returns
+    requires_new_evaluator, which is a legitimate output to hand back to
+    the scientist rather than a discard.
+    """
+    if not term_ids:
+        return {"tools": [], "requires_new_evaluator": UNASSESSED}
+
+    wanted = vocabulary.metrics_for(term_ids, vocab)
+    tools = sorted(
+        t["key"] for t in catalog["tools"]
+        if wanted & {m["metric"] for m in t.get("measures", [])}
+    )
     return {"tools": tools, "requires_new_evaluator": not tools}
 
 
