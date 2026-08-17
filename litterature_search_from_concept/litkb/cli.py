@@ -555,6 +555,19 @@ def resolve_coverage(plan, catalog):
     return classes
 
 
+def _load_calibration(path):
+    """Read the hand-curated calibration file, or the empty curation.
+
+    A checkout without the file must still sync, and must land in the
+    conservative state -- every tool `needs_calibration` -- rather than
+    failing. Silence is never a promotion.
+    """
+    p = Path(path)
+    if not p.exists():
+        return {"schema_version": proto.CALIBRATION_SCHEMA_VERSION, "tools": {}}
+    return json.loads(p.read_text())
+
+
 def cmd_proto_sync(args):
     """Sync the proto-tools catalogue and rebuild the registry.
 
@@ -601,6 +614,20 @@ def cmd_proto_sync(args):
         schema_fetcher=lambda k: schemas.get(k, {}),
         output_fetcher=lambda k: outputs.get(k, ""),
     )
+    # Overlay curated status LAST, so the generated fields stay fully derived
+    # and the one human-maintained fact survives a regeneration that would
+    # otherwise reset every tool to needs_calibration.
+    catalog, orphans = proto.apply_calibration(
+        catalog, _load_calibration(args.calibration))
+    validated = sum(1 for t in catalog["tools"] if t["status"] == "validated")
+    print(f"  {validated}/{len(tools)} validated "
+          f"(from {args.calibration})", file=sys.stderr)
+    for key in orphans:
+        # Rejections ship: a curated key the catalogue no longer has means
+        # real calibration work is pointing at a renamed or retired tool.
+        print(f"  warning: calibration names {key}, which proto-tools no "
+              f"longer lists -- calibration for it is orphaned", file=sys.stderr)
+
     capped = sum(1 for t in catalog["tools"] if t["max_length"] is not None)
     scoring = sum(1 for t in catalog["tools"] if t["measures"])
     print(f"  {capped}/{len(tools)} have a parseable length cap", file=sys.stderr)
@@ -791,6 +818,9 @@ def main(argv=None):
     p.add_argument("-o", "--out")
     p.add_argument("--snapshot", default="../registry/proto_metrics.json",
                    help="also write the formulation_agent007 vocabulary snapshot")
+    p.add_argument("--calibration", default="../registry/calibration.json",
+                   help="hand-curated calibration status, overlaid onto the "
+                        "generated catalogue; absent means nothing is validated")
     p.set_defaults(fn=cmd_proto_sync)
 
     p = sub.add_parser("registry-check", help="resolve mechanism classes against the evaluator registry")

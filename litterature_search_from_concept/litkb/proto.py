@@ -299,6 +299,60 @@ def fetch_output_doc(key, project="../proto"):
         capture_output=True, text=True).stdout
 
 
+CALIBRATION_SCHEMA_VERSION = 1
+CALIBRATION_STATUSES = ("needs_calibration", "validated")
+
+
+def apply_calibration(catalog, curation):
+    """Overlay hand-curated calibration status onto a freshly built catalogue.
+
+    Returns `(catalog, orphans)`.
+
+    `build_catalog` writes `status: "needs_calibration"` for every tool and
+    never reads the file it is about to replace, so a promotion edited into
+    `proto_catalog.json` by hand survived only until the next `proto-sync` --
+    which the docs tell you to run whenever the proto-tools catalogue moves.
+    The curated fact therefore lives in its own file, and this overlays it at
+    build time. The generated registry stays fully derived, which is the
+    property that made `measures` trustworthy in the first place; nothing a
+    human maintains is stored where the generator writes.
+
+    Orphans -- curated keys the catalogue no longer contains, e.g. after an
+    upstream rename -- are returned rather than dropped, so calibration effort
+    cannot evaporate silently. They are NOT written into the catalogue: that
+    would change its committed shape and, per this repo's own rule, force a
+    `schema_version` bump and a full regeneration to adopt a fix.
+
+    Scope: this makes curation durable, nothing more. Framework section 6 also
+    wants measured reliability, error bounds and an applicability domain per
+    evaluator, and `status` is per-tool where reliability is really per-metric.
+    Both remain unbuilt -- see the calibration notes in registry/calibration.json.
+    """
+    version = curation.get("schema_version")
+    if version != CALIBRATION_SCHEMA_VERSION:
+        raise ValueError(
+            f"calibration: schema_version {version!r}, expected "
+            f"{CALIBRATION_SCHEMA_VERSION}"
+        )
+    curated = curation.get("tools") or {}
+    for key, entry in sorted(curated.items()):
+        status = (entry or {}).get("status")
+        if status not in CALIBRATION_STATUSES:
+            # A typo reads as "not validated" and quietly fails to promote --
+            # the calibration equivalent of failing open, so refuse it loudly.
+            raise ValueError(
+                f"calibration: {key} has status {status!r}, expected one of "
+                f"{CALIBRATION_STATUSES}"
+            )
+    present = {t["key"] for t in catalog["tools"]}
+    tools = [
+        {**t, "status": curated[t["key"]]["status"]} if t["key"] in curated else t
+        for t in catalog["tools"]
+    ]
+    orphans = sorted(k for k in curated if k not in present)
+    return {**catalog, "tools": tools}, orphans
+
+
 def load_catalog(path):
     """Read a registry, refusing anything but the current schema version.
 

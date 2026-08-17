@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "note": "Hand-curated calibration status, kept OUT of proto_catalog.json because that file is regenerated from proto-tools on every `litkb proto-sync` and every field in it is derived. `status` is the one fact a human establishes rather than reads off a schema, so it lives here and is overlaid at build time by proto.apply_calibration. Editing status in the generated catalogue instead would survive only until the next sync.",
+  "promotion_rule": "A tool becomes \"validated\" only on measured reliability against a held-out benchmark, per docs/PRD-framework.md section 6. Absence from `tools` below means needs_calibration; silence is never a promotion. Framework section 6 forbids ranking candidates on an uncalibrated evaluator, so promoting a tool here changes what the system is allowed to claim.",
+  "known_gaps": [
+    "status is per-tool, but reliability is per-metric: a tool can emit a well-characterised avg_plddt and an uncharacterised iptm, and this file cannot yet say so. The `measures` rows in proto_catalog.json carry the right granularity for it.",
+    "Section 6 also requires measured error per evaluator (so no design margin is claimed finer than it) and an applicability domain (so out-of-domain candidates are flagged and excluded from ranking). Neither has a field anywhere in the registry yet.",
+    "Only 48 of 140 catalogued tools emit metrics at all; the other 92 are generators, retrievers, aligners and annotators for which calibration is meaningless. The real calibration surface is those 48."
+  ],
+  "tools": {}
+}
