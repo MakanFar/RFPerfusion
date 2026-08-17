@@ -404,7 +404,7 @@ def parse_metrics_doc(text):
 - [ ] **Step 4: Run the tests to verify they pass**
 
 Run: `cd litterature_search_from_concept && uv run --project . pytest tests/test_metrics_parse.py -q`
-Expected: `11 passed`
+Expected: `13 passed`
 
 - [ ] **Step 5: Commit**
 
@@ -610,7 +610,7 @@ def merge_constraints(from_schema, from_doc):
 - [ ] **Step 4: Run the tests to verify they pass**
 
 Run: `cd litterature_search_from_concept && uv run --project . pytest tests/test_schema_parse.py -q`
-Expected: `11 passed`
+Expected: `8 passed`
 
 - [ ] **Step 5: Confirm the existing prose parser still passes**
 
