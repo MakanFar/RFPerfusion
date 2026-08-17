@@ -1,10 +1,63 @@
 import shlex
 import shutil
 import subprocess
+import sys
+from unittest.mock import patch
 
 from pathlib import Path
 
+import pytest
+
 from formulation_agent007.emit import save_brief
+
+# The real litkb project, imported by path so this test validates the emitted
+# commands against litkb's *actual* argparse -- not against our own
+# restatement of its flags, which is exactly the kind of restatement that
+# drifted (a positional vs. a flag) and slipped past every other test here.
+REPO_ROOT = Path(__file__).resolve().parents[2]
+LITKB_PROJECT_DIR = REPO_ROOT / "litterature_search_from_concept"
+LITKB_CLI_PATH = LITKB_PROJECT_DIR / "litkb" / "cli.py"
+
+# Every litkb stage this script's litkb block invokes. Only these command
+# functions are stubbed out below, so a real invocation of any other
+# subcommand (there are none in the emitted script) would still execute for
+# real and fail loudly rather than being silently no-op'd.
+LITKB_STAGE_FNS = (
+    "cmd_plan_adopt", "cmd_search", "cmd_screen", "cmd_dig", "cmd_bind",
+    "cmd_evidence", "cmd_report", "cmd_manifest",
+)
+
+
+def _load_litkb_cli():
+    """Import litkb.cli from the sibling project by path, the same pattern
+    `paperclip_kb` uses in conftest.py. litkb is a package with relative
+    imports (`from . import contracts, ...`) and `contracts` in turn imports
+    the import-nothing `plan_contract` module from the project root by
+    absolute import, so the project root -- not just the `litkb/` dir --
+    must be on sys.path. Every import litkb.cli pulls in is stdlib-only, so
+    this stays self-contained and offline; skips cleanly if the sibling
+    project has moved."""
+    if not LITKB_CLI_PATH.exists():
+        pytest.skip(f"litkb cli not found at {LITKB_CLI_PATH}")
+    if str(LITKB_PROJECT_DIR) not in sys.path:
+        sys.path.insert(0, str(LITKB_PROJECT_DIR))
+    import litkb.cli as cli  # noqa: PLC0415 (deliberately lazy/off the hot path)
+    return cli
+
+
+def _extract_litkb_commands(script: str) -> list[list[str]]:
+    """Pull each `... python -m litkb <stage> ...` line out of the emitted
+    script as an argv list, i.e. everything after the `litkb` module name --
+    exactly what `litkb.cli.main(argv)` expects."""
+    commands = []
+    for line in script.splitlines():
+        stripped = line.strip()
+        if stripped.startswith("#") or "python -m litkb " not in stripped:
+            continue
+        tokens = shlex.split(stripped)
+        idx = tokens.index("litkb")
+        commands.append(tokens[idx + 1:])
+    return commands
 
 
 def _script(brief, tmp_path) -> str:
@@ -125,3 +178,42 @@ def test_script_cds_into_litkb_dir_for_all_output_dir_kinds(brief, tmp_path):
         save_brief(brief, str(out_dir))
         script = (out_dir / "run_literature.sh").read_text()
         assert "cd litterature_search_from_concept" in script
+
+
+def test_emitted_litkb_commands_match_the_real_cli(brief, tmp_path):
+    """Guard against a wrong-flag/positional mismatch between what emit.py
+    writes and what litkb.cli actually accepts.
+
+    `bash -n` only proves the script parses as shell; it says nothing about
+    whether `litkb manifest <file>` is a positional litkb's own argparse will
+    accept. This test runs every emitted `litkb <stage> ...` argv through the
+    real `litkb.cli` argparser (built fresh inside `cli.main`, same as a real
+    invocation would build it) with each stage's command function replaced by
+    a no-op, so a malformed invocation is caught by argparse's own
+    `unrecognized arguments` / `the following arguments are required` errors
+    without ever touching the network, paperclip, or the filesystem beyond
+    what save_brief already wrote.
+    """
+    cli = _load_litkb_cli()
+    script = _script(brief, tmp_path)
+    commands = _extract_litkb_commands(script)
+
+    # Sanity: every stage the litkb block claims to run was actually found as
+    # a parseable command line, so this test cannot pass by silently
+    # extracting nothing.
+    stages_found = {argv[0] for argv in commands}
+    assert stages_found == {
+        "plan-adopt", "search", "screen", "dig", "bind", "evidence", "report",
+        "manifest",
+    }
+
+    noops = {name: (lambda args: None) for name in LITKB_STAGE_FNS}
+    with patch.multiple(cli, **noops):
+        for argv in commands:
+            try:
+                cli.main(argv)
+            except SystemExit as exc:
+                pytest.fail(
+                    f"litkb's own argparse rejected the emitted command "
+                    f"{argv!r}: exit code {exc.code}"
+                )

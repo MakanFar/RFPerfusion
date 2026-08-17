@@ -170,7 +170,18 @@ def _run_script(brief: DesignBrief, directory: Path) -> str:
         "report", evidence_out, "--search", search_out, "--artifacts", artifacts_out,
         "--output-dir", run_dir,
     )
-    litkb_manifest = litkb("manifest", evidence_out, "--output-dir", run_dir)
+    # `manifest`'s subparser defines no positional -- every stage input is a
+    # flag (--plan/--search/--screen/--dig/--artifacts/--evidence). Pass every
+    # file this script actually produces by this point, so the manifest
+    # describes the whole run rather than just the evidence fragment;
+    # `contracts.build_manifest` is designed to accept a partial set, so this
+    # is additive, not a requirement each one exists.
+    litkb_manifest = litkb(
+        "manifest", "--plan", plan_out, "--search", search_out,
+        "--screen", screen_out, "--dig", dig_out, "--artifacts", artifacts_out,
+        "--evidence", evidence_out, "--slug", slug, "--objective", brief.question,
+        "--output-dir", run_dir,
+    )
     cd_litkb_dir = shlex.quote(LITKB_DIR)
 
     return f"""#!/usr/bin/env bash
