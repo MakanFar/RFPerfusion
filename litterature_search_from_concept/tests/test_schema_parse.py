@@ -78,3 +78,55 @@ def test_source_records_docstring_only_when_prose_contributed():
          "max_length": None, "constraint_source": "docstring"},
     )
     assert merged["constraint_source"] == ["schema"]
+
+
+def test_maxlength_ignores_irrelevant_field_before_sequence_field():
+    # A schema with name field (maxLength=64) before sequences field (maxLength=1022)
+    # should use the sequences cap, not the name cap
+    schema = {
+        "inputs": {
+            "$defs": {},
+            "properties": {
+                "name": {"type": "string", "maxLength": 64},
+                "sequences": {"type": "array", "items": {"type": "string",
+                                                         "maxLength": 1022}}
+            },
+        }
+    }
+    assert proto.parse_input_schema(schema)["max_length"] == 1022
+
+
+def test_maxlength_on_irrelevant_field_only_yields_none():
+    # A schema with only irrelevant fields that have maxLength should leave max_length as None
+    schema = {
+        "inputs": {
+            "$defs": {},
+            "properties": {
+                "name": {"type": "string", "maxLength": 64},
+                "id": {"type": "string", "maxLength": 32}
+            },
+        }
+    }
+    assert proto.parse_input_schema(schema)["max_length"] is None
+
+
+def test_entity_type_continues_scanning_if_first_field_uninformative():
+    # A schema with two entity_type fields, first one uninformative, second one informative
+    schema = {
+        "inputs": {
+            "$defs": {
+                "Component1": {
+                    "properties": {
+                        "entity_type": {"description": "Type information"},
+                    }
+                },
+                "Component2": {
+                    "properties": {
+                        "entity_type": {"description": "Entity type: 'protein' or 'rna'"},
+                    }
+                }
+            },
+            "properties": {},
+        }
+    }
+    assert proto.parse_input_schema(schema)["molecules"] == ["protein", "rna"]

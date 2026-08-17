@@ -108,14 +108,15 @@ def parse_input_schema(schema):
             found = _ENTITY_IN_DESC.findall((sub.get("description") or "").lower())
             if found:
                 molecules = sorted(set(found))
-            break
+                break
 
     max_length = None
-    for _, sub in fields:
-        cap = sub.get("maxLength") or (sub.get("items") or {}).get("maxLength")
-        if cap:
-            max_length = int(cap)
-            break
+    for name, sub in fields:
+        if "sequence" in name.lower():
+            cap = sub.get("maxLength") or (sub.get("items") or {}).get("maxLength")
+            if cap:
+                max_length = int(cap)
+                break
 
     if molecules == ["protein"]:
         alphabet = PROTEIN_ALPHABET
