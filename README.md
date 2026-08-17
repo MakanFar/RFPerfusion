@@ -131,8 +131,10 @@ function that does not exist yet.
 Everything is typed JSON with provenance, so a downstream agent consumes it
 without parsing prose.
 
-**Evidence** carries a claim, a citation, and which tools could test it — or
-`requires_new_evaluator` when nothing in the catalogue measures that property.
+**Evidence** carries a claim, a citation, and `testable_by.requires_new_evaluator` —
+three-valued: `"unassessed"` until you assign vocabulary terms via `litkb label`,
+then `false` once a catalogue tool measures the assigned property, or `true` if
+none does.
 
 **Sequences** carry the document they came from, whether they were confirmed
 present in it, and the tools whose input constraints they satisfy.

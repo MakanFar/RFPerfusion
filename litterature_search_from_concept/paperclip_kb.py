@@ -64,21 +64,59 @@ fences, with exactly these keys:
 """
 
 
+_plan_contract_module = None
+
+
+def _load_plan_contract():
+    """Load `plan_contract` from its own file next to this script rather
+    than via a plain `import plan_contract`, because `validate_plan` must
+    keep working when paperclip_kb.py itself is loaded by path from a
+    project whose sys.path never includes this directory --
+    formulation_agent007/tests/conftest.py does exactly that to check its
+    emitted plan against the real function. Cached at module level after
+    the first call so repeated `validate_plan` calls don't re-read and
+    re-execute the file from disk every time."""
+    global _plan_contract_module
+    if _plan_contract_module is None:
+        import importlib.util
+        import pathlib
+
+        plan_contract_path = pathlib.Path(__file__).resolve().with_name("plan_contract.py")
+        spec = importlib.util.spec_from_file_location("plan_contract", plan_contract_path)
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        _plan_contract_module = module
+    return _plan_contract_module
+
+
 def validate_plan(plan: object) -> dict:
+    """Delegates to the shared, import-nothing `plan_contract.check`, which
+    tags every problem with its KIND ("type" or "value") rather than leaving
+    this function to sniff message wording to recover which exception type
+    to raise. Same raising contract as before the delegation: a non-dict
+    plan or a non-string `notes` raise TypeError; every other rejection
+    raises ValueError -- callers (see
+    formulation_agent007/tests/test_emit.py) depend on that distinction.
+
+    `check()` emits its errors in the same order the old inline checks ran
+    in (dict-ness, then missing keys, then search_phrases/mechanism_patterns,
+    then notes), so `errors[0]`'s kind is exactly the exception the old code
+    would have raised FIRST -- this must select on `errors[0]`, not on
+    whether ANY error is type-kind, because a plan can fail more than one
+    check at once (e.g. an empty `search_phrases` AND a non-string `notes`);
+    the old code raised on the first violation it hit (ValueError, for that
+    example), and selecting by "any type-kind error" would wrongly raise
+    TypeError instead."""
+    plan_contract = _load_plan_contract()
+
     if not isinstance(plan, dict):
         raise TypeError("plan must be a JSON object")
-    required = {"search_phrases", "mechanism_patterns", "notes"}
-    missing = required - plan.keys()
-    if missing:
-        raise ValueError(f"plan is missing keys: {', '.join(sorted(missing))}")
-    for key in ("search_phrases", "mechanism_patterns"):
-        values = plan[key]
-        if not isinstance(values, list) or not values:
-            raise ValueError(f"{key} must be a non-empty list")
-        if not all(isinstance(value, str) and value.strip() for value in values):
-            raise ValueError(f"{key} must contain non-empty strings")
-    if not isinstance(plan["notes"], str):
-        raise TypeError("notes must be a string")
+    errors = plan_contract.check(plan)
+    if errors:
+        messages = "; ".join(message for _, message in errors)
+        if errors[0][0] == "type":
+            raise TypeError(messages)
+        raise ValueError(messages)
     return plan
 
 

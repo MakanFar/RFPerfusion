@@ -3,30 +3,15 @@ import json
 
 from litkb import cli, contracts, proto
 
-CATALOG = {"tools": [
-    {"key": "esmfold-prediction", "measures": ["fold_confidence"], "status": "validated"},
-    {"key": "esm2-score", "measures": ["sequence_likelihood"], "status": "needs_calibration"},
-]}
+# `resolve_properties`'s own contract (three-valued, vocabulary-mediated) is
+# covered exhaustively in tests/test_resolve_properties.py. This file only
+# exercises the drafting path (`item_from_mechanism`, `cmd_evidence`), which
+# no longer calls the resolver at all: drafting happens before any vocabulary
+# term is assigned, so there is nothing yet to resolve.
 
 MECH = {"chain": "RF -> nanoparticle heating -> TRPV1 gating",
         "claim": "Alternating fields heat nanoparticles enough to gate TRPV1",
         "measurable_properties": ["fold_confidence"]}
-
-
-def test_property_resolves_to_the_measuring_tool():
-    r = proto.resolve_properties(["fold_confidence"], CATALOG)
-    assert r["tools"] == ["esmfold-prediction"]
-    assert r["requires_new_evaluator"] is False
-
-
-def test_unmeasurable_property_requires_a_new_evaluator():
-    r = proto.resolve_properties(["spin_coherence_time"], CATALOG)
-    assert r["tools"] == []
-    assert r["requires_new_evaluator"] is True
-
-
-def test_empty_property_list_requires_a_new_evaluator():
-    assert proto.resolve_properties([], CATALOG)["requires_new_evaluator"] is True
 
 
 def test_mechanism_becomes_an_evidence_item_with_the_claim_filled():
@@ -74,11 +59,41 @@ def test_cmd_evidence_records_the_worker_screen_actually_used(tmp_path, monkeypa
         "papers": [{"doc_id": "PMC1", "class_id": "thermal", "mechanisms": [MECH]}],
     }))
     out_path = tmp_path / "evidence.json"
-    args = argparse.Namespace(screen=str(screen_path), registry=str(tmp_path / "nope.json"),
-                              out=str(out_path))
+    args = argparse.Namespace(screen=str(screen_path), out=str(out_path))
 
     monkeypatch.setattr(cli, "meta", lambda doc_id: {"doi": "d", "title": "t"})
     cli.cmd_evidence(args)
 
     result = json.loads(out_path.read_text())
     assert result["items"][0]["extracted_by"] == "quick-reader"
+
+
+def test_cmd_evidence_drafts_items_unassessed_not_resolved(tmp_path, monkeypatch):
+    """Drafting must not call the resolver: no vocabulary term is assigned
+    yet, so there is nothing for `resolve_properties` to resolve. The old
+    shape here (`tools: [], requires_new_evaluator: True`) claimed a
+    completed, negative assessment for every item unconditionally -- an
+    unmade judgement must read as unmade, not as a completed one that
+    happens to always fail. Evidence files written from cmd_evidence must
+    also carry schema_version 2."""
+    screen_path = tmp_path / "screen.json"
+    screen_path.write_text(json.dumps({
+        "slug": "s",
+        "extracted_by": "quick-reader",
+        "papers": [{"doc_id": "PMC1", "class_id": "thermal", "mechanisms": [MECH]}],
+    }))
+    out_path = tmp_path / "evidence.json"
+    args = argparse.Namespace(screen=str(screen_path), out=str(out_path))
+
+    monkeypatch.setattr(cli, "meta", lambda doc_id: {"doi": "d", "title": "t"})
+    cli.cmd_evidence(args)
+
+    result = json.loads(out_path.read_text())
+    assert result["schema_version"] == 2
+    testable_by = result["items"][0]["testable_by"]
+    assert testable_by == {
+        "properties": ["fold_confidence"],
+        "vocabulary": [],
+        "tools": [],
+        "requires_new_evaluator": proto.UNASSESSED,
+    }

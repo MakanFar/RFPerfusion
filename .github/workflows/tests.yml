@@ -6,13 +6,31 @@ on:
   pull_request:
 
 jobs:
-  litkb:
+  suites:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # No credentials needed anywhere: every test is offline, with
+          # paperclip and proto-tools calls monkeypatched.
+          - name: litkb
+            dir: litterature_search_from_concept
+            args: ""
+          - name: formulation_agent007
+            dir: formulation_agent007
+            args: ""
+          - name: formulation_agent
+            dir: formulation_agent
+            # 4 tests hit the live Paperclip corpus and need an account.
+            args: '-m "not live"'
+          - name: biophys_triage
+            dir: biophysical_triage_pipeline
+            args: ""
+    name: ${{ matrix.name }}
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v5
-      - name: Run the litkb suite
-        working-directory: litterature_search_from_concept
-        # No credentials needed: every test is offline, with paperclip and
-        # proto-tools calls monkeypatched.
-        run: uv run --project . pytest -q
+      - name: Run the ${{ matrix.name }} suite
+        working-directory: ${{ matrix.dir }}
+        run: uv run --project . pytest -q ${{ matrix.args }}

@@ -31,7 +31,7 @@ This skill answers *what do we build, what do we go read, and what number kills 
 
 The brief is an input to three other workflows. Do not perform their work inside this skill.
 
-- Literature mining: run the emitted `run_literature.sh` from the repository root, or use `mine-literature-from-concept` with the emitted concept and plan. The emitted plan is already validated against `paperclip_kb.validate_plan`, so pass it with `--plan-file` rather than letting the script re-plan.
+- Literature mining: run the emitted `run_literature.sh` from the repository root, or use `mine-literature-from-concept` with the emitted concept and plan. It runs the litkb chain (default: typed evidence, tool-bound sequences) followed by the paperclip_kb.py grep commands (alternative: no LLM read quota, dry run first). The emitted plan is already validated against `paperclip_kb.validate_plan`, so pass it with `--plan-file` rather than letting the script re-plan.
 - Sequence extraction: hand `harvest_<slug>.md` to the Paperclip agent.
 - Scoring: hand `proto_brief_<slug>.md` to `proto-tools`.
 

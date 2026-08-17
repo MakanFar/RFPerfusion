@@ -51,7 +51,7 @@ class TestProtoCascade:
         assert any("interface metric" in p for p in problems)
 
     def test_rejects_mislabelled_cost_tier(self, proto):
-        proto.gates[3].cost_tier = "cheap"  # bioemu is not cheap
+        proto.gates[3].cost_tier = "cheap"  # boltz2-prediction is not cheap
         problems = validate_proto(proto)
         assert any("cost_tier" in p for p in problems)
 

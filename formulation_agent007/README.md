@@ -45,7 +45,7 @@ Repeat `--context-file <path>` to supply framing context.
 |---|---|
 | `concept_<slug>.txt` | `paperclip_kb.py` positional argument |
 | `plan_<slug>.json` | `paperclip_kb.py --plan-file` — skips its own planning call |
-| `run_literature.sh` | you; the two mining commands, dry run first |
+| `run_literature.sh` | you; the litkb chain, plus the grep path as an alternative |
 | `harvest_<slug>.md` | the Paperclip agent — per-shard extraction contract |
 | `proto_brief_<slug>.md` | the Proto agent — assembly + cascade runbook |
 | `brief-<stamp>.json` | the audit trail |

@@ -7,7 +7,9 @@ translating first, so each downstream consumer gets a file shaped for it:
   plan_<slug>.json          -> paperclip_kb.py --plan-file (skips its own
                                planning call; the schema is validated against
                                that script's contract before it is written)
-  run_literature.sh         -> the exact two commands, dry-run first
+  run_literature.sh         -> the litkb chain (default handoff, typed
+                               evidence), plus the paperclip_kb.py grep
+                               commands as the no-LLM-quota alternative
   harvest_<slug>.md         -> the Paperclip agent's extraction contract
   proto_brief_<slug>.md     -> the Proto agent's runbook
   brief-<stamp>.json/.md    -> the full audit trail and the human read
@@ -27,6 +29,10 @@ from .report import render_markdown
 # shell commands. The brief is written wherever the user asked, so commands are
 # documented as run-from-repo-root rather than relative to the output dir.
 KB_SCRIPT = "litterature_search_from_concept/paperclip_kb.py"
+
+# litkb's --registry and --project defaults are relative to this directory, so
+# the emitted script must `cd` there for the litkb stages.
+LITKB_DIR = "litterature_search_from_concept"
 
 
 def save_brief(brief: DesignBrief, out_dir: str) -> list[Path]:
@@ -100,8 +106,22 @@ def _concept_file(brief: DesignBrief) -> str:
 
 
 def _run_script(brief: DesignBrief, directory: Path) -> str:
+    """Emit `run_literature.sh`.
+
+    Every path handed to a command below is made absolute (`directory` is
+    resolved up front) and every interpolation is quoted with `shlex.quote`
+    (or built through `shlex.join`, which quotes each element). That is
+    deliberate: the litkb stages must `cd` into `LITKB_DIR` because litkb's
+    `--registry` and `--project` defaults are relative to that directory, and
+    a `cd` silently breaks any path built by string-prefixing `../` onto a
+    value that might already be absolute, might point outside the repo, or
+    might contain a space. Absolute + quoted paths mean the `cd` cannot change
+    what any argument means, for a relative output dir, an absolute one, or
+    one with a space in it.
+    """
     slug = brief.slug
     sources = ",".join(SETTINGS.source_list())
+    directory = directory.resolve()
     concept = str(directory / f"concept_{slug}.txt")
     plan = str(directory / f"plan_{slug}.json")
     run_dir = str(directory / f"mining_{slug}")
@@ -126,15 +146,93 @@ def _run_script(brief: DesignBrief, directory: Path) -> str:
     dry = shlex.join([*base, "--plan-file", plan, "--dry-run"])
     live = shlex.join([*base, "--plan-file", plan])
 
+    run_path = Path(run_dir)
+    plan_out = str(run_path / f"plan_{slug}.json")
+    search_out = str(run_path / f"search_{slug}.json")
+    screen_out = str(run_path / f"screen_{slug}.json")
+    dig_out = str(run_path / f"dig_{slug}.json")
+    artifacts_out = str(run_path / f"artifacts_{slug}.json")
+    evidence_out = str(run_path / f"evidence_{slug}.json")
+
+    def litkb(*args: str) -> str:
+        return shlex.join(["uv", "run", "--project", ".", "python", "-m", "litkb", *args])
+
+    litkb_plan_adopt = litkb(
+        "plan-adopt", plan, "--objective", brief.question, "--slug", slug,
+        "--output-dir", run_dir,
+    )
+    litkb_search = litkb("search", plan_out, "-n", "4", "--output-dir", run_dir)
+    litkb_screen = litkb("screen", search_out, "-n", "1", "--output-dir", run_dir)
+    litkb_dig = litkb("dig", screen_out, "--output-dir", run_dir)
+    litkb_bind = litkb("bind", dig_out, "--output-dir", run_dir)
+    litkb_evidence = litkb("evidence", screen_out, "--output-dir", run_dir)
+    litkb_report = litkb(
+        "report", evidence_out, "--search", search_out, "--artifacts", artifacts_out,
+        "--output-dir", run_dir,
+    )
+    # `manifest`'s subparser defines no positional -- every stage input is a
+    # flag (--plan/--search/--screen/--dig/--artifacts/--evidence). Pass every
+    # file this script actually produces by this point, so the manifest
+    # describes the whole run rather than just the evidence fragment;
+    # `contracts.build_manifest` is designed to accept a partial set, so this
+    # is additive, not a requirement each one exists.
+    litkb_manifest = litkb(
+        "manifest", "--plan", plan_out, "--search", search_out,
+        "--screen", screen_out, "--dig", dig_out, "--artifacts", artifacts_out,
+        "--evidence", evidence_out, "--slug", slug, "--objective", brief.question,
+        "--output-dir", run_dir,
+    )
+    cd_litkb_dir = shlex.quote(LITKB_DIR)
+
     return f"""#!/usr/bin/env bash
 # Literature mining for: {brief.question}
 # Run from the repository root. Requires `paperclip` on PATH.
+#
+# This file has TWO alternative paths below (DEFAULT and ALTERNATIVE) --
+# run ONE of them, not both. A plain `bash run_literature.sh` executes both
+# back to back and doubles the cost for no benefit. Use the DEFAULT path
+# unless the daily LLM read quota is the binding constraint, in which case
+# use the ALTERNATIVE path instead (see its own header below for what it
+# trades away).
 set -euo pipefail
 
-# 1. Dry run. Validates plan_{slug}.json through paperclip_kb's own
-#    validate_plan and prints every search command without issuing one. Passing
-#    --plan-file here means no ANTHROPIC_API_KEY is needed and no planning call
-#    is billed: the plan was already written and checked.
+# ---------------------------------------------------------------------------
+# DEFAULT PATH -- litkb: typed evidence and tool-bound sequences.
+#
+# Reads full text with `paperclip map` and emits EvidenceItem / ProtoArtifact
+# records rather than grep lines. Costs LLM reads, which are capped per day.
+# `-n` caps papers per query and is the cost dial -- start small.
+#
+# Must run from {LITKB_DIR}/: litkb's --registry and --project
+# defaults are relative to that directory.
+# ---------------------------------------------------------------------------
+cd {cd_litkb_dir}
+
+{litkb_plan_adopt}
+{litkb_search}
+{litkb_screen}
+{litkb_dig}
+{litkb_bind}
+{litkb_evidence}
+{litkb_report}
+{litkb_manifest}
+cd -
+
+# Every evidence item lands with testable_by.requires_new_evaluator =
+# "unassessed". Run `litkb label` to assign vocabulary terms from
+# registry/property_vocabulary.json; until then no claim is made about what
+# can test it.
+
+# ---------------------------------------------------------------------------
+# ALTERNATIVE PATH -- paperclip_kb.py: regex grep, no LLM read quota.
+#
+# Cheaper reconnaissance over the same corpus. Emits a categorized knowledge
+# base rather than typed records. Use when the daily read cap matters more
+# than machine-consumable output.
+# ---------------------------------------------------------------------------
+
+# 1. Dry run. Validates plan_{slug}.json through the shared brief-plan
+#    contract and prints every search command without issuing one.
 {dry}
 
 # 2. Real run, same reviewed plan. This one searches.
@@ -142,7 +240,7 @@ set -euo pipefail
 
 # Outputs land in {run_dir}/:
 #   plan_{slug}.json            the phrases and patterns actually used
-#   knowledge_base_{slug}.txt   categorized grep hits  <-- the Paperclip agent reads this
+#   knowledge_base_{slug}.txt   categorized grep hits
 #   manifest_{slug}.json        set id + evidence_status=discovery_only_unverified
 """
 

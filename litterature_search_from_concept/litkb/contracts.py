@@ -10,6 +10,9 @@ That work belongs to the agent, via `litkb label`.
 import re
 from datetime import datetime, timezone
 
+from . import proto
+from .vocabulary import UnknownTerm
+
 SUPPORT_LEVELS = ("established", "contested", "speculative")
 CLAIM_TYPES = ("mechanism", "quantity", "scaffold", "failure_mode", "negative_result")
 EVIDENCE_KINDS = ("experimental", "computational", "review", "theoretical")
@@ -59,27 +62,17 @@ def validate_plan(plan):
 # design-brief-007 hands off a FLAT plan (exactly three keys:
 # search_phrases/mechanism_patterns/notes), already validated against
 # paperclip_kb.py's own `validate_plan` -- see
-# .claude/skills/design-brief-007/references/handoff-contract.md. This is
-# the same three-key check mirrored here rather than imported, so litkb has
-# no import dependency on the sibling script; a plan that fails it names
-# exactly which key is missing, per that handoff contract.
-BRIEF_PLAN_KEYS = ("search_phrases", "mechanism_patterns", "notes")
+# .claude/skills/design-brief-007/references/handoff-contract.md. The check
+# itself lives in the sibling, import-nothing `plan_contract` module rather
+# than being mirrored here by hand, so litkb still has no import dependency
+# on the sibling script -- `plan_contract` imports nothing either, which is
+# the whole point; a plan that fails it names exactly which key is missing,
+# per that handoff contract.
+from plan_contract import BRIEF_PLAN_KEYS, check as _check_brief_plan
 
 
 def validate_brief_plan(plan):
-    if not isinstance(plan, dict):
-        return ["brief plan must be a JSON object"]
-    missing = [k for k in BRIEF_PLAN_KEYS if k not in plan]
-    if missing:
-        return [f"brief plan is missing required key(s): {', '.join(missing)}"]
-    errors = []
-    for key in ("search_phrases", "mechanism_patterns"):
-        values = plan[key]
-        if not isinstance(values, list) or not values:
-            errors.append(f"brief plan.{key} must be a non-empty list")
-    if not isinstance(plan.get("notes"), str):
-        errors.append("brief plan.notes must be a string")
-    return errors
+    return [message for _, message in _check_brief_plan(plan)]
 
 
 def adopt_brief_plan(plan, objective, slug, source_path):
@@ -252,8 +245,12 @@ def item_from_mechanism(index, class_id, mech, doc_id, citation, extracted_by="q
         "evidence_kind": None,
         "extracted_by": extracted_by,
         "confidence": None,
+        # `vocabulary` is filled by `litkb label`, like every other
+        # judgement field -- the tool drafts, the agent judges. Until then
+        # the assessment is unmade, and says so.
         "testable_by": {"properties": mech.get("measurable_properties", []),
-                        "tools": [], "requires_new_evaluator": True},
+                        "vocabulary": [], "tools": [],
+                        "requires_new_evaluator": "unassessed"},
         "provenance": {
             "doc_id": doc_id,
             "section": None,
@@ -281,8 +278,14 @@ def citation_from_meta(m):
     }
 
 
-def apply_labels(items, labels):
-    """Merge agent-supplied judgements into draft items, by id."""
+def apply_labels(items, labels, catalog=None, vocab=None):
+    """Merge agent-supplied judgements into draft items, by id.
+
+    `vocabulary` is the one label that has a computed consequence: assigning
+    terms re-resolves `testable_by`. Assigning an EMPTY list is meaningful
+    and different from never labelling -- it records that the agent looked
+    and found nothing in the catalogue, which is a finding worth shipping.
+    """
     by_id = {it["id"]: it for it in items}
     errors, applied = [], 0
 
@@ -292,26 +295,59 @@ def apply_labels(items, labels):
             errors.append(f"unknown evidence id '{iid}'")
             continue
         item = by_id[iid]
+
+        if "vocabulary" in lab:
+            terms = lab["vocabulary"]
+            if not isinstance(terms, list):
+                errors.append(f"{iid}: vocabulary must be a list of term ids")
+                continue
+            if vocab is None or catalog is None:
+                errors.append(f"{iid}: cannot apply vocabulary without a "
+                              f"registry and a vocabulary file")
+                continue
+            try:
+                resolved = proto.resolve_properties(terms, catalog, vocab) if terms \
+                    else {"tools": [], "requires_new_evaluator": True}
+            except UnknownTerm as exc:
+                errors.append(f"{iid}: {exc}")
+                continue
+            item["testable_by"]["vocabulary"] = list(terms)
+            item["testable_by"]["tools"] = resolved["tools"]
+            item["testable_by"]["requires_new_evaluator"] = \
+                resolved["requires_new_evaluator"]
+
+        bad_field = False
         for field, value in lab.items():
-            if field == "id":
+            if field in ("id", "vocabulary"):
                 continue
             if field == "support" and value not in SUPPORT_LEVELS:
                 errors.append(f"{iid}: support must be one of {SUPPORT_LEVELS}, got '{value}'")
+                bad_field = True
                 continue
             if field == "claim_type" and value not in CLAIM_TYPES:
                 errors.append(f"{iid}: claim_type must be one of {CLAIM_TYPES}, got '{value}'")
+                bad_field = True
                 continue
             if field == "evidence_kind" and value not in EVIDENCE_KINDS:
                 errors.append(f"{iid}: evidence_kind must be one of {EVIDENCE_KINDS}, got '{value}'")
+                bad_field = True
                 continue
             if field == "confidence" and not (isinstance(value, (int, float)) and 0 <= value <= 1):
                 errors.append(f"{iid}: confidence must be a number in [0, 1], got '{value}'")
+                bad_field = True
                 continue
             if field == "provenance":
                 errors.append(f"{iid}: provenance is tool-owned and cannot be relabelled")
+                bad_field = True
+                continue
+            if field == "testable_by":
+                errors.append(f"{iid}: testable_by is resolved from `vocabulary`, "
+                              f"not set directly")
+                bad_field = True
                 continue
             item[field] = value
-        applied += 1
+        if not bad_field:
+            applied += 1
     return applied, errors
 
 

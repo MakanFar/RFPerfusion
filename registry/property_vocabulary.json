@@ -1,0 +1,33 @@
+{
+  "version": 1,
+  "note": "Closed set of properties the proto-tools catalogue can actually address. A property with no evaluator is expressed by assigning NO term, never by adding an unbacked one. Every term must resolve to at least one metric in registry/proto_catalog.json; tests/test_vocabulary.py enforces it.",
+  "terms": [
+    {"id": "fold_confidence",
+     "definition": "Model confidence that a predicted monomer fold is correct.",
+     "metrics": ["avg_plddt", "plddt", "complex_plddt", "avg_ss_plddt", "chain_plddt", "ptm"]},
+    {"id": "interface_confidence",
+     "definition": "Model confidence in a predicted inter-chain interface.",
+     "metrics": ["iptm", "chain_pair_iptm", "pdockq2", "avg_iplddt", "complex_iplddt", "avg_interface_plddt"]},
+    {"id": "predicted_error",
+     "definition": "Predicted positional error in a structure prediction.",
+     "metrics": ["avg_pae", "pae"]},
+    {"id": "sequence_likelihood",
+     "definition": "How probable a sequence is under a protein or nucleotide language model.",
+     "metrics": ["perplexity", "log_likelihood", "avg_log_likelihood"]},
+    {"id": "structural_validity",
+     "definition": "Whether a predicted structure is physically self-consistent.",
+     "metrics": ["has_clash"]},
+    {"id": "interface_energetics",
+     "definition": "Estimated energetic favourability of a designed interface.",
+     "metrics": ["dG", "dG_per_dSASA"]},
+    {"id": "interface_geometry",
+     "definition": "Size and shape of a designed interface.",
+     "metrics": ["dSASA", "interface_sasa_pct"]},
+    {"id": "surface_character",
+     "definition": "Hydrophobic character of a surface or interface.",
+     "metrics": ["surface_hydrophobicity", "interface_hydrophobicity"]},
+    {"id": "design_ranking",
+     "definition": "A tool's own aggregate ranking of the designs it produced.",
+     "metrics": ["ranking_score", "confidence_score"]}
+  ]
+}
