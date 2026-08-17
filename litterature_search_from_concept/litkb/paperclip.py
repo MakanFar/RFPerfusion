@@ -7,9 +7,11 @@ Verified against paperclip 0.7.36.
 """
 
 import json
+import os
 import re
 import shutil
 import subprocess
+import sys
 
 SET_ID_RE = re.compile(r"\b(s_[0-9a-f]{6,})\b")
 FOUND_RE = re.compile(r"Found\s+(\d+)\s+papers")
@@ -23,13 +25,40 @@ class PaperclipError(RuntimeError):
     pass
 
 
+def _clean_env():
+    """The environment paperclip must be launched with, never our own.
+
+    paperclip's launcher is `#!/usr/bin/env python3`, so the interpreter it
+    runs under is whatever PATH resolves first -- and `uv run` prepends this
+    project's venv bin dir. That venv has litkb's dependencies, not
+    paperclip's, so paperclip dies at `import requests` before parsing argv.
+
+    Unsetting VIRTUAL_ENV is NOT enough, which is the trap: the shebang
+    follows PATH, not VIRTUAL_ENV. Verified live under `uv run` -- with
+    VIRTUAL_ENV unset and the venv still first on PATH, paperclip still
+    crashed at import. The PATH entry is the load-bearing half; VIRTUAL_ENV is
+    dropped too so nothing downstream re-derives the venv from it.
+    """
+    env = dict(os.environ)
+    env.pop("VIRTUAL_ENV", None)
+    venv_bin = os.path.normpath(os.path.join(sys.prefix, "bin"))
+    env["PATH"] = os.pathsep.join(
+        d for d in env.get("PATH", "").split(os.pathsep)
+        if d and os.path.normpath(d) != venv_bin
+    )
+    return env
+
+
 def _run(args):
-    if shutil.which("paperclip") is None:
+    env = _clean_env()
+    # Resolve against the SAME PATH the child will use -- checking our own
+    # would happily find a paperclip the child cannot reach.
+    if shutil.which("paperclip", path=env["PATH"]) is None:
         raise PaperclipError(
             "`paperclip` is not on PATH. Install it, and note it needs "
             "Python >= 3.10 -- under 3.9 it fails at import."
         )
-    p = subprocess.run(["paperclip", *args], capture_output=True, text=True)
+    p = subprocess.run(["paperclip", *args], capture_output=True, text=True, env=env)
     blob = p.stdout + p.stderr
     if "Not authenticated" in blob:
         raise PaperclipError("paperclip is not authenticated -- run `paperclip login`")

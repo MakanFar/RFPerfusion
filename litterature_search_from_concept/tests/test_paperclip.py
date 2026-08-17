@@ -40,6 +40,36 @@ def test_run_raises_on_crash_disguised_as_no_match():
                 "stdout and a stderr traceback")
 
 
+def test_run_strips_the_active_venv_from_the_child_path():
+    """DEFECT 1, root cause: the test above catches the crash, but `_run` still
+    inherited the environment that CAUSED it, so the documented invocation
+    (`uv run --project . python -m litkb search`) could not run at all --
+    every phrase raised. paperclip's launcher is `#!/usr/bin/env python3`,
+    which follows PATH, and `uv run` prepends the project venv's bin dir. So
+    dropping VIRTUAL_ENV is NOT sufficient -- verified live: with VIRTUAL_ENV
+    unset but the venv still first on PATH, paperclip still died at
+    `import requests`. Both the variable and the PATH entry must go."""
+    import os
+    import sys
+
+    venv_bin = os.path.join(sys.prefix, "bin")
+    dirty = {
+        "VIRTUAL_ENV": sys.prefix,
+        "PATH": os.pathsep.join([venv_bin, "/usr/bin", "/bin"]),
+    }
+    fake = _FakeCompletedProcess(returncode=0, stdout="ok", stderr="")
+
+    with patch("litkb.paperclip.shutil.which", return_value="/usr/bin/paperclip"), \
+            patch.dict("litkb.paperclip.os.environ", dirty, clear=True), \
+            patch("litkb.paperclip.subprocess.run", return_value=fake) as run:
+        paperclip._run(["search", "-s", "pmc", "some phrase"])
+
+    child_env = run.call_args.kwargs["env"]
+    assert "VIRTUAL_ENV" not in child_env
+    assert venv_bin not in child_env["PATH"].split(os.pathsep)
+    assert "/usr/bin" in child_env["PATH"].split(os.pathsep)
+
+
 def test_run_returns_normally_for_genuine_no_match():
     """The legitimate no-match path must keep working: `paperclip grep`
     exits 1 and prints "No matches for /.../ in s_xxx" to STDOUT (not
