@@ -64,10 +64,10 @@ API keys -- the calling agent does the planning and the judging.
 WHICH ONE
 ---------
 
-paperclip_kb.py is what `design-brief-007` currently hands its plan to.  litkb
-is the newer path and produces machine-consumable artifacts; it accepts the
-same brief-emitted plan via `plan-adopt`.  Repointing the skills at litkb is a
-team decision that has not been taken.
+design-brief-007 now emits the litkb chain as the default handoff, with the
+paperclip_kb.py commands retained in the same script as the cheaper path with
+no LLM read quota. Decision recorded in
+docs/superpowers/specs/2026-08-16-registry-vocabulary-sweep-design.md.
 
 
 PAPERCLIP BEHAVIOUR BOTH PIPELINES MUST RESPECT

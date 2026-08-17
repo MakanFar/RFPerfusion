@@ -6,7 +6,7 @@ The output directory contains:
 - `brief-<stamp>.md`: the same content as a human read.
 - `concept_<slug>.txt`: the concept file, the positional argument to `paperclip_kb.py`.
 - `plan_<slug>.json`: reviewed search phrases, mechanism patterns, and notes. Already validated against that script's `validate_plan`; pass it with `--plan-file` so no planning call is made and no `ANTHROPIC_API_KEY` is needed.
-- `run_literature.sh`: the dry run and the real run, in order, from the repository root.
+- `run_literature.sh`: the litkb chain, plus the grep path as an alternative — run from the repository root.
 - `harvest_<slug>.md`: the per-shard extraction contract for the Paperclip agent.
 - `proto_brief_<slug>.md`: the assembly recipe and fitness cascade for the Proto agent.
 
