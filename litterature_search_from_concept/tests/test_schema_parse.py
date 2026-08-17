@@ -96,6 +96,52 @@ def test_maxlength_ignores_irrelevant_field_before_sequence_field():
     assert proto.parse_input_schema(schema)["max_length"] == 1022
 
 
+def test_molecules_are_intersected_not_schema_first():
+    # entity_type is a shared, generic $defs description reused by every
+    # Complex-accepting tool -- it always lists all four kinds. The prose
+    # Note is tool-specific and narrower here, so the merge must shrink to
+    # the prose's answer rather than keep the schema's broader one.
+    doc = proto.parse_input_doc("Note:\n    only supports protein sequences\n")
+    merged = proto.merge_constraints(proto.parse_input_schema(ESMFOLD_SCHEMA), doc)
+    assert merged["molecules"] == ["protein"]
+    assert merged["alphabet"] == proto.PROTEIN_ALPHABET
+    assert merged["constraint_source"] == ["schema", "docstring"]
+
+
+def test_molecules_from_schema_only_when_prose_is_silent():
+    doc = proto.parse_input_doc("Attributes:\n    complexes: no cap here.\n")
+    merged = proto.merge_constraints(proto.parse_input_schema(ESMFOLD_SCHEMA), doc)
+    assert merged["molecules"] == ["dna", "ligand", "protein", "rna"]
+
+
+def test_molecules_from_prose_only_when_schema_is_silent():
+    doc = proto.parse_input_doc("Note:\n    only supports protein sequences\n")
+    merged = proto.merge_constraints(proto.parse_input_schema(OPAQUE_SCHEMA), doc)
+    assert merged["molecules"] == ["protein"]
+
+
+def test_molecules_intersection_yields_nucleotide_alphabet():
+    doc = proto.parse_input_doc("Note:\n    entity types: dna, rna\n")
+    merged = proto.merge_constraints(proto.parse_input_schema(ESMFOLD_SCHEMA), doc)
+    assert merged["molecules"] == ["dna", "rna"]
+    assert merged["alphabet"] == proto.NUCLEOTIDE_ALPHABET
+
+
+def test_disjoint_molecules_resolve_to_the_shorter_list_not_the_union():
+    # A real contradiction (no overlap at all) must never resolve to the
+    # union -- that would be strictly more permissive than either source,
+    # the exact fail-open shape this merge exists to refuse.
+    schema = proto.parse_input_schema(
+        {"inputs": {"$defs": {"C": {"properties": {
+            "entity_type": {"description": "'dna'"}}}}, "properties": {}}}
+    )
+    doc = proto.parse_input_doc("Note:\n    only supports protein sequences\n")
+    merged = proto.merge_constraints(schema, doc)
+    assert merged["molecules"] in (["dna"], ["protein"])
+    assert merged["molecules"] != sorted({"dna", "protein"})
+    assert len(merged["molecules"]) == 1
+
+
 def test_maxlength_on_irrelevant_field_only_yields_none():
     # A schema with only irrelevant fields that have maxLength should leave max_length as None
     schema = {

@@ -129,11 +129,71 @@ def parse_input_schema(schema):
             "alphabet": alphabet, "max_length": max_length}
 
 
-_CONSTRAINT_FIELDS = ("input_kind", "molecules", "alphabet", "max_length")
+_CONSTRAINT_FIELDS = ("input_kind", "max_length")
+
+
+def _alphabet_for(molecules):
+    """Derive the legal-character alphabet from a resolved molecule list.
+
+    Kept in one place and always computed from the FINAL merged `molecules`,
+    never taken from whichever source happened to answer `alphabet` first --
+    that would let `alphabet` disagree with the `molecules` list it is
+    supposed to describe.
+    """
+    if molecules == ["protein"]:
+        return PROTEIN_ALPHABET
+    if molecules and set(molecules) <= {"dna", "rna"}:
+        return NUCLEOTIDE_ALPHABET
+    return None
+
+
+def _merge_molecules(from_schema, from_doc, sources):
+    """Intersect rather than let the schema win outright.
+
+    The schema's `entity_type` description is a shared, generic definition
+    reused by every tool that accepts a `Complex` -- it lists all four
+    molecule kinds regardless of what a given tool actually supports, while
+    the prose Note is tool-specific and narrower. Letting the schema win
+    (the general `merge_constraints` rule) turned five protein-only/DNA-RNA
+    tools into "accepts everything", which `check()` then treats as a molecule
+    pass and an alphabet pass (protein letters are a superset of A/C/G/T) --
+    a DNA artifact silently binds to a protein-only folder. That is exactly
+    the fail-open behaviour this module exists to refuse.
+
+    So: both present -> intersection; empty intersection (a real
+    contradiction) -> the SHORTER list, never the union, because a narrower
+    claim only produces a false rejection (visible in `rejected_by`) while a
+    broader one produces a false acceptance (invisible). Unknown never
+    counts as pass, so on disagreement the more restrictive claim wins.
+    """
+    schema_m, doc_m = from_schema.get("molecules"), from_doc.get("molecules")
+    if schema_m is not None and doc_m is not None:
+        if "schema" not in sources:
+            sources.append("schema")
+        if "docstring" not in sources:
+            sources.append("docstring")
+        intersection = sorted(set(schema_m) & set(doc_m))
+        if intersection:
+            return intersection
+        return schema_m if len(schema_m) <= len(doc_m) else doc_m
+    if schema_m is not None:
+        if "schema" not in sources:
+            sources.append("schema")
+        return schema_m
+    if doc_m is not None:
+        if "docstring" not in sources:
+            sources.append("docstring")
+        return doc_m
+    return None
 
 
 def merge_constraints(from_schema, from_doc):
-    """Schema first, prose only where the schema is silent.
+    """Schema first, prose only where the schema is silent -- except
+    `molecules`, which the schema answers with a shared generic description
+    rather than a tool-specific one, so it is intersected against the prose
+    instead of simply preferred (see `_merge_molecules`). `alphabet` is then
+    derived from that merged `molecules`, not taken independently from
+    either source.
 
     `constraint_source` becomes a list naming every source that actually
     contributed a value, so a thin entry is traceable to why it is thin
@@ -151,11 +211,28 @@ def merge_constraints(from_schema, from_doc):
                 sources.append("docstring")
         else:
             merged[field] = None
+
+    merged["molecules"] = _merge_molecules(from_schema, from_doc, sources)
+    merged["alphabet"] = _alphabet_for(merged["molecules"])
     merged["constraint_source"] = sources
     return merged
 
 
 CATALOG_SCHEMA_VERSION = 2
+
+
+def _fetch_or_default(fetcher, key, default):
+    """A fetcher may raise (proto-sync's own prefetch already guards its
+    subprocess calls this way, but nothing stops a caller from handing
+    `build_catalog` a raw, unguarded fetcher). One tool's failure must
+    degrade that tool to unknown -- an empty doc/schema, which every
+    parser below already reads as "nothing learned" -- never abort the
+    whole catalogue and never fall back to a stale or fabricated value.
+    """
+    try:
+        return fetcher(key)
+    except Exception:
+        return default
 
 
 def build_catalog(tools, doc_fetcher, schema_fetcher, output_fetcher):
@@ -171,10 +248,10 @@ def build_catalog(tools, doc_fetcher, schema_fetcher, output_fetcher):
     for t in tools:
         key = t["key"]
         constraints = merge_constraints(
-            parse_input_schema(schema_fetcher(key)),
-            parse_input_doc(doc_fetcher(key)),
+            parse_input_schema(_fetch_or_default(schema_fetcher, key, {})),
+            parse_input_doc(_fetch_or_default(doc_fetcher, key, "")),
         )
-        parsed_metrics = parse_metrics_doc(output_fetcher(key))
+        parsed_metrics = parse_metrics_doc(_fetch_or_default(output_fetcher, key, ""))
         failures.extend({"key": key, "line": line}
                         for line in parsed_metrics["failures"])
         entries.append({

@@ -74,3 +74,50 @@ def test_load_catalog_rejects_a_version_1_registry(tmp_path):
     old.write_text(json.dumps({"tools": [], "n_tools": 0}))
     with pytest.raises(ValueError, match="schema_version"):
         proto.load_catalog(old)
+
+
+def _raise(key):
+    raise RuntimeError(f"fetch failed for {key}")
+
+
+def test_raising_fetcher_degrades_one_tool_to_unknown_without_aborting():
+    # A prefetch that failed for one tool (proto-sync's own concurrent
+    # fetchers guard against this before build_catalog ever sees it, but
+    # build_catalog must not depend on that guard) must leave that tool
+    # with unknown -- never fabricated -- constraints and no measures,
+    # and must not stop the rest of the catalogue from being built.
+    cat = proto.build_catalog(
+        TOOLS,
+        doc_fetcher=_raise,
+        schema_fetcher=_raise,
+        output_fetcher=_raise,
+    )
+    assert cat["n_tools"] == len(TOOLS)
+    for tool in cat["tools"]:
+        assert tool["measures"] == []
+        assert tool["input_kind"] is None
+        assert tool["molecules"] is None
+        assert tool["alphabet"] is None
+        assert tool["max_length"] is None
+        assert tool["constraint_source"] == []
+        assert tool["status"] == "needs_calibration"
+    assert cat["parse_failures"] == []
+
+
+def test_raising_fetcher_for_one_tool_does_not_affect_the_other():
+    def doc_fetcher(key):
+        if key == "esmfold-prediction":
+            raise RuntimeError("boom")
+        return DOCS[key]
+
+    cat = proto.build_catalog(
+        TOOLS,
+        doc_fetcher=doc_fetcher,
+        schema_fetcher=lambda k: SCHEMAS[k],
+        output_fetcher=lambda k: OUTPUTS[k],
+    )
+    tools = {t["key"]: t for t in cat["tools"]}
+    # esmfold's doc fetch failed, but its schema still answers molecules/input_kind.
+    assert tools["esmfold-prediction"]["molecules"] == ["dna", "ligand", "protein", "rna"]
+    # uniprot-fetch's fetchers never raised, so it is unaffected.
+    assert tools["uniprot-fetch"]["measures"] == []
