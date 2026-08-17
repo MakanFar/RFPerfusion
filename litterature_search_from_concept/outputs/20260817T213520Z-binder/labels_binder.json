@@ -1,0 +1,63 @@
+{
+  "labels": [
+    {"id": "ev_001", "vocabulary": ["fold_confidence", "predicted_error", "interface_energetics"],
+     "claim_type": "mechanism", "support": "established", "evidence_kind": "computational", "confidence": 0.85},
+
+    {"id": "ev_002", "vocabulary": [],
+     "claim_type": "mechanism", "support": "established", "evidence_kind": "experimental", "confidence": 0.7},
+
+    {"id": "ev_003", "vocabulary": [],
+     "claim_type": "failure_mode", "support": "established", "evidence_kind": "experimental", "confidence": 0.75},
+
+    {"id": "ev_004", "vocabulary": [],
+     "claim_type": "mechanism", "support": "established", "evidence_kind": "experimental", "confidence": 0.7},
+
+    {"id": "ev_005", "vocabulary": [],
+     "claim_type": "mechanism", "support": "established", "evidence_kind": "experimental", "confidence": 0.8},
+
+    {"id": "ev_006", "vocabulary": ["interface_energetics"],
+     "claim_type": "mechanism", "support": "speculative", "evidence_kind": "computational", "confidence": 0.5},
+
+    {"id": "ev_007", "vocabulary": [],
+     "claim_type": "mechanism", "support": "established", "evidence_kind": "experimental", "confidence": 0.8},
+
+    {"id": "ev_008", "vocabulary": [],
+     "claim_type": "mechanism", "support": "speculative", "evidence_kind": "experimental", "confidence": 0.4},
+
+    {"id": "ev_009", "vocabulary": [],
+     "claim_type": "mechanism", "support": "speculative", "evidence_kind": "experimental", "confidence": 0.35},
+
+    {"id": "ev_010", "vocabulary": ["fold_confidence", "interface_confidence"],
+     "claim_type": "mechanism", "support": "established", "evidence_kind": "computational", "confidence": 0.7},
+
+    {"id": "ev_011", "vocabulary": [],
+     "claim_type": "mechanism", "support": "speculative", "evidence_kind": "computational", "confidence": 0.5},
+
+    {"id": "ev_012", "vocabulary": ["interface_energetics"],
+     "claim_type": "mechanism", "support": "established", "evidence_kind": "experimental", "confidence": 0.8},
+
+    {"id": "ev_013", "vocabulary": [],
+     "claim_type": "negative_result", "support": "established", "evidence_kind": "theoretical", "confidence": 0.6},
+
+    {"id": "ev_014", "vocabulary": ["interface_energetics", "interface_geometry"],
+     "claim_type": "mechanism", "support": "speculative", "evidence_kind": "computational", "confidence": 0.4},
+
+    {"id": "ev_015", "vocabulary": ["interface_energetics", "interface_geometry"],
+     "claim_type": "mechanism", "support": "established", "evidence_kind": "computational", "confidence": 0.7},
+
+    {"id": "ev_016", "vocabulary": [],
+     "claim_type": "mechanism", "support": "speculative", "evidence_kind": "computational", "confidence": 0.5},
+
+    {"id": "ev_017", "vocabulary": [],
+     "claim_type": "mechanism", "support": "speculative", "evidence_kind": "computational", "confidence": 0.5},
+
+    {"id": "ev_018", "vocabulary": ["interface_geometry"],
+     "claim_type": "mechanism", "support": "established", "evidence_kind": "computational", "confidence": 0.6},
+
+    {"id": "ev_019", "vocabulary": [],
+     "claim_type": "mechanism", "support": "established", "evidence_kind": "experimental", "confidence": 0.8},
+
+    {"id": "ev_020", "vocabulary": [],
+     "claim_type": "mechanism", "support": "established", "evidence_kind": "experimental", "confidence": 0.8}
+  ]
+}

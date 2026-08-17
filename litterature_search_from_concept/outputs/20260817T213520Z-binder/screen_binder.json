@@ -1,0 +1,3310 @@
+{
+  "slug": "binder",
+  "papers": [
+    {
+      "doc_id": "PMC10163288",
+      "extraction_failed": false,
+      "has_sequence": true,
+      "mechanisms": [
+        {
+          "chain": "The physically based Rosetta approach frames both the folding and binding problems in energetic terms; for the approach to succeed, the designed sequence must have as its lowest energy state in isolation the designed monomer structure, and the complex between this designed monomer structure and the target must have sufficiently low energy to drive formation of the design-target protein complex.",
+          "claim": "The physically based Rosetta approach frames folding and binding in energetic terms, requiring the designed sequence to have the designed monomer structure as its lowest energy state in isolation and a sufficiently low complex energy with the target to drive complex formation.",
+          "measurable_properties": [
+            "Rosetta energy of the monomer normalized by chain length",
+            "binding affinity/SC50",
+            "Rosetta ddG",
+            "C\u03b1 RMSD",
+            "pLDDT",
+            "pAE_interaction"
+          ]
+        }
+      ],
+      "named_proteins": [
+        {
+          "name": "TrkA",
+          "accession": null
+        },
+        {
+          "name": "FGFR2",
+          "accession": null
+        },
+        {
+          "name": "IL-7R\u03b1",
+          "accession": null
+        },
+        {
+          "name": "SARS-CoV-2 Spike protein",
+          "accession": null
+        },
+        {
+          "name": "LCB1",
+          "accession": null
+        },
+        {
+          "name": "LCB3",
+          "accession": null
+        },
+        {
+          "name": "InsulinR",
+          "accession": null
+        },
+        {
+          "name": "PDGFR",
+          "accession": null
+        },
+        {
+          "name": "ALK",
+          "accession": "7NWZ"
+        },
+        {
+          "name": "LTK",
+          "accession": "7NX0"
+        },
+        {
+          "name": "IL-10R\u03b1",
+          "accession": null
+        },
+        {
+          "name": "IL-2R\u03b1",
+          "accession": null
+        },
+        {
+          "name": "IL-2 receptor-\u03b1",
+          "accession": null
+        },
+        {
+          "name": "IL10 receptor-\u03b1",
+          "accession": null
+        },
+        {
+          "name": "IL2 receptor-\u03b1",
+          "accession": null
+        }
+      ],
+      "sequence_location": "supplementary",
+      "class_id": "de_novo_binder_generation",
+      "set_id": "s_e712be24"
+    },
+    {
+      "doc_id": "bio_31704d20",
+      "extraction_failed": false,
+      "mechanisms": [],
+      "has_sequence": false,
+      "sequence_location": "none",
+      "named_proteins": [],
+      "class_id": "de_novo_binder_generation",
+      "set_id": "s_e712be24"
+    },
+    {
+      "doc_id": "PMC12710756",
+      "extraction_failed": false,
+      "mechanisms": [
+        {
+          "chain": "binder net charge -> tonic signaling",
+          "claim": "Binder net charge determines tonic signaling in de novo designed CAR T cells.",
+          "measurable_properties": [
+            "binder net charge",
+            "degree of tonic signaling",
+            "CD69 expression in CAR-alone condition"
+          ]
+        },
+        {
+          "chain": "epitope occlusion -> lack of cell-based CAR activation",
+          "claim": "Epitope occlusion by native binding partners (such as CD81 on CD19) prevents cell-based CAR activation despite recombinant protein binding.",
+          "measurable_properties": [
+            "recombinant antigen binding",
+            "CAR activation (CD69 expression)",
+            "epitope location / overlap with native binding partner"
+          ]
+        },
+        {
+          "chain": "non-interface sequence variation -> off-target activation",
+          "claim": "Sequence variations at non-interface residues can mitigate off-target activation while maintaining on-target CAR activity.",
+          "measurable_properties": [
+            "non-interface residue sequence",
+            "off-target activation (CD69 expression against negative cell lines)",
+            "on-target binding/activation"
+          ]
+        }
+      ],
+      "named_proteins": [
+        {
+          "accession": "1XU2",
+          "name": "BCMA"
+        },
+        {
+          "accession": null,
+          "name": "CD19"
+        },
+        {
+          "accession": "5VKJ",
+          "name": "CD22"
+        },
+        {
+          "accession": null,
+          "name": "CD81"
+        },
+        {
+          "accession": "7JIC",
+          "name": "CD81"
+        },
+        {
+          "accession": null,
+          "name": "APRIL"
+        },
+        {
+          "accession": null,
+          "name": "CXCR4"
+        },
+        {
+          "accession": null,
+          "name": "C11D5.3 scFv"
+        },
+        {
+          "accession": null,
+          "name": "FMC63 scFv"
+        },
+        {
+          "accession": null,
+          "name": "m971 scFv"
+        },
+        {
+          "accession": null,
+          "name": "B5 binder"
+        },
+        {
+          "accession": null,
+          "name": "B5.I0 binder"
+        },
+        {
+          "accession": null,
+          "name": "B5.N6 binder"
+        },
+        {
+          "accession": null,
+          "name": "B5.N9 binder"
+        },
+        {
+          "accession": null,
+          "name": "C1 binder"
+        },
+        {
+          "accession": null,
+          "name": "C2 binder"
+        },
+        {
+          "accession": null,
+          "name": "C3 binder"
+        },
+        {
+          "accession": null,
+          "name": "C2.N2 binder"
+        },
+        {
+          "accession": null,
+          "name": "D1 binder"
+        },
+        {
+          "accession": null,
+          "name": "D2 binder"
+        },
+        {
+          "accession": null,
+          "name": "D3 binder"
+        },
+        {
+          "accession": null,
+          "name": "D4 binder"
+        },
+        {
+          "accession": null,
+          "name": "D1.N0 binder"
+        },
+        {
+          "accession": null,
+          "name": "D1.N1 binder"
+        },
+        {
+          "accession": null,
+          "name": "L1-L9 binders"
+        },
+        {
+          "accession": null,
+          "name": "T1-T3 binders"
+        },
+        {
+          "accession": null,
+          "name": "B1-B5 binders"
+        },
+        {
+          "accession": null,
+          "name": "L10 binder"
+        },
+        {
+          "accession": null,
+          "name": "L11 binder"
+        }
+      ],
+      "has_sequence": true,
+      "sequence_location": "supplementary",
+      "class_id": "de_novo_binder_generation",
+      "set_id": "s_e712be24"
+    },
+    {
+      "doc_id": "PMC12412469",
+      "extraction_failed": false,
+      "has_sequence": true,
+      "mechanisms": [
+        {
+          "chain": "VEGF signaling pathway / VEGFR activation",
+          "claim": "Protein-based quenching of the ligand binding site on the receptor surface or sequestration of VEGF to inhibit VEGFR signaling, angiogenesis, and cell proliferation.",
+          "measurable_properties": [
+            "melting temperature",
+            "dissociation constant (Kd)",
+            "cell survival/proliferation",
+            "tumor size",
+            "microvasculature formation area coverage and blood vessel diameter"
+          ]
+        }
+      ],
+      "named_proteins": [
+        {
+          "name": "vascular endothelial growth factor (VEGF)",
+          "accession": "NP_001165097"
+        },
+        {
+          "name": "vascular endothelial growth factor receptor (VEGFR)",
+          "accession": null
+        },
+        {
+          "name": "interleukin-7 receptor-\u03b1 (IL-7R\u03b1)",
+          "accession": null
+        },
+        {
+          "name": "interleukin-7 (IL-7)",
+          "accession": null
+        },
+        {
+          "name": "Sam0.1",
+          "accession": null
+        },
+        {
+          "name": "Sam0.2",
+          "accession": "8BL5"
+        },
+        {
+          "name": "Sam0.3",
+          "accession": null
+        },
+        {
+          "name": "Sam0.4",
+          "accession": null
+        },
+        {
+          "name": "Sam0.5",
+          "accession": null
+        },
+        {
+          "name": "Sam0.6",
+          "accession": null
+        },
+        {
+          "name": "Sam0.7",
+          "accession": "8BL9"
+        },
+        {
+          "name": "Sam0.8",
+          "accession": null
+        },
+        {
+          "name": "Sima1.1",
+          "accession": null
+        },
+        {
+          "name": "Sima1.2",
+          "accession": null
+        },
+        {
+          "name": "Sima2.1",
+          "accession": null
+        },
+        {
+          "name": "Sima2.2",
+          "accession": null
+        },
+        {
+          "name": "Sima3.1",
+          "accession": null
+        },
+        {
+          "name": "Sima3.2",
+          "accession": null
+        },
+        {
+          "name": "Sima4.1",
+          "accession": null
+        },
+        {
+          "name": "Sima4.2",
+          "accession": null
+        },
+        {
+          "name": "bevacizumab",
+          "accession": null
+        },
+        {
+          "name": "des01",
+          "accession": null
+        },
+        {
+          "name": "des02",
+          "accession": null
+        },
+        {
+          "name": "des03",
+          "accession": null
+        },
+        {
+          "name": "des04",
+          "accession": null
+        },
+        {
+          "name": "des05",
+          "accession": null
+        },
+        {
+          "name": "des06",
+          "accession": null
+        },
+        {
+          "name": "des07",
+          "accession": null
+        },
+        {
+          "name": "des08",
+          "accession": null
+        },
+        {
+          "name": "lusvertikimab",
+          "accession": null
+        }
+      ],
+      "sequence_location": "supplementary",
+      "class_id": "de_novo_binder_generation",
+      "set_id": "s_55414f38"
+    },
+    {
+      "doc_id": "bio_f3ba198f",
+      "extraction_failed": false,
+      "mechanisms": [
+        {
+          "chain": "TAS1R2",
+          "claim": "Engaging the Venus Flytrap Domain (VFTD) of TAS1R2 with a designed binder induces lobe closure of LB1, partial opening of LB2, and allosteric outward displacement of transmembrane helices TM3 and TM6, stabilizing an active-like conformational state of the receptor.",
+          "measurable_properties": [
+            "inter-lobe distances",
+            "transmembrane helix distances (e.g., TM3-TM6 distance)",
+            "binding free energy (MM-GBSA)"
+          ]
+        }
+      ],
+      "named_proteins": [
+        {
+          "accession": null,
+          "name": "TAS1R2"
+        },
+        {
+          "accession": null,
+          "name": "FGFR2"
+        },
+        {
+          "accession": null,
+          "name": "brazzein"
+        },
+        {
+          "accession": null,
+          "name": "KaiB"
+        },
+        {
+          "accession": null,
+          "name": "Mpt53"
+        },
+        {
+          "accession": null,
+          "name": "IMPa metallopeptidase"
+        },
+        {
+          "accession": null,
+          "name": "CXCR4 chemokine receptor"
+        },
+        {
+          "accession": null,
+          "name": "5-hydroxytryptamine receptor 2B"
+        },
+        {
+          "accession": null,
+          "name": "5-HT2B"
+        },
+        {
+          "accession": null,
+          "name": "5-hydroxytryptamine receptor 1B"
+        },
+        {
+          "accession": null,
+          "name": "5-HT1B"
+        },
+        {
+          "accession": null,
+          "name": "nociceptin/orphanin FQ receptor"
+        },
+        {
+          "accession": null,
+          "name": "NOP"
+        },
+        {
+          "accession": null,
+          "name": "adenosine A2A receptor"
+        },
+        {
+          "accession": null,
+          "name": "A2AAR"
+        },
+        {
+          "accession": null,
+          "name": "PD-1"
+        },
+        {
+          "accession": null,
+          "name": "EGFR"
+        }
+      ],
+      "has_sequence": false,
+      "sequence_location": "none",
+      "class_id": "de_novo_binder_generation",
+      "set_id": "s_55414f38"
+    },
+    {
+      "doc_id": "PMC10468394",
+      "extraction_failed": false,
+      "has_sequence": true,
+      "mechanisms": [
+        {
+          "chain": "NiB1.17",
+          "claim": "Metal coordination driven by scaffolded histidine residues (e.g., histidine 52)",
+          "measurable_properties": [
+            "dissociation constant (KD)",
+            "metal:monomer stoichiometry",
+            "heat release/uptake measured by isothermal titration calorimetry (ITC)"
+          ]
+        }
+      ],
+      "named_proteins": [
+        {
+          "name": "Influenza A H1 Haemagglutinin",
+          "accession": null
+        },
+        {
+          "name": "IL-7R\u03b1",
+          "accession": null
+        },
+        {
+          "name": "InsR",
+          "accession": null
+        },
+        {
+          "name": "PD-L1",
+          "accession": null
+        },
+        {
+          "name": "TrkA",
+          "accession": null
+        },
+        {
+          "name": "MDM2",
+          "accession": null
+        },
+        {
+          "name": "p53",
+          "accession": null
+        },
+        {
+          "name": "HE0822",
+          "accession": null
+        },
+        {
+          "name": "HE0626",
+          "accession": null
+        },
+        {
+          "name": "HE0675",
+          "accession": null
+        },
+        {
+          "name": "HE0490",
+          "accession": null
+        },
+        {
+          "name": "HE0537",
+          "accession": null
+        },
+        {
+          "name": "HE0902",
+          "accession": null
+        },
+        {
+          "name": "HE0794",
+          "accession": null
+        },
+        {
+          "name": "HE0789",
+          "accession": null
+        },
+        {
+          "name": "HE0841",
+          "accession": null
+        },
+        {
+          "name": "HE0600",
+          "accession": null
+        },
+        {
+          "name": "HE0964",
+          "accession": null
+        },
+        {
+          "name": "p53_design_89",
+          "accession": null
+        },
+        {
+          "name": "p53_design_53",
+          "accession": null
+        },
+        {
+          "name": "NiB1.17",
+          "accession": null
+        },
+        {
+          "name": "NiB2.15",
+          "accession": null
+        },
+        {
+          "name": "NiB1.12",
+          "accession": null
+        },
+        {
+          "name": "NiB1.20",
+          "accession": null
+        },
+        {
+          "name": "NiB2.9",
+          "accession": null
+        },
+        {
+          "name": "NiB2.10",
+          "accession": null
+        },
+        {
+          "name": "NiB2.23",
+          "accession": null
+        },
+        {
+          "name": "NiB1.15",
+          "accession": null
+        },
+        {
+          "name": "IL7Ra_55",
+          "accession": null
+        },
+        {
+          "name": "InsulinR_30",
+          "accession": null
+        },
+        {
+          "name": "PDL1_77",
+          "accession": null
+        },
+        {
+          "name": "TrkA_88",
+          "accession": null
+        },
+        {
+          "name": "HA_20",
+          "accession": null
+        },
+        {
+          "name": "AHB2",
+          "accession": null
+        }
+      ],
+      "sequence_location": "supplementary",
+      "class_id": "de_novo_binder_generation",
+      "set_id": "s_55414f38"
+    },
+    {
+      "doc_id": "bio_f583cade",
+      "extraction_failed": false,
+      "mechanisms": [
+        {
+          "chain": "LCB1 and LCB3",
+          "claim": "Differential efficacy and activation across receptors are hypothesized to be the result of the binding orientation of these two proteins, which bind to the same surface on Spike but in opposite orientations.",
+          "measurable_properties": [
+            "binding orientation",
+            "binding site",
+            "affinity"
+          ]
+        }
+      ],
+      "named_proteins": [
+        {
+          "accession": "7JZU",
+          "name": "LCB1 binder"
+        },
+        {
+          "accession": null,
+          "name": "LCB3"
+        },
+        {
+          "accession": null,
+          "name": "SARS-CoV-2 Spike protein"
+        },
+        {
+          "accession": null,
+          "name": "Gal4-VP64 transcription factor"
+        },
+        {
+          "accession": null,
+          "name": "BFP"
+        },
+        {
+          "accession": null,
+          "name": "mCitrine"
+        },
+        {
+          "accession": null,
+          "name": "mCherry"
+        },
+        {
+          "accession": null,
+          "name": "CD8a"
+        },
+        {
+          "accession": "P01730",
+          "name": "Notch1"
+        },
+        {
+          "accession": "Q04721",
+          "name": "Notch2"
+        },
+        {
+          "accession": null,
+          "name": "4-1BB"
+        },
+        {
+          "accession": null,
+          "name": "CD3\u03b6"
+        },
+        {
+          "accession": null,
+          "name": "CD19 scFv FMC63"
+        },
+        {
+          "accession": "3TEU",
+          "name": "Fibcon"
+        },
+        {
+          "accession": null,
+          "name": "EGFRn_mb"
+        },
+        {
+          "accession": null,
+          "name": "EGFRc_mb"
+        },
+        {
+          "accession": null,
+          "name": "epidermal growth factor receptor (EGFR)"
+        },
+        {
+          "accession": null,
+          "name": "P2224 scFv"
+        }
+      ],
+      "has_sequence": true,
+      "sequence_location": "supplementary",
+      "class_id": "de_novo_binder_generation",
+      "set_id": "s_212e9ba8"
+    },
+    {
+      "doc_id": "PMC12650588",
+      "extraction_failed": false,
+      "has_sequence": true,
+      "mechanisms": [
+        {
+          "chain": "HER2",
+          "claim": "Although 2_703_6 does not measurably block HER2 dimerization in our assay, domain-IV engagement may still attenuate signaling by biasing the ectodomain toward non-productive dimer conformations, limiting ectodomain shedding and generation of p95HER2, and/or promoting receptor internalization and down-regulation.",
+          "measurable_properties": [
+            "receptor dimerization",
+            "ectodomain shedding",
+            "receptor internalization",
+            "down-regulation"
+          ]
+        }
+      ],
+      "sequence_location": "supplementary",
+      "named_proteins": [
+        {
+          "name": "HER2",
+          "accession": null
+        },
+        {
+          "name": "trastuzumab",
+          "accession": null
+        },
+        {
+          "name": "0_703_6",
+          "accession": null
+        },
+        {
+          "name": "0_710_9",
+          "accession": null
+        },
+        {
+          "name": "2_703_6",
+          "accession": null
+        },
+        {
+          "name": "Rb-H2",
+          "accession": "6LBX"
+        },
+        {
+          "name": "YiaT",
+          "accession": null
+        },
+        {
+          "name": "GFP",
+          "accession": null
+        },
+        {
+          "name": "EGFR",
+          "accession": null
+        },
+        {
+          "name": "HER3",
+          "accession": null
+        },
+        {
+          "name": "HER4",
+          "accession": null
+        }
+      ],
+      "class_id": "de_novo_binder_generation",
+      "set_id": "s_212e9ba8"
+    },
+    {
+      "doc_id": "bio_390a5999",
+      "extraction_failed": false,
+      "mechanisms": [],
+      "has_sequence": false,
+      "sequence_location": "none",
+      "named_proteins": [
+        {
+          "name": "OmpA",
+          "accession": null
+        }
+      ],
+      "class_id": "inverse_folding_sequence_design",
+      "set_id": "s_0023ecdb"
+    },
+    {
+      "doc_id": "PMC10808456",
+      "extraction_failed": false,
+      "mechanisms": [],
+      "named_proteins": [
+        {
+          "accession": null,
+          "name": "TEM-1 \u03b2-lactamase"
+        },
+        {
+          "accession": null,
+          "name": "Green fluorescent protein (GFP)"
+        },
+        {
+          "accession": "2RN2",
+          "name": "E. coli ribonuclease H"
+        }
+      ],
+      "sequence_location": "none",
+      "has_sequence": false,
+      "class_id": "inverse_folding_sequence_design",
+      "set_id": "s_0023ecdb"
+    },
+    {
+      "doc_id": "PMC2909241",
+      "extraction_failed": false,
+      "mechanisms": [],
+      "has_sequence": false,
+      "sequence_location": "none",
+      "named_proteins": [],
+      "class_id": "inverse_folding_sequence_design",
+      "set_id": "s_30c24eca"
+    },
+    {
+      "doc_id": "bio_7fda0b39",
+      "extraction_failed": false,
+      "mechanisms": [],
+      "named_proteins": [],
+      "has_sequence": false,
+      "sequence_location": "none",
+      "class_id": "inverse_folding_sequence_design",
+      "set_id": "s_30c24eca"
+    },
+    {
+      "doc_id": "PMC3169953",
+      "extraction_failed": false,
+      "mechanisms": [],
+      "has_sequence": false,
+      "sequence_location": "none",
+      "named_proteins": [],
+      "class_id": "inverse_folding_sequence_design",
+      "set_id": "s_30c24eca"
+    },
+    {
+      "doc_id": "bio_8b44046a",
+      "extraction_failed": false,
+      "mechanisms": [],
+      "has_sequence": false,
+      "sequence_location": "none",
+      "named_proteins": [],
+      "class_id": "inverse_folding_sequence_design",
+      "set_id": "s_8870741c"
+    },
+    {
+      "doc_id": "bio_0f0c11a2",
+      "extraction_failed": false,
+      "mechanisms": [],
+      "has_sequence": false,
+      "sequence_location": "none",
+      "named_proteins": [
+        {
+          "name": "CalB Hydrolase",
+          "accession": null
+        },
+        {
+          "name": "RoseTTAFold",
+          "accession": null
+        },
+        {
+          "name": "Chroma",
+          "accession": null
+        },
+        {
+          "name": "ESMFold",
+          "accession": null
+        },
+        {
+          "name": "AlphaFold2",
+          "accession": null
+        },
+        {
+          "name": "OmegaFold",
+          "accession": null
+        },
+        {
+          "name": "Genie",
+          "accession": null
+        },
+        {
+          "name": "FrameDiff",
+          "accession": null
+        },
+        {
+          "name": "RFdiffusion",
+          "accession": null
+        },
+        {
+          "name": "TDS",
+          "accession": null
+        },
+        {
+          "name": "FrameFlow",
+          "accession": null
+        },
+        {
+          "name": "GPDL",
+          "accession": null
+        },
+        {
+          "name": "ProteinMPNN",
+          "accession": null
+        },
+        {
+          "name": "ACE2",
+          "accession": null
+        }
+      ],
+      "class_id": "inverse_folding_sequence_design",
+      "set_id": "s_8870741c"
+    },
+    {
+      "doc_id": "PMC11925850",
+      "extraction_failed": false,
+      "mechanisms": [],
+      "has_sequence": false,
+      "sequence_location": "none",
+      "named_proteins": [
+        {
+          "name": "MDM2",
+          "accession": null
+        },
+        {
+          "name": "p53",
+          "accession": null
+        },
+        {
+          "name": "SIAH1",
+          "accession": null
+        },
+        {
+          "name": "CACYBP",
+          "accession": null
+        },
+        {
+          "name": "MAPK",
+          "accession": null
+        },
+        {
+          "name": "SH3BP5",
+          "accession": null
+        },
+        {
+          "name": "KEAP1",
+          "accession": null
+        },
+        {
+          "name": "NF2L2",
+          "accession": null
+        },
+        {
+          "name": "PP2A-B55",
+          "accession": null
+        },
+        {
+          "name": "MAPK10",
+          "accession": null
+        },
+        {
+          "name": "NEK2",
+          "accession": null
+        }
+      ],
+      "class_id": "interface_confidence_filter",
+      "set_id": "s_7ce49367"
+    },
+    {
+      "doc_id": "bio_10a218cb",
+      "extraction_failed": false,
+      "mechanisms": [],
+      "has_sequence": false,
+      "sequence_location": "none",
+      "named_proteins": [
+        {
+          "name": "GFP",
+          "accession": null
+        },
+        {
+          "name": "Wingless",
+          "accession": null
+        },
+        {
+          "name": "Wg",
+          "accession": null
+        },
+        {
+          "name": "Chi",
+          "accession": null
+        },
+        {
+          "name": "Ap",
+          "accession": null
+        },
+        {
+          "name": "Kay",
+          "accession": null
+        },
+        {
+          "name": "Jra",
+          "accession": null
+        },
+        {
+          "name": "PSMD4",
+          "accession": null
+        },
+        {
+          "name": "RAD23A",
+          "accession": null
+        },
+        {
+          "name": "RD23A",
+          "accession": null
+        },
+        {
+          "name": "LCP2",
+          "accession": null
+        },
+        {
+          "name": "GRAP2",
+          "accession": null
+        },
+        {
+          "name": "METTL3",
+          "accession": null
+        },
+        {
+          "name": "METTL14",
+          "accession": null
+        },
+        {
+          "name": "Kap-alpha3",
+          "accession": null
+        },
+        {
+          "name": "14-3-3 epsilon",
+          "accession": null
+        },
+        {
+          "name": "CCT7",
+          "accession": null
+        },
+        {
+          "name": "CCT3",
+          "accession": null
+        },
+        {
+          "name": "CCT4",
+          "accession": null
+        },
+        {
+          "name": "CCT8",
+          "accession": null
+        },
+        {
+          "name": "CCT2",
+          "accession": null
+        },
+        {
+          "name": "CCT6",
+          "accession": null
+        },
+        {
+          "name": "Epidermal growth factor receptor",
+          "accession": null
+        },
+        {
+          "name": "EGFR",
+          "accession": null
+        },
+        {
+          "name": "Spi",
+          "accession": null
+        },
+        {
+          "name": "Grk",
+          "accession": null
+        },
+        {
+          "name": "Krn",
+          "accession": null
+        },
+        {
+          "name": "Pvr",
+          "accession": null
+        },
+        {
+          "name": "Torso",
+          "accession": null
+        },
+        {
+          "name": "Toll",
+          "accession": null
+        },
+        {
+          "name": "Wnt",
+          "accession": null
+        },
+        {
+          "name": "BMP",
+          "accession": null
+        },
+        {
+          "name": "Notch",
+          "accession": null
+        },
+        {
+          "name": "Imd",
+          "accession": null
+        },
+        {
+          "name": "Akt1",
+          "accession": null
+        },
+        {
+          "name": "Ubx",
+          "accession": null
+        },
+        {
+          "name": "al",
+          "accession": null
+        },
+        {
+          "name": "dock",
+          "accession": null
+        },
+        {
+          "name": "Pak",
+          "accession": null
+        },
+        {
+          "name": "Ptp61F",
+          "accession": null
+        },
+        {
+          "name": "su_f",
+          "accession": null
+        },
+        {
+          "name": "CstF64",
+          "accession": null
+        },
+        {
+          "name": "ftz",
+          "accession": null
+        },
+        {
+          "name": "ftz-f1",
+          "accession": null
+        },
+        {
+          "name": "dwi",
+          "accession": null
+        },
+        {
+          "name": "twi",
+          "accession": null
+        },
+        {
+          "name": "mod_mdg4",
+          "accession": null
+        },
+        {
+          "name": "Trl",
+          "accession": null
+        },
+        {
+          "name": "Ubqn",
+          "accession": null
+        },
+        {
+          "name": "Rpn10",
+          "accession": null
+        },
+        {
+          "name": "Hrs",
+          "accession": null
+        },
+        {
+          "name": "Stam",
+          "accession": null
+        },
+        {
+          "name": "LMNA",
+          "accession": "LMNA_HUMAN"
+        },
+        {
+          "name": "LMBN1",
+          "accession": "LMBN1_HUMAN"
+        },
+        {
+          "name": "HIF1A",
+          "accession": "HIF1A_HUMAN"
+        },
+        {
+          "name": "PS3",
+          "accession": "PS3_HUMAN"
+        },
+        {
+          "name": "LCP1",
+          "accession": "LCP1_HUMAN"
+        },
+        {
+          "name": "APC11",
+          "accession": "APC11_YEAST"
+        },
+        {
+          "name": "CDC16",
+          "accession": "CDC16_YEAST"
+        },
+        {
+          "name": "PRP19",
+          "accession": "PRP19_YEAST"
+        },
+        {
+          "name": "B52",
+          "accession": null
+        },
+        {
+          "name": "Bacc",
+          "accession": null
+        },
+        {
+          "name": "CG10417",
+          "accession": null
+        },
+        {
+          "name": "CG2199",
+          "accession": null
+        },
+        {
+          "name": "D1",
+          "accession": null
+        },
+        {
+          "name": "Df31",
+          "accession": null
+        },
+        {
+          "name": "Droj2",
+          "accession": null
+        },
+        {
+          "name": "Fkbp39",
+          "accession": null
+        },
+        {
+          "name": "Flacc",
+          "accession": null
+        },
+        {
+          "name": "Hrb98DE",
+          "accession": null
+        },
+        {
+          "name": "Lam",
+          "accession": null
+        },
+        {
+          "name": "Nap1",
+          "accession": null
+        },
+        {
+          "name": "Nito",
+          "accession": null
+        },
+        {
+          "name": "Rm62",
+          "accession": null
+        },
+        {
+          "name": "RpL22",
+          "accession": null
+        },
+        {
+          "name": "RpLP0",
+          "accession": null
+        },
+        {
+          "name": "Trxr-1",
+          "accession": null
+        },
+        {
+          "name": "fl(2)d",
+          "accession": null
+        },
+        {
+          "name": "lark",
+          "accession": null
+        },
+        {
+          "name": "lost",
+          "accession": null
+        },
+        {
+          "name": "nudE",
+          "accession": null
+        },
+        {
+          "name": "pasha",
+          "accession": null
+        },
+        {
+          "name": "rump",
+          "accession": null
+        },
+        {
+          "name": "sqd",
+          "accession": null
+        },
+        {
+          "name": "qkr58E-1",
+          "accession": null
+        },
+        {
+          "name": "Calr",
+          "accession": null
+        },
+        {
+          "name": "qkr58E-2",
+          "accession": null
+        },
+        {
+          "name": "CG7903",
+          "accession": null
+        },
+        {
+          "name": "Pep",
+          "accession": null
+        },
+        {
+          "name": "yps",
+          "accession": null
+        },
+        {
+          "name": "RanBPM",
+          "accession": null
+        },
+        {
+          "name": "Hakai",
+          "accession": null
+        },
+        {
+          "name": "CG9641",
+          "accession": null
+        },
+        {
+          "name": "bel",
+          "accession": null
+        },
+        {
+          "name": "smt3",
+          "accession": null
+        },
+        {
+          "name": "pAbp",
+          "accession": null
+        },
+        {
+          "name": "CG7065",
+          "accession": null
+        },
+        {
+          "name": "CG7611",
+          "accession": null
+        },
+        {
+          "name": "sesB",
+          "accession": null
+        },
+        {
+          "name": "METTL4",
+          "accession": null
+        },
+        {
+          "name": "CG34149",
+          "accession": null
+        },
+        {
+          "name": "Ravus",
+          "accession": null
+        },
+        {
+          "name": "CG4415",
+          "accession": null
+        },
+        {
+          "name": "betaNACTes3",
+          "accession": null
+        },
+        {
+          "name": "mamo",
+          "accession": null
+        },
+        {
+          "name": "ttk",
+          "accession": null
+        },
+        {
+          "name": "rib",
+          "accession": null
+        },
+        {
+          "name": "br",
+          "accession": null
+        },
+        {
+          "name": "Coop",
+          "accession": null
+        },
+        {
+          "name": "bip1",
+          "accession": null
+        },
+        {
+          "name": "CG18190",
+          "accession": null
+        },
+        {
+          "name": "Ebl",
+          "accession": null
+        },
+        {
+          "name": "lbf1",
+          "accession": null
+        },
+        {
+          "name": "lbf2",
+          "accession": null
+        },
+        {
+          "name": "Odj",
+          "accession": null
+        },
+        {
+          "name": "CG8159",
+          "accession": null
+        },
+        {
+          "name": "prod",
+          "accession": null
+        },
+        {
+          "name": "CG15107",
+          "accession": null
+        },
+        {
+          "name": "Saf-B",
+          "accession": null
+        },
+        {
+          "name": "Zif",
+          "accession": null
+        },
+        {
+          "name": "ransfi",
+          "accession": null
+        },
+        {
+          "name": "CG18159",
+          "accession": null
+        },
+        {
+          "name": "CG17803",
+          "accession": null
+        },
+        {
+          "name": "otp",
+          "accession": null
+        },
+        {
+          "name": "hbn",
+          "accession": null
+        },
+        {
+          "name": "CG31388",
+          "accession": null
+        },
+        {
+          "name": "oc",
+          "accession": null
+        },
+        {
+          "name": "CG11300",
+          "accession": null
+        },
+        {
+          "name": "CG12491",
+          "accession": null
+        },
+        {
+          "name": "insb",
+          "accession": null
+        },
+        {
+          "name": "E(spl)mgammaHLH",
+          "accession": null
+        },
+        {
+          "name": "CG11723",
+          "accession": null
+        },
+        {
+          "name": "Poxn",
+          "accession": null
+        },
+        {
+          "name": "tbrd-1",
+          "accession": null
+        },
+        {
+          "name": "tbrd-2",
+          "accession": null
+        },
+        {
+          "name": "Lim3",
+          "accession": null
+        },
+        {
+          "name": "CG2712",
+          "accession": null
+        },
+        {
+          "name": "CG1164",
+          "accession": null
+        },
+        {
+          "name": "dgm",
+          "accession": null
+        },
+        {
+          "name": "tup",
+          "accession": null
+        },
+        {
+          "name": "CG32264",
+          "accession": null
+        },
+        {
+          "name": "homer",
+          "accession": null
+        },
+        {
+          "name": "Deaf1",
+          "accession": null
+        },
+        {
+          "name": "CG10209",
+          "accession": null
+        },
+        {
+          "name": "MED15",
+          "accession": null
+        },
+        {
+          "name": "CG34404",
+          "accession": null
+        },
+        {
+          "name": "sprt",
+          "accession": null
+        },
+        {
+          "name": "lms",
+          "accession": null
+        },
+        {
+          "name": "Sox21b",
+          "accession": null
+        },
+        {
+          "name": "CG12822",
+          "accession": null
+        },
+        {
+          "name": "CDC53",
+          "accession": null
+        },
+        {
+          "name": "CG4328",
+          "accession": null
+        },
+        {
+          "name": "CG15514",
+          "accession": null
+        },
+        {
+          "name": "CG14232",
+          "accession": null
+        },
+        {
+          "name": "CG9356",
+          "accession": null
+        },
+        {
+          "name": "CG32655",
+          "accession": null
+        },
+        {
+          "name": "Nrf1b",
+          "accession": null
+        },
+        {
+          "name": "Rst6R",
+          "accession": null
+        },
+        {
+          "name": "CG3342",
+          "accession": null
+        },
+        {
+          "name": "CG8851",
+          "accession": null
+        },
+        {
+          "name": "sstn",
+          "accession": null
+        },
+        {
+          "name": "Rsp3",
+          "accession": null
+        },
+        {
+          "name": "Lim1",
+          "accession": null
+        },
+        {
+          "name": "CG17601",
+          "accession": null
+        },
+        {
+          "name": "ctp",
+          "accession": null
+        },
+        {
+          "name": "H2.0",
+          "accession": null
+        },
+        {
+          "name": "Gsc",
+          "accession": null
+        },
+        {
+          "name": "cbs",
+          "accession": null
+        },
+        {
+          "name": "CG31638",
+          "accession": null
+        },
+        {
+          "name": "neur",
+          "accession": null
+        },
+        {
+          "name": "CG10947",
+          "accession": null
+        },
+        {
+          "name": "CG4325",
+          "accession": null
+        },
+        {
+          "name": "CG43861",
+          "accession": null
+        },
+        {
+          "name": "CG12768",
+          "accession": null
+        },
+        {
+          "name": "Mes2",
+          "accession": null
+        },
+        {
+          "name": "Pc",
+          "accession": null
+        },
+        {
+          "name": "Sce",
+          "accession": null
+        },
+        {
+          "name": "D12",
+          "accession": null
+        },
+        {
+          "name": "Atac1",
+          "accession": null
+        },
+        {
+          "name": "D",
+          "accession": null
+        },
+        {
+          "name": "Sox21a",
+          "accession": null
+        },
+        {
+          "name": "CG17002",
+          "accession": null
+        },
+        {
+          "name": "MED30",
+          "accession": null
+        },
+        {
+          "name": "CG8237",
+          "accession": null
+        },
+        {
+          "name": "sip3",
+          "accession": null
+        },
+        {
+          "name": "mei-P26",
+          "accession": null
+        },
+        {
+          "name": "CG6304",
+          "accession": null
+        },
+        {
+          "name": "wde",
+          "accession": null
+        },
+        {
+          "name": "egg",
+          "accession": null
+        },
+        {
+          "name": "btz",
+          "accession": null
+        },
+        {
+          "name": "eEF1delta",
+          "accession": null
+        },
+        {
+          "name": "Nacalpha",
+          "accession": null
+        },
+        {
+          "name": "Lint-1",
+          "accession": null
+        },
+        {
+          "name": "CoRest",
+          "accession": null
+        },
+        {
+          "name": "ArgRS",
+          "accession": null
+        },
+        {
+          "name": "AIMP1",
+          "accession": null
+        },
+        {
+          "name": "MBD-like",
+          "accession": null
+        },
+        {
+          "name": "MTA1-like",
+          "accession": null
+        },
+        {
+          "name": "vis",
+          "accession": null
+        },
+        {
+          "name": "achi",
+          "accession": null
+        },
+        {
+          "name": "Cen",
+          "accession": null
+        },
+        {
+          "name": "Smap",
+          "accession": null
+        },
+        {
+          "name": "Nup50",
+          "accession": null
+        },
+        {
+          "name": "Nup153",
+          "accession": null
+        },
+        {
+          "name": "CG5174",
+          "accession": null
+        },
+        {
+          "name": "ix",
+          "accession": null
+        },
+        {
+          "name": "Syx5",
+          "accession": null
+        },
+        {
+          "name": "Syx8",
+          "accession": null
+        },
+        {
+          "name": "Mvb12",
+          "accession": null
+        },
+        {
+          "name": "TSG101",
+          "accession": null
+        },
+        {
+          "name": "BicD",
+          "accession": null
+        },
+        {
+          "name": "pav",
+          "accession": null
+        },
+        {
+          "name": "Ssdp",
+          "accession": null
+        },
+        {
+          "name": "mor",
+          "accession": null
+        },
+        {
+          "name": "brm",
+          "accession": null
+        },
+        {
+          "name": "Bap60",
+          "accession": null
+        },
+        {
+          "name": "Mic2",
+          "accession": null
+        },
+        {
+          "name": "wupA",
+          "accession": null
+        },
+        {
+          "name": "CG12024",
+          "accession": null
+        },
+        {
+          "name": "CG3529",
+          "accession": null
+        },
+        {
+          "name": "Kank",
+          "accession": null
+        },
+        {
+          "name": "Klp31E",
+          "accession": null
+        },
+        {
+          "name": "Ddx1",
+          "accession": null
+        },
+        {
+          "name": "CG5913",
+          "accession": null
+        },
+        {
+          "name": "MED8",
+          "accession": null
+        },
+        {
+          "name": "MED11",
+          "accession": null
+        },
+        {
+          "name": "CG7668",
+          "accession": null
+        },
+        {
+          "name": "Frl",
+          "accession": null
+        },
+        {
+          "name": "az2",
+          "accession": null
+        },
+        {
+          "name": "CG1603",
+          "accession": null
+        },
+        {
+          "name": "elf3q1",
+          "accession": null
+        },
+        {
+          "name": "elf3p",
+          "accession": null
+        },
+        {
+          "name": "CG3548",
+          "accession": null
+        },
+        {
+          "name": "CG42676",
+          "accession": null
+        },
+        {
+          "name": "Cosf6",
+          "accession": null
+        },
+        {
+          "name": "Prip",
+          "accession": null
+        },
+        {
+          "name": "MBD-R2",
+          "accession": null
+        },
+        {
+          "name": "CG11504",
+          "accession": null
+        },
+        {
+          "name": "nwk",
+          "accession": null
+        },
+        {
+          "name": "dsh",
+          "accession": null
+        },
+        {
+          "name": "Syx18",
+          "accession": null
+        },
+        {
+          "name": "Es2",
+          "accession": null
+        },
+        {
+          "name": "CG15084",
+          "accession": null
+        },
+        {
+          "name": "Syp",
+          "accession": null
+        },
+        {
+          "name": "Col4a1",
+          "accession": null
+        },
+        {
+          "name": "vkg",
+          "accession": null
+        },
+        {
+          "name": "Sas-4",
+          "accession": null
+        },
+        {
+          "name": "Sas-6",
+          "accession": null
+        },
+        {
+          "name": "Axn",
+          "accession": null
+        },
+        {
+          "name": "Apc2",
+          "accession": null
+        },
+        {
+          "name": "dl",
+          "accession": null
+        },
+        {
+          "name": "abd-A",
+          "accession": null
+        },
+        {
+          "name": "lbe",
+          "accession": null
+        },
+        {
+          "name": "Abd-B",
+          "accession": null
+        },
+        {
+          "name": "Dll",
+          "accession": null
+        },
+        {
+          "name": "ena",
+          "accession": null
+        },
+        {
+          "name": "C15",
+          "accession": null
+        },
+        {
+          "name": "Appl",
+          "accession": null
+        },
+        {
+          "name": "XIIL",
+          "accession": null
+        },
+        {
+          "name": "ase",
+          "accession": null
+        },
+        {
+          "name": "Dfd",
+          "accession": null
+        },
+        {
+          "name": "Lbx",
+          "accession": null
+        },
+        {
+          "name": "bcd",
+          "accession": null
+        },
+        {
+          "name": "pum",
+          "accession": null
+        },
+        {
+          "name": "BicC",
+          "accession": null
+        },
+        {
+          "name": "gnu",
+          "accession": null
+        },
+        {
+          "name": "Bsq25D",
+          "accession": null
+        },
+        {
+          "name": "ens",
+          "accession": null
+        },
+        {
+          "name": "cad",
+          "accession": null
+        },
+        {
+          "name": "vnd",
+          "accession": null
+        },
+        {
+          "name": "dor",
+          "accession": null
+        },
+        {
+          "name": "Vps8",
+          "accession": null
+        },
+        {
+          "name": "Dr",
+          "accession": null
+        },
+        {
+          "name": "Hipk",
+          "accession": null
+        },
+        {
+          "name": "EcR",
+          "accession": null
+        },
+        {
+          "name": "Scr",
+          "accession": null
+        },
+        {
+          "name": "tj",
+          "accession": null
+        },
+        {
+          "name": "hydra",
+          "accession": null
+        },
+        {
+          "name": "prd",
+          "accession": null
+        },
+        {
+          "name": "qce",
+          "accession": null
+        },
+        {
+          "name": "fz",
+          "accession": null
+        },
+        {
+          "name": "apKC",
+          "accession": null
+        },
+        {
+          "name": "grau",
+          "accession": null
+        },
+        {
+          "name": "CG6654",
+          "accession": null
+        },
+        {
+          "name": "gro",
+          "accession": null
+        },
+        {
+          "name": "hbx",
+          "accession": null
+        },
+        {
+          "name": "inaD",
+          "accession": null
+        },
+        {
+          "name": "norpA",
+          "accession": null
+        },
+        {
+          "name": "Jra",
+          "accession": null
+        },
+        {
+          "name": "Atf3",
+          "accession": null
+        },
+        {
+          "name": "kel",
+          "accession": null
+        },
+        {
+          "name": "mei-38",
+          "accession": null
+        },
+        {
+          "name": "Khc",
+          "accession": null
+        },
+        {
+          "name": "Klc",
+          "accession": null
+        },
+        {
+          "name": "kni",
+          "accession": null
+        },
+        {
+          "name": "dlg1",
+          "accession": null
+        },
+        {
+          "name": "scrib",
+          "accession": null
+        },
+        {
+          "name": "wek",
+          "accession": null
+        },
+        {
+          "name": "CG7386",
+          "accession": null
+        },
+        {
+          "name": "robo2",
+          "accession": null
+        },
+        {
+          "name": "sli",
+          "accession": null
+        },
+        {
+          "name": "E(spl)m4-BFM",
+          "accession": null
+        },
+        {
+          "name": "Traf4",
+          "accession": null
+        },
+        {
+          "name": "par-1",
+          "accession": null
+        },
+        {
+          "name": "suf(Hw)",
+          "accession": null
+        },
+        {
+          "name": "z",
+          "accession": null
+        },
+        {
+          "name": "Ck1alpha",
+          "accession": null
+        },
+        {
+          "name": "put",
+          "accession": null
+        },
+        {
+          "name": "Cdk2",
+          "accession": null
+        },
+        {
+          "name": "Pka-C1",
+          "accession": null
+        },
+        {
+          "name": "p38B",
+          "accession": null
+        },
+        {
+          "name": "bsk",
+          "accession": null
+        },
+        {
+          "name": "aPKC",
+          "accession": null
+        },
+        {
+          "name": "sgg",
+          "accession": null
+        },
+        {
+          "name": "gek",
+          "accession": null
+        },
+        {
+          "name": "Doa",
+          "accession": null
+        },
+        {
+          "name": "mbt",
+          "accession": null
+        },
+        {
+          "name": "Nek2",
+          "accession": null
+        },
+        {
+          "name": "S6k",
+          "accession": null
+        },
+        {
+          "name": "rl",
+          "accession": null
+        },
+        {
+          "name": "aurA",
+          "accession": null
+        },
+        {
+          "name": "hep",
+          "accession": null
+        },
+        {
+          "name": "Rok",
+          "accession": null
+        },
+        {
+          "name": "SRm160",
+          "accession": null
+        },
+        {
+          "name": "chb",
+          "accession": null
+        },
+        {
+          "name": "vvl",
+          "accession": null
+        },
+        {
+          "name": "CG9346",
+          "accession": null
+        },
+        {
+          "name": "DCP2",
+          "accession": null
+        },
+        {
+          "name": "fry",
+          "accession": null
+        },
+        {
+          "name": "cos",
+          "accession": null
+        },
+        {
+          "name": "cnn",
+          "accession": null
+        },
+        {
+          "name": "foxo",
+          "accession": null
+        },
+        {
+          "name": "CG42684",
+          "accession": null
+        },
+        {
+          "name": "BubR1",
+          "accession": null
+        },
+        {
+          "name": "scra",
+          "accession": null
+        },
+        {
+          "name": "I(2)K01209",
+          "accession": null
+        },
+        {
+          "name": "CG42797",
+          "accession": null
+        },
+        {
+          "name": "Trf4-1",
+          "accession": null
+        },
+        {
+          "name": "Tsc1",
+          "accession": null
+        },
+        {
+          "name": "enc",
+          "accession": null
+        },
+        {
+          "name": "chico",
+          "accession": null
+        },
+        {
+          "name": "Sik3",
+          "accession": null
+        },
+        {
+          "name": "Smurf",
+          "accession": null
+        },
+        {
+          "name": "gig",
+          "accession": null
+        },
+        {
+          "name": "Nuak1",
+          "accession": null
+        }
+      ],
+      "class_id": "interface_confidence_filter",
+      "set_id": "s_7ce49367"
+    },
+    {
+      "doc_id": "bio_c8b16bd2",
+      "extraction_failed": false,
+      "mechanisms": [
+        {
+          "chain": "mutating chain / designed chain",
+          "claim": "Amino-acid mutations are introduced across the full sequence (including interface residues) via PMCM to alter interactions and ensure stability of the newly designed protein complex.",
+          "measurable_properties": [
+            "Root-Mean-Square-Deviation (RMSD)",
+            "predicted-Template-Modelling (pTM) score",
+            "interface pTM (ipTM) score",
+            "binding affinity"
+          ]
+        }
+      ],
+      "has_sequence": false,
+      "sequence_location": "none",
+      "named_proteins": [
+        {
+          "accession": null,
+          "name": "AlphaFold2"
+        },
+        {
+          "accession": null,
+          "name": "AlphaFold-Multimer"
+        },
+        {
+          "accession": null,
+          "name": "MaTPIP-Hybrid"
+        },
+        {
+          "accession": null,
+          "name": "ProtTrans"
+        },
+        {
+          "accession": null,
+          "name": "OmegaFold"
+        },
+        {
+          "accession": null,
+          "name": "ESMFold"
+        },
+        {
+          "accession": null,
+          "name": "TIMED"
+        },
+        {
+          "accession": null,
+          "name": "GENERALIST"
+        },
+        {
+          "accession": null,
+          "name": "SADIE"
+        },
+        {
+          "accession": null,
+          "name": "ESM-2"
+        }
+      ],
+      "class_id": "interface_confidence_filter",
+      "set_id": "s_7ce49367"
+    },
+    {
+      "doc_id": "bio_cc603161",
+      "extraction_failed": false,
+      "mechanisms": [],
+      "has_sequence": false,
+      "sequence_location": "none",
+      "named_proteins": [
+        {
+          "name": "KRAS",
+          "accession": null
+        },
+        {
+          "name": "RAF1",
+          "accession": null
+        },
+        {
+          "name": "KSR1",
+          "accession": null
+        },
+        {
+          "name": "BRAF",
+          "accession": null
+        },
+        {
+          "name": "RIPK1",
+          "accession": null
+        },
+        {
+          "name": "MDM2",
+          "accession": null
+        },
+        {
+          "name": "P53",
+          "accession": null
+        },
+        {
+          "name": "SIAH1",
+          "accession": null
+        },
+        {
+          "name": "Calcyclin binding protein",
+          "accession": null
+        },
+        {
+          "name": "KEAP1",
+          "accession": null
+        },
+        {
+          "name": "NF2L2",
+          "accession": null
+        },
+        {
+          "name": "MAPK10",
+          "accession": null
+        },
+        {
+          "name": "SH3 domain-binding protein 5",
+          "accession": null
+        },
+        {
+          "name": "chicken lysozyme C",
+          "accession": null
+        },
+        {
+          "name": "LYSC_HUMAN",
+          "accession": null
+        },
+        {
+          "name": "MEK1",
+          "accession": null
+        }
+      ],
+      "class_id": "interface_confidence_filter",
+      "set_id": "s_3255e0cd"
+    },
+    {
+      "doc_id": "PMC11925850",
+      "extraction_failed": false,
+      "mechanisms": [],
+      "has_sequence": false,
+      "sequence_location": "none",
+      "named_proteins": [
+        {
+          "name": "MDM2",
+          "accession": null
+        },
+        {
+          "name": "p53",
+          "accession": null
+        },
+        {
+          "name": "SIAH1",
+          "accession": null
+        },
+        {
+          "name": "CACYBP",
+          "accession": null
+        },
+        {
+          "name": "MAPK",
+          "accession": null
+        },
+        {
+          "name": "SH3BP5",
+          "accession": null
+        },
+        {
+          "name": "KEAP1",
+          "accession": null
+        },
+        {
+          "name": "NF2L2",
+          "accession": null
+        },
+        {
+          "name": "PP2A-B55",
+          "accession": null
+        },
+        {
+          "name": "MAPK10",
+          "accession": null
+        },
+        {
+          "name": "NEK2",
+          "accession": null
+        }
+      ],
+      "class_id": "interface_confidence_filter",
+      "set_id": "s_3255e0cd"
+    },
+    {
+      "doc_id": "PMC10320053",
+      "extraction_failed": false,
+      "mechanisms": [
+        {
+          "chain": "PdhI",
+          "claim": "Structural modeling suggested that the protein interferes with catalysis by protruding into the active center of the enzyme.",
+          "measurable_properties": [
+            "enzyme activity",
+            "C\u03b1-C\u03b1 distance",
+            "distance restraint"
+          ]
+        }
+      ],
+      "has_sequence": false,
+      "sequence_location": "none",
+      "named_proteins": [
+        {
+          "name": "PdhI",
+          "accession": null
+        },
+        {
+          "name": "pyruvate dehydrogenase",
+          "accession": null
+        },
+        {
+          "name": "PdhA",
+          "accession": null
+        },
+        {
+          "name": "PdhB",
+          "accession": null
+        }
+      ],
+      "class_id": "interface_confidence_filter",
+      "set_id": "s_d1b3dc88"
+    },
+    {
+      "doc_id": "PMC8728224",
+      "extraction_failed": false,
+      "mechanisms": [],
+      "has_sequence": false,
+      "sequence_location": "none",
+      "named_proteins": [
+        {
+          "name": "human CREB-binding protein",
+          "accession": "Q92793"
+        }
+      ],
+      "class_id": "interface_confidence_filter",
+      "set_id": "s_d1b3dc88"
+    },
+    {
+      "doc_id": "PMC11653142",
+      "extraction_failed": false,
+      "mechanisms": [],
+      "has_sequence": false,
+      "sequence_location": "none",
+      "named_proteins": [
+        {
+          "name": "6sup_A",
+          "accession": "6sup_A"
+        },
+        {
+          "name": "3jub_A",
+          "accession": "3jub_A"
+        },
+        {
+          "name": "6gus_A",
+          "accession": "6gus_A"
+        },
+        {
+          "name": "6gut",
+          "accession": "6gut"
+        },
+        {
+          "name": "4xb6_E",
+          "accession": "4xb6_E"
+        },
+        {
+          "name": "5vz0_A",
+          "accession": "5vz0_A"
+        },
+        {
+          "name": "6p5x_E",
+          "accession": "6p5x_E"
+        }
+      ],
+      "class_id": "fold_confidence_filter",
+      "set_id": "s_8577164a"
+    },
+    {
+      "doc_id": "bio_f5b4bfd4",
+      "extraction_failed": false,
+      "mechanisms": [],
+      "has_sequence": false,
+      "sequence_location": "none",
+      "named_proteins": [
+        {
+          "name": "Neurogenic locus notch homolog protein 3",
+          "accession": "Q9UM47"
+        },
+        {
+          "name": "eukaryotic translation initiation factor 3 subunit M",
+          "accession": "Q7L2H7"
+        },
+        {
+          "name": "human Forkhead box protein N1",
+          "accession": "O15353"
+        },
+        {
+          "name": "eukaryotic translation initiation factor 3",
+          "accession": "P60228"
+        },
+        {
+          "name": "UniProt Q86YZ3 fragment 6",
+          "accession": "Q86YZ3"
+        },
+        {
+          "name": "UniProt O95218",
+          "accession": "O95218"
+        }
+      ],
+      "class_id": "fold_confidence_filter",
+      "set_id": "s_8577164a"
+    },
+    {
+      "doc_id": "PMC10796318",
+      "extraction_failed": false,
+      "mechanisms": [],
+      "has_sequence": false,
+      "sequence_location": "none",
+      "named_proteins": [],
+      "class_id": "fold_confidence_filter",
+      "set_id": "s_0b34116f"
+    },
+    {
+      "doc_id": "bio_39487633",
+      "extraction_failed": false,
+      "mechanisms": [],
+      "has_sequence": true,
+      "sequence_location": "supplementary",
+      "named_proteins": [
+        {
+          "name": "MCM2",
+          "accession": "P49736"
+        },
+        {
+          "name": "histone H3",
+          "accession": null
+        },
+        {
+          "name": "histone H4",
+          "accession": null
+        }
+      ],
+      "class_id": "fold_confidence_filter",
+      "set_id": "s_0b34116f"
+    },
+    {
+      "doc_id": "PMC12463876",
+      "extraction_failed": false,
+      "has_sequence": true,
+      "mechanisms": [
+        {
+          "chain": "MiniP-2 / LCN2",
+          "claim": "Binding is primarily mediated by backbone hydrogen bonds forming a short antiparallel \u03b2-augmentation interface, complemented by additional hydrogen bonds and a stabilizing salt bridge between Arg37 of MiniP-2 and Asp97 of LCN2.",
+          "measurable_properties": [
+            "dissociation constant (Kd)",
+            "binding free energy",
+            "melting temperature (Tm)",
+            "particle size distribution"
+          ]
+        }
+      ],
+      "named_proteins": [
+        {
+          "name": "Lipocalin-2 (LCN2) / neutrophil gelatinase-associated lipocalin / siderocalin / 24p3",
+          "accession": "3FW4"
+        },
+        {
+          "name": "MMP-9",
+          "accession": "A331071-50"
+        },
+        {
+          "name": "NGALR",
+          "accession": null
+        },
+        {
+          "name": "MiniP-1",
+          "accession": null
+        },
+        {
+          "name": "MiniP-2",
+          "accession": null
+        },
+        {
+          "name": "MiniP-3",
+          "accession": null
+        },
+        {
+          "name": "MiniP-4",
+          "accession": null
+        },
+        {
+          "name": "MiniP-5",
+          "accession": null
+        }
+      ],
+      "sequence_location": "supplementary",
+      "class_id": "fold_confidence_filter",
+      "set_id": "s_0b34116f"
+    },
+    {
+      "doc_id": "PMC12461943",
+      "extraction_failed": false,
+      "has_sequence": false,
+      "mechanisms": [],
+      "named_proteins": [
+        {
+          "accession": null,
+          "name": "Chlorophyll A"
+        }
+      ],
+      "sequence_location": "none",
+      "class_id": "fold_confidence_filter",
+      "set_id": "s_074c09b3"
+    },
+    {
+      "doc_id": "bio_554b98b2",
+      "extraction_failed": false,
+      "has_sequence": false,
+      "mechanisms": [],
+      "named_proteins": [],
+      "sequence_location": "none",
+      "class_id": "fold_confidence_filter",
+      "set_id": "s_074c09b3"
+    },
+    {
+      "doc_id": "PMC9607527",
+      "extraction_failed": false,
+      "mechanisms": [],
+      "has_sequence": false,
+      "sequence_location": "none",
+      "named_proteins": [],
+      "class_id": "fold_confidence_filter",
+      "set_id": "s_074c09b3"
+    },
+    {
+      "doc_id": "bio_0c510ba3",
+      "extraction_failed": false,
+      "mechanisms": [
+        {
+          "chain": "none",
+          "claim": "The paper does not establish a physical mechanism for actuating a protein; instead, it studies diffusion models through the lens of theoretical biophysics by analyzing their underlying formulation of potentials and extracting learned energy functions.",
+          "measurable_properties": [
+            "negative log-likelihood values (- log p0(x0))",
+            "docking quality (DockQ)",
+            "interface-residue RMSD"
+          ]
+        }
+      ],
+      "has_sequence": false,
+      "sequence_location": "none",
+      "named_proteins": [
+        {
+          "name": "subtilisin BPN' with an inhibitor",
+          "accession": "2SIC"
+        },
+        {
+          "name": "PKR kinase domain-eIF2 alpha",
+          "accession": "2A1A"
+        }
+      ],
+      "class_id": "interface_energetics_filter",
+      "set_id": "s_4fd1c228"
+    },
+    {
+      "doc_id": "PMC3599296",
+      "extraction_failed": false,
+      "mechanisms": [],
+      "has_sequence": false,
+      "sequence_location": "none",
+      "named_proteins": [
+        {
+          "name": "HP986",
+          "accession": null
+        },
+        {
+          "name": "tumor necrosis factor receptor 1",
+          "accession": "1NCF"
+        },
+        {
+          "name": "VC1899",
+          "accession": "1XMXA"
+        },
+        {
+          "name": "spTranslin",
+          "accession": null
+        },
+        {
+          "name": "spTRAX",
+          "accession": null
+        }
+      ],
+      "class_id": "interface_energetics_filter",
+      "set_id": "s_3e771901"
+    },
+    {
+      "doc_id": "bio_6e839975",
+      "extraction_failed": false,
+      "mechanisms": [
+        {
+          "chain": "Pyocyanin acts as a redox-active phenazine that accepts electrons from NADPH to modulate/amplify NADPH oxidase activity, and interacts with TLR4 to influence inflammatory signaling.",
+          "claim": "Pyocyanin interacts with NADPH oxidase (NOX2) and Toll-like receptor 4 (TLR4) to modulate oxidative stress and inflammatory signaling pathways.",
+          "measurable_properties": [
+            "HADDOCK score",
+            "binding energy",
+            "RMSD",
+            "buried surface area",
+            "van der Waals energy",
+            "electrostatic energy"
+          ]
+        }
+      ],
+      "named_proteins": [
+        {
+          "accession": "P04839",
+          "name": "NADPH oxidase"
+        },
+        {
+          "accession": "O00206",
+          "name": "Toll-like receptor 4"
+        }
+      ],
+      "has_sequence": false,
+      "sequence_location": "none",
+      "class_id": "interface_energetics_filter",
+      "set_id": "s_3e771901"
+    },
+    {
+      "doc_id": "PMC3886892",
+      "extraction_failed": false,
+      "has_sequence": false,
+      "mechanisms": [
+        {
+          "chain": "The paper does not establish a mechanism for actuating a protein (it investigates lateral association/dimerization rather than actuation or mechanical activation of a single protein), but rather characterizes the free energy landscape of membrane protein dimerization driven by protein-lipid-protein interactions and optimal packing of intervening lipids (L7, L20, L41).",
+          "claim": "Characterization of the dimerization free energy landscape and lipid-mediated interactions.",
+          "measurable_properties": [
+            "Free energy of dimerization / potential of mean force (PMF) well depth",
+            "Lipid-inaccessible buried surface area",
+            "Inter-protein center of mass separation distances at local/global minima"
+          ]
+        }
+      ],
+      "named_proteins": [
+        {
+          "accession": null,
+          "name": "NanC"
+        },
+        {
+          "accession": null,
+          "name": "OmpC"
+        },
+        {
+          "accession": null,
+          "name": "OmpF"
+        },
+        {
+          "accession": null,
+          "name": "LamB"
+        },
+        {
+          "accession": null,
+          "name": "OMPLA"
+        },
+        {
+          "accession": null,
+          "name": "glycophorin"
+        },
+        {
+          "accession": null,
+          "name": "rhodopsin"
+        },
+        {
+          "accession": null,
+          "name": "BtuB"
+        },
+        {
+          "accession": null,
+          "name": "erythropoietin receptor"
+        },
+        {
+          "accession": null,
+          "name": "bacteriorhodopsin"
+        }
+      ],
+      "sequence_location": "none",
+      "class_id": "interface_energetics_filter",
+      "set_id": "s_3e771901"
+    },
+    {
+      "doc_id": "PMC3834541",
+      "extraction_failed": false,
+      "mechanisms": [
+        {
+          "chain": "When the two proteins with shape complementarity approach each other, the conformation of lipid chains between two proteins would be restricted significantly. The lipid molecules tend to leave the gap formed by two proteins to maximize the configuration entropy, and therefore yield an effective entropy-induced protein-protein attraction, which enhances the protein aggregation.",
+          "claim": "Shape complementarity yields an effective entropy-induced protein-protein attraction and enhances protein aggregation due to lipid conformational restriction and maximization of configuration entropy.",
+          "measurable_properties": [
+            "lipid chain conformation",
+            "lipid density or number of lipid molecules in the gap",
+            "protein aggregation degree",
+            "average size of protein clusters",
+            "number of correct bindings"
+          ]
+        }
+      ],
+      "named_proteins": [],
+      "has_sequence": false,
+      "sequence_location": "none",
+      "class_id": "interface_energetics_filter",
+      "set_id": "s_dc8877c3"
+    },
+    {
+      "doc_id": "bio_0e230d06",
+      "extraction_failed": false,
+      "has_sequence": true,
+      "sequence_location": "supplementary",
+      "mechanisms": [
+        {
+          "chain": "Trpzip, WAAAH-Helix, Trp-Cage",
+          "claim": "Excipients stabilize proteins based on shape complementarity between protein networks and surrounding solvent networks, where stabilizing excipients form solvent structures that preferentially complement each protein and central folding pathway residues.",
+          "measurable_properties": [
+            "melting temperature",
+            "fraction of native contacts",
+            "protein-solvent shape complementarity"
+          ]
+        }
+      ],
+      "named_proteins": [
+        {
+          "name": "Trpzip",
+          "accession": "1LE0"
+        },
+        {
+          "name": "WAAAH-Helix",
+          "accession": null
+        },
+        {
+          "name": "Trp-Cage",
+          "accession": "2JOF"
+        },
+        {
+          "name": "hen egg white lysozyme",
+          "accession": null
+        },
+        {
+          "name": "thaumatin",
+          "accession": null
+        }
+      ],
+      "class_id": "interface_energetics_filter",
+      "set_id": "s_dc8877c3"
+    },
+    {
+      "doc_id": "PMC11968322",
+      "extraction_failed": false,
+      "mechanisms": [
+        {
+          "chain": "van der Waals forces",
+          "claim": "Minimization of the energy contribution of van der Waals interactions through the rearrangement of side chains optimizes shape complementarity between molecular surfaces and influences protein complex stability.",
+          "measurable_properties": [
+            "shape complementarity",
+            "Zernike distance"
+          ]
+        }
+      ],
+      "has_sequence": false,
+      "sequence_location": "none",
+      "named_proteins": [
+        {
+          "accession": "3O0N",
+          "name": "Ribonucleoside-diphosphate reductase"
+        },
+        {
+          "accession": "3CQC",
+          "name": "Nuclear pore complex proteins Nup107-Nup133"
+        }
+      ],
+      "class_id": "interface_energetics_filter",
+      "set_id": "s_dc8877c3"
+    },
+    {
+      "doc_id": "PMC2845608",
+      "extraction_failed": false,
+      "mechanisms": [],
+      "has_sequence": false,
+      "sequence_location": "none",
+      "named_proteins": [
+        {
+          "name": "bovine serum albumin",
+          "accession": null
+        },
+        {
+          "name": "BSA",
+          "accession": null
+        }
+      ],
+      "class_id": "experimental_binding_validation",
+      "set_id": "s_680cd5e7"
+    },
+    {
+      "doc_id": "bio_6dd5db78",
+      "extraction_failed": false,
+      "mechanisms": [],
+      "has_sequence": false,
+      "sequence_location": "none",
+      "named_proteins": [
+        {
+          "name": "Fibronectin",
+          "accession": null
+        }
+      ],
+      "class_id": "experimental_binding_validation",
+      "set_id": "s_680cd5e7"
+    },
+    {
+      "doc_id": "PMC10245261",
+      "extraction_failed": false,
+      "mechanisms": [],
+      "has_sequence": false,
+      "sequence_location": "none",
+      "named_proteins": [
+        {
+          "name": "protein A/G",
+          "accession": null
+        },
+        {
+          "name": "IgG antibody",
+          "accession": null
+        },
+        {
+          "name": "hemoglobin",
+          "accession": null
+        },
+        {
+          "name": "streptavidin",
+          "accession": null
+        },
+        {
+          "name": "anti-VEGF",
+          "accession": null
+        },
+        {
+          "name": "Leukocyte cell-derived chemotaxin 2",
+          "accession": null
+        }
+      ],
+      "class_id": "experimental_binding_validation",
+      "set_id": "s_680cd5e7"
+    },
+    {
+      "doc_id": "PMC4167697",
+      "extraction_failed": false,
+      "mechanisms": [],
+      "has_sequence": false,
+      "sequence_location": "none",
+      "named_proteins": [
+        {
+          "name": "immunoglobulin G",
+          "accession": "ABIN376828"
+        },
+        {
+          "name": "protein G B1",
+          "accession": null
+        },
+        {
+          "name": "scFv IC16",
+          "accession": null
+        },
+        {
+          "name": "amyloid beta (1\u201342)",
+          "accession": null
+        }
+      ],
+      "class_id": "experimental_binding_validation",
+      "set_id": "s_33578cb7"
+    },
+    {
+      "doc_id": "bio_eaf64d9a",
+      "extraction_failed": false,
+      "mechanisms": [],
+      "has_sequence": true,
+      "sequence_location": "supplementary",
+      "named_proteins": [],
+      "class_id": "experimental_binding_validation",
+      "set_id": "s_33578cb7"
+    },
+    {
+      "doc_id": "PMC12593577",
+      "extraction_failed": false,
+      "mechanisms": [
+        {
+          "chain": "MHC class II / HLA-DR",
+          "claim": "Dimerization of the MHCII complex is mediated by the transmembrane domain (TMD), and to obtain a soluble MHCII dimer, the TMD must be replaced with an exogenous dimerization motif (such as Leucine zippers, Fos in the alpha chain, and Jun in the beta chain).",
+          "measurable_properties": [
+            "binding kinetics",
+            "steady state affinity",
+            "dissociation rate",
+            "association rate"
+          ]
+        }
+      ],
+      "has_sequence": true,
+      "sequence_location": "supplementary",
+      "named_proteins": [
+        {
+          "name": "HLA-DRA",
+          "accession": null
+        },
+        {
+          "name": "HLA-DRB1",
+          "accession": null
+        }
+      ],
+      "class_id": "experimental_binding_validation",
+      "set_id": "s_33578cb7"
+    },
+    {
+      "doc_id": "PMC8961641",
+      "extraction_failed": false,
+      "mechanisms": [],
+      "has_sequence": false,
+      "sequence_location": "none",
+      "named_proteins": [],
+      "class_id": "experimental_binding_validation",
+      "set_id": "s_3cece934"
+    },
+    {
+      "doc_id": "bio_e5f94c3f",
+      "extraction_failed": false,
+      "mechanisms": [
+        {
+          "chain": "Membrane receptors (such as receptor tyrosine kinases, e.g., EphA2) are activated through lateral self-association (dimerization or higher-order oligomerization) where monomers are inactive and associated forms (dimers/oligomers) are active due to close proximity allowing cross-phosphorylation (L12, L15).",
+          "claim": "Activation of membrane proteins (receptors) is controlled by lateral association into dimers or higher-order oligomers where close proximity allows cross-phosphorylation/catalytic activity.",
+          "measurable_properties": [
+            "Effective equilibrium dissociation constant",
+            "FRET efficiency",
+            "Oligomeric fraction",
+            "Receptor concentration in the plasma membrane"
+          ]
+        }
+      ],
+      "has_sequence": false,
+      "sequence_location": "none",
+      "named_proteins": [
+        {
+          "accession": null,
+          "name": "EphA2"
+        },
+        {
+          "accession": null,
+          "name": "ephrinA1-Fc"
+        },
+        {
+          "accession": null,
+          "name": "eYFP"
+        },
+        {
+          "accession": null,
+          "name": "mTurquoise"
+        },
+        {
+          "accession": null,
+          "name": "ephrinA1"
+        },
+        {
+          "accession": null,
+          "name": "FGFR3"
+        },
+        {
+          "accession": null,
+          "name": "EGFR"
+        },
+        {
+          "accession": null,
+          "name": "VEGFR-2"
+        },
+        {
+          "accession": null,
+          "name": "E-cadherin"
+        },
+        {
+          "accession": null,
+          "name": "ERBB receptors"
+        }
+      ],
+      "class_id": "experimental_binding_validation",
+      "set_id": "s_3cece934"
+    },
+    {
+      "doc_id": "PMC3985308",
+      "extraction_failed": false,
+      "has_sequence": false,
+      "mechanisms": [],
+      "named_proteins": [],
+      "sequence_location": "none",
+      "class_id": "experimental_binding_validation",
+      "set_id": "s_3cece934"
+    }
+  ],
+  "flagged": [
+    "PMC10163288",
+    "PMC12710756",
+    "PMC12412469",
+    "PMC10468394",
+    "bio_f583cade",
+    "PMC12650588",
+    "bio_39487633",
+    "PMC12463876",
+    "bio_0e230d06",
+    "bio_eaf64d9a",
+    "PMC12593577"
+  ],
+  "failed": [],
+  "extracted_by": "quick-reader"
+}

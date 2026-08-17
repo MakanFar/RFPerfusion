@@ -1,0 +1,138 @@
+{
+  "created_at": "2026-08-17T21:50:00.641388+00:00",
+  "slug": "binder",
+  "objective": "Which computational filters actually predict whether a de novo designed protein binder will bind its target, and which reported properties have no evaluator in the proto-tools catalogue?",
+  "evidence_status": "discovery_only_unverified",
+  "sources": "pmc,biorxiv",
+  "n": 3,
+  "set_ids": [
+    {
+      "class_id": "de_novo_binder_generation",
+      "phrase": "de novo protein binder",
+      "set_id": "s_e712be24",
+      "n_papers": 3
+    },
+    {
+      "class_id": "de_novo_binder_generation",
+      "phrase": "de novo binder design",
+      "set_id": "s_55414f38",
+      "n_papers": 3
+    },
+    {
+      "class_id": "de_novo_binder_generation",
+      "phrase": "minibinder",
+      "set_id": "s_212e9ba8",
+      "n_papers": 2
+    },
+    {
+      "class_id": "inverse_folding_sequence_design",
+      "phrase": "ProteinMPNN",
+      "set_id": "s_0023ecdb",
+      "n_papers": 2
+    },
+    {
+      "class_id": "inverse_folding_sequence_design",
+      "phrase": "inverse folding",
+      "set_id": "s_30c24eca",
+      "n_papers": 3
+    },
+    {
+      "class_id": "inverse_folding_sequence_design",
+      "phrase": "fixed backbone sequence design",
+      "set_id": "s_8870741c",
+      "n_papers": 2
+    },
+    {
+      "class_id": "interface_confidence_filter",
+      "phrase": "interface pTM",
+      "set_id": "s_7ce49367",
+      "n_papers": 3
+    },
+    {
+      "class_id": "interface_confidence_filter",
+      "phrase": "ipTM",
+      "set_id": "s_3255e0cd",
+      "n_papers": 2
+    },
+    {
+      "class_id": "interface_confidence_filter",
+      "phrase": "predicted aligned error",
+      "set_id": "s_d1b3dc88",
+      "n_papers": 2
+    },
+    {
+      "class_id": "fold_confidence_filter",
+      "phrase": "pLDDT",
+      "set_id": "s_8577164a",
+      "n_papers": 2
+    },
+    {
+      "class_id": "fold_confidence_filter",
+      "phrase": "AlphaFold2 confidence",
+      "set_id": "s_0b34116f",
+      "n_papers": 3
+    },
+    {
+      "class_id": "fold_confidence_filter",
+      "phrase": "self-consistency",
+      "set_id": "s_074c09b3",
+      "n_papers": 3
+    },
+    {
+      "class_id": "interface_energetics_filter",
+      "phrase": "Rosetta interface energy",
+      "set_id": "s_4fd1c228",
+      "n_papers": 1
+    },
+    {
+      "class_id": "interface_energetics_filter",
+      "phrase": "buried surface area",
+      "set_id": "s_3e771901",
+      "n_papers": 3
+    },
+    {
+      "class_id": "interface_energetics_filter",
+      "phrase": "shape complementarity",
+      "set_id": "s_dc8877c3",
+      "n_papers": 3
+    },
+    {
+      "class_id": "experimental_binding_validation",
+      "phrase": "surface plasmon resonance",
+      "set_id": "s_680cd5e7",
+      "n_papers": 3
+    },
+    {
+      "class_id": "experimental_binding_validation",
+      "phrase": "biolayer interferometry",
+      "set_id": "s_33578cb7",
+      "n_papers": 3
+    },
+    {
+      "class_id": "experimental_binding_validation",
+      "phrase": "dissociation constant",
+      "set_id": "s_3cece934",
+      "n_papers": 3
+    }
+  ],
+  "extracted_by": {
+    "screen": "quick-reader",
+    "dig": "quick-reader"
+  },
+  "artifact_paths": {
+    "plan": "outputs/20260817T213520Z-binder/plan_binder.json",
+    "search": "outputs/20260817T213520Z-binder/search_binder.json",
+    "screen": "outputs/20260817T213520Z-binder/screen_binder.json",
+    "dig": "outputs/20260817T213520Z-binder/dig_binder.json",
+    "artifacts": "outputs/20260817T213520Z-binder/artifacts_binder.json",
+    "evidence": "outputs/20260817T213520Z-binder/evidence_binder.json",
+    "report": "outputs/20260817T213520Z-binder/knowledge_base_binder.txt"
+  },
+  "counts": {
+    "papers_screened": 46,
+    "papers_flagged": 11,
+    "failed_extractions": 0,
+    "artifacts_runnable": 0,
+    "artifacts_rejected": 56
+  }
+}

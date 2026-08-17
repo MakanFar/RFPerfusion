@@ -1,0 +1,787 @@
+{
+  "schema_version": 2,
+  "slug": "binder",
+  "items": [
+    {
+      "id": "ev_001",
+      "question_id": "de_novo_binder_generation",
+      "claim": "The physically based Rosetta approach frames folding and binding in energetic terms, requiring the designed sequence to have the designed monomer structure as its lowest energy state in isolation and a sufficiently low complex energy with the target to drive complex formation.",
+      "claim_type": "mechanism",
+      "quantitative": null,
+      "support": "established",
+      "citation": {
+        "doi": "10.1038/s41467-023-38328-5",
+        "title": "Improving de novo protein binder design with deep learning",
+        "year": 2023,
+        "journal": "Nature Communications",
+        "authors": "Nathaniel R. Bennett, Brian Coventry, Inna Goreshnik, Buwei Huang, Aza Allen, Dionne Vafeados, Ying Po Peng, Justas Dauparas, Minkyung Baek, Lance Stewart, Frank DiMaio, Steven De Munck, Savvas N. Savvides, David Baker"
+      },
+      "evidence_kind": "computational",
+      "extracted_by": "quick-reader",
+      "confidence": 0.85,
+      "testable_by": {
+        "properties": [
+          "Rosetta energy of the monomer normalized by chain length",
+          "binding affinity/SC50",
+          "Rosetta ddG",
+          "C\u03b1 RMSD",
+          "pLDDT",
+          "pAE_interaction"
+        ],
+        "vocabulary": [
+          "fold_confidence",
+          "predicted_error",
+          "interface_energetics"
+        ],
+        "tools": [
+          "alphafold-db-fetch",
+          "alphafold2-gradient",
+          "alphafold2-prediction",
+          "alphafold3-prediction",
+          "bindcraft-design",
+          "boltz2-prediction",
+          "chai1-prediction",
+          "esmfold-gradient",
+          "esmfold-prediction",
+          "esmfold2-prediction",
+          "freebindcraft-design",
+          "germinal-design",
+          "opendde-prediction",
+          "protenix-prediction",
+          "rf3-prediction"
+        ],
+        "requires_new_evaluator": false
+      },
+      "provenance": {
+        "doc_id": "PMC10163288",
+        "section": null,
+        "category": "mechanism",
+        "span": "The physically based Rosetta approach frames both the folding and binding problems in energetic terms; for the approach to succeed, the designed sequence must have as its lowest energy state in isolation the designed monomer structure, and the complex between this designed monomer structure and the target must have sufficiently low energy to drive formation of the design-target protein complex.",
+        "url": "https://paperclip.gxl.ai/citations/papers/PMC10163288"
+      }
+    },
+    {
+      "id": "ev_002",
+      "question_id": "de_novo_binder_generation",
+      "claim": "Binder net charge determines tonic signaling in de novo designed CAR T cells.",
+      "claim_type": "mechanism",
+      "quantitative": null,
+      "support": "established",
+      "citation": {
+        "doi": "10.64898/2025.12.12.694033",
+        "title": "Sequence and structural determinants of efficacious  de novo  chimeric antigen receptors",
+        "year": 2025,
+        "journal": "bioRxiv",
+        "authors": "Arthur Chow, Hoyin Chu, Ruofan Li, Benan N. Nalbant, Abdul Vehab Dozic, Laura C. Kida, Caleb A. Lareau"
+      },
+      "evidence_kind": "experimental",
+      "extracted_by": "quick-reader",
+      "confidence": 0.7,
+      "testable_by": {
+        "properties": [
+          "binder net charge",
+          "degree of tonic signaling",
+          "CD69 expression in CAR-alone condition"
+        ],
+        "vocabulary": [],
+        "tools": [],
+        "requires_new_evaluator": true
+      },
+      "provenance": {
+        "doc_id": "PMC12710756",
+        "section": null,
+        "category": "mechanism",
+        "span": "binder net charge -> tonic signaling",
+        "url": "https://paperclip.gxl.ai/citations/papers/PMC12710756"
+      }
+    },
+    {
+      "id": "ev_003",
+      "question_id": "de_novo_binder_generation",
+      "claim": "Epitope occlusion by native binding partners (such as CD81 on CD19) prevents cell-based CAR activation despite recombinant protein binding.",
+      "claim_type": "failure_mode",
+      "quantitative": null,
+      "support": "established",
+      "citation": {
+        "doi": "10.64898/2025.12.12.694033",
+        "title": "Sequence and structural determinants of efficacious  de novo  chimeric antigen receptors",
+        "year": 2025,
+        "journal": "bioRxiv",
+        "authors": "Arthur Chow, Hoyin Chu, Ruofan Li, Benan N. Nalbant, Abdul Vehab Dozic, Laura C. Kida, Caleb A. Lareau"
+      },
+      "evidence_kind": "experimental",
+      "extracted_by": "quick-reader",
+      "confidence": 0.75,
+      "testable_by": {
+        "properties": [
+          "recombinant antigen binding",
+          "CAR activation (CD69 expression)",
+          "epitope location / overlap with native binding partner"
+        ],
+        "vocabulary": [],
+        "tools": [],
+        "requires_new_evaluator": true
+      },
+      "provenance": {
+        "doc_id": "PMC12710756",
+        "section": null,
+        "category": "mechanism",
+        "span": "epitope occlusion -> lack of cell-based CAR activation",
+        "url": "https://paperclip.gxl.ai/citations/papers/PMC12710756"
+      }
+    },
+    {
+      "id": "ev_004",
+      "question_id": "de_novo_binder_generation",
+      "claim": "Sequence variations at non-interface residues can mitigate off-target activation while maintaining on-target CAR activity.",
+      "claim_type": "mechanism",
+      "quantitative": null,
+      "support": "established",
+      "citation": {
+        "doi": "10.64898/2025.12.12.694033",
+        "title": "Sequence and structural determinants of efficacious  de novo  chimeric antigen receptors",
+        "year": 2025,
+        "journal": "bioRxiv",
+        "authors": "Arthur Chow, Hoyin Chu, Ruofan Li, Benan N. Nalbant, Abdul Vehab Dozic, Laura C. Kida, Caleb A. Lareau"
+      },
+      "evidence_kind": "experimental",
+      "extracted_by": "quick-reader",
+      "confidence": 0.7,
+      "testable_by": {
+        "properties": [
+          "non-interface residue sequence",
+          "off-target activation (CD69 expression against negative cell lines)",
+          "on-target binding/activation"
+        ],
+        "vocabulary": [],
+        "tools": [],
+        "requires_new_evaluator": true
+      },
+      "provenance": {
+        "doc_id": "PMC12710756",
+        "section": null,
+        "category": "mechanism",
+        "span": "non-interface sequence variation -> off-target activation",
+        "url": "https://paperclip.gxl.ai/citations/papers/PMC12710756"
+      }
+    },
+    {
+      "id": "ev_005",
+      "question_id": "de_novo_binder_generation",
+      "claim": "Protein-based quenching of the ligand binding site on the receptor surface or sequestration of VEGF to inhibit VEGFR signaling, angiogenesis, and cell proliferation.",
+      "claim_type": "mechanism",
+      "quantitative": null,
+      "support": "established",
+      "citation": {
+        "doi": "10.1002/advs.202502015",
+        "title": "A Complementarity\u2010Based Approach to  De Novo  Binder Design",
+        "year": 2025,
+        "journal": "Advanced Science",
+        "authors": "Kateryna Maksymenko, Valeriia Hatskovska, Murray Coles, Narges Aghaallaei, Natalia Pashkovskaia, Natalia Borbar\u00e1n\u2010Bravo, Matteo Pilz, Philip Bucher, Mareike Volz, Joana Pereira, Marcus D. Hartmann, Ghazaleh Tabatabai, Judith Feucht, Stefan Liebau, Patrick M\u00fcller, Andrei N. Lupas, Julia Skokowa, Mohammad ElGamacy"
+      },
+      "evidence_kind": "experimental",
+      "extracted_by": "quick-reader",
+      "confidence": 0.8,
+      "testable_by": {
+        "properties": [
+          "melting temperature",
+          "dissociation constant (Kd)",
+          "cell survival/proliferation",
+          "tumor size",
+          "microvasculature formation area coverage and blood vessel diameter"
+        ],
+        "vocabulary": [],
+        "tools": [],
+        "requires_new_evaluator": true
+      },
+      "provenance": {
+        "doc_id": "PMC12412469",
+        "section": null,
+        "category": "mechanism",
+        "span": "VEGF signaling pathway / VEGFR activation",
+        "url": "https://paperclip.gxl.ai/citations/papers/PMC12412469"
+      }
+    },
+    {
+      "id": "ev_006",
+      "question_id": "de_novo_binder_generation",
+      "claim": "Engaging the Venus Flytrap Domain (VFTD) of TAS1R2 with a designed binder induces lobe closure of LB1, partial opening of LB2, and allosteric outward displacement of transmembrane helices TM3 and TM6, stabilizing an active-like conformational state of the receptor.",
+      "claim_type": "mechanism",
+      "quantitative": null,
+      "support": "speculative",
+      "citation": {
+        "doi": null,
+        "title": null,
+        "year": null,
+        "journal": null,
+        "authors": null
+      },
+      "evidence_kind": "computational",
+      "extracted_by": "quick-reader",
+      "confidence": 0.5,
+      "testable_by": {
+        "properties": [
+          "inter-lobe distances",
+          "transmembrane helix distances (e.g., TM3-TM6 distance)",
+          "binding free energy (MM-GBSA)"
+        ],
+        "vocabulary": [
+          "interface_energetics"
+        ],
+        "tools": [
+          "bindcraft-design"
+        ],
+        "requires_new_evaluator": false
+      },
+      "provenance": {
+        "doc_id": "bio_f3ba198f",
+        "section": null,
+        "category": "mechanism",
+        "span": "TAS1R2",
+        "url": "https://paperclip.gxl.ai/citations/papers/bio_f3ba198f"
+      }
+    },
+    {
+      "id": "ev_007",
+      "question_id": "de_novo_binder_generation",
+      "claim": "Metal coordination driven by scaffolded histidine residues (e.g., histidine 52)",
+      "claim_type": "mechanism",
+      "quantitative": null,
+      "support": "established",
+      "citation": {
+        "doi": "10.1038/s41586-023-06415-8",
+        "title": "De novo design of protein structure and function with RFdiffusion",
+        "year": 2023,
+        "journal": "Nature",
+        "authors": "Joseph L. Watson, David Juergens, Nathaniel R. Bennett, Brian L. Trippe, Jason Yim, Helen E. Eisenach, Woody Ahern, Andrew J. Borst, Robert J. Ragotte, Lukas F. Milles, Basile I. M. Wicky, Nikita Hanikel, Samuel J. Pellock, Alexis Courbet, William Sheffler, Jue Wang, Preetham Venkatesh, Isaac Sappington, Susana V\u00e1zquez Torres, Anna Lauko, Valentin De Bortoli, Emile Mathieu, Sergey Ovchinnikov, Regina Barzilay, Tommi S. Jaakkola, Frank DiMaio, Minkyung Baek, David Baker"
+      },
+      "evidence_kind": "experimental",
+      "extracted_by": "quick-reader",
+      "confidence": 0.8,
+      "testable_by": {
+        "properties": [
+          "dissociation constant (KD)",
+          "metal:monomer stoichiometry",
+          "heat release/uptake measured by isothermal titration calorimetry (ITC)"
+        ],
+        "vocabulary": [],
+        "tools": [],
+        "requires_new_evaluator": true
+      },
+      "provenance": {
+        "doc_id": "PMC10468394",
+        "section": null,
+        "category": "mechanism",
+        "span": "NiB1.17",
+        "url": "https://paperclip.gxl.ai/citations/papers/PMC10468394"
+      }
+    },
+    {
+      "id": "ev_008",
+      "question_id": "de_novo_binder_generation",
+      "claim": "Differential efficacy and activation across receptors are hypothesized to be the result of the binding orientation of these two proteins, which bind to the same surface on Spike but in opposite orientations.",
+      "claim_type": "mechanism",
+      "quantitative": null,
+      "support": "speculative",
+      "citation": {
+        "doi": null,
+        "title": null,
+        "year": null,
+        "journal": null,
+        "authors": null
+      },
+      "evidence_kind": "experimental",
+      "extracted_by": "quick-reader",
+      "confidence": 0.4,
+      "testable_by": {
+        "properties": [
+          "binding orientation",
+          "binding site",
+          "affinity"
+        ],
+        "vocabulary": [],
+        "tools": [],
+        "requires_new_evaluator": true
+      },
+      "provenance": {
+        "doc_id": "bio_f583cade",
+        "section": null,
+        "category": "mechanism",
+        "span": "LCB1 and LCB3",
+        "url": "https://paperclip.gxl.ai/citations/papers/bio_f583cade"
+      }
+    },
+    {
+      "id": "ev_009",
+      "question_id": "de_novo_binder_generation",
+      "claim": "Although 2_703_6 does not measurably block HER2 dimerization in our assay, domain-IV engagement may still attenuate signaling by biasing the ectodomain toward non-productive dimer conformations, limiting ectodomain shedding and generation of p95HER2, and/or promoting receptor internalization and down-regulation.",
+      "claim_type": "mechanism",
+      "quantitative": null,
+      "support": "speculative",
+      "citation": {
+        "doi": "10.3390/biom15111587",
+        "title": "De Novo Design of High-Affinity HER2-Targeting Protein Minibinders",
+        "year": 2025,
+        "journal": "Biomolecules",
+        "authors": "Yize Zhao, Wenping Wei, Zijun Cheng, Min Yang, Yunjun Yan"
+      },
+      "evidence_kind": "experimental",
+      "extracted_by": "quick-reader",
+      "confidence": 0.35,
+      "testable_by": {
+        "properties": [
+          "receptor dimerization",
+          "ectodomain shedding",
+          "receptor internalization",
+          "down-regulation"
+        ],
+        "vocabulary": [],
+        "tools": [],
+        "requires_new_evaluator": true
+      },
+      "provenance": {
+        "doc_id": "PMC12650588",
+        "section": null,
+        "category": "mechanism",
+        "span": "HER2",
+        "url": "https://paperclip.gxl.ai/citations/papers/PMC12650588"
+      }
+    },
+    {
+      "id": "ev_010",
+      "question_id": "interface_confidence_filter",
+      "claim": "Amino-acid mutations are introduced across the full sequence (including interface residues) via PMCM to alter interactions and ensure stability of the newly designed protein complex.",
+      "claim_type": "mechanism",
+      "quantitative": null,
+      "support": "established",
+      "citation": {
+        "doi": null,
+        "title": null,
+        "year": null,
+        "journal": null,
+        "authors": null
+      },
+      "evidence_kind": "computational",
+      "extracted_by": "quick-reader",
+      "confidence": 0.7,
+      "testable_by": {
+        "properties": [
+          "Root-Mean-Square-Deviation (RMSD)",
+          "predicted-Template-Modelling (pTM) score",
+          "interface pTM (ipTM) score",
+          "binding affinity"
+        ],
+        "vocabulary": [
+          "fold_confidence",
+          "interface_confidence"
+        ],
+        "tools": [
+          "alphafold-db-fetch",
+          "alphafold2-gradient",
+          "alphafold2-prediction",
+          "alphafold3-prediction",
+          "bindcraft-design",
+          "boltz2-prediction",
+          "chai1-prediction",
+          "esmfold-gradient",
+          "esmfold-prediction",
+          "esmfold2-prediction",
+          "freebindcraft-design",
+          "germinal-design",
+          "ipsae-scoring",
+          "opendde-prediction",
+          "pdockq2",
+          "protenix-prediction",
+          "rf3-prediction"
+        ],
+        "requires_new_evaluator": false
+      },
+      "provenance": {
+        "doc_id": "bio_c8b16bd2",
+        "section": null,
+        "category": "mechanism",
+        "span": "mutating chain / designed chain",
+        "url": "https://paperclip.gxl.ai/citations/papers/bio_c8b16bd2"
+      }
+    },
+    {
+      "id": "ev_011",
+      "question_id": "interface_confidence_filter",
+      "claim": "Structural modeling suggested that the protein interferes with catalysis by protruding into the active center of the enzyme.",
+      "claim_type": "mechanism",
+      "quantitative": null,
+      "support": "speculative",
+      "citation": {
+        "doi": "10.1093/nar/gkad350",
+        "title": "PAE viewer: a webserver for the interactive visualization of the predicted aligned error for multimer structure predictions and crosslinks",
+        "year": 2023,
+        "journal": "Nucleic Acids Research",
+        "authors": "Christoph Elfmann, J\u00f6rg St\u00fclke"
+      },
+      "evidence_kind": "computational",
+      "extracted_by": "quick-reader",
+      "confidence": 0.5,
+      "testable_by": {
+        "properties": [
+          "enzyme activity",
+          "C\u03b1-C\u03b1 distance",
+          "distance restraint"
+        ],
+        "vocabulary": [],
+        "tools": [],
+        "requires_new_evaluator": true
+      },
+      "provenance": {
+        "doc_id": "PMC10320053",
+        "section": null,
+        "category": "mechanism",
+        "span": "PdhI",
+        "url": "https://paperclip.gxl.ai/citations/papers/PMC10320053"
+      }
+    },
+    {
+      "id": "ev_012",
+      "question_id": "fold_confidence_filter",
+      "claim": "Binding is primarily mediated by backbone hydrogen bonds forming a short antiparallel \u03b2-augmentation interface, complemented by additional hydrogen bonds and a stabilizing salt bridge between Arg37 of MiniP-2 and Asp97 of LCN2.",
+      "claim_type": "mechanism",
+      "quantitative": null,
+      "support": "established",
+      "citation": {
+        "doi": "10.3389/fimmu.2025.1631868",
+        "title": "AI-assisted design of ligands for lipocalin-2",
+        "year": 2025,
+        "journal": "Frontiers in Immunology",
+        "authors": "Jacopo Sgrignani, Sara Buscarini, Patrizia Locatelli, Concetta Guerra, Alberto Furlan, Yingyi Chen, Giada Zoppi, Andrea Cavalli"
+      },
+      "evidence_kind": "experimental",
+      "extracted_by": "quick-reader",
+      "confidence": 0.8,
+      "testable_by": {
+        "properties": [
+          "dissociation constant (Kd)",
+          "binding free energy",
+          "melting temperature (Tm)",
+          "particle size distribution"
+        ],
+        "vocabulary": [
+          "interface_energetics"
+        ],
+        "tools": [
+          "bindcraft-design"
+        ],
+        "requires_new_evaluator": false
+      },
+      "provenance": {
+        "doc_id": "PMC12463876",
+        "section": null,
+        "category": "mechanism",
+        "span": "MiniP-2 / LCN2",
+        "url": "https://paperclip.gxl.ai/citations/papers/PMC12463876"
+      }
+    },
+    {
+      "id": "ev_013",
+      "question_id": "interface_energetics_filter",
+      "claim": "The paper does not establish a physical mechanism for actuating a protein; instead, it studies diffusion models through the lens of theoretical biophysics by analyzing their underlying formulation of potentials and extracting learned energy functions.",
+      "claim_type": "negative_result",
+      "quantitative": null,
+      "support": "established",
+      "citation": {
+        "doi": null,
+        "title": null,
+        "year": null,
+        "journal": null,
+        "authors": null
+      },
+      "evidence_kind": "theoretical",
+      "extracted_by": "quick-reader",
+      "confidence": 0.6,
+      "testable_by": {
+        "properties": [
+          "negative log-likelihood values (- log p0(x0))",
+          "docking quality (DockQ)",
+          "interface-residue RMSD"
+        ],
+        "vocabulary": [],
+        "tools": [],
+        "requires_new_evaluator": true
+      },
+      "provenance": {
+        "doc_id": "bio_0c510ba3",
+        "section": null,
+        "category": "mechanism",
+        "span": "none",
+        "url": "https://paperclip.gxl.ai/citations/papers/bio_0c510ba3"
+      }
+    },
+    {
+      "id": "ev_014",
+      "question_id": "interface_energetics_filter",
+      "claim": "Pyocyanin interacts with NADPH oxidase (NOX2) and Toll-like receptor 4 (TLR4) to modulate oxidative stress and inflammatory signaling pathways.",
+      "claim_type": "mechanism",
+      "quantitative": null,
+      "support": "speculative",
+      "citation": {
+        "doi": null,
+        "title": null,
+        "year": null,
+        "journal": null,
+        "authors": null
+      },
+      "evidence_kind": "computational",
+      "extracted_by": "quick-reader",
+      "confidence": 0.4,
+      "testable_by": {
+        "properties": [
+          "HADDOCK score",
+          "binding energy",
+          "RMSD",
+          "buried surface area",
+          "van der Waals energy",
+          "electrostatic energy"
+        ],
+        "vocabulary": [
+          "interface_energetics",
+          "interface_geometry"
+        ],
+        "tools": [
+          "bindcraft-design",
+          "freebindcraft-design"
+        ],
+        "requires_new_evaluator": false
+      },
+      "provenance": {
+        "doc_id": "bio_6e839975",
+        "section": null,
+        "category": "mechanism",
+        "span": "Pyocyanin acts as a redox-active phenazine that accepts electrons from NADPH to modulate/amplify NADPH oxidase activity, and interacts with TLR4 to influence inflammatory signaling.",
+        "url": "https://paperclip.gxl.ai/citations/papers/bio_6e839975"
+      }
+    },
+    {
+      "id": "ev_015",
+      "question_id": "interface_energetics_filter",
+      "claim": "Characterization of the dimerization free energy landscape and lipid-mediated interactions.",
+      "claim_type": "mechanism",
+      "quantitative": null,
+      "support": "established",
+      "citation": {
+        "doi": "10.1371/journal.pcbi.1003417",
+        "title": "The Free Energy Landscape of Dimerization of a Membrane Protein, NanC",
+        "year": 2014,
+        "journal": "PLOS Computational Biology",
+        "authors": "Thomas A. Dunton, Joseph E. Goose, David J. Gavaghan, Mark S. P. Sansom, James M. Osborne"
+      },
+      "evidence_kind": "computational",
+      "extracted_by": "quick-reader",
+      "confidence": 0.7,
+      "testable_by": {
+        "properties": [
+          "Free energy of dimerization / potential of mean force (PMF) well depth",
+          "Lipid-inaccessible buried surface area",
+          "Inter-protein center of mass separation distances at local/global minima"
+        ],
+        "vocabulary": [
+          "interface_energetics",
+          "interface_geometry"
+        ],
+        "tools": [
+          "bindcraft-design",
+          "freebindcraft-design"
+        ],
+        "requires_new_evaluator": false
+      },
+      "provenance": {
+        "doc_id": "PMC3886892",
+        "section": null,
+        "category": "mechanism",
+        "span": "The paper does not establish a mechanism for actuating a protein (it investigates lateral association/dimerization rather than actuation or mechanical activation of a single protein), but rather characterizes the free energy landscape of membrane protein dimerization driven by protein-lipid-protein interactions and optimal packing of intervening lipids (L7, L20, L41).",
+        "url": "https://paperclip.gxl.ai/citations/papers/PMC3886892"
+      }
+    },
+    {
+      "id": "ev_016",
+      "question_id": "interface_energetics_filter",
+      "claim": "Shape complementarity yields an effective entropy-induced protein-protein attraction and enhances protein aggregation due to lipid conformational restriction and maximization of configuration entropy.",
+      "claim_type": "mechanism",
+      "quantitative": null,
+      "support": "speculative",
+      "citation": {
+        "doi": "10.1038/srep03271",
+        "title": "The Role of Shape Complementarity in the Protein-Protein Interactions",
+        "year": 2013,
+        "journal": "Scientific Reports",
+        "authors": "Ye Li, Xianren Zhang, Dapeng Cao"
+      },
+      "evidence_kind": "computational",
+      "extracted_by": "quick-reader",
+      "confidence": 0.5,
+      "testable_by": {
+        "properties": [
+          "lipid chain conformation",
+          "lipid density or number of lipid molecules in the gap",
+          "protein aggregation degree",
+          "average size of protein clusters",
+          "number of correct bindings"
+        ],
+        "vocabulary": [],
+        "tools": [],
+        "requires_new_evaluator": true
+      },
+      "provenance": {
+        "doc_id": "PMC3834541",
+        "section": null,
+        "category": "mechanism",
+        "span": "When the two proteins with shape complementarity approach each other, the conformation of lipid chains between two proteins would be restricted significantly. The lipid molecules tend to leave the gap formed by two proteins to maximize the configuration entropy, and therefore yield an effective entropy-induced protein-protein attraction, which enhances the protein aggregation.",
+        "url": "https://paperclip.gxl.ai/citations/papers/PMC3834541"
+      }
+    },
+    {
+      "id": "ev_017",
+      "question_id": "interface_energetics_filter",
+      "claim": "Excipients stabilize proteins based on shape complementarity between protein networks and surrounding solvent networks, where stabilizing excipients form solvent structures that preferentially complement each protein and central folding pathway residues.",
+      "claim_type": "mechanism",
+      "quantitative": null,
+      "support": "speculative",
+      "citation": {
+        "doi": null,
+        "title": null,
+        "year": null,
+        "journal": null,
+        "authors": null
+      },
+      "evidence_kind": "computational",
+      "extracted_by": "quick-reader",
+      "confidence": 0.5,
+      "testable_by": {
+        "properties": [
+          "melting temperature",
+          "fraction of native contacts",
+          "protein-solvent shape complementarity"
+        ],
+        "vocabulary": [],
+        "tools": [],
+        "requires_new_evaluator": true
+      },
+      "provenance": {
+        "doc_id": "bio_0e230d06",
+        "section": null,
+        "category": "mechanism",
+        "span": "Trpzip, WAAAH-Helix, Trp-Cage",
+        "url": "https://paperclip.gxl.ai/citations/papers/bio_0e230d06"
+      }
+    },
+    {
+      "id": "ev_018",
+      "question_id": "interface_energetics_filter",
+      "claim": "Minimization of the energy contribution of van der Waals interactions through the rearrangement of side chains optimizes shape complementarity between molecular surfaces and influences protein complex stability.",
+      "claim_type": "mechanism",
+      "quantitative": null,
+      "support": "established",
+      "citation": {
+        "doi": "10.1093/bioadv/vbaf051",
+        "title": "Zepyros: a webserver to evaluate the shape complementarity of protein\u2013protein interfaces",
+        "year": 2025,
+        "journal": "Bioinformatics Advances",
+        "authors": "Mattia Miotto, Lorenzo Di Rienzo, Leonardo Bo\u2019, Giancarlo Ruocco, Edoardo Milanetti"
+      },
+      "evidence_kind": "computational",
+      "extracted_by": "quick-reader",
+      "confidence": 0.6,
+      "testable_by": {
+        "properties": [
+          "shape complementarity",
+          "Zernike distance"
+        ],
+        "vocabulary": [
+          "interface_geometry"
+        ],
+        "tools": [
+          "bindcraft-design",
+          "freebindcraft-design"
+        ],
+        "requires_new_evaluator": false
+      },
+      "provenance": {
+        "doc_id": "PMC11968322",
+        "section": null,
+        "category": "mechanism",
+        "span": "van der Waals forces",
+        "url": "https://paperclip.gxl.ai/citations/papers/PMC11968322"
+      }
+    },
+    {
+      "id": "ev_019",
+      "question_id": "experimental_binding_validation",
+      "claim": "Dimerization of the MHCII complex is mediated by the transmembrane domain (TMD), and to obtain a soluble MHCII dimer, the TMD must be replaced with an exogenous dimerization motif (such as Leucine zippers, Fos in the alpha chain, and Jun in the beta chain).",
+      "claim_type": "mechanism",
+      "quantitative": null,
+      "support": "established",
+      "citation": {
+        "doi": "10.1016/j.xpro.2025.104155",
+        "title": "Protocol to measure the kinetics of MHC class II-influenza A binding using biolayer interferometry",
+        "year": 2025,
+        "journal": "STAR Protocols",
+        "authors": "Matias Cardenas, Sasha Compton, Ashkon Hunt, Pradeep Chopra, Daniel R. Perez, Geert-Jan Boons, Daniela S. Rajao"
+      },
+      "evidence_kind": "experimental",
+      "extracted_by": "quick-reader",
+      "confidence": 0.8,
+      "testable_by": {
+        "properties": [
+          "binding kinetics",
+          "steady state affinity",
+          "dissociation rate",
+          "association rate"
+        ],
+        "vocabulary": [],
+        "tools": [],
+        "requires_new_evaluator": true
+      },
+      "provenance": {
+        "doc_id": "PMC12593577",
+        "section": null,
+        "category": "mechanism",
+        "span": "MHC class II / HLA-DR",
+        "url": "https://paperclip.gxl.ai/citations/papers/PMC12593577"
+      }
+    },
+    {
+      "id": "ev_020",
+      "question_id": "experimental_binding_validation",
+      "claim": "Activation of membrane proteins (receptors) is controlled by lateral association into dimers or higher-order oligomers where close proximity allows cross-phosphorylation/catalytic activity.",
+      "claim_type": "mechanism",
+      "quantitative": null,
+      "support": "established",
+      "citation": {
+        "doi": null,
+        "title": null,
+        "year": null,
+        "journal": null,
+        "authors": null
+      },
+      "evidence_kind": "experimental",
+      "extracted_by": "quick-reader",
+      "confidence": 0.8,
+      "testable_by": {
+        "properties": [
+          "Effective equilibrium dissociation constant",
+          "FRET efficiency",
+          "Oligomeric fraction",
+          "Receptor concentration in the plasma membrane"
+        ],
+        "vocabulary": [],
+        "tools": [],
+        "requires_new_evaluator": true
+      },
+      "provenance": {
+        "doc_id": "bio_e5f94c3f",
+        "section": null,
+        "category": "mechanism",
+        "span": "Membrane receptors (such as receptor tyrosine kinases, e.g., EphA2) are activated through lateral self-association (dimerization or higher-order oligomerization) where monomers are inactive and associated forms (dimers/oligomers) are active due to close proximity allowing cross-phosphorylation (L12, L15).",
+        "url": "https://paperclip.gxl.ai/citations/papers/bio_e5f94c3f"
+      }
+    }
+  ],
+  "unlabelled": 0
+}

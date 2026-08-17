@@ -1,0 +1,154 @@
+{
+  "slug": "binder",
+  "sources": "pmc,biorxiv",
+  "n": 3,
+  "classes": [
+    {
+      "id": "de_novo_binder_generation",
+      "sets": [
+        {
+          "phrase": "de novo protein binder",
+          "set_id": "s_e712be24",
+          "n_papers": 3
+        },
+        {
+          "phrase": "de novo binder design",
+          "set_id": "s_55414f38",
+          "n_papers": 3
+        },
+        {
+          "phrase": "minibinder",
+          "set_id": "s_212e9ba8",
+          "n_papers": 2
+        }
+      ],
+      "n_papers_total": 8,
+      "status": "covered"
+    },
+    {
+      "id": "inverse_folding_sequence_design",
+      "sets": [
+        {
+          "phrase": "ProteinMPNN",
+          "set_id": "s_0023ecdb",
+          "n_papers": 2
+        },
+        {
+          "phrase": "inverse folding",
+          "set_id": "s_30c24eca",
+          "n_papers": 3
+        },
+        {
+          "phrase": "fixed backbone sequence design",
+          "set_id": "s_8870741c",
+          "n_papers": 2
+        }
+      ],
+      "n_papers_total": 7,
+      "status": "covered"
+    },
+    {
+      "id": "interface_confidence_filter",
+      "sets": [
+        {
+          "phrase": "interface pTM",
+          "set_id": "s_7ce49367",
+          "n_papers": 3
+        },
+        {
+          "phrase": "ipTM",
+          "set_id": "s_3255e0cd",
+          "n_papers": 2
+        },
+        {
+          "phrase": "predicted aligned error",
+          "set_id": "s_d1b3dc88",
+          "n_papers": 2
+        }
+      ],
+      "n_papers_total": 7,
+      "status": "covered"
+    },
+    {
+      "id": "fold_confidence_filter",
+      "sets": [
+        {
+          "phrase": "pLDDT",
+          "set_id": "s_8577164a",
+          "n_papers": 2
+        },
+        {
+          "phrase": "AlphaFold2 confidence",
+          "set_id": "s_0b34116f",
+          "n_papers": 3
+        },
+        {
+          "phrase": "self-consistency",
+          "set_id": "s_074c09b3",
+          "n_papers": 3
+        }
+      ],
+      "n_papers_total": 8,
+      "status": "covered"
+    },
+    {
+      "id": "interface_energetics_filter",
+      "sets": [
+        {
+          "phrase": "Rosetta interface energy",
+          "set_id": "s_4fd1c228",
+          "n_papers": 1
+        },
+        {
+          "phrase": "buried surface area",
+          "set_id": "s_3e771901",
+          "n_papers": 3
+        },
+        {
+          "phrase": "shape complementarity",
+          "set_id": "s_dc8877c3",
+          "n_papers": 3
+        }
+      ],
+      "n_papers_total": 7,
+      "status": "covered"
+    },
+    {
+      "id": "experimental_binding_validation",
+      "sets": [
+        {
+          "phrase": "surface plasmon resonance",
+          "set_id": "s_680cd5e7",
+          "n_papers": 3
+        },
+        {
+          "phrase": "biolayer interferometry",
+          "set_id": "s_33578cb7",
+          "n_papers": 3
+        },
+        {
+          "phrase": "dissociation constant",
+          "set_id": "s_3cece934",
+          "n_papers": 3
+        }
+      ],
+      "n_papers_total": 9,
+      "status": "covered"
+    }
+  ],
+  "rejections": [
+    {
+      "excluded": "small-molecule and nucleic-acid binders",
+      "reason": "The proto-tools catalogue's interface metrics are protein-protein; a small-molecule binder would be unbindable for reasons unrelated to the evaluator question."
+    },
+    {
+      "excluded": "antibody affinity maturation",
+      "reason": "A distinct design regime with its own evaluators; including it would swamp the de novo classes in the corpus."
+    }
+  ],
+  "coverage": {
+    "classes_covered": 6,
+    "classes_total": 6,
+    "meets_framework_minimum": true
+  }
+}

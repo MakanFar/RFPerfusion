@@ -1,0 +1,106 @@
+{
+  "objective": "Which computational filters actually predict whether a de novo designed protein binder will bind its target, and which reported properties have no evaluator in the proto-tools catalogue?",
+  "slug": "binder",
+  "mechanism_classes": [
+    {
+      "id": "de_novo_binder_generation",
+      "question": "How are de novo binder backbones and sequences generated?",
+      "candidate_evaluators": [],
+      "search_phrases": [
+        "de novo protein binder",
+        "de novo binder design",
+        "minibinder"
+      ],
+      "mechanism_patterns": [
+        "binder design campaign",
+        "designed binders were",
+        "backbone generation"
+      ]
+    },
+    {
+      "id": "inverse_folding_sequence_design",
+      "question": "How is a sequence chosen for a designed backbone?",
+      "candidate_evaluators": [],
+      "search_phrases": [
+        "ProteinMPNN",
+        "inverse folding",
+        "fixed backbone sequence design"
+      ],
+      "mechanism_patterns": [
+        "sequence recovery",
+        "designed sequences were",
+        "inverse folding model"
+      ]
+    },
+    {
+      "id": "interface_confidence_filter",
+      "question": "Does predicted interface confidence discriminate binders from non-binders?",
+      "candidate_evaluators": [],
+      "search_phrases": [
+        "interface pTM",
+        "ipTM",
+        "predicted aligned error"
+      ],
+      "mechanism_patterns": [
+        "ipTM threshold",
+        "correlated with experimental",
+        "in silico success rate"
+      ]
+    },
+    {
+      "id": "fold_confidence_filter",
+      "question": "Does monomer fold confidence predict a designed binder's success?",
+      "candidate_evaluators": [],
+      "search_phrases": [
+        "pLDDT",
+        "AlphaFold2 confidence",
+        "self-consistency"
+      ],
+      "mechanism_patterns": [
+        "pLDDT cutoff",
+        "filtered designs",
+        "confidence metric"
+      ]
+    },
+    {
+      "id": "interface_energetics_filter",
+      "question": "Do physics-based interface energy terms add predictive power?",
+      "candidate_evaluators": [],
+      "search_phrases": [
+        "Rosetta interface energy",
+        "buried surface area",
+        "shape complementarity"
+      ],
+      "mechanism_patterns": [
+        "binding energy was",
+        "interface metrics",
+        "ddG of binding"
+      ]
+    },
+    {
+      "id": "experimental_binding_validation",
+      "question": "What is actually measured in the wet lab to confirm binding?",
+      "candidate_evaluators": [],
+      "search_phrases": [
+        "surface plasmon resonance",
+        "biolayer interferometry",
+        "dissociation constant"
+      ],
+      "mechanism_patterns": [
+        "binding affinity of",
+        "measured KD",
+        "yeast display"
+      ]
+    }
+  ],
+  "exclusions": [
+    {
+      "excluded": "small-molecule and nucleic-acid binders",
+      "reason": "The proto-tools catalogue's interface metrics are protein-protein; a small-molecule binder would be unbindable for reasons unrelated to the evaluator question."
+    },
+    {
+      "excluded": "antibody affinity maturation",
+      "reason": "A distinct design regime with its own evaluators; including it would swamp the de novo classes in the corpus."
+    }
+  ]
+}
