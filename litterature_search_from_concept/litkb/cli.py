@@ -15,7 +15,7 @@ import sys
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
-from . import contracts, proto, reader, report
+from . import contracts, proto, reader, report, vocabulary
 from .paperclip import PaperclipError, count, grep_set, map_papers, meta, search
 
 
@@ -436,7 +436,10 @@ def cmd_label(args):
     labels = _load(args.labels)
     if isinstance(labels, dict):
         labels = labels.get("labels", [])
-    applied, errors = contracts.apply_labels(ev["items"], labels)
+    catalog = proto.load_catalog(args.registry) if Path(args.registry).exists() else None
+    vocab = vocabulary.load(args.vocabulary) if Path(args.vocabulary).exists() else None
+    applied, errors = contracts.apply_labels(ev["items"], labels,
+                                             catalog=catalog, vocab=vocab)
     if errors:
         print(f"applied {applied} labels, {len(errors)} rejected:", file=sys.stderr)
         _fail(errors)
@@ -704,6 +707,8 @@ def main(argv=None):
     p.add_argument("evidence")
     p.add_argument("labels")
     p.add_argument("-o", "--out")
+    p.add_argument("--registry", default="../registry/proto_catalog.json")
+    p.add_argument("--vocabulary", default="../registry/property_vocabulary.json")
     p.set_defaults(fn=cmd_label)
 
     p = sub.add_parser("validate", help="are all items complete enough for L1?")

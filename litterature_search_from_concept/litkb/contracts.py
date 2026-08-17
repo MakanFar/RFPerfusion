@@ -10,6 +10,9 @@ That work belongs to the agent, via `litkb label`.
 import re
 from datetime import datetime, timezone
 
+from . import proto
+from .vocabulary import UnknownTerm
+
 SUPPORT_LEVELS = ("established", "contested", "speculative")
 CLAIM_TYPES = ("mechanism", "quantity", "scaffold", "failure_mode", "negative_result")
 EVIDENCE_KINDS = ("experimental", "computational", "review", "theoretical")
@@ -285,8 +288,14 @@ def citation_from_meta(m):
     }
 
 
-def apply_labels(items, labels):
-    """Merge agent-supplied judgements into draft items, by id."""
+def apply_labels(items, labels, catalog=None, vocab=None):
+    """Merge agent-supplied judgements into draft items, by id.
+
+    `vocabulary` is the one label that has a computed consequence: assigning
+    terms re-resolves `testable_by`. Assigning an EMPTY list is meaningful
+    and different from never labelling -- it records that the agent looked
+    and found nothing in the catalogue, which is a finding worth shipping.
+    """
     by_id = {it["id"]: it for it in items}
     errors, applied = [], 0
 
@@ -296,26 +305,59 @@ def apply_labels(items, labels):
             errors.append(f"unknown evidence id '{iid}'")
             continue
         item = by_id[iid]
+
+        if "vocabulary" in lab:
+            terms = lab["vocabulary"]
+            if not isinstance(terms, list):
+                errors.append(f"{iid}: vocabulary must be a list of term ids")
+                continue
+            if vocab is None or catalog is None:
+                errors.append(f"{iid}: cannot apply vocabulary without a "
+                              f"registry and a vocabulary file")
+                continue
+            try:
+                resolved = proto.resolve_properties(terms, catalog, vocab) if terms \
+                    else {"tools": [], "requires_new_evaluator": True}
+            except UnknownTerm as exc:
+                errors.append(f"{iid}: {exc}")
+                continue
+            item["testable_by"]["vocabulary"] = list(terms)
+            item["testable_by"]["tools"] = resolved["tools"]
+            item["testable_by"]["requires_new_evaluator"] = \
+                resolved["requires_new_evaluator"]
+
+        bad_field = False
         for field, value in lab.items():
-            if field == "id":
+            if field in ("id", "vocabulary"):
                 continue
             if field == "support" and value not in SUPPORT_LEVELS:
                 errors.append(f"{iid}: support must be one of {SUPPORT_LEVELS}, got '{value}'")
+                bad_field = True
                 continue
             if field == "claim_type" and value not in CLAIM_TYPES:
                 errors.append(f"{iid}: claim_type must be one of {CLAIM_TYPES}, got '{value}'")
+                bad_field = True
                 continue
             if field == "evidence_kind" and value not in EVIDENCE_KINDS:
                 errors.append(f"{iid}: evidence_kind must be one of {EVIDENCE_KINDS}, got '{value}'")
+                bad_field = True
                 continue
             if field == "confidence" and not (isinstance(value, (int, float)) and 0 <= value <= 1):
                 errors.append(f"{iid}: confidence must be a number in [0, 1], got '{value}'")
+                bad_field = True
                 continue
             if field == "provenance":
                 errors.append(f"{iid}: provenance is tool-owned and cannot be relabelled")
+                bad_field = True
+                continue
+            if field == "testable_by":
+                errors.append(f"{iid}: testable_by is resolved from `vocabulary`, "
+                              f"not set directly")
+                bad_field = True
                 continue
             item[field] = value
-        applied += 1
+        if not bad_field:
+            applied += 1
     return applied, errors
 
 
