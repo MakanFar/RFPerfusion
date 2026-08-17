@@ -15,13 +15,22 @@ def test_every_term_resolves_to_a_real_metric():
     A term resolving to nothing would silently make an assessable property
     unassessable, which is the failure this whole design removes.
     """
+    vocab = vocabulary.load(VOCAB)
+    # Prevent vacuous passing on an accidentally emptied vocabulary
+    assert len(vocab["terms"]) == 9, "Vocabulary must have exactly 9 terms"
+    term_ids = {t["id"] for t in vocab["terms"]}
+    assert "fold_confidence" in term_ids, "fold_confidence term must be present"
+    assert "sequence_likelihood" in term_ids, "sequence_likelihood term must be present"
+
     catalog = proto.load_catalog(REGISTRY)
-    assert vocabulary.validate(vocabulary.load(VOCAB), catalog) == []
+    assert vocabulary.validate(vocab, catalog) == []
 
 
 def test_term_ids_are_unique():
     vocab = vocabulary.load(VOCAB)
     ids = [t["id"] for t in vocab["terms"]]
+    # Prevent vacuous passing on an accidentally emptied vocabulary
+    assert len(ids) > 0, "Vocabulary must have at least one term"
     assert len(ids) == len(set(ids))
 
 
@@ -46,6 +55,23 @@ def test_validate_reports_a_term_backed_by_no_metric():
         {"key": "t", "measures": [{"metric": "avg_plddt"}]}]}
     errors = vocabulary.validate(vocab, catalog)
     assert len(errors) == 1 and "phlogiston" in errors[0]
+
+
+def test_validate_accepts_a_term_with_at_least_one_metric_present():
+    """Distinguish 'at least one metric present' from 'all metrics present'.
+
+    A term whose metrics are partially present should pass validation,
+    because even one available evaluator is enough to assess the property.
+    """
+    vocab = {"version": 1, "terms": [
+        {"id": "partial", "definition": "some but not all metrics present",
+         "metrics": ["avg_plddt", "not_a_real_metric"]},
+    ]}
+    catalog = {"schema_version": 2, "tools": [
+        {"key": "t", "measures": [{"metric": "avg_plddt"}]}]}
+    errors = vocabulary.validate(vocab, catalog)
+    # Must pass because at least one metric (avg_plddt) is present
+    assert errors == []
 
 
 def test_unknown_term_id_is_rejected():
