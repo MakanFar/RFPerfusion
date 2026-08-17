@@ -22,6 +22,7 @@ _ENTITY_TYPES = re.compile(r"entity types:\s*(.+)")
 _FIELD_LINE = re.compile(r"^  (?P<name>[a-z_]+)\s{2,}(?P<type>\S.*?)\s{2,}\(")
 
 _STRUCTURE_HINTS = ("structure", "pdb", "sequence_structure_pairs")
+_ENTITY_IN_DESC = re.compile(r"protein|dna|rna|ligand")
 
 
 def parse_input_doc(text):
@@ -70,6 +71,87 @@ def parse_input_doc(text):
         "max_length": max_length,
         "constraint_source": "docstring",
     }
+
+
+def _walk_properties(node):
+    """Yield (name, subschema) for every property in a schema and its $defs."""
+    for name, sub in (node.get("properties") or {}).items():
+        yield name, sub
+    for sub in (node.get("$defs") or {}).values():
+        yield from _walk_properties(sub)
+
+
+def parse_input_schema(schema):
+    """Machine-checkable constraints from `proto-tools schema <key>`.
+
+    Structured, so this is preferred over the prose input doc wherever it
+    answers. It does not answer everything: caps stated only in a docstring
+    Note (ESMFold's 2,400 residues) are invisible here, which is what
+    `merge_constraints` is for.
+    """
+    inputs = schema.get("inputs") or {}
+    fields = list(_walk_properties(inputs))
+    names = {name for name, _ in fields}
+
+    if "complexes" in names:
+        input_kind = "complex"
+    elif any("structure" in n or n == "sequence_structure_pairs" for n in names):
+        input_kind = "structure"
+    elif any("sequence" in n for n in names):
+        input_kind = "sequence"
+    else:
+        input_kind = None
+
+    molecules = None
+    for name, sub in fields:
+        if name == "entity_type":
+            found = _ENTITY_IN_DESC.findall((sub.get("description") or "").lower())
+            if found:
+                molecules = sorted(set(found))
+            break
+
+    max_length = None
+    for _, sub in fields:
+        cap = sub.get("maxLength") or (sub.get("items") or {}).get("maxLength")
+        if cap:
+            max_length = int(cap)
+            break
+
+    if molecules == ["protein"]:
+        alphabet = PROTEIN_ALPHABET
+    elif molecules and set(molecules) <= {"dna", "rna"}:
+        alphabet = NUCLEOTIDE_ALPHABET
+    else:
+        alphabet = None
+
+    return {"input_kind": input_kind, "molecules": molecules,
+            "alphabet": alphabet, "max_length": max_length}
+
+
+_CONSTRAINT_FIELDS = ("input_kind", "molecules", "alphabet", "max_length")
+
+
+def merge_constraints(from_schema, from_doc):
+    """Schema first, prose only where the schema is silent.
+
+    `constraint_source` becomes a list naming every source that actually
+    contributed a value, so a thin entry is traceable to why it is thin
+    rather than merely looking neglected.
+    """
+    merged, sources = {}, []
+    for field in _CONSTRAINT_FIELDS:
+        if from_schema.get(field) is not None:
+            merged[field] = from_schema[field]
+            if "schema" not in sources:
+                sources.append("schema")
+        elif from_doc.get(field) is not None:
+            merged[field] = from_doc[field]
+            if "docstring" not in sources:
+                sources.append("docstring")
+        else:
+            merged[field] = None
+    merged["constraint_source"] = sources
+    return merged
 
 
 def build_catalog(tools, doc_fetcher):
