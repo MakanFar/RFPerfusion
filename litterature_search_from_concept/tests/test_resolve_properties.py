@@ -63,3 +63,46 @@ def test_unknown_never_counts_as_pass_regression():
     checks = proto.check(artifact, tool)
     assert set(checks.values()) == {"unknown"}
     assert proto.bind_artifact(artifact, {"tools": [tool]})["status"] == "unverified"
+
+
+def _cat(cal_status):
+    return {"schema_version": 3, "tools": [
+        {"key": "esmfold-prediction", "status": "needs_calibration",
+         "measures": [{"metric": "avg_plddt", "primary": True,
+                       "calibration": {"status": cal_status}}]},
+    ]}
+
+
+_VOCAB = {"version": 1, "terms": [
+    {"id": "fold_confidence", "definition": "d", "metrics": ["avg_plddt"]}]}
+
+
+def test_uncalibrated_tool_can_measure_but_not_rank():
+    """Framework section 6: an uncalibrated evaluator may run, and may not
+    rank. Before this field there was no way to say the second half, so a
+    consumer reading requires_new_evaluator=false saw 'covered'."""
+    from litkb import proto
+
+    out = proto.resolve_properties(["fold_confidence"],
+                                   _cat("needs_calibration"), _VOCAB)
+
+    assert out["tools"] == ["esmfold-prediction"]
+    assert out["rankable_by"] == []
+    assert out["requires_new_evaluator"] is False
+
+
+def test_validated_metric_makes_its_tool_rankable():
+    from litkb import proto
+
+    out = proto.resolve_properties(["fold_confidence"], _cat("validated"), _VOCAB)
+
+    assert out["rankable_by"] == ["esmfold-prediction"]
+
+
+def test_unassessed_item_has_no_rankable_by():
+    from litkb import proto
+
+    out = proto.resolve_properties([], _cat("validated"), _VOCAB)
+
+    assert out["rankable_by"] == []
+    assert out["requires_new_evaluator"] == proto.UNASSESSED

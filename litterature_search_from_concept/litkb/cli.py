@@ -493,7 +493,7 @@ def cmd_evidence(args):
 
     print(f"  {len(items)} items drafted, all testable_by unassessed until "
           f"`litkb label` runs", file=sys.stderr)
-    _emit({"schema_version": 2, "slug": screened["slug"], "items": items,
+    _emit({"schema_version": 3, "slug": screened["slug"], "items": items,
            "unlabelled": len(contracts.validate_items(items))},
           _resolve_out(args, f"evidence_{screened['slug']}.json"))
 

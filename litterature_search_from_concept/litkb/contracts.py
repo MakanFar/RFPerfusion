@@ -249,7 +249,7 @@ def item_from_mechanism(index, class_id, mech, doc_id, citation, extracted_by="q
         # judgement field -- the tool drafts, the agent judges. Until then
         # the assessment is unmade, and says so.
         "testable_by": {"properties": mech.get("measurable_properties", []),
-                        "vocabulary": [], "tools": [],
+                        "vocabulary": [], "tools": [], "rankable_by": [],
                         "requires_new_evaluator": "unassessed"},
         "provenance": {
             "doc_id": doc_id,
@@ -307,12 +307,14 @@ def apply_labels(items, labels, catalog=None, vocab=None):
                 continue
             try:
                 resolved = proto.resolve_properties(terms, catalog, vocab) if terms \
-                    else {"tools": [], "requires_new_evaluator": True}
+                    else {"tools": [], "rankable_by": [],
+                          "requires_new_evaluator": True}
             except UnknownTerm as exc:
                 errors.append(f"{iid}: {exc}")
                 continue
             item["testable_by"]["vocabulary"] = list(terms)
             item["testable_by"]["tools"] = resolved["tools"]
+            item["testable_by"]["rankable_by"] = resolved["rankable_by"]
             item["testable_by"]["requires_new_evaluator"] = \
                 resolved["requires_new_evaluator"]
 

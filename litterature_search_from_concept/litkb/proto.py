@@ -501,16 +501,29 @@ def resolve_properties(term_ids, catalog, vocab):
     Framework section 77: a class nothing can evaluate returns
     requires_new_evaluator, which is a legitimate output to hand back to
     the scientist rather than a discard.
+
+    `tools` answers "what can MEASURE this"; `rankable_by` answers "what may
+    RANK on it", which framework section 6 restricts to calibrated
+    evaluators. They are separate fields because they are separate questions:
+    folding them into one would have silently changed the meaning of every
+    committed `requires_new_evaluator: false`.
     """
     if not term_ids:
-        return {"tools": [], "requires_new_evaluator": UNASSESSED}
+        return {"tools": [], "rankable_by": [],
+                "requires_new_evaluator": UNASSESSED}
 
     wanted = vocabulary.metrics_for(term_ids, vocab)
-    tools = sorted(
-        t["key"] for t in catalog["tools"]
-        if wanted & {m["metric"] for m in t.get("measures", [])}
-    )
-    return {"tools": tools, "requires_new_evaluator": not tools}
+    tools, rankable = [], []
+    for t in catalog["tools"]:
+        hits = [m for m in t.get("measures", []) if m["metric"] in wanted]
+        if not hits:
+            continue
+        tools.append(t["key"])
+        if any(m.get("calibration", UNCALIBRATED).get("status") == "validated"
+               for m in hits):
+            rankable.append(t["key"])
+    return {"tools": sorted(tools), "rankable_by": sorted(rankable),
+            "requires_new_evaluator": not tools}
 
 
 # `proto-tools output <key>` renders each tool's declarative `metric_spec`

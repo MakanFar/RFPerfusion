@@ -89,11 +89,12 @@ def test_cmd_evidence_drafts_items_unassessed_not_resolved(tmp_path, monkeypatch
     cli.cmd_evidence(args)
 
     result = json.loads(out_path.read_text())
-    assert result["schema_version"] == 2
+    assert result["schema_version"] == 3
     testable_by = result["items"][0]["testable_by"]
     assert testable_by == {
         "properties": ["fold_confidence"],
         "vocabulary": [],
         "tools": [],
+        "rankable_by": [],
         "requires_new_evaluator": proto.UNASSESSED,
     }

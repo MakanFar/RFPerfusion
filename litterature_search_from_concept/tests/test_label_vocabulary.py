@@ -59,3 +59,19 @@ def test_testable_by_cannot_be_overwritten_wholesale():
         catalog=CATALOG, vocab=VOCAB)
     assert applied == 0
     assert "testable_by" in errors[0]
+
+
+def test_empty_vocabulary_assignment_still_sets_rankable_by():
+    """An empty assignment is a real judgement -- 'nothing measures this' --
+    and must produce a complete testable_by, not a missing key."""
+    from litkb import contracts
+
+    items = [{"id": "ev_001", "testable_by": {"properties": [], "vocabulary": [],
+                                              "tools": [], "rankable_by": [],
+                                              "requires_new_evaluator": "unassessed"}}]
+    errors = contracts.apply_labels(
+        items, [{"id": "ev_001", "vocabulary": []}],
+        catalog={"schema_version": 3, "tools": []}, vocab={"version": 1, "terms": []})
+
+    assert items[0]["testable_by"]["rankable_by"] == []
+    assert items[0]["testable_by"]["requires_new_evaluator"] is True
