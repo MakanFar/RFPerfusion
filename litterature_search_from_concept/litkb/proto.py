@@ -481,11 +481,63 @@ def check(artifact, tool):
     return checks
 
 
+MIN_DESIGN_LENGTH = 20
+
+# IUPAC codes that stand for "one of several residues" rather than naming one.
+# U (selenocysteine) and O (pyrrolysine) are real residues and stay legal.
+_AMBIGUITY_CODES = {
+    "protein": frozenset("XBZ"),
+    "dna": frozenset("N"),
+    "rna": frozenset("N"),
+}
+
+# Statuses that reject an artifact on its own merits, before any tool is
+# consulted. `cmd_bind` reports these by name rather than as a proto failure,
+# because no proto constraint is involved.
+ARTIFACT_QUALITY_STATUSES = ("unspecified_sequence", "below_min_length")
+
+
+def _quality_gate(artifact):
+    """Reject an artifact that is not a design candidate, whatever the tool.
+
+    Both gates exist because a live run bound `VPGXG` -- the five-residue
+    elastin-like-polypeptide repeat -- to esmfold-prediction with all four
+    per-tool checks reading `pass`. Neither problem is expressible in
+    `check()`, whose every verdict is relative to one tool's declared
+    constraints: X really is a legal PROTEIN_ALPHABET character, and ESMFold
+    really will accept a 5-mer. The artifact was still not a candidate.
+
+    Ambiguity is reported ahead of length: a sequence carrying X is not fully
+    specified, which is a more fundamental objection than being short.
+    """
+    ambiguous = sorted(
+        set(artifact["value"].upper())
+        & _AMBIGUITY_CODES.get(artifact["molecule"], frozenset())
+    )
+    if ambiguous:
+        return ("unspecified_sequence",
+                f"contains IUPAC ambiguity code(s) {ambiguous} -- those "
+                f"positions are unresolved, so the sequence is not fully "
+                f"specified")
+    if artifact["length"] < MIN_DESIGN_LENGTH:
+        return ("below_min_length",
+                f"{artifact['length']} residues is below the "
+                f"{MIN_DESIGN_LENGTH}-residue minimum for a design candidate "
+                f"-- shorter matches are motifs or fragments")
+    return None
+
+
 def bind_artifact(artifact, catalog):
     """Bind one artifact to every tool that accepts it."""
     if artifact["kind"] not in _SEQUENCE_KINDS:
         return {"status": "unsupported_kind", "tools": [], "unverified": [],
                 "rejected_by": [], "reason": f"no proto tool consumes a bare {artifact['kind']}"}
+
+    gated = _quality_gate(artifact)
+    if gated:
+        status, reason = gated
+        return {"status": status, "tools": [], "unverified": [],
+                "rejected_by": [], "reason": reason}
 
     accepted, rejected, unverified = [], [], []
     for tool in catalog["tools"]:

@@ -457,6 +457,13 @@ def cmd_bind(args):
         status = art["proto_binding"]["status"]
         if status == "runnable":
             kept.append(art)
+        elif status in proto.ARTIFACT_QUALITY_STATUSES:
+            # Not a proto failure: no tool was consulted. The artifact is not
+            # a design candidate on its own merits, so it is reported under
+            # its own kind rather than borrowing the proto_ prefix.
+            rejections.append({"kind": status, "id": art["id"],
+                               "doc_id": doc_id,
+                               "reason": art["proto_binding"]["reason"]})
         elif status == "unsupported_kind":
             rejections.append({"kind": f"proto_{status}", "id": art["id"],
                                "doc_id": doc_id,

@@ -111,3 +111,34 @@ def test_unconfirmed_mutation_gets_a_notation_specific_reason(tmp_path, monkeypa
     assert rej["kind"] == "not_confirmed_in_source"
     assert "notation" in rej["reason"]
     assert "sequence does not literally appear" not in rej["reason"]
+
+
+def test_quality_gated_rejections_carry_their_own_kind_and_a_string_reason(
+        tmp_path, monkeypatch):
+    """`VPGXG` bound to esmfold-prediction in a live run with every per-tool
+    check reading `pass`. The two gates that now stop it are artifact-quality
+    judgements, not proto constraints, so they must NOT be reported under a
+    `proto_` kind -- and, like unsupported_kind above, they must carry a real
+    string reason rather than the falsy empty list the generic branch would
+    supply."""
+    def fake_grep_set(set_id, patterns, ignore_case=False, fixed=False):
+        return [{"doc_id": "PMC1", "text": patterns[0]}]
+
+    monkeypatch.setattr(cli, "grep_set", fake_grep_set)
+
+    motif = contracts.draft_artifact(
+        1, {"value": "VPGXG", "molecule": "protein", "name": "ELP",
+            "verbatim": True}, "PMC1", "s_1")
+    short = contracts.draft_artifact(
+        2, {"value": "VPGVG", "molecule": "protein", "name": "ELP",
+            "verbatim": True}, "PMC1", "s_1")
+
+    result = _run_bind(tmp_path, [motif, short], [])
+
+    assert result["artifacts"] == []
+    by_id = {r["id"]: r for r in result["rejections"]}
+    assert by_id["art_001"]["kind"] == "unspecified_sequence"
+    assert by_id["art_002"]["kind"] == "below_min_length"
+    for rej in by_id.values():
+        assert isinstance(rej["reason"], str) and rej["reason"]
+        assert rej["doc_id"] == "PMC1"

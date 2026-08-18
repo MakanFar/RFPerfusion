@@ -56,8 +56,15 @@ def test_drafted_item_starts_unassessed_with_free_text_kept():
 
 
 def test_unknown_never_counts_as_pass_regression():
-    """Guard on the rule this work must not weaken."""
-    artifact = {"kind": "sequence", "molecule": "protein", "value": "MKV", "length": 3}
+    """Guard on the rule this work must not weaken.
+
+    The artifact must clear bind_artifact's artifact-quality gates
+    (MIN_DESIGN_LENGTH, ambiguity codes) or it is rejected before any tool is
+    consulted and this stops testing the unknown-never-passes rule at all.
+    Its former 3-residue value was incidental to what the test guards.
+    """
+    artifact = {"kind": "sequence", "molecule": "protein",
+                "value": "MKVAALLPQRSTGYWFNDEC", "length": 20}
     tool = {"key": "t", "input_kind": None, "molecules": None,
             "alphabet": None, "max_length": None}
     checks = proto.check(artifact, tool)
