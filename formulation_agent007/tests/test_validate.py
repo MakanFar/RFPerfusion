@@ -9,7 +9,16 @@ from __future__ import annotations
 
 import pytest
 
-from formulation_agent007.catalog import METRIC_CALIBRATION
+# Import the MODULE, not the name: `test_catalog_single_file.py` does
+# `importlib.reload(catalog)` elsewhere in this suite, which rebinds
+# `catalog.METRIC_CALIBRATION` to a brand-new dict object in place.
+# `calibration_for` (catalog.py) reads that module global at call time,
+# so a `from ... import METRIC_CALIBRATION` binding here would go stale
+# after a reload runs elsewhere in the same test session and any
+# `monkeypatch.setitem` on it would silently stop being seen by the
+# code under test. Patching through `catalog.METRIC_CALIBRATION`
+# always resolves against whatever the module currently holds.
+from formulation_agent007 import catalog
 from formulation_agent007.models import FitnessGate, GateState, Linker
 from formulation_agent007.validate import (
     _decimal_step,
@@ -85,7 +94,7 @@ class TestProtoCascade:
 
     def test_between_window_narrower_than_twice_the_error_is_rejected(
             self, proto, monkeypatch):
-        monkeypatch.setitem(METRIC_CALIBRATION, "avg_plddt", self._CAL)
+        monkeypatch.setitem(catalog.METRIC_CALIBRATION, "avg_plddt", self._CAL)
         gate = proto.gates[0]
         gate.metric, gate.tool_keys = "avg_plddt", ["esmfold-prediction"]
         gate.operator = "between"
@@ -95,7 +104,7 @@ class TestProtoCascade:
 
     def test_threshold_quoted_finer_than_the_measured_error_is_rejected(
             self, proto, monkeypatch):
-        monkeypatch.setitem(METRIC_CALIBRATION, "avg_plddt", self._CAL)
+        monkeypatch.setitem(catalog.METRIC_CALIBRATION, "avg_plddt", self._CAL)
         gate = proto.gates[0]
         gate.metric, gate.tool_keys = "avg_plddt", ["esmfold-prediction"]
         gate.operator, gate.threshold = ">=", 0.852
@@ -105,7 +114,7 @@ class TestProtoCascade:
 
     def test_threshold_coarser_than_the_measured_error_passes(
             self, proto, monkeypatch):
-        monkeypatch.setitem(METRIC_CALIBRATION, "avg_plddt", self._CAL)
+        monkeypatch.setitem(catalog.METRIC_CALIBRATION, "avg_plddt", self._CAL)
         gate = proto.gates[0]
         gate.metric, gate.tool_keys = "avg_plddt", ["esmfold-prediction"]
         gate.operator, gate.threshold = ">=", 0.8
@@ -117,7 +126,7 @@ class TestProtoCascade:
             self, proto, monkeypatch):
         """The gate names the tools that will actually run. A metric
         validated on some other tool says nothing about this gate."""
-        monkeypatch.setitem(METRIC_CALIBRATION, "avg_plddt", self._CAL)
+        monkeypatch.setitem(catalog.METRIC_CALIBRATION, "avg_plddt", self._CAL)
         gate = proto.gates[0]
         gate.metric, gate.tool_keys = "avg_plddt", ["boltz2-prediction"]
         gate.operator, gate.threshold = ">=", 0.852
@@ -132,7 +141,7 @@ class TestProtoCascade:
         (pydantic always coerces an authored `2` to `2.0`, so this path is
         the only one a real gate ever takes) -- that falsely rejected a
         gate like `count >= 2` against a measured error as coarse as 0.5."""
-        monkeypatch.setitem(METRIC_CALIBRATION, "avg_plddt", {
+        monkeypatch.setitem(catalog.METRIC_CALIBRATION, "avg_plddt", {
             "esmfold-prediction": {
                 "status": "validated",
                 "measured_error": {"kind": "mae", "value": 0.5}}})
@@ -143,13 +152,34 @@ class TestProtoCascade:
 
         assert not any("measured error" in p for p in validate_proto(proto))
 
+    def test_malformed_committed_calibration_entry_is_skipped_not_crashed(
+            self, proto, monkeypatch):
+        """`calibration.json` is a committed artifact this module does not
+        own. A record shaped like `{"status": "validated", "measured_error":
+        {"kind": "mae"}, "benchmark": {...}}` -- validated but with no
+        numeric `value` -- must not crash the whole brief validation with a
+        KeyError; it must be treated as no measured error for this gate."""
+        monkeypatch.setitem(catalog.METRIC_CALIBRATION, "avg_plddt", {
+            "esmfold-prediction": {
+                "status": "validated",
+                "measured_error": {"kind": "mae"},
+                "benchmark": {"name": "b"}}})
+        gate = proto.gates[0]
+        gate.metric, gate.tool_keys = "avg_plddt", ["esmfold-prediction"]
+        gate.operator, gate.threshold = ">=", 0.852
+        gate.threshold_upper = None
+
+        problems = validate_proto(proto)  # must not raise
+
+        assert not any("measured error" in p for p in problems)
+
     def test_inverted_between_gate_is_not_also_flagged_by_the_margin_check(
             self, proto, monkeypatch):
         """threshold_upper <= threshold is already rejected by the shape
         check; the margin check must not pile on a nonsensical negative-
         window message on top of it (that message would also feed the LLM
         repair loop)."""
-        monkeypatch.setitem(METRIC_CALIBRATION, "avg_plddt", self._CAL)
+        monkeypatch.setitem(catalog.METRIC_CALIBRATION, "avg_plddt", self._CAL)
         gate = proto.gates[0]
         gate.metric, gate.tool_keys = "avg_plddt", ["esmfold-prediction"]
         gate.operator = "between"
@@ -175,10 +205,37 @@ class TestDecimalStep:
             (10.0, 1.0),
             (2.50, 0.1),
             (0.0, 1.0),
+            (1e-05, 1e-05),
+            (0.0001, 0.0001),
         ],
     )
     def test_pinned_cases(self, value, expected):
         assert _decimal_step(value) == pytest.approx(expected)
+
+
+class TestDecimalStepExponentNotationGate:
+    """`repr()` switches to exponent form below 1e-4. The old text-based
+    `_decimal_step` treated any 'e' in the repr as "no fractional precision
+    claimed" and returned 1.0 -- maximally coarse -- which fails open: a
+    threshold of 1e-05 (finer than 0.0001, which IS correctly rejected)
+    would silently skip the margin check entirely. This is an end-to-end
+    proof through `validate_proto` that a 1e-05 threshold is now rejected
+    against a coarser measured error, not just a unit check on
+    `_decimal_step` in isolation."""
+
+    _CAL = {"esmfold-prediction": {
+        "status": "validated",
+        "measured_error": {"kind": "mae", "value": 0.06}}}
+
+    def test_exponent_notation_threshold_is_rejected_against_coarser_error(
+            self, proto, monkeypatch):
+        monkeypatch.setitem(catalog.METRIC_CALIBRATION, "avg_plddt", self._CAL)
+        gate = proto.gates[0]
+        gate.metric, gate.tool_keys = "avg_plddt", ["esmfold-prediction"]
+        gate.operator, gate.threshold = ">=", 1e-05
+        gate.threshold_upper = None
+
+        assert any("measured error" in p for p in validate_proto(proto))
 
 
 class TestLiteraturePlan:

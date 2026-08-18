@@ -306,7 +306,12 @@ UNCALIBRATED = {"status": "needs_calibration"}
 
 def _check_metric_record(tool_key, metric, rec):
     """A curated record must be complete before it can promote anything."""
-    status = (rec or {}).get("status")
+    if not isinstance(rec, dict):
+        raise ValueError(
+            f"calibration: {tool_key}:{metric} record must be a JSON object, "
+            f"got {rec!r}"
+        )
+    status = rec.get("status")
     if status not in CALIBRATION_STATUSES:
         raise ValueError(
             f"calibration: {tool_key}:{metric} has status {status!r}, expected "
@@ -314,14 +319,29 @@ def _check_metric_record(tool_key, metric, rec):
         )
     if status != "validated":
         return
-    for field in ("measured_error", "benchmark"):
-        if not rec.get(field):
-            # Framework section 6 promotes on MEASURED reliability. A bare
-            # flag with no number is the claim it exists to forbid.
-            raise ValueError(
-                f"calibration: {tool_key}:{metric} is validated without "
-                f"{field}; a promotion needs the measurement behind it"
-            )
+    if not rec.get("benchmark"):
+        # Framework section 6 promotes on MEASURED reliability. A bare
+        # flag with no number is the claim it exists to forbid.
+        raise ValueError(
+            f"calibration: {tool_key}:{metric} is validated without "
+            f"benchmark; a promotion needs the measurement behind it"
+        )
+    # `measured_error` must be checked for SHAPE, not just presence: a
+    # truthy-but-empty-of-substance record like {"kind": "mae"} used to pass
+    # here and then raised a bare KeyError at validate.py's
+    # `c["measured_error"]["value"]`. `isinstance(rec, dict)` is checked
+    # before `.get` is called on it (the `not isinstance` short-circuits the
+    # `or`), and `bool` is excluded explicitly because it is a subclass of
+    # `int` in Python -- `isinstance(True, int)` is True.
+    err = rec.get("measured_error")
+    if (not isinstance(err, dict)
+            or isinstance(err.get("value"), bool)
+            or not isinstance(err.get("value"), (int, float))
+            or err["value"] <= 0):
+        raise ValueError(
+            f"calibration: {tool_key}:{metric} has measured_error {err!r}; "
+            f"needs a positive numeric `value`"
+        )
 
 
 def derive_status(measures):
@@ -387,8 +407,12 @@ def apply_calibration(catalog, curation):
     tools = []
     for t in catalog["tools"]:
         metrics = ((curated.get(t["key"]) or {}).get("metrics") or {})
+        # `dict(...)` around the whole lookup, not just the UNCALIBRATED
+        # fallback: writing the curated record object in by reference let a
+        # later in-place mutation of the catalogue's `calibration` entry
+        # edit the curation dict out from under it.
         measures = [
-            {**m, "calibration": metrics.get(m["metric"], dict(UNCALIBRATED))}
+            {**m, "calibration": dict(metrics.get(m["metric"], UNCALIBRATED))}
             for m in t.get("measures", [])
         ]
         tools.append({**t, "measures": measures,
@@ -507,6 +531,13 @@ def resolve_properties(term_ids, catalog, vocab):
     evaluators. They are separate fields because they are separate questions:
     folding them into one would have silently changed the meaning of every
     committed `requires_new_evaluator: false`.
+
+    Known coarseness: when an item is labelled with several vocabulary terms,
+    the metrics of ALL of them are unioned before matching, and a tool is
+    marked rankable if ANY of its hits is validated -- so an item labelled
+    `[fold_confidence, interface_energetics]` can list a tool validated only
+    on `avg_plddt` as rankable for the whole multi-term claim, not just the
+    term that tool actually covers.
     """
     if not term_ids:
         return {"tools": [], "rankable_by": [],

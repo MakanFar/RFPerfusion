@@ -33,4 +33,6 @@ A mutation rejected this way is reported as a notation mismatch rather than a fa
 
 `vocabulary` is a list of term ids from `registry/property_vocabulary.json`, the closed set of properties the proto catalogue can actually address. Assigning it re-resolves `testable_by.tools` and `testable_by.requires_new_evaluator` against `registry/proto_catalog.json`. An empty list is a real, distinct assessment ("nothing in the catalogue measures this") that resolves to `requires_new_evaluator: true`; never labelling `vocabulary` at all leaves the item at `requires_new_evaluator: "unassessed"` indefinitely.
 
+Assigning `vocabulary` also resolves `testable_by.rankable_by`: the subset of `tools` whose relevant metric is calibrated `validated`, per `registry/calibration.json`, rather than merely present in the catalogue. `tools` answers "what can measure this claim"; `rankable_by` answers "what may rank on it" (framework §6). `rankable_by` is `[]` for every item today, because nothing has been promoted to `validated` yet — do not read a non-empty `tools` list as "covered" for ranking purposes.
+
 Empty categories, zero-yield phrases, classes with no corpus, and failed extractions are all preserved as rejections. They are search diagnostics and must not be rewritten as evidence that the literature contains nothing.

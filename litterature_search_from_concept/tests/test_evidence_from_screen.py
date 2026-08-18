@@ -75,7 +75,7 @@ def test_cmd_evidence_drafts_items_unassessed_not_resolved(tmp_path, monkeypatch
     completed, negative assessment for every item unconditionally -- an
     unmade judgement must read as unmade, not as a completed one that
     happens to always fail. Evidence files written from cmd_evidence must
-    also carry schema_version 2."""
+    also carry schema_version 3."""
     screen_path = tmp_path / "screen.json"
     screen_path.write_text(json.dumps({
         "slug": "s",

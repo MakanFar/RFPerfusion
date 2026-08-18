@@ -10,7 +10,16 @@ from __future__ import annotations
 import json
 import re
 
-from formulation_agent007.catalog import METRIC_CALIBRATION
+# Import the MODULE, not the name: `test_catalog_single_file.py` does
+# `importlib.reload(catalog)` elsewhere in this suite, which rebinds
+# `catalog.METRIC_CALIBRATION` to a brand-new dict object in place.
+# `calibration_for` (catalog.py) reads that module global at call time,
+# so a `from ... import METRIC_CALIBRATION` binding here would go stale
+# after a reload runs elsewhere in the same test session and any
+# `monkeypatch.setitem` on it would silently stop being seen by the
+# code under test. Patching through `catalog.METRIC_CALIBRATION`
+# always resolves against whatever the module currently holds.
+from formulation_agent007 import catalog
 from formulation_agent007.emit import render_harvest, render_proto_brief, save_brief
 
 
@@ -90,12 +99,32 @@ class TestProtoRunbook:
         cal = {"status": "validated",
                "measured_error": {"kind": "mae", "value": 0.05}}
         for gate in brief.proto.gates:
-            existing = dict(METRIC_CALIBRATION.get(gate.metric, {}))
+            existing = dict(catalog.METRIC_CALIBRATION.get(gate.metric, {}))
             existing.update({key: cal for key in gate.tool_keys})
-            monkeypatch.setitem(METRIC_CALIBRATION, gate.metric, existing)
+            monkeypatch.setitem(catalog.METRIC_CALIBRATION, gate.metric, existing)
 
         text = render_proto_brief(brief)
         assert "no measured error on the tools named" not in text
+
+    def test_label_stays_when_only_one_of_two_named_tools_is_calibrated(
+            self, brief, monkeypatch):
+        """A gate naming two tools where only one has a validated metric
+        must still be labelled -- omitting it would claim full calibration
+        for a gate where two of the tools have no measured error at all.
+        Regression for the old `not any(...)` rule, which stopped labelling
+        as soon as ONE named tool was validated."""
+        gate = brief.proto.gates[0]
+        gate.tool_keys = ["esmfold-prediction", "boltz2-prediction"]
+        existing = dict(catalog.METRIC_CALIBRATION.get(gate.metric, {}))
+        existing["esmfold-prediction"] = {
+            "status": "validated",
+            "measured_error": {"kind": "mae", "value": 0.05}}
+        existing.pop("boltz2-prediction", None)
+        monkeypatch.setitem(catalog.METRIC_CALIBRATION, gate.metric, existing)
+
+        text = render_proto_brief(brief)
+        assert "no measured error on the tools named" in text
+        assert f"Gates {gate.order}" in text
 
 
 class TestHarvestContract:

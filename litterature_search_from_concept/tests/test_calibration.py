@@ -95,6 +95,53 @@ def test_unknown_status_value_is_rejected_loudly():
             {"esmfold-prediction": {"metrics": {"avg_plddt": {"status": "validatd"}}}}))
 
 
+def test_measured_error_present_but_missing_value_is_rejected():
+    """`{"status": "validated", "measured_error": {"kind": "mae"},
+    "benchmark": {"name": "b"}}` used to pass -- `measured_error` is
+    truthy -- and then crashed `validate.py:356`
+    (`c["measured_error"]["value"]`) downstream with a bare KeyError."""
+    rec = _validated()
+    del rec["measured_error"]["value"]
+    with pytest.raises(ValueError, match="esmfold-prediction:avg_plddt"):
+        proto.apply_calibration(_catalog(), _curation(
+            {"esmfold-prediction": {"metrics": {"avg_plddt": rec}}}))
+
+
+def test_measured_error_non_numeric_value_is_rejected():
+    rec = _validated()
+    rec["measured_error"]["value"] = "0.06"
+    with pytest.raises(ValueError, match="esmfold-prediction:avg_plddt"):
+        proto.apply_calibration(_catalog(), _curation(
+            {"esmfold-prediction": {"metrics": {"avg_plddt": rec}}}))
+
+
+def test_measured_error_boolean_value_is_rejected():
+    """`bool` is a subclass of `int` in Python -- `isinstance(True, int)` is
+    True -- so a naive numeric check would accept a stray `true`/`false`
+    where a measured error belongs."""
+    rec = _validated()
+    rec["measured_error"]["value"] = True
+    with pytest.raises(ValueError, match="esmfold-prediction:avg_plddt"):
+        proto.apply_calibration(_catalog(), _curation(
+            {"esmfold-prediction": {"metrics": {"avg_plddt": rec}}}))
+
+
+def test_measured_error_non_positive_value_is_rejected():
+    rec = _validated()
+    rec["measured_error"]["value"] = 0
+    with pytest.raises(ValueError, match="esmfold-prediction:avg_plddt"):
+        proto.apply_calibration(_catalog(), _curation(
+            {"esmfold-prediction": {"metrics": {"avg_plddt": rec}}}))
+
+
+def test_non_dict_curated_record_is_rejected():
+    """A non-dict curated record must raise the same pointed ValueError as a
+    malformed dict, not a bare AttributeError from `.get` on a string."""
+    with pytest.raises(ValueError, match="esmfold-prediction:avg_plddt"):
+        proto.apply_calibration(_catalog(), _curation(
+            {"esmfold-prediction": {"metrics": {"avg_plddt": "not a dict"}}}))
+
+
 def test_orphan_tool_is_reported():
     _, orphans = proto.apply_calibration(_catalog(), _curation(
         {"tool-that-went-away": {"metrics": {"avg_plddt": _validated()}}}))
@@ -115,6 +162,22 @@ def test_v1_curation_is_refused_with_a_pointer():
     v1 = {"schema_version": 1, "tools": {"esmfold-prediction": {"status": "validated"}}}
     with pytest.raises(ValueError, match="schema_version"):
         proto.apply_calibration(_catalog(), v1)
+
+
+def test_curated_record_is_copied_not_aliased_into_the_catalogue():
+    """The curated record object must not be written into the catalogue by
+    reference -- only the uncalibrated fallback was copied (`dict(UNCALIBRATED)`)
+    while the curated dict itself was written in directly, so a later
+    in-place mutation of the catalogue's `calibration` entry could edit the
+    curation dict out from under it."""
+    rec = _validated()
+    out, _ = proto.apply_calibration(_catalog(), _curation(
+        {"esmfold-prediction": {"metrics": {"avg_plddt": rec}}}))
+
+    row = [m for t in out["tools"] if t["key"] == "esmfold-prediction"
+           for m in t["measures"] if m["metric"] == "avg_plddt"][0]
+    row["calibration"]["status"] = "mutated"
+    assert rec["status"] == "validated"
 
 
 def test_no_curation_leaves_every_row_uncalibrated():
@@ -202,3 +265,23 @@ def test_every_tool_in_the_committed_catalogue_is_still_uncalibrated():
     out, _ = proto.apply_calibration(catalog, curation)
 
     assert {t["status"] for t in out["tools"]} == {"needs_calibration"}
+
+
+def test_committed_catalogue_matches_committed_curation():
+    """`calibration.json` is the sole promotion vector, but it only reaches
+    consumers through artifacts `proto-sync` regenerates. The dangerous
+    direction is fail-open: revert a promotion in `calibration.json` without
+    regenerating, and `proto_catalog.json` keeps `status: validated`, so
+    `resolve_coverage` keeps reporting `full` for a tool curation no longer
+    backs. `test_every_tool_in_the_committed_catalogue_is_still_uncalibrated`
+    above stops being a consistency check the moment anything is promoted --
+    it only pins "nothing is calibrated", not "the committed catalogue agrees
+    with the committed curation". This generalises it: re-derive the whole
+    catalogue from the committed curation and require the committed one to
+    match byte-for-byte on `tools`, so any future promotion that lands in
+    `calibration.json` without a `proto-sync` run fails this test rather than
+    silently shipping a stale `proto_catalog.json`."""
+    catalog = json.load(open("../registry/proto_catalog.json"))
+    curation = json.load(open("../registry/calibration.json"))
+    out, _ = proto.apply_calibration(catalog, curation)
+    assert out["tools"] == catalog["tools"], "re-run `litkb proto-sync`"

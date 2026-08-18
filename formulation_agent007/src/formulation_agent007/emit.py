@@ -21,7 +21,7 @@ import json
 import shlex
 from pathlib import Path
 
-from .catalog import METRIC_CALIBRATION
+from .catalog import calibration_for
 from .config import SETTINGS
 from .models import DesignBrief
 from .report import render_markdown
@@ -445,10 +445,16 @@ def render_proto_brief(brief: DesignBrief) -> str:
         "manifest declares `evidence_status: discovery_only_unverified`. That "
         "status is inherited by everything built from them.",
     ]
+    # Labelled unless EVERY tool the gate names is validated for its metric --
+    # a gate naming three tools where only one pair is validated is still
+    # only partially characterised, and section 6 forbids claiming otherwise.
+    # `not any(...)` here used to under-label: as soon as ONE named tool was
+    # validated the whole gate was treated as calibrated and silently
+    # dropped from this note, even with other named tools carrying no
+    # measured error at all.
     uncal = [g for g in p.ordered()
-             if not any(c.get("status") == "validated"
-                        for key, c in METRIC_CALIBRATION.get(g.metric, {}).items()
-                        if key in g.tool_keys)]
+             if len({key for key, c in calibration_for(g.metric, g.tool_keys).items()
+                     if c.get("status") == "validated"}) != len(g.tool_keys)]
     if uncal:
         lines.append(
             "- Gates "

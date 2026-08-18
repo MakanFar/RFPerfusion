@@ -22,12 +22,13 @@ The load-bearing checks, in rough order of how much damage they prevent:
 from __future__ import annotations
 
 import re
+from decimal import Decimal
 
 from .catalog import (
     INTERFACE_METRICS,
-    METRIC_CALIBRATION,
     METRIC_DIRECTION,
     PROTO_METRICS,
+    calibration_for,
     cost_rank,
     gate_cost_tier,
     unknown_tools,
@@ -51,23 +52,25 @@ MIN_PHRASE_WORDS = 2
 
 def _decimal_step(value: float) -> float:
     """The resolution a number is quoted to: 0.85 -> 0.01, 0.852 -> 0.001,
-    2.0 -> 1.0.
+    2.0 -> 1.0, 1e-05 -> 1e-05.
 
     Quoting more digits than the evaluator's error supports is a claim about
-    precision the measurement does not carry. `repr()` of a whole-number
-    float always appends `.0` (and `models.py` types `threshold: float`, so
-    an authored `2` is always seen here as `2.0`) -- trailing zeros in the
-    fractional part are stripped first so a whole number claims no
-    fractional precision at all, rather than being scored as "quoted to one
-    decimal place".
+    precision the measurement does not carry. Goes through
+    `Decimal(repr(value))` rather than text-sniffing the repr: `repr()`
+    switches to exponent notation below 1e-4, and a prior version treated
+    any exponent-notation repr as "no fractional precision claimed" (whole-
+    number coarse) -- which fails open, scoring a threshold finer than 1e-4
+    as maximally coarse and skipping the margin check for exactly the
+    thresholds it matters most for.
+
+    Known nuisance, not fixed here: a *computed* threshold like `0.1 + 0.2`
+    reprs as `0.30000000000000004` (exponent -17) and would read as
+    claiming 17 digits of precision, producing a spurious rejection. There
+    is no way to tell an authored ultra-fine threshold apart from a
+    float-arithmetic artifact from the value alone.
     """
-    text = f"{value!r}"
-    if "." not in text or "e" in text or "E" in text:
-        return 1.0
-    frac = text.split(".", 1)[1].rstrip("0")
-    if not frac:
-        return 1.0
-    return 10.0 ** -len(frac)
+    exp = Decimal(repr(value)).normalize().as_tuple().exponent
+    return 10.0 ** exp if exp < 0 else 1.0
 
 
 # --------------------------------------------------------------------------
@@ -352,11 +355,17 @@ def validate_proto(proto: ProtoBrief) -> list[str]:
         # Framework section 6: no claimed design margin finer than the
         # evaluator's measured error. Fires only for metrics validated for the
         # tools THIS gate names, so it is inert until calibration lands.
+        # `calibration.json` is a committed artifact this module does not
+        # own: a validated record with a malformed `measured_error` (missing
+        # or non-numeric `value`) is skipped rather than crashing the whole
+        # brief validation on a KeyError/TypeError.
         errors_for_gate = [
             c["measured_error"]["value"]
-            for key, c in METRIC_CALIBRATION.get(gate.metric, {}).items()
-            if key in gate.tool_keys and c.get("status") == "validated"
-            and c.get("measured_error")
+            for c in calibration_for(gate.metric, gate.tool_keys).values()
+            if c.get("status") == "validated"
+            and isinstance(c.get("measured_error"), dict)
+            and isinstance(c["measured_error"].get("value"), (int, float))
+            and not isinstance(c["measured_error"].get("value"), bool)
         ]
         if errors_for_gate:
             err = max(errors_for_gate)

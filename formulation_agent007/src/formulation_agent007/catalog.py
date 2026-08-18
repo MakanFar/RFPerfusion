@@ -48,6 +48,19 @@ METRIC_CALIBRATION: dict[str, dict[str, dict]] = {
 }
 TOOLS_BY_CATEGORY: dict[str, list[str]] = _SNAPSHOT["categories"]
 
+
+def calibration_for(metric: str, tool_keys) -> dict[str, dict]:
+    """The calibration records for `metric` on exactly the tools named.
+
+    `validate.py` and `emit.py` both need "the calibration rows for THIS
+    gate's metric, restricted to the tools THIS gate actually names" -- a
+    metric validated on some other tool says nothing about a gate that does
+    not name it. One helper, so the two modules read the same rule over the
+    same data instead of two independently-drifting restatements of it.
+    """
+    return {k: c for k, c in METRIC_CALIBRATION.get(metric, {}).items()
+            if k in tool_keys}
+
 # `primary` is True on a metric's snapshot entry when at least one tool
 # emitting it flags it primary in the tool's own schema -- "the number you
 # actually look at" rather than a secondary readout bundled alongside it.
