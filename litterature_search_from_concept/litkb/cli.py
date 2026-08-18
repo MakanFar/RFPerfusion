@@ -614,9 +614,11 @@ def cmd_proto_sync(args):
         schema_fetcher=lambda k: schemas.get(k, {}),
         output_fetcher=lambda k: outputs.get(k, ""),
     )
-    # Overlay curated status LAST, so the generated fields stay fully derived
-    # and the one human-maintained fact survives a regeneration that would
-    # otherwise reset every tool to needs_calibration.
+    # Overlay per-metric calibration from the curated file onto the generated
+    # measures, then derive each tool's status from its primary metrics. Tool
+    # status is never curated — the human-maintained facts are the per-(tool,
+    # metric) records in calibration.json, which survive regeneration because
+    # they live in a separate file. The generated fields stay fully derived.
     catalog, orphans = proto.apply_calibration(
         catalog, _load_calibration(args.calibration))
     validated = sum(1 for t in catalog["tools"] if t["status"] == "validated")
