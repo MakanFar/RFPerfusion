@@ -63,15 +63,24 @@ def test_testable_by_cannot_be_overwritten_wholesale():
 
 def test_empty_vocabulary_assignment_still_sets_rankable_by():
     """An empty assignment is a real judgement -- 'nothing measures this' --
-    and must produce a complete testable_by, not a missing key."""
-    from litkb import contracts
+    and must produce a complete testable_by, not a missing key.
 
-    items = [{"id": "ev_001", "testable_by": {"properties": [], "vocabulary": [],
-                                              "tools": [], "rankable_by": [],
-                                              "requires_new_evaluator": "unassessed"}}]
-    errors = contracts.apply_labels(
+    The fixture seeds `tools` and `rankable_by` with stale, non-empty values
+    the code must overwrite. A fixture that starts at `[]` cannot tell "the
+    code wrote []" apart from "the code never touched the field" -- both
+    look identical at the assertion. Seeding stale values makes the
+    assertion load-bearing: it can only pass if `apply_labels` actually
+    replaces them, so don't simplify this back to an empty seed.
+    """
+    items = [{"id": "ev_001", "testable_by": {
+        "properties": [], "vocabulary": [],
+        "tools": ["stale-tool"], "rankable_by": ["stale-tool-that-must-be-cleared"],
+        "requires_new_evaluator": "unassessed"}}]
+    applied, errors = contracts.apply_labels(
         items, [{"id": "ev_001", "vocabulary": []}],
         catalog={"schema_version": 3, "tools": []}, vocab={"version": 1, "terms": []})
 
+    assert errors == []
+    assert items[0]["testable_by"]["tools"] == []
     assert items[0]["testable_by"]["rankable_by"] == []
     assert items[0]["testable_by"]["requires_new_evaluator"] is True
