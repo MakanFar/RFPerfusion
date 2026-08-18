@@ -250,4 +250,4 @@ Run C first.
 ## References
 
 - `PRD-instance-tlpa.md` — instance #1, SWIR/TlpA vertical
-- `Team Discussion Summary & Proposed Project Direction.md` — originating discussion
+- The originating team discussion — no longer in the repo; its conclusions live in §1 and §2 here

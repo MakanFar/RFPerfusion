@@ -9,7 +9,7 @@
 | **Duration** | ~48 h (full weekend) |
 | **Team** | 4–6 people, 3 workstreams |
 | **Status** | Draft for team review |
-| **Supersedes** | Framing in `Team Discussion Summary & Proposed Project Direction.md` §13 (see §1.2) |
+| **Supersedes** | The originating team discussion's §13 framing (see §1.2); that document is no longer in the repo |
 
 ---
 
@@ -469,4 +469,4 @@ After hour 4, workstreams are independent. **Anyone blocked on another workstrea
 - [Proto: A programming language for generative biology — Arc Institute](https://arcinstitute.org/news/proto) — Sequences/Generators/Constraints/Optimizers
 - [evo-design/proto-tools — GitHub](https://github.com/evo-design/proto-tools) — ~80 tools, MCP server mode
 - [BenchFlow](https://www.benchflow.ai/) — agent evaluation environments
-- `Team Discussion Summary & Proposed Project Direction.md` — originating team discussion
+- The originating team discussion — no longer in the repo; superseded by this document (see §1.2)
