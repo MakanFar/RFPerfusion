@@ -3,9 +3,9 @@
   "note": "Hand-curated calibration, kept OUT of proto_catalog.json because that file is regenerated from proto-tools on every `litkb proto-sync` and everything in it is derived. Keyed by (tool, metric): one model emits several metrics and may be characterised for some and not others. Overlaid at build time by proto.apply_calibration. Tool-level `status` is DERIVED from these, never curated.",
   "promotion_rule": "A metric becomes \"validated\" only on measured reliability against a held-out benchmark, per docs/PRD-framework.md section 6, and the record must carry `measured_error` and `benchmark` or it is refused. Absence means needs_calibration; silence is never a promotion.",
   "known_gaps": [
-    "status is per-tool, but reliability is per-metric: a tool can emit a well-characterised avg_plddt and an uncharacterised iptm, and this file cannot yet say so. The `measures` rows in proto_catalog.json carry the right granularity for it.",
-    "Section 6 also requires measured error per evaluator (so no design margin is claimed finer than it) and an applicability domain (so out-of-domain candidates are flagged and excluded from ranking). Neither has a field anywhere in the registry yet.",
-    "Only 48 of 140 catalogued tools emit metrics at all; the other 92 are generators, retrievers, aligners and annotators for which calibration is meaningless. The real calibration surface is those 48."
+    "Section 6 requires measured error per evaluator (so no design margin is claimed finer than it) and an applicability domain (so out-of-domain candidates are flagged and excluded from ranking). Both fields exist on curated records in this file, but nothing consumes them yet: no code reads `measured_error`, and `applicability_domain` is recorded but not enforced against any candidate set.",
+    "Only 48 of 140 catalogued tools emit metrics at all; the other 92 are generators, retrievers, aligners and annotators for which calibration is meaningless. The real calibration surface is those 48.",
+    "Tool-level `status` in proto_catalog.json is still the literal `build_catalog` writes for every tool (`needs_calibration`); it is not yet derived from the per-metric records curated here. That derivation is the next task."
   ],
   "tools": {},
   "example": {
