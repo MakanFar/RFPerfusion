@@ -1,0 +1,390 @@
+{
+  "slug": "rfswitch",
+  "papers": [
+    {
+      "doc_id": "PMC7557750",
+      "extraction_failed": false,
+      "mechanisms": [
+        {
+          "chain": "Atmospheric cold plasma (ACP) treatment affects the tryptophan microenvironment around ferritin channels, decreases alpha-helix/beta-sheet contents, and lowers aromatic surface hydrophobicity and thermal stability, thereby facilitating dissociation into subunits at a more benign pH (pH 4.0) for guest molecule encapsulation.",
+          "claim": "Atmospheric cold plasma (ACP) treatment modifies the structure and properties of ferritin to allow subunit dissociation and reassembly at a milder pH (pH 4.0) for encapsulation.",
+          "measurable_properties": [
+            "tryptophan microenvironment",
+            "alpha-helix/beta-sheet contents",
+            "aromatic surface hydrophobicity",
+            "thermal stability",
+            "dissociation pH"
+          ]
+        },
+        {
+          "chain": "Pulsed electric field (PEF) treatment modifies the structure and features of ferritin, enabling it to dissociate at a milder pH (pH 3.6) for encapsulation.",
+          "claim": "Pulsed electric field (PEF) treatment modifies ferritin structure to allow dissociation at a milder pH (pH 3.6).",
+          "measurable_properties": [
+            "dissociation pH"
+          ]
+        },
+        {
+          "chain": "Manothermosonication (MTS) treatment decreases ferritin stability, affecting iron oxidative deposition and release activity, allowing apoferritin to encapsulate EGCG via a benign pH conversion (pH 3.0/6.8).",
+          "claim": "MTS treatment decreases ferritin stability and allows encapsulation of guest molecules via mild pH conversion.",
+          "measurable_properties": [
+            "iron oxidative deposition activity",
+            "iron release activity",
+            "protein stability"
+          ]
+        },
+        {
+          "chain": "Temperature changes (heating up to 60 \u00b0C) can expand the fourfold channels of phytoferritin, as evidenced by an increased initial iron release rate and decreased alpha-helix content, allowing guest molecules to be loaded through channel expansion and recovery.",
+          "claim": "Thermal treatment at up to 60 \u00b0C expands the fourfold channels of phytoferritin to allow cargo loading.",
+          "measurable_properties": [
+            "initial iron release rate (v_o)",
+            "alpha-helix content",
+            "random coil content"
+          ]
+        },
+        {
+          "chain": "High hydrostatic pressure (HHP) treatment (200\u2013300 MPa) impairs hydrophobic interactions and changes tertiary and quaternary structure to encapsulate DOX into human H-chain ferritin without protein precipitation.",
+          "claim": "High hydrostatic pressure alters protein conformation by impairing hydrophobic interactions to allow encapsulation.",
+          "measurable_properties": [
+            "protein conformation",
+            "tertiary and quaternary structure",
+            "solubility"
+          ]
+        }
+      ],
+      "has_sequence": false,
+      "sequence_location": "none",
+      "named_proteins": [
+        {
+          "name": "horse spleen apoferritin (HSF)",
+          "accession": null
+        },
+        {
+          "name": "Escherichia coli ferritin A (EcFtnA)",
+          "accession": null
+        },
+        {
+          "name": "Archaeoglobus fulgidus ferritin (AfFtn)",
+          "accession": null
+        },
+        {
+          "name": "Thermotoga maritima ferritin (TmFtn)",
+          "accession": null
+        },
+        {
+          "name": "Escherichia BFR",
+          "accession": null
+        },
+        {
+          "name": "Pseudomonas aeruginosa BFR",
+          "accession": null
+        },
+        {
+          "name": "recombinant human H chain ferritin (HuHF)",
+          "accession": null
+        },
+        {
+          "name": "human mitochondrial ferritin (MtF)",
+          "accession": null
+        },
+        {
+          "name": "recombinant human H-chain ferritin H alpha and H beta",
+          "accession": null
+        },
+        {
+          "name": "soybean seed ferritin (SSF) / soybean ferritin 4 (SFER4)",
+          "accession": "3a68"
+        },
+        {
+          "name": "horse L-chain ferritin (HoLF)",
+          "accession": "2v2i"
+        },
+        {
+          "name": "bacterioferritin (BFR)",
+          "accession": "1nfv"
+        },
+        {
+          "name": "AfFtn (Archaeoglobus fulgidus ferritin)",
+          "accession": "1s3q"
+        },
+        {
+          "name": "rHuHF-\u0394DE",
+          "accession": null
+        },
+        {
+          "name": "f160",
+          "accession": null
+        },
+        {
+          "name": "phytoferritin",
+          "accession": null
+        },
+        {
+          "name": "human carbonic anhydrase II",
+          "accession": null
+        },
+        {
+          "name": "artificial (retro-)aldolase RA95.5-8F",
+          "accession": null
+        },
+        {
+          "name": "Kemp eliminase HG3.17",
+          "accession": null
+        },
+        {
+          "name": "green fluorescent protein (GFP) variant (+36GFP)",
+          "accession": null
+        },
+        {
+          "name": "cytochrome C",
+          "accession": null
+        },
+        {
+          "name": "lysozyme",
+          "accession": null
+        },
+        {
+          "name": "humanized Archaeoglobus ferritin (HumFt)",
+          "accession": null
+        },
+        {
+          "name": "non-native 16-mer lenticular protein (7A)",
+          "accession": null
+        }
+      ],
+      "class_id": "rfswitch",
+      "set_id": "s_a555db9d"
+    },
+    {
+      "doc_id": "PMC11236489",
+      "extraction_failed": false,
+      "mechanisms": [],
+      "has_sequence": false,
+      "sequence_location": "none",
+      "named_proteins": [],
+      "class_id": "rfswitch",
+      "set_id": "s_cdbee5bf"
+    },
+    {
+      "doc_id": "PMC3224952",
+      "extraction_failed": false,
+      "mechanisms": [
+        {
+          "chain": "ELP fusion tags and elastin-like polypeptides",
+          "claim": "Elastin-like polypeptides undergo a reversible inverse phase transition (co-acervation/self-aggregation) from soluble protein into insoluble hydrophobic aggregates (forming beta-spiral structures with type II beta-turns) when heated above their transition temperature (Tt), or through high local concentrations in the ER, leading to the formation of protein bodies.",
+          "measurable_properties": [
+            "transition temperature (Tt)",
+            "thermal behavior / aggregation threshold",
+            "protein concentration"
+          ]
+        }
+      ],
+      "has_sequence": true,
+      "sequence_location": "methods",
+      "named_proteins": [
+        {
+          "name": "green fluorescent protein",
+          "accession": null
+        },
+        {
+          "name": "yellow fluorescent protein",
+          "accession": null
+        },
+        {
+          "name": "cyan fluorescent protein",
+          "accession": null
+        },
+        {
+          "name": "elastin-like polypeptide",
+          "accession": null
+        },
+        {
+          "name": "tobacco small subunit RuBisCo",
+          "accession": null
+        },
+        {
+          "name": "tobacco secretory signal peptide",
+          "accession": null
+        },
+        {
+          "name": "tobacco immunoglobulin heavy chain binding protein",
+          "accession": null
+        },
+        {
+          "name": "mouse talin",
+          "accession": null
+        },
+        {
+          "name": "myosin XI-K",
+          "accession": null
+        },
+        {
+          "name": "peptide N-glycosidase F",
+          "accession": null
+        },
+        {
+          "name": "endoglycosidase H",
+          "accession": null
+        }
+      ],
+      "class_id": "rfswitch",
+      "set_id": "s_fff8cd92"
+    },
+    {
+      "doc_id": "PMC3425482",
+      "extraction_failed": false,
+      "has_sequence": true,
+      "mechanisms": [
+        {
+          "chain": "\u03b1-synuclein fused to the GFP11 sensor fragment co-expressed with the GFP1\u201310 detector fragment",
+          "claim": "Fluorescence complementation is directly proportional to \u03b1-synuclein solubility because the small GFP11 sensor fragment can only complement with the large GFP1\u201310 detector fragment if \u03b1-synuclein escapes aggregation and remains soluble, exposing the sensor fragment to the solvent.",
+          "measurable_properties": [
+            "GFP fluorescence intensity",
+            "soluble \u03b1-synuclein concentration",
+            "extent of aggregate co-localization"
+          ]
+        }
+      ],
+      "named_proteins": [
+        {
+          "accession": null,
+          "name": "\u03b1-synuclein"
+        },
+        {
+          "accession": null,
+          "name": "A53T \u03b1-synuclein"
+        },
+        {
+          "accession": null,
+          "name": "TP \u03b1-synuclein"
+        },
+        {
+          "accession": null,
+          "name": "\u03b1-synuclein truncation variant 1\u2013123"
+        },
+        {
+          "accession": null,
+          "name": "GFP"
+        },
+        {
+          "accession": null,
+          "name": "mCherry"
+        },
+        {
+          "accession": null,
+          "name": "GAPDH"
+        }
+      ],
+      "sequence_location": "supplementary",
+      "class_id": "rfswitch",
+      "set_id": "s_21aea16e"
+    },
+    {
+      "doc_id": "PMC5473585",
+      "extraction_failed": false,
+      "mechanisms": [
+        {
+          "chain": "Direct MinE membrane interaction restrains MinE's capacity to stimulate MinD's ATPase activity, which regulates the detachment of MinD from the membrane and the wavelength/length scale of Min protein patterns.",
+          "claim": "Impairing MinE membrane interaction (via truncation or single mutations in the membrane targeting sequence) increases MinD ATPase stimulation and reduces the lower limit of the concentration-dependent wavelength.",
+          "measurable_properties": [
+            "ATPase activity / ATPase rate",
+            "Wavelength of Min protein patterns",
+            "Wave velocity"
+          ]
+        }
+      ],
+      "has_sequence": true,
+      "sequence_location": "supplementary",
+      "named_proteins": [
+        {
+          "name": "MinE",
+          "accession": null
+        },
+        {
+          "name": "MinD",
+          "accession": null
+        },
+        {
+          "name": "MinC",
+          "accession": null
+        },
+        {
+          "name": "eGFP-MinD",
+          "accession": null
+        },
+        {
+          "name": "MinCDE",
+          "accession": null
+        },
+        {
+          "name": "FtsZ",
+          "accession": null
+        },
+        {
+          "name": "FtsA",
+          "accession": null
+        },
+        {
+          "name": "ZipA",
+          "accession": null
+        }
+      ],
+      "class_id": "rfswitch",
+      "set_id": "s_eb5d8e1a"
+    },
+    {
+      "doc_id": "PMC11150526",
+      "extraction_failed": false,
+      "has_sequence": true,
+      "sequence_location": "methods",
+      "mechanisms": [
+        {
+          "chain": "Electrostatic interactions / ionic steering between positively charged residues / surface regions and the negatively charged backbone of DNA",
+          "claim": "Interactions between Pa DpsL and DNA result in nicking, linearization, and degradation of plasmid DNA, mediated by electrostatic interactions/ionic steering.",
+          "measurable_properties": [
+            "Plasmid DNA cleavage / nicking activity",
+            "Electrophoretic mobility on agarose gels",
+            "Binding affinity or interaction strength under varying ionic strength conditions"
+          ]
+        }
+      ],
+      "named_proteins": [
+        {
+          "name": "Pa DpsL",
+          "accession": "8W1D"
+        },
+        {
+          "name": "Pa Dps",
+          "accession": null
+        },
+        {
+          "name": "bacterioferritin (BfrB)",
+          "accession": null
+        },
+        {
+          "name": "bacterial ferritin (FtnA)",
+          "accession": null
+        }
+      ],
+      "class_id": "rfswitch",
+      "set_id": "s_09440584"
+    },
+    {
+      "doc_id": "PMC9417684",
+      "extraction_failed": false,
+      "mechanisms": [],
+      "named_proteins": [],
+      "has_sequence": false,
+      "sequence_location": "none",
+      "class_id": "rfswitch",
+      "set_id": "s_89b910d1"
+    }
+  ],
+  "flagged": [
+    "PMC3224952",
+    "PMC3425482",
+    "PMC5473585",
+    "PMC11150526"
+  ],
+  "failed": [],
+  "extracted_by": "quick-reader"
+}

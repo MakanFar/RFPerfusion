@@ -1,0 +1,102 @@
+{
+  "slug": "rfswitch",
+  "sources": "pmc,biorxiv",
+  "n": 2,
+  "classes": [
+    {
+      "id": "rfswitch",
+      "sets": [
+        {
+          "phrase": "ferritin nanocage",
+          "set_id": "s_a555db9d",
+          "n_papers": 2
+        },
+        {
+          "phrase": "radiofrequency-induced heating",
+          "set_id": "s_cdbee5bf",
+          "n_papers": 2
+        },
+        {
+          "phrase": "elastin-like polypeptide",
+          "set_id": "s_fff8cd92",
+          "n_papers": 2
+        },
+        {
+          "phrase": "split GFP complementation",
+          "set_id": "s_21aea16e",
+          "n_papers": 2
+        },
+        {
+          "phrase": "membrane targeting sequence",
+          "set_id": "s_eb5d8e1a",
+          "n_papers": 2
+        },
+        {
+          "phrase": "ferroxidase center",
+          "set_id": "s_09440584",
+          "n_papers": 2
+        },
+        {
+          "phrase": "alternating magnetic field heating",
+          "set_id": "s_89b910d1",
+          "n_papers": 2
+        }
+      ],
+      "n_papers_total": 14,
+      "status": "covered"
+    }
+  ],
+  "rejections": [
+    {
+      "excluded": "Excluded direct RF-antenna dipole coupling, magnetic torque/mechanosensation, and EPR spin-state redox switching mechanisms since they lack harvestable published sequences and require field/quantum simulation the toolchain cannot provide; patterns avoid generic sequence/structure terms already covered by the pipeline's built-in regexes; merged 'aggregat' into 'failed to assemble' and dropped 'allosteric coupling' to fit the 12-20 pattern budget.",
+      "reason": "carried verbatim from the design-brief plan's `notes` field by `plan-adopt`, so the planner's reasoning is not lost"
+    },
+    {
+      "kind": "phrase_zero_yield",
+      "class_id": "rfswitch",
+      "phrase": "magnetogenetic activation",
+      "reason": "exact-phrase search returned no papers"
+    },
+    {
+      "kind": "phrase_zero_yield",
+      "class_id": "rfswitch",
+      "phrase": "ferritin-TRPV1 chimera",
+      "reason": "exact-phrase search returned no papers"
+    },
+    {
+      "kind": "phrase_zero_yield",
+      "class_id": "rfswitch",
+      "phrase": "thermosensitive gating domain",
+      "reason": "exact-phrase search returned no papers"
+    },
+    {
+      "kind": "phrase_zero_yield",
+      "class_id": "rfswitch",
+      "phrase": "marginally stable mutant",
+      "reason": "exact-phrase search returned no papers"
+    },
+    {
+      "kind": "phrase_zero_yield",
+      "class_id": "rfswitch",
+      "phrase": "coiled-coil melting temperature",
+      "reason": "exact-phrase search returned no papers"
+    },
+    {
+      "kind": "phrase_zero_yield",
+      "class_id": "rfswitch",
+      "phrase": "TRPV1 C-terminal domain",
+      "reason": "exact-phrase search returned no papers"
+    },
+    {
+      "kind": "phrase_zero_yield",
+      "class_id": "rfswitch",
+      "phrase": "iron oxide nanoparticle biomineralization",
+      "reason": "exact-phrase search returned no papers"
+    }
+  ],
+  "coverage": {
+    "classes_covered": 1,
+    "classes_total": 1,
+    "meets_framework_minimum": false
+  }
+}

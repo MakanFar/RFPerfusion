@@ -1,0 +1,20 @@
+{"labels": [
+  {"id": "ev_001", "vocabulary": ["surface_character"],
+   "claim_type": "mechanism", "support": "established", "evidence_kind": "experimental", "confidence": 0.7},
+  {"id": "ev_002", "vocabulary": [],
+   "claim_type": "mechanism", "support": "established", "evidence_kind": "experimental", "confidence": 0.7},
+  {"id": "ev_003", "vocabulary": [],
+   "claim_type": "mechanism", "support": "established", "evidence_kind": "experimental", "confidence": 0.65},
+  {"id": "ev_004", "vocabulary": [],
+   "claim_type": "mechanism", "support": "established", "evidence_kind": "experimental", "confidence": 0.7},
+  {"id": "ev_005", "vocabulary": [],
+   "claim_type": "mechanism", "support": "established", "evidence_kind": "experimental", "confidence": 0.7},
+  {"id": "ev_006", "vocabulary": [],
+   "claim_type": "mechanism", "support": "established", "evidence_kind": "experimental", "confidence": 0.85},
+  {"id": "ev_007", "vocabulary": [],
+   "claim_type": "mechanism", "support": "established", "evidence_kind": "experimental", "confidence": 0.8},
+  {"id": "ev_008", "vocabulary": [],
+   "claim_type": "mechanism", "support": "established", "evidence_kind": "experimental", "confidence": 0.75},
+  {"id": "ev_009", "vocabulary": [],
+   "claim_type": "mechanism", "support": "established", "evidence_kind": "experimental", "confidence": 0.7}
+]}

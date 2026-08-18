@@ -1,0 +1,338 @@
+{
+  "schema_version": 3,
+  "slug": "rfswitch",
+  "items": [
+    {
+      "id": "ev_001",
+      "question_id": "rfswitch",
+      "claim": "Atmospheric cold plasma (ACP) treatment modifies the structure and properties of ferritin to allow subunit dissociation and reassembly at a milder pH (pH 4.0) for encapsulation.",
+      "claim_type": "mechanism",
+      "quantitative": null,
+      "support": "established",
+      "citation": {
+        "doi": "10.3390/nano10091894",
+        "title": "Ferritin Nanocage: A Versatile Nanocarrier Utilized in the Field of Food, Nutrition, and Medicine",
+        "year": 2020,
+        "journal": "Nanomaterials",
+        "authors": "Chenxi Zhang, Xiaorong Zhang, Guanghua Zhao"
+      },
+      "evidence_kind": "experimental",
+      "extracted_by": "quick-reader",
+      "confidence": 0.7,
+      "testable_by": {
+        "properties": [
+          "tryptophan microenvironment",
+          "alpha-helix/beta-sheet contents",
+          "aromatic surface hydrophobicity",
+          "thermal stability",
+          "dissociation pH"
+        ],
+        "vocabulary": [
+          "surface_character"
+        ],
+        "tools": [
+          "bindcraft-design",
+          "freebindcraft-design",
+          "germinal-design",
+          "pyrosetta-interface-analyzer"
+        ],
+        "rankable_by": [],
+        "requires_new_evaluator": false
+      },
+      "provenance": {
+        "doc_id": "PMC7557750",
+        "section": null,
+        "category": "mechanism",
+        "span": "Atmospheric cold plasma (ACP) treatment affects the tryptophan microenvironment around ferritin channels, decreases alpha-helix/beta-sheet contents, and lowers aromatic surface hydrophobicity and thermal stability, thereby facilitating dissociation into subunits at a more benign pH (pH 4.0) for guest molecule encapsulation.",
+        "url": "https://paperclip.gxl.ai/citations/papers/PMC7557750"
+      }
+    },
+    {
+      "id": "ev_002",
+      "question_id": "rfswitch",
+      "claim": "Pulsed electric field (PEF) treatment modifies ferritin structure to allow dissociation at a milder pH (pH 3.6).",
+      "claim_type": "mechanism",
+      "quantitative": null,
+      "support": "established",
+      "citation": {
+        "doi": "10.3390/nano10091894",
+        "title": "Ferritin Nanocage: A Versatile Nanocarrier Utilized in the Field of Food, Nutrition, and Medicine",
+        "year": 2020,
+        "journal": "Nanomaterials",
+        "authors": "Chenxi Zhang, Xiaorong Zhang, Guanghua Zhao"
+      },
+      "evidence_kind": "experimental",
+      "extracted_by": "quick-reader",
+      "confidence": 0.7,
+      "testable_by": {
+        "properties": [
+          "dissociation pH"
+        ],
+        "vocabulary": [],
+        "tools": [],
+        "rankable_by": [],
+        "requires_new_evaluator": true
+      },
+      "provenance": {
+        "doc_id": "PMC7557750",
+        "section": null,
+        "category": "mechanism",
+        "span": "Pulsed electric field (PEF) treatment modifies the structure and features of ferritin, enabling it to dissociate at a milder pH (pH 3.6) for encapsulation.",
+        "url": "https://paperclip.gxl.ai/citations/papers/PMC7557750"
+      }
+    },
+    {
+      "id": "ev_003",
+      "question_id": "rfswitch",
+      "claim": "MTS treatment decreases ferritin stability and allows encapsulation of guest molecules via mild pH conversion.",
+      "claim_type": "mechanism",
+      "quantitative": null,
+      "support": "established",
+      "citation": {
+        "doi": "10.3390/nano10091894",
+        "title": "Ferritin Nanocage: A Versatile Nanocarrier Utilized in the Field of Food, Nutrition, and Medicine",
+        "year": 2020,
+        "journal": "Nanomaterials",
+        "authors": "Chenxi Zhang, Xiaorong Zhang, Guanghua Zhao"
+      },
+      "evidence_kind": "experimental",
+      "extracted_by": "quick-reader",
+      "confidence": 0.65,
+      "testable_by": {
+        "properties": [
+          "iron oxidative deposition activity",
+          "iron release activity",
+          "protein stability"
+        ],
+        "vocabulary": [],
+        "tools": [],
+        "rankable_by": [],
+        "requires_new_evaluator": true
+      },
+      "provenance": {
+        "doc_id": "PMC7557750",
+        "section": null,
+        "category": "mechanism",
+        "span": "Manothermosonication (MTS) treatment decreases ferritin stability, affecting iron oxidative deposition and release activity, allowing apoferritin to encapsulate EGCG via a benign pH conversion (pH 3.0/6.8).",
+        "url": "https://paperclip.gxl.ai/citations/papers/PMC7557750"
+      }
+    },
+    {
+      "id": "ev_004",
+      "question_id": "rfswitch",
+      "claim": "Thermal treatment at up to 60 \u00b0C expands the fourfold channels of phytoferritin to allow cargo loading.",
+      "claim_type": "mechanism",
+      "quantitative": null,
+      "support": "established",
+      "citation": {
+        "doi": "10.3390/nano10091894",
+        "title": "Ferritin Nanocage: A Versatile Nanocarrier Utilized in the Field of Food, Nutrition, and Medicine",
+        "year": 2020,
+        "journal": "Nanomaterials",
+        "authors": "Chenxi Zhang, Xiaorong Zhang, Guanghua Zhao"
+      },
+      "evidence_kind": "experimental",
+      "extracted_by": "quick-reader",
+      "confidence": 0.7,
+      "testable_by": {
+        "properties": [
+          "initial iron release rate (v_o)",
+          "alpha-helix content",
+          "random coil content"
+        ],
+        "vocabulary": [],
+        "tools": [],
+        "rankable_by": [],
+        "requires_new_evaluator": true
+      },
+      "provenance": {
+        "doc_id": "PMC7557750",
+        "section": null,
+        "category": "mechanism",
+        "span": "Temperature changes (heating up to 60 \u00b0C) can expand the fourfold channels of phytoferritin, as evidenced by an increased initial iron release rate and decreased alpha-helix content, allowing guest molecules to be loaded through channel expansion and recovery.",
+        "url": "https://paperclip.gxl.ai/citations/papers/PMC7557750"
+      }
+    },
+    {
+      "id": "ev_005",
+      "question_id": "rfswitch",
+      "claim": "High hydrostatic pressure alters protein conformation by impairing hydrophobic interactions to allow encapsulation.",
+      "claim_type": "mechanism",
+      "quantitative": null,
+      "support": "established",
+      "citation": {
+        "doi": "10.3390/nano10091894",
+        "title": "Ferritin Nanocage: A Versatile Nanocarrier Utilized in the Field of Food, Nutrition, and Medicine",
+        "year": 2020,
+        "journal": "Nanomaterials",
+        "authors": "Chenxi Zhang, Xiaorong Zhang, Guanghua Zhao"
+      },
+      "evidence_kind": "experimental",
+      "extracted_by": "quick-reader",
+      "confidence": 0.7,
+      "testable_by": {
+        "properties": [
+          "protein conformation",
+          "tertiary and quaternary structure",
+          "solubility"
+        ],
+        "vocabulary": [],
+        "tools": [],
+        "rankable_by": [],
+        "requires_new_evaluator": true
+      },
+      "provenance": {
+        "doc_id": "PMC7557750",
+        "section": null,
+        "category": "mechanism",
+        "span": "High hydrostatic pressure (HHP) treatment (200\u2013300 MPa) impairs hydrophobic interactions and changes tertiary and quaternary structure to encapsulate DOX into human H-chain ferritin without protein precipitation.",
+        "url": "https://paperclip.gxl.ai/citations/papers/PMC7557750"
+      }
+    },
+    {
+      "id": "ev_006",
+      "question_id": "rfswitch",
+      "claim": "Elastin-like polypeptides undergo a reversible inverse phase transition (co-acervation/self-aggregation) from soluble protein into insoluble hydrophobic aggregates (forming beta-spiral structures with type II beta-turns) when heated above their transition temperature (Tt), or through high local concentrations in the ER, leading to the formation of protein bodies.",
+      "claim_type": "mechanism",
+      "quantitative": null,
+      "support": "established",
+      "citation": {
+        "doi": "10.1186/1741-7007-7-48",
+        "title": "Induction of protein body formation in plant leaves by elastin-like polypeptide fusions",
+        "year": 2009,
+        "journal": "BMC Biology",
+        "authors": "Andrew J Conley, Jussi J Joensuu, Rima Menassa, Jim E Brandle"
+      },
+      "evidence_kind": "experimental",
+      "extracted_by": "quick-reader",
+      "confidence": 0.85,
+      "testable_by": {
+        "properties": [
+          "transition temperature (Tt)",
+          "thermal behavior / aggregation threshold",
+          "protein concentration"
+        ],
+        "vocabulary": [],
+        "tools": [],
+        "rankable_by": [],
+        "requires_new_evaluator": true
+      },
+      "provenance": {
+        "doc_id": "PMC3224952",
+        "section": null,
+        "category": "mechanism",
+        "span": "ELP fusion tags and elastin-like polypeptides",
+        "url": "https://paperclip.gxl.ai/citations/papers/PMC3224952"
+      }
+    },
+    {
+      "id": "ev_007",
+      "question_id": "rfswitch",
+      "claim": "Fluorescence complementation is directly proportional to \u03b1-synuclein solubility because the small GFP11 sensor fragment can only complement with the large GFP1\u201310 detector fragment if \u03b1-synuclein escapes aggregation and remains soluble, exposing the sensor fragment to the solvent.",
+      "claim_type": "mechanism",
+      "quantitative": null,
+      "support": "established",
+      "citation": {
+        "doi": "10.1371/journal.pone.0043505",
+        "title": "Quantitative Analysis of \u03b1-Synuclein Solubility in Living Cells Using Split GFP Complementation",
+        "year": 2012,
+        "journal": "PLoS ONE",
+        "authors": "Ahmed Kothawala, Kiri Kilpatrick, Jose Andres Novoa, Laura Segatori"
+      },
+      "evidence_kind": "experimental",
+      "extracted_by": "quick-reader",
+      "confidence": 0.8,
+      "testable_by": {
+        "properties": [
+          "GFP fluorescence intensity",
+          "soluble \u03b1-synuclein concentration",
+          "extent of aggregate co-localization"
+        ],
+        "vocabulary": [],
+        "tools": [],
+        "rankable_by": [],
+        "requires_new_evaluator": true
+      },
+      "provenance": {
+        "doc_id": "PMC3425482",
+        "section": null,
+        "category": "mechanism",
+        "span": "\u03b1-synuclein fused to the GFP11 sensor fragment co-expressed with the GFP1\u201310 detector fragment",
+        "url": "https://paperclip.gxl.ai/citations/papers/PMC3425482"
+      }
+    },
+    {
+      "id": "ev_008",
+      "question_id": "rfswitch",
+      "claim": "Impairing MinE membrane interaction (via truncation or single mutations in the membrane targeting sequence) increases MinD ATPase stimulation and reduces the lower limit of the concentration-dependent wavelength.",
+      "claim_type": "mechanism",
+      "quantitative": null,
+      "support": "established",
+      "citation": {
+        "doi": "10.1371/journal.pone.0179582",
+        "title": "Large-scale modulation of reconstituted Min protein patterns and gradients by defined mutations in MinE\u2019s membrane targeting sequence",
+        "year": 2017,
+        "journal": "PLoS ONE",
+        "authors": "Simon Kretschmer, Katja Zieske, Petra Schwille"
+      },
+      "evidence_kind": "experimental",
+      "extracted_by": "quick-reader",
+      "confidence": 0.75,
+      "testable_by": {
+        "properties": [
+          "ATPase activity / ATPase rate",
+          "Wavelength of Min protein patterns",
+          "Wave velocity"
+        ],
+        "vocabulary": [],
+        "tools": [],
+        "rankable_by": [],
+        "requires_new_evaluator": true
+      },
+      "provenance": {
+        "doc_id": "PMC5473585",
+        "section": null,
+        "category": "mechanism",
+        "span": "Direct MinE membrane interaction restrains MinE's capacity to stimulate MinD's ATPase activity, which regulates the detachment of MinD from the membrane and the wavelength/length scale of Min protein patterns.",
+        "url": "https://paperclip.gxl.ai/citations/papers/PMC5473585"
+      }
+    },
+    {
+      "id": "ev_009",
+      "question_id": "rfswitch",
+      "claim": "Interactions between Pa DpsL and DNA result in nicking, linearization, and degradation of plasmid DNA, mediated by electrostatic interactions/ionic steering.",
+      "claim_type": "mechanism",
+      "quantitative": null,
+      "support": "established",
+      "citation": {
+        "doi": "10.3389/fmolb.2024.1390745",
+        "title": "Pseudomonas aeruginosa  gene PA4880 encodes a Dps-like protein with a Dps fold, bacterioferritin-type ferroxidase centers, and endonuclease activity",
+        "year": 2024,
+        "journal": "Frontiers in Molecular Biosciences",
+        "authors": "Nimesha Rajapaksha, Huili Yao, Aisha Cook, Steve Seibold, Lijun Liu, Kevin P. Battaile, Leo Fontenot, Fabrizio Donnarumma, Scott Lovell, Mario Rivera"
+      },
+      "evidence_kind": "experimental",
+      "extracted_by": "quick-reader",
+      "confidence": 0.7,
+      "testable_by": {
+        "properties": [
+          "Plasmid DNA cleavage / nicking activity",
+          "Electrophoretic mobility on agarose gels",
+          "Binding affinity or interaction strength under varying ionic strength conditions"
+        ],
+        "vocabulary": [],
+        "tools": [],
+        "rankable_by": [],
+        "requires_new_evaluator": true
+      },
+      "provenance": {
+        "doc_id": "PMC11150526",
+        "section": null,
+        "category": "mechanism",
+        "span": "Electrostatic interactions / ionic steering between positively charged residues / surface regions and the negatively charged backbone of DNA",
+        "url": "https://paperclip.gxl.ai/citations/papers/PMC11150526"
+      }
+    }
+  ],
+  "unlabelled": 0
+}

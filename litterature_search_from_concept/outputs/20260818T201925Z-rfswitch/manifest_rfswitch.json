@@ -1,0 +1,72 @@
+{
+  "created_at": "2026-08-18T20:22:51.839793+00:00",
+  "slug": "rfswitch",
+  "objective": "Design a protein that changes conformation in response to radiofrequency fields",
+  "evidence_status": "discovery_only_unverified",
+  "sources": "pmc,biorxiv",
+  "n": 2,
+  "set_ids": [
+    {
+      "class_id": "rfswitch",
+      "phrase": "ferritin nanocage",
+      "set_id": "s_a555db9d",
+      "n_papers": 2
+    },
+    {
+      "class_id": "rfswitch",
+      "phrase": "radiofrequency-induced heating",
+      "set_id": "s_cdbee5bf",
+      "n_papers": 2
+    },
+    {
+      "class_id": "rfswitch",
+      "phrase": "elastin-like polypeptide",
+      "set_id": "s_fff8cd92",
+      "n_papers": 2
+    },
+    {
+      "class_id": "rfswitch",
+      "phrase": "split GFP complementation",
+      "set_id": "s_21aea16e",
+      "n_papers": 2
+    },
+    {
+      "class_id": "rfswitch",
+      "phrase": "membrane targeting sequence",
+      "set_id": "s_eb5d8e1a",
+      "n_papers": 2
+    },
+    {
+      "class_id": "rfswitch",
+      "phrase": "ferroxidase center",
+      "set_id": "s_09440584",
+      "n_papers": 2
+    },
+    {
+      "class_id": "rfswitch",
+      "phrase": "alternating magnetic field heating",
+      "set_id": "s_89b910d1",
+      "n_papers": 2
+    }
+  ],
+  "extracted_by": {
+    "screen": "quick-reader",
+    "dig": "quick-reader"
+  },
+  "artifact_paths": {
+    "plan": "outputs/20260818T201925Z-rfswitch/plan_rfswitch.json",
+    "search": "outputs/20260818T201925Z-rfswitch/search_rfswitch.json",
+    "screen": "outputs/20260818T201925Z-rfswitch/screen_rfswitch.json",
+    "dig": "outputs/20260818T201925Z-rfswitch/dig_rfswitch.json",
+    "artifacts": "outputs/20260818T201925Z-rfswitch/artifacts_rfswitch.json",
+    "evidence": "outputs/20260818T201925Z-rfswitch/evidence_rfswitch.json",
+    "report": "outputs/20260818T201925Z-rfswitch/knowledge_base_rfswitch.txt"
+  },
+  "counts": {
+    "papers_screened": 7,
+    "papers_flagged": 4,
+    "failed_extractions": 0,
+    "artifacts_runnable": 3,
+    "artifacts_rejected": 42
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "objective": "Design a protein that changes conformation in response to radiofrequency fields",
+  "slug": "rfswitch",
+  "search_mode": "exact",
+  "mechanism_classes": [
+    {
+      "id": "rfswitch",
+      "question": "Excluded direct RF-antenna dipole coupling, magnetic torque/mechanosensation, and EPR spin-state redox switching mechanisms since they lack harvestable published sequences and require field/quantum simulation the toolchain cannot provide; patterns avoid generic sequence/structure terms already covered by the pipeline's built-in regexes; merged 'aggregat' into 'failed to assemble' and dropped 'allosteric coupling' to fit the 12-20 pattern budget.",
+      "candidate_evaluators": [],
+      "search_phrases": [
+        "ferritin nanocage",
+        "radiofrequency-induced heating",
+        "magnetogenetic activation",
+        "ferritin-TRPV1 chimera",
+        "thermosensitive gating domain",
+        "marginally stable mutant",
+        "elastin-like polypeptide",
+        "coiled-coil melting temperature",
+        "TRPV1 C-terminal domain",
+        "split GFP complementation",
+        "membrane targeting sequence",
+        "iron oxide nanoparticle biomineralization",
+        "ferroxidase center",
+        "alternating magnetic field heating"
+      ],
+      "mechanism_patterns": [
+        "N\u00e9el relaxation",
+        "Brownian relaxation",
+        "hysteretic heating",
+        "specific absorption rate",
+        "local temperature rise",
+        "ferroxidase center",
+        "di-iron center",
+        "self-assembly into a nanocage",
+        "conformational change upon heating",
+        "folded to unfolded transition",
+        "cold denaturation",
+        "lower critical solution temperature",
+        "coiled-coil unfolding",
+        "loss of channel activity",
+        "constitutive activation",
+        "leaky channel",
+        "failed to assemble",
+        "loss of function mutant",
+        "temperature-dependent gating",
+        "latch domain release"
+      ]
+    }
+  ],
+  "exclusions": [
+    {
+      "excluded": "Excluded direct RF-antenna dipole coupling, magnetic torque/mechanosensation, and EPR spin-state redox switching mechanisms since they lack harvestable published sequences and require field/quantum simulation the toolchain cannot provide; patterns avoid generic sequence/structure terms already covered by the pipeline's built-in regexes; merged 'aggregat' into 'failed to assemble' and dropped 'allosteric coupling' to fit the 12-20 pattern budget.",
+      "reason": "carried verbatim from the design-brief plan's `notes` field by `plan-adopt`, so the planner's reasoning is not lost"
+    }
+  ],
+  "provenance": {
+    "adopted_from": "brief_plan",
+    "source_path": "../formulation_agent007/briefs/rf-switch/plan_rf-ferritin-thermoswitch.json"
+  }
+}

@@ -1,0 +1,1221 @@
+{
+  "slug": "rfswitch",
+  "artifacts": [
+    {
+      "id": "art_001",
+      "kind": "sequence",
+      "molecule": "protein",
+      "value": "VPGXG",
+      "length": 5,
+      "parent": {
+        "name": "repeating pentapeptide sequence",
+        "accession": null,
+        "region": null
+      },
+      "evidence_refs": [],
+      "provenance": {
+        "doc_id": "PMC3224952",
+        "set_id": "s_fff8cd92",
+        "where": "Background (L9, L20)",
+        "verbatim": true,
+        "confirmed_in_source": false,
+        "extractor": "quick-reader"
+      },
+      "proto_binding": {
+        "status": "unbound",
+        "tools": [],
+        "unverified": [],
+        "rejected_by": []
+      }
+    },
+    {
+      "id": "art_002",
+      "kind": "sequence",
+      "molecule": "protein",
+      "value": "(PPPVHL)8",
+      "length": 9,
+      "parent": {
+        "name": "\u03b3-zein repetitive sequence",
+        "accession": null,
+        "region": null
+      },
+      "evidence_refs": [],
+      "provenance": {
+        "doc_id": "PMC3224952",
+        "set_id": "s_fff8cd92",
+        "where": "Background (L17)",
+        "verbatim": true,
+        "confirmed_in_source": false,
+        "extractor": "quick-reader"
+      },
+      "proto_binding": {
+        "status": "unbound",
+        "tools": [],
+        "unverified": [],
+        "rejected_by": []
+      }
+    },
+    {
+      "id": "art_003",
+      "kind": "sequence",
+      "molecule": "protein",
+      "value": "28\u00d7VPGVG",
+      "length": 8,
+      "parent": {
+        "name": "ELP tag",
+        "accession": null,
+        "region": null
+      },
+      "evidence_refs": [],
+      "provenance": {
+        "doc_id": "PMC3224952",
+        "set_id": "s_fff8cd92",
+        "where": "Figure 1 legend (L25)",
+        "verbatim": true,
+        "confirmed_in_source": false,
+        "extractor": "quick-reader"
+      },
+      "proto_binding": {
+        "status": "unbound",
+        "tools": [],
+        "unverified": [],
+        "rejected_by": []
+      }
+    },
+    {
+      "id": "art_004",
+      "kind": "sequence",
+      "molecule": "protein",
+      "value": "GELVSNGTVT",
+      "length": 10,
+      "parent": {
+        "name": "N-glycosylation motif",
+        "accession": null,
+        "region": null
+      },
+      "evidence_refs": [],
+      "provenance": {
+        "doc_id": "PMC3224952",
+        "set_id": "s_fff8cd92",
+        "where": "Figure 1 legend (L25), Table 1 footnote/text (L33, L38)",
+        "verbatim": true,
+        "confirmed_in_source": false,
+        "extractor": "quick-reader"
+      },
+      "proto_binding": {
+        "status": "unbound",
+        "tools": [],
+        "unverified": [],
+        "rejected_by": []
+      }
+    },
+    {
+      "id": "art_005",
+      "kind": "sequence",
+      "molecule": "protein",
+      "value": "PGVGVPG",
+      "length": 7,
+      "parent": {
+        "name": "putative BiP binding site",
+        "accession": null,
+        "region": null
+      },
+      "evidence_refs": [],
+      "provenance": {
+        "doc_id": "PMC3224952",
+        "set_id": "s_fff8cd92",
+        "where": "Discussion (L48)",
+        "verbatim": true,
+        "confirmed_in_source": false,
+        "extractor": "quick-reader"
+      },
+      "proto_binding": {
+        "status": "unbound",
+        "tools": [],
+        "unverified": [],
+        "rejected_by": []
+      }
+    },
+    {
+      "id": "art_006",
+      "kind": "sequence",
+      "molecule": "dna",
+      "value": "GCGCGCCTCGAGATGGATGTATTCATGAAAGGACTTTCAAAGGCC",
+      "length": 45,
+      "parent": {
+        "name": "asyn_F1",
+        "accession": null,
+        "region": null
+      },
+      "evidence_refs": [],
+      "provenance": {
+        "doc_id": "PMC3425482",
+        "set_id": "s_21aea16e",
+        "where": "Table S1",
+        "verbatim": true,
+        "confirmed_in_source": false,
+        "extractor": "quick-reader"
+      },
+      "proto_binding": {
+        "status": "unbound",
+        "tools": [],
+        "unverified": [],
+        "rejected_by": []
+      }
+    },
+    {
+      "id": "art_007",
+      "kind": "sequence",
+      "molecule": "dna",
+      "value": "CTATATACCGGTTTGGCTTCAGGTTCGTAGTCTTGATACCC",
+      "length": 41,
+      "parent": {
+        "name": "GFP11_R1",
+        "accession": null,
+        "region": null
+      },
+      "evidence_refs": [],
+      "provenance": {
+        "doc_id": "PMC3425482",
+        "set_id": "s_21aea16e",
+        "where": "Table S1",
+        "verbatim": true,
+        "confirmed_in_source": false,
+        "extractor": "quick-reader"
+      },
+      "proto_binding": {
+        "status": "unbound",
+        "tools": [],
+        "unverified": [],
+        "rejected_by": []
+      }
+    },
+    {
+      "id": "art_008",
+      "kind": "sequence",
+      "molecule": "dna",
+      "value": "GCTATGGTACCATGGTTTCGAAAGGCGAGGAGCTGTTC",
+      "length": 38,
+      "parent": {
+        "name": "GFP1-10_F1",
+        "accession": null,
+        "region": null
+      },
+      "evidence_refs": [],
+      "provenance": {
+        "doc_id": "PMC3425482",
+        "set_id": "s_21aea16e",
+        "where": "Table S1",
+        "verbatim": true,
+        "confirmed_in_source": false,
+        "extractor": "quick-reader"
+      },
+      "proto_binding": {
+        "status": "unbound",
+        "tools": [],
+        "unverified": [],
+        "rejected_by": []
+      }
+    },
+    {
+      "id": "art_009",
+      "kind": "sequence",
+      "molecule": "dna",
+      "value": "CGCGCCTCGAGTTATTTCTCGTTTGGGTCTTTGCTCAG",
+      "length": 38,
+      "parent": {
+        "name": "GFP1-10_R1",
+        "accession": null,
+        "region": null
+      },
+      "evidence_refs": [],
+      "provenance": {
+        "doc_id": "PMC3425482",
+        "set_id": "s_21aea16e",
+        "where": "Table S1",
+        "verbatim": true,
+        "confirmed_in_source": false,
+        "extractor": "quick-reader"
+      },
+      "proto_binding": {
+        "status": "unbound",
+        "tools": [],
+        "unverified": [],
+        "rejected_by": []
+      }
+    },
+    {
+      "id": "art_010",
+      "kind": "sequence",
+      "molecule": "dna",
+      "value": "GTGGTGCATGGTGTGACAACAGTGGCTGAGAAGACCAAAGAG",
+      "length": 42,
+      "parent": {
+        "name": "A53T_F1",
+        "accession": null,
+        "region": null
+      },
+      "evidence_refs": [],
+      "provenance": {
+        "doc_id": "PMC3425482",
+        "set_id": "s_21aea16e",
+        "where": "Table S1",
+        "verbatim": true,
+        "confirmed_in_source": false,
+        "extractor": "quick-reader"
+      },
+      "proto_binding": {
+        "status": "unbound",
+        "tools": [],
+        "unverified": [],
+        "rejected_by": []
+      }
+    },
+    {
+      "id": "art_011",
+      "kind": "sequence",
+      "molecule": "dna",
+      "value": "CTCTTTGGTCTTCTCAGCCACTGTTGTCACACCATGCACCAC",
+      "length": 42,
+      "parent": {
+        "name": "A53T_R1",
+        "accession": null,
+        "region": null
+      },
+      "evidence_refs": [],
+      "provenance": {
+        "doc_id": "PMC3425482",
+        "set_id": "s_21aea16e",
+        "where": "Table S1",
+        "verbatim": true,
+        "confirmed_in_source": false,
+        "extractor": "quick-reader"
+      },
+      "proto_binding": {
+        "status": "unbound",
+        "tools": [],
+        "unverified": [],
+        "rejected_by": []
+      }
+    },
+    {
+      "id": "art_012",
+      "kind": "sequence",
+      "molecule": "dna",
+      "value": "GCGCGCCTCGAGATGGATGTATTCATGAAAGGACTTTCAAAGGCC",
+      "length": 45,
+      "parent": {
+        "name": "GFP11_F1",
+        "accession": null,
+        "region": null
+      },
+      "evidence_refs": [],
+      "provenance": {
+        "doc_id": "PMC3425482",
+        "set_id": "s_21aea16e",
+        "where": "Table S1",
+        "verbatim": true,
+        "confirmed_in_source": false,
+        "extractor": "quick-reader"
+      },
+      "proto_binding": {
+        "status": "unbound",
+        "tools": [],
+        "unverified": [],
+        "rejected_by": []
+      }
+    },
+    {
+      "id": "art_013",
+      "kind": "sequence",
+      "molecule": "dna",
+      "value": "CTATATACCGGTTTCTCATTGTCAGGATCCACAGGCATATCTTCCAGAATTC",
+      "length": 52,
+      "parent": {
+        "name": "Syn123_R1",
+        "accession": null,
+        "region": null
+      },
+      "evidence_refs": [],
+      "provenance": {
+        "doc_id": "PMC3425482",
+        "set_id": "s_21aea16e",
+        "where": "Table S1",
+        "verbatim": true,
+        "confirmed_in_source": false,
+        "extractor": "quick-reader"
+      },
+      "proto_binding": {
+        "status": "unbound",
+        "tools": [],
+        "unverified": [],
+        "rejected_by": []
+      }
+    },
+    {
+      "id": "art_014",
+      "kind": "sequence",
+      "molecule": "dna",
+      "value": "CAGGGTGTGGCAGAAGCACCAGGAAAGACAAAAGAGGGTGTTCTC",
+      "length": 45,
+      "parent": {
+        "name": "A30P_F",
+        "accession": null,
+        "region": null
+      },
+      "evidence_refs": [],
+      "provenance": {
+        "doc_id": "PMC3425482",
+        "set_id": "s_21aea16e",
+        "where": "Table S1",
+        "verbatim": true,
+        "confirmed_in_source": false,
+        "extractor": "quick-reader"
+      },
+      "proto_binding": {
+        "status": "unbound",
+        "tools": [],
+        "unverified": [],
+        "rejected_by": []
+      }
+    },
+    {
+      "id": "art_015",
+      "kind": "sequence",
+      "molecule": "dna",
+      "value": "GAGAACACCCTCTTTTGTCTTTCCTGGTGCTTCTGCCACACCCTG",
+      "length": 45,
+      "parent": {
+        "name": "A30P_R",
+        "accession": null,
+        "region": null
+      },
+      "evidence_refs": [],
+      "provenance": {
+        "doc_id": "PMC3425482",
+        "set_id": "s_21aea16e",
+        "where": "Table S1",
+        "verbatim": true,
+        "confirmed_in_source": false,
+        "extractor": "quick-reader"
+      },
+      "proto_binding": {
+        "status": "unbound",
+        "tools": [],
+        "unverified": [],
+        "rejected_by": []
+      }
+    },
+    {
+      "id": "art_016",
+      "kind": "sequence",
+      "molecule": "dna",
+      "value": "CATGGTGTGGCAACAGTGCCTGAGAAGACCAAAGAG",
+      "length": 36,
+      "parent": {
+        "name": "A56P_F",
+        "accession": null,
+        "region": null
+      },
+      "evidence_refs": [],
+      "provenance": {
+        "doc_id": "PMC3425482",
+        "set_id": "s_21aea16e",
+        "where": "Table S1",
+        "verbatim": true,
+        "confirmed_in_source": false,
+        "extractor": "quick-reader"
+      },
+      "proto_binding": {
+        "status": "unbound",
+        "tools": [],
+        "unverified": [],
+        "rejected_by": []
+      }
+    },
+    {
+      "id": "art_017",
+      "kind": "sequence",
+      "molecule": "dna",
+      "value": "CTCTTTGGTCTTCTCAGGCACTGTTGCCACACCATG",
+      "length": 36,
+      "parent": {
+        "name": "A56P_R",
+        "accession": null,
+        "region": null
+      },
+      "evidence_refs": [],
+      "provenance": {
+        "doc_id": "PMC3425482",
+        "set_id": "s_21aea16e",
+        "where": "Table S1",
+        "verbatim": true,
+        "confirmed_in_source": false,
+        "extractor": "quick-reader"
+      },
+      "proto_binding": {
+        "status": "unbound",
+        "tools": [],
+        "unverified": [],
+        "rejected_by": []
+      }
+    },
+    {
+      "id": "art_018",
+      "kind": "sequence",
+      "molecule": "dna",
+      "value": "GTGGTGACGGGTGTGACACCAGTAGCCCAGAAGAC",
+      "length": 35,
+      "parent": {
+        "name": "A76P_F",
+        "accession": null,
+        "region": null
+      },
+      "evidence_refs": [],
+      "provenance": {
+        "doc_id": "PMC3425482",
+        "set_id": "s_21aea16e",
+        "where": "Table S1",
+        "verbatim": true,
+        "confirmed_in_source": false,
+        "extractor": "quick-reader"
+      },
+      "proto_binding": {
+        "status": "unbound",
+        "tools": [],
+        "unverified": [],
+        "rejected_by": []
+      }
+    },
+    {
+      "id": "art_019",
+      "kind": "sequence",
+      "molecule": "dna",
+      "value": "GTCTTCTGGGCTACTGGTGTCACACCCGTCACCAC",
+      "length": 35,
+      "parent": {
+        "name": "A76P_R",
+        "accession": null,
+        "region": null
+      },
+      "evidence_refs": [],
+      "provenance": {
+        "doc_id": "PMC3425482",
+        "set_id": "s_21aea16e",
+        "where": "Table S1",
+        "verbatim": true,
+        "confirmed_in_source": false,
+        "extractor": "quick-reader"
+      },
+      "proto_binding": {
+        "status": "unbound",
+        "tools": [],
+        "unverified": [],
+        "rejected_by": []
+      }
+    },
+    {
+      "id": "art_020",
+      "kind": "mutation",
+      "molecule": "protein",
+      "value": "A53T",
+      "length": 4,
+      "parent": {
+        "name": "\u03b1syn",
+        "accession": null,
+        "region": null
+      },
+      "evidence_refs": [],
+      "provenance": {
+        "doc_id": "PMC3425482",
+        "set_id": "s_21aea16e",
+        "where": null,
+        "verbatim": true,
+        "confirmed_in_source": false,
+        "extractor": "quick-reader"
+      },
+      "proto_binding": {
+        "status": "unbound",
+        "tools": [],
+        "unverified": [],
+        "rejected_by": []
+      }
+    },
+    {
+      "id": "art_021",
+      "kind": "mutation",
+      "molecule": "protein",
+      "value": "A30P",
+      "length": 4,
+      "parent": {
+        "name": "\u03b1syn",
+        "accession": null,
+        "region": null
+      },
+      "evidence_refs": [],
+      "provenance": {
+        "doc_id": "PMC3425482",
+        "set_id": "s_21aea16e",
+        "where": null,
+        "verbatim": true,
+        "confirmed_in_source": false,
+        "extractor": "quick-reader"
+      },
+      "proto_binding": {
+        "status": "unbound",
+        "tools": [],
+        "unverified": [],
+        "rejected_by": []
+      }
+    },
+    {
+      "id": "art_022",
+      "kind": "mutation",
+      "molecule": "protein",
+      "value": "E46K",
+      "length": 4,
+      "parent": {
+        "name": "\u03b1syn",
+        "accession": null,
+        "region": null
+      },
+      "evidence_refs": [],
+      "provenance": {
+        "doc_id": "PMC3425482",
+        "set_id": "s_21aea16e",
+        "where": null,
+        "verbatim": true,
+        "confirmed_in_source": false,
+        "extractor": "quick-reader"
+      },
+      "proto_binding": {
+        "status": "unbound",
+        "tools": [],
+        "unverified": [],
+        "rejected_by": []
+      }
+    },
+    {
+      "id": "art_023",
+      "kind": "mutation",
+      "molecule": "protein",
+      "value": "A53T",
+      "length": 4,
+      "parent": {
+        "name": "\u03b1syn",
+        "accession": null,
+        "region": null
+      },
+      "evidence_refs": [],
+      "provenance": {
+        "doc_id": "PMC3425482",
+        "set_id": "s_21aea16e",
+        "where": null,
+        "verbatim": true,
+        "confirmed_in_source": false,
+        "extractor": "quick-reader"
+      },
+      "proto_binding": {
+        "status": "unbound",
+        "tools": [],
+        "unverified": [],
+        "rejected_by": []
+      }
+    },
+    {
+      "id": "art_024",
+      "kind": "mutation",
+      "molecule": "protein",
+      "value": "A30P, A56P and A76P",
+      "length": 19,
+      "parent": {
+        "name": "\u03b1syn",
+        "accession": null,
+        "region": null
+      },
+      "evidence_refs": [],
+      "provenance": {
+        "doc_id": "PMC3425482",
+        "set_id": "s_21aea16e",
+        "where": null,
+        "verbatim": true,
+        "confirmed_in_source": false,
+        "extractor": "quick-reader"
+      },
+      "proto_binding": {
+        "status": "unbound",
+        "tools": [],
+        "unverified": [],
+        "rejected_by": []
+      }
+    },
+    {
+      "id": "art_025",
+      "kind": "mutation",
+      "molecule": "protein",
+      "value": "A53T",
+      "length": 4,
+      "parent": {
+        "name": "\u03b1syn",
+        "accession": null,
+        "region": null
+      },
+      "evidence_refs": [],
+      "provenance": {
+        "doc_id": "PMC3425482",
+        "set_id": "s_21aea16e",
+        "where": null,
+        "verbatim": true,
+        "confirmed_in_source": false,
+        "extractor": "quick-reader"
+      },
+      "proto_binding": {
+        "status": "unbound",
+        "tools": [],
+        "unverified": [],
+        "rejected_by": []
+      }
+    },
+    {
+      "id": "art_026",
+      "kind": "sequence",
+      "molecule": "dna",
+      "value": "GGATCCGAATTCGCAGAACTCGATTTCTTTCT",
+      "length": 32,
+      "parent": {
+        "name": "MinE_L3E_fwd",
+        "accession": null,
+        "region": null
+      },
+      "evidence_refs": [],
+      "provenance": {
+        "doc_id": "PMC5473585",
+        "set_id": "s_eb5d8e1a",
+        "where": "S1 Table",
+        "verbatim": true,
+        "confirmed_in_source": false,
+        "extractor": "quick-reader"
+      },
+      "proto_binding": {
+        "status": "unbound",
+        "tools": [],
+        "unverified": [],
+        "rejected_by": []
+      }
+    },
+    {
+      "id": "art_027",
+      "kind": "sequence",
+      "molecule": "dna",
+      "value": "AGAAAGAAATCGAGTTCTGCGAATTCGGATCC",
+      "length": 32,
+      "parent": {
+        "name": "MinE_L3E_rev",
+        "accession": null,
+        "region": null
+      },
+      "evidence_refs": [],
+      "provenance": {
+        "doc_id": "PMC5473585",
+        "set_id": "s_eb5d8e1a",
+        "where": "S1 Table",
+        "verbatim": true,
+        "confirmed_in_source": false,
+        "extractor": "quick-reader"
+      },
+      "proto_binding": {
+        "status": "unbound",
+        "tools": [],
+        "unverified": [],
+        "rejected_by": []
+      }
+    },
+    {
+      "id": "art_028",
+      "kind": "sequence",
+      "molecule": "dna",
+      "value": "TCCGAATTCGCATTAGAAGATTTCTTTCTCTCG",
+      "length": 33,
+      "parent": {
+        "name": "MinE_L4E_fwd",
+        "accession": null,
+        "region": null
+      },
+      "evidence_refs": [],
+      "provenance": {
+        "doc_id": "PMC5473585",
+        "set_id": "s_eb5d8e1a",
+        "where": "S1 Table",
+        "verbatim": true,
+        "confirmed_in_source": false,
+        "extractor": "quick-reader"
+      },
+      "proto_binding": {
+        "status": "unbound",
+        "tools": [],
+        "unverified": [],
+        "rejected_by": []
+      }
+    },
+    {
+      "id": "art_029",
+      "kind": "sequence",
+      "molecule": "dna",
+      "value": "CGAGAGAAAGAAATCTTCTAATGCGAATTCGGA",
+      "length": 33,
+      "parent": {
+        "name": "MinE_L4E_rev",
+        "accession": null,
+        "region": null
+      },
+      "evidence_refs": [],
+      "provenance": {
+        "doc_id": "PMC5473585",
+        "set_id": "s_eb5d8e1a",
+        "where": "S1 Table",
+        "verbatim": true,
+        "confirmed_in_source": false,
+        "extractor": "quick-reader"
+      },
+      "proto_binding": {
+        "status": "unbound",
+        "tools": [],
+        "unverified": [],
+        "rejected_by": []
+      }
+    },
+    {
+      "id": "art_030",
+      "kind": "sequence",
+      "molecule": "dna",
+      "value": "TTCGCATTACTCGATGAATTTCTCTCGCGGAAG",
+      "length": 33,
+      "parent": {
+        "name": "MinE_F6E_fwd",
+        "accession": null,
+        "region": null
+      },
+      "evidence_refs": [],
+      "provenance": {
+        "doc_id": "PMC5473585",
+        "set_id": "s_eb5d8e1a",
+        "where": "S1 Table",
+        "verbatim": true,
+        "confirmed_in_source": false,
+        "extractor": "quick-reader"
+      },
+      "proto_binding": {
+        "status": "unbound",
+        "tools": [],
+        "unverified": [],
+        "rejected_by": []
+      }
+    },
+    {
+      "id": "art_031",
+      "kind": "sequence",
+      "molecule": "dna",
+      "value": "CTTCCGCGAGAGAAATTCATCGAGTAATGCGAA",
+      "length": 33,
+      "parent": {
+        "name": "MinE_F6E_rev",
+        "accession": null,
+        "region": null
+      },
+      "evidence_refs": [],
+      "provenance": {
+        "doc_id": "PMC5473585",
+        "set_id": "s_eb5d8e1a",
+        "where": "S1 Table",
+        "verbatim": true,
+        "confirmed_in_source": false,
+        "extractor": "quick-reader"
+      },
+      "proto_binding": {
+        "status": "unbound",
+        "tools": [],
+        "unverified": [],
+        "rejected_by": []
+      }
+    },
+    {
+      "id": "art_032",
+      "kind": "sequence",
+      "molecule": "dna",
+      "value": "GCATTACTCGATTTCGAACTCTCGCGGAAGAAA",
+      "length": 33,
+      "parent": {
+        "name": "MinE_F7E_fwd",
+        "accession": null,
+        "region": null
+      },
+      "evidence_refs": [],
+      "provenance": {
+        "doc_id": "PMC5473585",
+        "set_id": "s_eb5d8e1a",
+        "where": "S1 Table",
+        "verbatim": true,
+        "confirmed_in_source": false,
+        "extractor": "quick-reader"
+      },
+      "proto_binding": {
+        "status": "unbound",
+        "tools": [],
+        "unverified": [],
+        "rejected_by": []
+      }
+    },
+    {
+      "id": "art_033",
+      "kind": "sequence",
+      "molecule": "dna",
+      "value": "TTTCTTCCGCGAGAGTTCGAAATCGAGTAATGC",
+      "length": 33,
+      "parent": {
+        "name": "MinE_F7E_rev",
+        "accession": null,
+        "region": null
+      },
+      "evidence_refs": [],
+      "provenance": {
+        "doc_id": "PMC5473585",
+        "set_id": "s_eb5d8e1a",
+        "where": "S1 Table",
+        "verbatim": true,
+        "confirmed_in_source": false,
+        "extractor": "quick-reader"
+      },
+      "proto_binding": {
+        "status": "unbound",
+        "tools": [],
+        "unverified": [],
+        "rejected_by": []
+      }
+    },
+    {
+      "id": "art_034",
+      "kind": "sequence",
+      "molecule": "dna",
+      "value": "CGCGGATCCGAATTCAACACAGCCAACATTGCAAAAGAA",
+      "length": 39,
+      "parent": {
+        "name": "MinE_\u0394(2-12)_fwd_1",
+        "accession": null,
+        "region": null
+      },
+      "evidence_refs": [],
+      "provenance": {
+        "doc_id": "PMC5473585",
+        "set_id": "s_eb5d8e1a",
+        "where": "S1 Table",
+        "verbatim": true,
+        "confirmed_in_source": false,
+        "extractor": "quick-reader"
+      },
+      "proto_binding": {
+        "status": "unbound",
+        "tools": [],
+        "unverified": [],
+        "rejected_by": []
+      }
+    },
+    {
+      "id": "art_035",
+      "kind": "sequence",
+      "molecule": "dna",
+      "value": "AATGTTGGCTGTGTTGAATTCGGATCCGCGACCCATTTG",
+      "length": 39,
+      "parent": {
+        "name": "MinE_\u0394(2-12)_rev_1",
+        "accession": null,
+        "region": null
+      },
+      "evidence_refs": [],
+      "provenance": {
+        "doc_id": "PMC5473585",
+        "set_id": "s_eb5d8e1a",
+        "where": "S1 Table",
+        "verbatim": true,
+        "confirmed_in_source": false,
+        "extractor": "quick-reader"
+      },
+      "proto_binding": {
+        "status": "unbound",
+        "tools": [],
+        "unverified": [],
+        "rejected_by": []
+      }
+    },
+    {
+      "id": "art_036",
+      "kind": "sequence",
+      "molecule": "dna",
+      "value": "CCGCCTTTGAGTGAGCTGATACCGCTCGCCGCAGCCGAA",
+      "length": 39,
+      "parent": {
+        "name": "MinE_\u0394(2-12)_fwd_2",
+        "accession": null,
+        "region": null
+      },
+      "evidence_refs": [],
+      "provenance": {
+        "doc_id": "PMC5473585",
+        "set_id": "s_eb5d8e1a",
+        "where": "S1 Table",
+        "verbatim": true,
+        "confirmed_in_source": false,
+        "extractor": "quick-reader"
+      },
+      "proto_binding": {
+        "status": "unbound",
+        "tools": [],
+        "unverified": [],
+        "rejected_by": []
+      }
+    },
+    {
+      "id": "art_037",
+      "kind": "sequence",
+      "molecule": "dna",
+      "value": "CTCACTCAAAGGCGGTAATACGGTTATCCACAGAATCAG",
+      "length": 39,
+      "parent": {
+        "name": "MinE_\u0394(2-12)_rev_2",
+        "accession": null,
+        "region": null
+      },
+      "evidence_refs": [],
+      "provenance": {
+        "doc_id": "PMC5473585",
+        "set_id": "s_eb5d8e1a",
+        "where": "S1 Table",
+        "verbatim": true,
+        "confirmed_in_source": false,
+        "extractor": "quick-reader"
+      },
+      "proto_binding": {
+        "status": "unbound",
+        "tools": [],
+        "unverified": [],
+        "rejected_by": []
+      }
+    },
+    {
+      "id": "art_038",
+      "kind": "sequence",
+      "molecule": "dna",
+      "value": "AAGAACGGCTGCAGAACATTGTTGCTGAACGC",
+      "length": 32,
+      "parent": {
+        "name": "MinE_I24N_fwd",
+        "accession": null,
+        "region": null
+      },
+      "evidence_refs": [],
+      "provenance": {
+        "doc_id": "PMC5473585",
+        "set_id": "s_eb5d8e1a",
+        "where": "S1 Table",
+        "verbatim": true,
+        "confirmed_in_source": false,
+        "extractor": "quick-reader"
+      },
+      "proto_binding": {
+        "status": "unbound",
+        "tools": [],
+        "unverified": [],
+        "rejected_by": []
+      }
+    },
+    {
+      "id": "art_039",
+      "kind": "sequence",
+      "molecule": "dna",
+      "value": "GCGTTCAGCAACAATGTTCTGCAGCCGTTCTT",
+      "length": 32,
+      "parent": {
+        "name": "MinE_I24N_rev",
+        "accession": null,
+        "region": null
+      },
+      "evidence_refs": [],
+      "provenance": {
+        "doc_id": "PMC5473585",
+        "set_id": "s_eb5d8e1a",
+        "where": "S1 Table",
+        "verbatim": true,
+        "confirmed_in_source": false,
+        "extractor": "quick-reader"
+      },
+      "proto_binding": {
+        "status": "unbound",
+        "tools": [],
+        "unverified": [],
+        "rejected_by": []
+      }
+    },
+    {
+      "id": "art_040",
+      "kind": "mutation",
+      "molecule": "protein",
+      "value": "R10G/K11E/K12E",
+      "length": 14,
+      "parent": {
+        "name": "MinE",
+        "accession": null,
+        "region": null
+      },
+      "evidence_refs": [],
+      "provenance": {
+        "doc_id": "PMC5473585",
+        "set_id": "s_eb5d8e1a",
+        "where": null,
+        "verbatim": true,
+        "confirmed_in_source": false,
+        "extractor": "quick-reader"
+      },
+      "proto_binding": {
+        "status": "unbound",
+        "tools": [],
+        "unverified": [],
+        "rejected_by": []
+      }
+    },
+    {
+      "id": "art_041",
+      "kind": "mutation",
+      "molecule": "protein",
+      "value": "L3E",
+      "length": 3,
+      "parent": {
+        "name": "MinE",
+        "accession": null,
+        "region": null
+      },
+      "evidence_refs": [],
+      "provenance": {
+        "doc_id": "PMC5473585",
+        "set_id": "s_eb5d8e1a",
+        "where": null,
+        "verbatim": true,
+        "confirmed_in_source": false,
+        "extractor": "quick-reader"
+      },
+      "proto_binding": {
+        "status": "unbound",
+        "tools": [],
+        "unverified": [],
+        "rejected_by": []
+      }
+    },
+    {
+      "id": "art_042",
+      "kind": "mutation",
+      "molecule": "protein",
+      "value": "L4E",
+      "length": 3,
+      "parent": {
+        "name": "MinE",
+        "accession": null,
+        "region": null
+      },
+      "evidence_refs": [],
+      "provenance": {
+        "doc_id": "PMC5473585",
+        "set_id": "s_eb5d8e1a",
+        "where": null,
+        "verbatim": true,
+        "confirmed_in_source": false,
+        "extractor": "quick-reader"
+      },
+      "proto_binding": {
+        "status": "unbound",
+        "tools": [],
+        "unverified": [],
+        "rejected_by": []
+      }
+    },
+    {
+      "id": "art_043",
+      "kind": "mutation",
+      "molecule": "protein",
+      "value": "F6E",
+      "length": 3,
+      "parent": {
+        "name": "MinE",
+        "accession": null,
+        "region": null
+      },
+      "evidence_refs": [],
+      "provenance": {
+        "doc_id": "PMC5473585",
+        "set_id": "s_eb5d8e1a",
+        "where": null,
+        "verbatim": true,
+        "confirmed_in_source": false,
+        "extractor": "quick-reader"
+      },
+      "proto_binding": {
+        "status": "unbound",
+        "tools": [],
+        "unverified": [],
+        "rejected_by": []
+      }
+    },
+    {
+      "id": "art_044",
+      "kind": "mutation",
+      "molecule": "protein",
+      "value": "F7E",
+      "length": 3,
+      "parent": {
+        "name": "MinE",
+        "accession": null,
+        "region": null
+      },
+      "evidence_refs": [],
+      "provenance": {
+        "doc_id": "PMC5473585",
+        "set_id": "s_eb5d8e1a",
+        "where": null,
+        "verbatim": true,
+        "confirmed_in_source": false,
+        "extractor": "quick-reader"
+      },
+      "proto_binding": {
+        "status": "unbound",
+        "tools": [],
+        "unverified": [],
+        "rejected_by": []
+      }
+    },
+    {
+      "id": "art_045",
+      "kind": "mutation",
+      "molecule": "protein",
+      "value": "I24N",
+      "length": 4,
+      "parent": {
+        "name": "MinE",
+        "accession": null,
+        "region": null
+      },
+      "evidence_refs": [],
+      "provenance": {
+        "doc_id": "PMC5473585",
+        "set_id": "s_eb5d8e1a",
+        "where": null,
+        "verbatim": true,
+        "confirmed_in_source": false,
+        "extractor": "quick-reader"
+      },
+      "proto_binding": {
+        "status": "unbound",
+        "tools": [],
+        "unverified": [],
+        "rejected_by": []
+      }
+    }
+  ],
+  "extracted_by": "quick-reader"
+}
