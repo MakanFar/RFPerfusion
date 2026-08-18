@@ -34,3 +34,19 @@ def test_class_with_no_tool_requires_new_evaluator(tmp_path):
 def test_unknown_tool_key_is_unresolved(tmp_path):
     result = cli.resolve_coverage(_plan(["spin-dynamics-sim"]), CATALOG)
     assert result[0]["unresolved"] == ["spin-dynamics-sim"]
+
+
+def test_committed_catalogue_is_schema_3_with_calibration_on_every_row():
+    """The overlay is what makes calibration visible to readers of the
+    catalogue. A row without it would read as "no opinion" rather than
+    "not calibrated"."""
+    import json
+    from litkb import proto
+
+    catalog = json.load(open("../registry/proto_catalog.json"))
+    assert catalog["schema_version"] == proto.CATALOG_SCHEMA_VERSION == 3
+
+    rows = [m for t in catalog["tools"] for m in t.get("measures", [])]
+    assert rows, "catalogue has no metric rows at all"
+    assert all("calibration" in m for m in rows)
+    assert {m["calibration"]["status"] for m in rows} == {"needs_calibration"}

@@ -1,5 +1,5 @@
 {
-  "schema_version": 2,
+  "schema_version": 3,
   "tools": [
     {
       "key": "ablang-embedding",
@@ -52,7 +52,10 @@
           "unit": "",
           "availability": "always",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "avg_log_likelihood",
@@ -64,7 +67,10 @@
           "unit": "",
           "availability": "always",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "perplexity",
@@ -76,7 +82,10 @@
           "unit": "",
           "availability": "always",
           "better": "lower",
-          "primary": true
+          "primary": true,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         }
       ],
       "status": "needs_calibration",
@@ -101,7 +110,10 @@
           "unit": "",
           "availability": "always",
           "better": "higher",
-          "primary": true
+          "primary": true,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "plddt_per_residue",
@@ -113,7 +125,10 @@
           "unit": "",
           "availability": "always",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "pae",
@@ -125,7 +140,10 @@
           "unit": "",
           "availability": "when include_pae=True",
           "better": "lower",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         }
       ],
       "status": "needs_calibration",
@@ -150,7 +168,10 @@
           "unit": "",
           "availability": "always",
           "better": "higher",
-          "primary": true
+          "primary": true,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "ptm",
@@ -162,7 +183,10 @@
           "unit": "",
           "availability": "always",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "iptm",
@@ -174,7 +198,10 @@
           "unit": "multi-chain input only",
           "availability": "",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "avg_pae",
@@ -186,7 +213,10 @@
           "unit": "",
           "availability": "always",
           "better": "lower",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "pae",
@@ -198,7 +228,10 @@
           "unit": "",
           "availability": "when include_pae_matrix=True",
           "better": "lower",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         }
       ],
       "status": "needs_calibration",
@@ -225,7 +258,10 @@
           "unit": "",
           "availability": "always",
           "better": "higher",
-          "primary": true
+          "primary": true,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "ptm",
@@ -237,7 +273,10 @@
           "unit": "",
           "availability": "always",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "iptm",
@@ -249,7 +288,10 @@
           "unit": "multi-chain input only",
           "availability": "",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "avg_pae",
@@ -261,7 +303,10 @@
           "unit": "",
           "availability": "always",
           "better": "lower",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "pae",
@@ -273,7 +318,10 @@
           "unit": "",
           "availability": "when include_pae_matrix=True",
           "better": "lower",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         }
       ],
       "status": "needs_calibration",
@@ -303,7 +351,10 @@
           "unit": "",
           "availability": "always",
           "better": "higher",
-          "primary": true
+          "primary": true,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "avg_pae",
@@ -315,7 +366,10 @@
           "unit": "",
           "availability": "always",
           "better": "lower",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "pae",
@@ -327,7 +381,10 @@
           "unit": "",
           "availability": "when include_pae_matrix=True",
           "better": "lower",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "ptm",
@@ -339,7 +396,10 @@
           "unit": "",
           "availability": "depends on model output",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "iptm",
@@ -351,7 +411,10 @@
           "unit": "",
           "availability": "depends on model output",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "chain_pair_iptm",
@@ -363,7 +426,10 @@
           "unit": "",
           "availability": "depends on model output",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "ranking_score",
@@ -375,7 +441,10 @@
           "unit": "",
           "availability": "depends on model output",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         }
       ],
       "status": "needs_calibration",
@@ -493,7 +562,10 @@
           "unit": "fraction",
           "availability": "",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "avg_ptm",
@@ -505,7 +577,10 @@
           "unit": "fraction",
           "availability": "",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "avg_iptm",
@@ -517,7 +592,10 @@
           "unit": "fraction",
           "availability": "",
           "better": "higher",
-          "primary": true
+          "primary": true,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "avg_pae",
@@ -529,7 +607,10 @@
           "unit": "\u00c5",
           "availability": "",
           "better": "lower",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "avg_ipae",
@@ -541,7 +622,10 @@
           "unit": "\u00c5",
           "availability": "",
           "better": "lower",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "avg_iplddt",
@@ -553,7 +637,10 @@
           "unit": "fraction",
           "availability": "",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "avg_ss_plddt",
@@ -565,7 +652,10 @@
           "unit": "fraction",
           "availability": "",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "avg_binder_plddt",
@@ -577,7 +667,10 @@
           "unit": "fraction",
           "availability": "",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "avg_binder_ptm",
@@ -589,7 +682,10 @@
           "unit": "fraction",
           "availability": "",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "avg_binder_pae",
@@ -601,7 +697,10 @@
           "unit": "\u00c5",
           "availability": "",
           "better": "lower",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "binder_energy_score",
@@ -613,7 +712,10 @@
           "unit": "REU",
           "availability": "",
           "better": "lower",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "dG",
@@ -625,7 +727,10 @@
           "unit": "REU",
           "availability": "",
           "better": "lower",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "dSASA",
@@ -637,7 +742,10 @@
           "unit": "\u00c5^2",
           "availability": "",
           "better": "context-dependent",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "dG_per_dSASA",
@@ -649,7 +757,10 @@
           "unit": "REU/\u00c5^2",
           "availability": "",
           "better": "lower",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "interface_sasa_pct",
@@ -661,7 +772,10 @@
           "unit": "percent",
           "availability": "",
           "better": "context-dependent",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "interface_hydrophobicity",
@@ -673,7 +787,10 @@
           "unit": "percent",
           "availability": "",
           "better": "context-dependent",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "surface_hydrophobicity",
@@ -685,7 +802,10 @@
           "unit": "fraction",
           "availability": "",
           "better": "lower",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "shape_complementarity",
@@ -697,7 +817,10 @@
           "unit": "fraction",
           "availability": "",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "packstat",
@@ -709,7 +832,10 @@
           "unit": "fraction",
           "availability": "",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "n_interface_hbonds",
@@ -721,7 +847,10 @@
           "unit": "count",
           "availability": "",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "interface_hbonds_pct",
@@ -733,7 +862,10 @@
           "unit": "percent",
           "availability": "",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "n_interface_unsat_hbonds",
@@ -745,7 +877,10 @@
           "unit": "count",
           "availability": "",
           "better": "lower",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "interface_unsat_hbonds_pct",
@@ -757,7 +892,10 @@
           "unit": "percent",
           "availability": "",
           "better": "lower",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "n_interface_residues",
@@ -769,7 +907,10 @@
           "unit": "count",
           "availability": "",
           "better": "context-dependent",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "binder_helix_pct",
@@ -781,7 +922,10 @@
           "unit": "percent",
           "availability": "",
           "better": "context-dependent",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "binder_betasheet_pct",
@@ -793,7 +937,10 @@
           "unit": "percent",
           "availability": "",
           "better": "context-dependent",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "binder_loop_pct",
@@ -805,7 +952,10 @@
           "unit": "percent",
           "availability": "",
           "better": "context-dependent",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "interface_helix_pct",
@@ -817,7 +967,10 @@
           "unit": "percent",
           "availability": "",
           "better": "context-dependent",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "interface_betasheet_pct",
@@ -829,7 +982,10 @@
           "unit": "percent",
           "availability": "",
           "better": "context-dependent",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "interface_loop_pct",
@@ -841,7 +997,10 @@
           "unit": "percent",
           "availability": "",
           "better": "context-dependent",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "hotspot_rmsd",
@@ -853,7 +1012,10 @@
           "unit": "\u00c5",
           "availability": "",
           "better": "lower",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "target_rmsd",
@@ -865,7 +1027,10 @@
           "unit": "\u00c5",
           "availability": "",
           "better": "lower",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "binder_rmsd",
@@ -877,7 +1042,10 @@
           "unit": "\u00c5",
           "availability": "",
           "better": "lower",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "unrelaxed_clashes",
@@ -889,7 +1057,10 @@
           "unit": "count",
           "availability": "",
           "better": "lower",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "relaxed_clashes",
@@ -901,7 +1072,10 @@
           "unit": "count",
           "availability": "",
           "better": "lower",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         }
       ],
       "status": "needs_calibration",
@@ -973,7 +1147,10 @@
           "unit": "log10(IC50 \u03bcM)",
           "availability": "always",
           "better": "lower",
-          "primary": true
+          "primary": true,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "affinity_probability_binary",
@@ -985,7 +1162,10 @@
           "unit": "",
           "availability": "always",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "affinity_pred_value1",
@@ -997,7 +1177,10 @@
           "unit": "log10(IC50 \u03bcM)",
           "availability": "when ensemble emits per-model values",
           "better": "lower",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "affinity_probability_binary1",
@@ -1009,7 +1192,10 @@
           "unit": "",
           "availability": "when ensemble emits per-model values",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "affinity_pred_value2",
@@ -1021,7 +1207,10 @@
           "unit": "log10(IC50 \u03bcM)",
           "availability": "when ensemble emits per-model values",
           "better": "lower",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "affinity_probability_binary2",
@@ -1033,7 +1222,10 @@
           "unit": "",
           "availability": "when ensemble emits per-model values",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         }
       ],
       "status": "needs_calibration",
@@ -1065,7 +1257,10 @@
           "unit": "",
           "availability": "always",
           "better": "higher",
-          "primary": true
+          "primary": true,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "ptm",
@@ -1077,7 +1272,10 @@
           "unit": "",
           "availability": "always",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "iptm",
@@ -1089,7 +1287,10 @@
           "unit": "",
           "availability": "always",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "chains_ptm",
@@ -1101,7 +1302,10 @@
           "unit": "",
           "availability": "always",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "pair_chains_iptm",
@@ -1113,7 +1317,10 @@
           "unit": "",
           "availability": "always",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "avg_pae",
@@ -1125,7 +1332,10 @@
           "unit": "",
           "availability": "always",
           "better": "lower",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "pae",
@@ -1137,7 +1347,10 @@
           "unit": "",
           "availability": "when include_pae_matrix=True",
           "better": "lower",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "ligand_iptm",
@@ -1149,7 +1362,10 @@
           "unit": "",
           "availability": "depends on complex composition",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "protein_iptm",
@@ -1161,7 +1377,10 @@
           "unit": "",
           "availability": "depends on complex composition",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "complex_plddt",
@@ -1173,7 +1392,10 @@
           "unit": "",
           "availability": "depends on complex composition",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "complex_iplddt",
@@ -1185,7 +1407,10 @@
           "unit": "",
           "availability": "depends on complex composition",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "complex_pde",
@@ -1197,7 +1422,10 @@
           "unit": "",
           "availability": "depends on complex composition",
           "better": "lower",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "complex_ipde",
@@ -1209,7 +1437,10 @@
           "unit": "",
           "availability": "depends on complex composition",
           "better": "lower",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         }
       ],
       "status": "needs_calibration",
@@ -1282,7 +1513,10 @@
           "unit": "",
           "availability": "always",
           "better": "higher",
-          "primary": true
+          "primary": true,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "ptm",
@@ -1294,7 +1528,10 @@
           "unit": "",
           "availability": "always",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "iptm",
@@ -1306,7 +1543,10 @@
           "unit": "",
           "availability": "always",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "avg_pae",
@@ -1318,7 +1558,10 @@
           "unit": "",
           "availability": "always",
           "better": "lower",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "pae",
@@ -1330,7 +1573,10 @@
           "unit": "",
           "availability": "when include_pae_matrix=True",
           "better": "lower",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "confidence_score",
@@ -1342,7 +1588,10 @@
           "unit": "",
           "availability": "always",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         }
       ],
       "status": "needs_calibration",
@@ -1469,7 +1718,10 @@
           "unit": "%",
           "availability": "always",
           "better": "context-dependent",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "sheet_pct",
@@ -1481,7 +1733,10 @@
           "unit": "%",
           "availability": "always",
           "better": "context-dependent",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "loop_pct",
@@ -1493,7 +1748,10 @@
           "unit": "%",
           "availability": "always",
           "better": "context-dependent",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         }
       ],
       "status": "needs_calibration",
@@ -1608,7 +1866,10 @@
           "unit": "",
           "availability": "always",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "avg_log_likelihood",
@@ -1620,7 +1881,10 @@
           "unit": "",
           "availability": "always",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "perplexity",
@@ -1632,7 +1896,10 @@
           "unit": "",
           "availability": "always",
           "better": "lower",
-          "primary": true
+          "primary": true,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         }
       ],
       "status": "needs_calibration",
@@ -1701,7 +1968,10 @@
           "unit": "",
           "availability": "always",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "avg_log_likelihood",
@@ -1713,7 +1983,10 @@
           "unit": "",
           "availability": "always",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "perplexity",
@@ -1725,7 +1998,10 @@
           "unit": "",
           "availability": "always",
           "better": "lower",
-          "primary": true
+          "primary": true,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         }
       ],
       "status": "needs_calibration",
@@ -1781,7 +2057,10 @@
           "unit": "",
           "availability": "always",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "avg_log_likelihood",
@@ -1793,7 +2072,10 @@
           "unit": "",
           "availability": "always",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "perplexity",
@@ -1805,7 +2087,10 @@
           "unit": "",
           "availability": "always",
           "better": "lower",
-          "primary": true
+          "primary": true,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         }
       ],
       "status": "needs_calibration",
@@ -1860,7 +2145,10 @@
           "unit": "",
           "availability": "always",
           "better": "higher",
-          "primary": true
+          "primary": true,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "ptm",
@@ -1872,7 +2160,10 @@
           "unit": "",
           "availability": "depends on model output",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "avg_pae",
@@ -1884,7 +2175,10 @@
           "unit": "",
           "availability": "depends on model output",
           "better": "lower",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "pae",
@@ -1896,7 +2190,10 @@
           "unit": "",
           "availability": "when include_pae_matrix=True",
           "better": "lower",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         }
       ],
       "status": "needs_calibration",
@@ -1921,7 +2218,10 @@
           "unit": "",
           "availability": "always",
           "better": "higher",
-          "primary": true
+          "primary": true,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "ptm",
@@ -1933,7 +2233,10 @@
           "unit": "",
           "availability": "depends on model output",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "avg_pae",
@@ -1945,7 +2248,10 @@
           "unit": "",
           "availability": "depends on model output",
           "better": "lower",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "pae",
@@ -1957,7 +2263,10 @@
           "unit": "",
           "availability": "when include_pae_matrix=True",
           "better": "lower",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         }
       ],
       "status": "needs_calibration",
@@ -1987,7 +2296,10 @@
           "unit": "",
           "availability": "always",
           "better": "higher",
-          "primary": true
+          "primary": true,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "ptm",
@@ -1999,7 +2311,10 @@
           "unit": "",
           "availability": "always",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "iptm",
@@ -2011,7 +2326,10 @@
           "unit": "",
           "availability": "depends on complex composition",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "avg_pae",
@@ -2023,7 +2341,10 @@
           "unit": "",
           "availability": "always",
           "better": "lower",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "pae",
@@ -2035,7 +2356,10 @@
           "unit": "",
           "availability": "when include_pae_matrix=True",
           "better": "lower",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         }
       ],
       "status": "needs_calibration",
@@ -2079,7 +2403,10 @@
           "unit": "",
           "availability": "always",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "avg_log_likelihood",
@@ -2091,7 +2418,10 @@
           "unit": "",
           "availability": "always",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "perplexity",
@@ -2103,7 +2433,10 @@
           "unit": "",
           "availability": "always",
           "better": "lower",
-          "primary": true
+          "primary": true,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         }
       ],
       "status": "needs_calibration",
@@ -2142,7 +2475,10 @@
           "unit": "",
           "availability": "always",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "avg_log_likelihood",
@@ -2154,7 +2490,10 @@
           "unit": "",
           "availability": "always",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "perplexity",
@@ -2166,7 +2505,10 @@
           "unit": "",
           "availability": "always",
           "better": "lower",
-          "primary": true
+          "primary": true,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         }
       ],
       "status": "needs_calibration",
@@ -2347,7 +2689,10 @@
           "unit": "fraction",
           "availability": "",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "avg_ptm",
@@ -2359,7 +2704,10 @@
           "unit": "fraction",
           "availability": "",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "avg_iptm",
@@ -2371,7 +2719,10 @@
           "unit": "fraction",
           "availability": "",
           "better": "higher",
-          "primary": true
+          "primary": true,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "avg_pae",
@@ -2383,7 +2734,10 @@
           "unit": "\u00c5",
           "availability": "",
           "better": "lower",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "avg_ipae",
@@ -2395,7 +2749,10 @@
           "unit": "\u00c5",
           "availability": "",
           "better": "lower",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "avg_ipsae",
@@ -2407,7 +2764,10 @@
           "unit": "fraction",
           "availability": "",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "avg_iplddt",
@@ -2419,7 +2779,10 @@
           "unit": "fraction",
           "availability": "",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "avg_ss_plddt",
@@ -2431,7 +2794,10 @@
           "unit": "fraction",
           "availability": "",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "avg_binder_plddt",
@@ -2443,7 +2809,10 @@
           "unit": "fraction",
           "availability": "",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "avg_binder_ptm",
@@ -2455,7 +2824,10 @@
           "unit": "fraction",
           "availability": "",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "avg_binder_pae",
@@ -2467,7 +2839,10 @@
           "unit": "\u00c5",
           "availability": "",
           "better": "lower",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "dSASA",
@@ -2479,7 +2854,10 @@
           "unit": "\u00c5^2",
           "availability": "",
           "better": "context-dependent",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "interface_sasa_pct",
@@ -2491,7 +2869,10 @@
           "unit": "percent",
           "availability": "",
           "better": "context-dependent",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "interface_hydrophobicity",
@@ -2503,7 +2884,10 @@
           "unit": "percent",
           "availability": "",
           "better": "context-dependent",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "surface_hydrophobicity",
@@ -2515,7 +2899,10 @@
           "unit": "fraction",
           "availability": "",
           "better": "lower",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "shape_complementarity",
@@ -2527,7 +2914,10 @@
           "unit": "fraction",
           "availability": "",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "n_interface_residues",
@@ -2539,7 +2929,10 @@
           "unit": "count",
           "availability": "",
           "better": "context-dependent",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "binder_helix_pct",
@@ -2551,7 +2944,10 @@
           "unit": "percent",
           "availability": "",
           "better": "context-dependent",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "binder_betasheet_pct",
@@ -2563,7 +2959,10 @@
           "unit": "percent",
           "availability": "",
           "better": "context-dependent",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "binder_loop_pct",
@@ -2575,7 +2974,10 @@
           "unit": "percent",
           "availability": "",
           "better": "context-dependent",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "interface_helix_pct",
@@ -2587,7 +2989,10 @@
           "unit": "percent",
           "availability": "",
           "better": "context-dependent",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "interface_betasheet_pct",
@@ -2599,7 +3004,10 @@
           "unit": "percent",
           "availability": "",
           "better": "context-dependent",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "interface_loop_pct",
@@ -2611,7 +3019,10 @@
           "unit": "percent",
           "availability": "",
           "better": "context-dependent",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "hotspot_rmsd",
@@ -2623,7 +3034,10 @@
           "unit": "\u00c5",
           "availability": "",
           "better": "lower",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "target_rmsd",
@@ -2635,7 +3049,10 @@
           "unit": "\u00c5",
           "availability": "",
           "better": "lower",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "binder_rmsd",
@@ -2647,7 +3064,10 @@
           "unit": "\u00c5",
           "availability": "",
           "better": "lower",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "unrelaxed_clashes",
@@ -2659,7 +3079,10 @@
           "unit": "count",
           "availability": "",
           "better": "lower",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "relaxed_clashes",
@@ -2671,7 +3094,10 @@
           "unit": "count",
           "availability": "",
           "better": "lower",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         }
       ],
       "status": "needs_calibration",
@@ -2698,7 +3124,10 @@
           "unit": "",
           "availability": "always",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "ptm",
@@ -2710,7 +3139,10 @@
           "unit": "",
           "availability": "always",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "i_ptm",
@@ -2722,7 +3154,10 @@
           "unit": "",
           "availability": "always",
           "better": "higher",
-          "primary": true
+          "primary": true,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "i_pae",
@@ -2734,7 +3169,10 @@
           "unit": "\u00c5",
           "availability": "always",
           "better": "lower",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "pae",
@@ -2746,7 +3184,10 @@
           "unit": "\u00c5",
           "availability": "always",
           "better": "lower",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "loss",
@@ -2758,7 +3199,10 @@
           "unit": "",
           "availability": "always",
           "better": "lower",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "lm_ll",
@@ -2770,7 +3214,10 @@
           "unit": "",
           "availability": "always",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "helix",
@@ -2782,7 +3229,10 @@
           "unit": "",
           "availability": "always",
           "better": "context-dependent",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "beta_strand",
@@ -2794,7 +3244,10 @@
           "unit": "",
           "availability": "always",
           "better": "context-dependent",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "clashes",
@@ -2806,7 +3259,10 @@
           "unit": "after filtering",
           "availability": "",
           "better": "lower",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "sc_rmsd",
@@ -2818,7 +3274,10 @@
           "unit": "\u00c5, after filtering",
           "availability": "",
           "better": "lower",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "binder_near_hotspot",
@@ -2830,7 +3289,10 @@
           "unit": "after filtering",
           "availability": "",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "cdr3_hotspot_contacts",
@@ -2842,7 +3304,10 @@
           "unit": "after filtering",
           "availability": "",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "percent_interface_cdr",
@@ -2854,7 +3319,10 @@
           "unit": "after filtering",
           "availability": "",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "interface_shape_comp",
@@ -2866,7 +3334,10 @@
           "unit": "after filtering",
           "availability": "",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "interface_hbonds",
@@ -2878,7 +3349,10 @@
           "unit": "after filtering",
           "availability": "",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "surface_hydrophobicity",
@@ -2890,7 +3364,10 @@
           "unit": "after filtering",
           "availability": "",
           "better": "lower",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "interface_hydrophobicity",
@@ -2902,7 +3379,10 @@
           "unit": "after filtering",
           "availability": "",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "pdockq2",
@@ -2914,7 +3394,10 @@
           "unit": "after filtering",
           "availability": "",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "external_plddt",
@@ -2926,7 +3409,10 @@
           "unit": "after validation",
           "availability": "",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "external_iptm",
@@ -2938,7 +3424,10 @@
           "unit": "after validation",
           "availability": "",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "external_ptm",
@@ -2950,7 +3439,10 @@
           "unit": "after validation",
           "availability": "",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "external_pae",
@@ -2962,7 +3454,10 @@
           "unit": "\u00c5, after validation",
           "availability": "",
           "better": "lower",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "external_i_pae",
@@ -2974,7 +3469,10 @@
           "unit": "\u00c5, after validation",
           "availability": "",
           "better": "lower",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "external_i_plddt",
@@ -2986,7 +3484,10 @@
           "unit": "after validation",
           "availability": "",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "external_plddt_binder",
@@ -2998,7 +3499,10 @@
           "unit": "after validation",
           "availability": "",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "external_chain_ptm",
@@ -3010,7 +3514,10 @@
           "unit": "after validation",
           "availability": "",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "external_binder_pae",
@@ -3022,7 +3529,10 @@
           "unit": "\u00c5, after validation",
           "availability": "",
           "better": "lower",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "external_aggregate_score",
@@ -3034,7 +3544,10 @@
           "unit": "after validation",
           "availability": "",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "ipsae",
@@ -3046,7 +3559,10 @@
           "unit": "after validation",
           "availability": "",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "ipsae_pdockq2",
@@ -3058,7 +3574,10 @@
           "unit": "after validation",
           "availability": "",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "lis_lis",
@@ -3070,7 +3589,10 @@
           "unit": "after validation",
           "availability": "",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "lis_lia",
@@ -3082,7 +3604,10 @@
           "unit": "after validation",
           "availability": "",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "binder_score",
@@ -3094,7 +3619,10 @@
           "unit": "REU, after filtering",
           "availability": "",
           "better": "lower",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "interface_packstat",
@@ -3106,7 +3634,10 @@
           "unit": "after filtering",
           "availability": "",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "interface_dG",
@@ -3118,7 +3649,10 @@
           "unit": "REU, after filtering",
           "availability": "",
           "better": "lower",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "interface_dSASA",
@@ -3130,7 +3664,10 @@
           "unit": "\u00c5\u00b2, after filtering",
           "availability": "",
           "better": "context-dependent",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "interface_dG_SASA_ratio",
@@ -3142,7 +3679,10 @@
           "unit": "REU/\u00c5\u00b2, after filtering",
           "availability": "",
           "better": "lower",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "interface_fraction",
@@ -3154,7 +3694,10 @@
           "unit": "after filtering",
           "availability": "",
           "better": "context-dependent",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "interface_nres",
@@ -3166,7 +3709,10 @@
           "unit": "after filtering",
           "availability": "",
           "better": "context-dependent",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "interface_hbond_percentage",
@@ -3178,7 +3724,10 @@
           "unit": "after filtering",
           "availability": "",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "interface_delta_unsat_hbonds",
@@ -3190,7 +3739,10 @@
           "unit": "after filtering",
           "availability": "",
           "better": "lower",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "interface_delta_unsat_hbonds_percentage",
@@ -3202,7 +3754,10 @@
           "unit": "after filtering",
           "availability": "",
           "better": "lower",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "clashes_unrelaxed",
@@ -3214,7 +3769,10 @@
           "unit": "after filtering",
           "availability": "",
           "better": "lower",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "hydrophobic_patches_binder",
@@ -3226,7 +3784,10 @@
           "unit": "after filtering",
           "availability": "",
           "better": "lower",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "hydrophobic_patches_struct",
@@ -3238,7 +3799,10 @@
           "unit": "after filtering",
           "availability": "",
           "better": "lower",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "sap_score",
@@ -3250,7 +3814,10 @@
           "unit": "after filtering",
           "availability": "",
           "better": "lower",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "cdr_sap",
@@ -3262,7 +3829,10 @@
           "unit": "after filtering",
           "availability": "",
           "better": "lower",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "cdr_hotspot_contacts",
@@ -3274,7 +3844,10 @@
           "unit": "after filtering",
           "availability": "",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "percent_interface_cdr3",
@@ -3286,7 +3859,10 @@
           "unit": "after filtering",
           "availability": "",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "alpha_interface",
@@ -3298,7 +3874,10 @@
           "unit": "after filtering",
           "availability": "",
           "better": "context-dependent",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "beta_interface",
@@ -3310,7 +3889,10 @@
           "unit": "after filtering",
           "availability": "",
           "better": "context-dependent",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "loops_interface",
@@ -3322,7 +3904,10 @@
           "unit": "after filtering",
           "availability": "",
           "better": "context-dependent",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "alpha_all",
@@ -3334,7 +3919,10 @@
           "unit": "after filtering",
           "availability": "",
           "better": "context-dependent",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "beta_all",
@@ -3346,7 +3934,10 @@
           "unit": "after filtering",
           "availability": "",
           "better": "context-dependent",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "loops_all",
@@ -3358,7 +3949,10 @@
           "unit": "after filtering",
           "availability": "",
           "better": "context-dependent",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "n_framework_mutations",
@@ -3370,7 +3964,10 @@
           "unit": "after filtering",
           "availability": "",
           "better": "lower",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         }
       ],
       "status": "needs_calibration",
@@ -3411,7 +4008,10 @@
           "unit": "",
           "availability": "always",
           "better": "higher",
-          "primary": true
+          "primary": true,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "pdockq2",
@@ -3423,7 +4023,10 @@
           "unit": "",
           "availability": "always",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "lis",
@@ -3435,7 +4038,10 @@
           "unit": "",
           "availability": "always",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "pdockq",
@@ -3447,7 +4053,10 @@
           "unit": "",
           "availability": "always",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "iptm_d0chn",
@@ -3459,7 +4068,10 @@
           "unit": "",
           "availability": "always",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         }
       ],
       "status": "needs_calibration",
@@ -3500,7 +4112,10 @@
           "unit": "",
           "availability": "always",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "avg_log_likelihood",
@@ -3512,7 +4127,10 @@
           "unit": "",
           "availability": "always",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "perplexity",
@@ -3524,7 +4142,10 @@
           "unit": "",
           "availability": "always",
           "better": "lower",
-          "primary": true
+          "primary": true,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         }
       ],
       "status": "needs_calibration",
@@ -3565,7 +4186,10 @@
           "unit": "",
           "availability": "always",
           "better": "lower",
-          "primary": true
+          "primary": true,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "K562",
@@ -3577,7 +4201,10 @@
           "unit": "",
           "availability": "when requested",
           "better": "context-dependent",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "HepG2",
@@ -3589,7 +4216,10 @@
           "unit": "",
           "availability": "when requested",
           "better": "context-dependent",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "SKNSH",
@@ -3601,7 +4231,10 @@
           "unit": "",
           "availability": "when requested",
           "better": "context-dependent",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         }
       ],
       "status": "needs_calibration",
@@ -3626,7 +4259,10 @@
           "unit": "",
           "availability": "when requested",
           "better": "context-dependent",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "HepG2",
@@ -3638,7 +4274,10 @@
           "unit": "",
           "availability": "when requested",
           "better": "context-dependent",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "SKNSH",
@@ -3650,7 +4289,10 @@
           "unit": "",
           "availability": "when requested",
           "better": "context-dependent",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         }
       ],
       "status": "needs_calibration",
@@ -3691,7 +4333,10 @@
           "unit": "",
           "availability": "always",
           "better": "higher",
-          "primary": true
+          "primary": true,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         }
       ],
       "status": "needs_calibration",
@@ -3854,7 +4499,10 @@
           "unit": "",
           "availability": "always",
           "better": "higher",
-          "primary": true
+          "primary": true,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "ptm",
@@ -3866,7 +4514,10 @@
           "unit": "",
           "availability": "always",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "iptm",
@@ -3878,7 +4529,10 @@
           "unit": "",
           "availability": "always",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "gpde",
@@ -3890,7 +4544,10 @@
           "unit": "",
           "availability": "always",
           "better": "lower",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "ranking_score",
@@ -3902,7 +4559,10 @@
           "unit": "",
           "availability": "always",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "has_clash",
@@ -3914,7 +4574,10 @@
           "unit": "",
           "availability": "always",
           "better": "lower",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "avg_pae",
@@ -3926,7 +4589,10 @@
           "unit": "",
           "availability": "when include_pae_matrix=True",
           "better": "lower",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "pae",
@@ -3938,7 +4604,10 @@
           "unit": "",
           "availability": "when include_pae_matrix=True",
           "better": "lower",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         }
       ],
       "status": "needs_calibration",
@@ -3998,7 +4667,10 @@
           "unit": "",
           "availability": "always",
           "better": "context-dependent",
-          "primary": true
+          "primary": true,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "max_loss",
@@ -4010,7 +4682,10 @@
           "unit": "",
           "availability": "always",
           "better": "context-dependent",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         }
       ],
       "status": "needs_calibration",
@@ -4037,7 +4712,10 @@
           "unit": "",
           "availability": "when requested",
           "better": "context-dependent",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "c2",
@@ -4049,7 +4727,10 @@
           "unit": "",
           "availability": "when requested",
           "better": "context-dependent",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "c4",
@@ -4061,7 +4742,10 @@
           "unit": "",
           "availability": "when requested",
           "better": "context-dependent",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "c6",
@@ -4073,7 +4757,10 @@
           "unit": "",
           "availability": "when requested",
           "better": "context-dependent",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "c17",
@@ -4085,7 +4772,10 @@
           "unit": "",
           "availability": "when requested",
           "better": "context-dependent",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "c13",
@@ -4097,7 +4787,10 @@
           "unit": "",
           "availability": "when requested",
           "better": "context-dependent",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         }
       ],
       "status": "needs_calibration",
@@ -4124,7 +4817,10 @@
           "unit": "",
           "availability": "always",
           "better": "lower",
-          "primary": true
+          "primary": true,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "c1",
@@ -4136,7 +4832,10 @@
           "unit": "",
           "availability": "when requested",
           "better": "context-dependent",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "c2",
@@ -4148,7 +4847,10 @@
           "unit": "",
           "availability": "when requested",
           "better": "context-dependent",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "c4",
@@ -4160,7 +4862,10 @@
           "unit": "",
           "availability": "when requested",
           "better": "context-dependent",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "c6",
@@ -4172,7 +4877,10 @@
           "unit": "",
           "availability": "when requested",
           "better": "context-dependent",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "c17",
@@ -4184,7 +4892,10 @@
           "unit": "",
           "availability": "when requested",
           "better": "context-dependent",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "c13",
@@ -4196,7 +4907,10 @@
           "unit": "",
           "availability": "when requested",
           "better": "context-dependent",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         }
       ],
       "status": "needs_calibration",
@@ -4221,7 +4935,10 @@
           "unit": "",
           "availability": "always",
           "better": "higher",
-          "primary": true
+          "primary": true,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         }
       ],
       "status": "needs_calibration",
@@ -4276,7 +4993,10 @@
           "unit": "",
           "availability": "always",
           "better": "higher",
-          "primary": true
+          "primary": true,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "avg_interface_plddt",
@@ -4288,7 +5008,10 @@
           "unit": "",
           "availability": "always",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "avg_interface_pae",
@@ -4300,7 +5023,10 @@
           "unit": "",
           "availability": "always",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "num_interface_contacts",
@@ -4312,7 +5038,10 @@
           "unit": "",
           "availability": "always",
           "better": "context-dependent",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         }
       ],
       "status": "needs_calibration",
@@ -4379,7 +5108,10 @@
           "unit": "",
           "availability": "always",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "avg_log_likelihood",
@@ -4391,7 +5123,10 @@
           "unit": "",
           "availability": "always",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "perplexity",
@@ -4403,7 +5138,10 @@
           "unit": "",
           "availability": "always",
           "better": "lower",
-          "primary": true
+          "primary": true,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         }
       ],
       "status": "needs_calibration",
@@ -4442,7 +5180,10 @@
           "unit": "",
           "availability": "always",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "avg_log_likelihood",
@@ -4454,7 +5195,10 @@
           "unit": "",
           "availability": "always",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "perplexity",
@@ -4466,7 +5210,10 @@
           "unit": "",
           "availability": "always",
           "better": "lower",
-          "primary": true
+          "primary": true,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         }
       ],
       "status": "needs_calibration",
@@ -4535,7 +5282,10 @@
           "unit": "",
           "availability": "always",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "avg_log_likelihood",
@@ -4547,7 +5297,10 @@
           "unit": "",
           "availability": "always",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "perplexity",
@@ -4559,7 +5312,10 @@
           "unit": "",
           "availability": "always",
           "better": "lower",
-          "primary": true
+          "primary": true,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         }
       ],
       "status": "needs_calibration",
@@ -4586,7 +5342,10 @@
           "unit": "",
           "availability": "always",
           "better": "higher",
-          "primary": true
+          "primary": true,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "ptm",
@@ -4598,7 +5357,10 @@
           "unit": "",
           "availability": "always",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "iptm",
@@ -4610,7 +5372,10 @@
           "unit": "",
           "availability": "always",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "avg_plddt",
@@ -4622,7 +5387,10 @@
           "unit": "",
           "availability": "always",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "gpde",
@@ -4634,7 +5402,10 @@
           "unit": "",
           "availability": "always",
           "better": "lower",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "avg_pae",
@@ -4646,7 +5417,10 @@
           "unit": "",
           "availability": "always",
           "better": "lower",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "pae",
@@ -4658,7 +5432,10 @@
           "unit": "",
           "availability": "when include_pae_matrix=True",
           "better": "lower",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "chain_ptm",
@@ -4670,7 +5447,10 @@
           "unit": "",
           "availability": "depends on model output",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "chain_plddt",
@@ -4682,7 +5462,10 @@
           "unit": "",
           "availability": "depends on model output",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "chain_pair_iptm",
@@ -4694,7 +5477,10 @@
           "unit": "",
           "availability": "depends on model output",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "has_clash",
@@ -4706,7 +5492,10 @@
           "unit": "",
           "availability": "depends on model output",
           "better": "lower",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         }
       ],
       "status": "needs_calibration",
@@ -4849,7 +5638,10 @@
           "unit": "angstrom",
           "availability": "always",
           "better": "lower",
-          "primary": true
+          "primary": true,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "aligned_length",
@@ -4861,7 +5653,10 @@
           "unit": "cealign only",
           "availability": "",
           "better": "context-dependent",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "aligned_atoms",
@@ -4873,7 +5668,10 @@
           "unit": "align only",
           "availability": "",
           "better": "context-dependent",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "alignment_cycles",
@@ -4885,7 +5683,10 @@
           "unit": "align only",
           "availability": "",
           "better": "context-dependent",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "alignment_score",
@@ -4897,7 +5698,10 @@
           "unit": "align only",
           "availability": "",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "pre_refinement_rmsd",
@@ -4909,7 +5713,10 @@
           "unit": "angstrom, align only",
           "availability": "",
           "better": "lower",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "pre_refinement_aligned_atoms",
@@ -4921,7 +5728,10 @@
           "unit": "align only",
           "availability": "",
           "better": "context-dependent",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "aligned_residues",
@@ -4933,7 +5743,10 @@
           "unit": "align only",
           "availability": "",
           "better": "context-dependent",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         }
       ],
       "status": "needs_calibration",
@@ -4960,7 +5773,10 @@
           "unit": "REU",
           "availability": "always",
           "better": "lower",
-          "primary": true
+          "primary": true,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         }
       ],
       "status": "needs_calibration",
@@ -4987,7 +5803,10 @@
           "unit": "",
           "availability": "always",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "interface_hbonds",
@@ -4999,7 +5818,10 @@
           "unit": "count",
           "availability": "always",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "interface_dG",
@@ -5011,7 +5833,10 @@
           "unit": "REU",
           "availability": "always",
           "better": "lower",
-          "primary": true
+          "primary": true,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "interface_dSASA",
@@ -5023,7 +5848,10 @@
           "unit": "\u00c5\u00b2",
           "availability": "always",
           "better": "context-dependent",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "interface_packstat",
@@ -5035,7 +5863,10 @@
           "unit": "",
           "availability": "always",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "interface_hydrophobicity",
@@ -5047,7 +5878,10 @@
           "unit": "%",
           "availability": "always",
           "better": "context-dependent",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "surface_hydrophobicity",
@@ -5059,7 +5893,10 @@
           "unit": "",
           "availability": "always",
           "better": "lower",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "delta_unsat_hbonds",
@@ -5071,7 +5908,10 @@
           "unit": "count",
           "availability": "optional",
           "better": "lower",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         }
       ],
       "status": "needs_calibration",
@@ -5098,7 +5938,10 @@
           "unit": "REU",
           "availability": "always",
           "better": "lower",
-          "primary": true
+          "primary": true,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         }
       ],
       "status": "needs_calibration",
@@ -5125,7 +5968,10 @@
           "unit": "",
           "availability": "always",
           "better": "lower",
-          "primary": true
+          "primary": true,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         }
       ],
       "status": "needs_calibration",
@@ -5152,7 +5998,10 @@
           "unit": "\u00c5\u00b2",
           "availability": "always",
           "better": "context-dependent",
-          "primary": true
+          "primary": true,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         }
       ],
       "status": "needs_calibration",
@@ -5207,7 +6056,10 @@
           "unit": "",
           "availability": "always",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "ptm",
@@ -5219,7 +6071,10 @@
           "unit": "",
           "availability": "always",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "iptm",
@@ -5231,7 +6086,10 @@
           "unit": "multi-chain input only",
           "availability": "",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "avg_pae",
@@ -5243,7 +6101,10 @@
           "unit": "\u00c5",
           "availability": "always",
           "better": "lower",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "pde",
@@ -5255,7 +6116,10 @@
           "unit": "\u00c5",
           "availability": "always",
           "better": "lower",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "ranking_score",
@@ -5267,7 +6131,10 @@
           "unit": "",
           "availability": "always",
           "better": "higher",
-          "primary": true
+          "primary": true,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "chain_ptm",
@@ -5279,7 +6146,10 @@
           "unit": "",
           "availability": "always",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "chain_pair_pae",
@@ -5291,7 +6161,10 @@
           "unit": "\u00c5",
           "availability": "always (empty list for single-chain inputs)",
           "better": "lower",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "chain_pair_pae_min",
@@ -5303,7 +6176,10 @@
           "unit": "\u00c5",
           "availability": "always (empty list for single-chain inputs)",
           "better": "lower",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "chain_pair_pde",
@@ -5315,7 +6191,10 @@
           "unit": "\u00c5",
           "availability": "always (empty list for single-chain inputs)",
           "better": "lower",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "chain_pair_pde_min",
@@ -5327,7 +6206,10 @@
           "unit": "\u00c5",
           "availability": "always (empty list for single-chain inputs)",
           "better": "lower",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "has_clash",
@@ -5339,7 +6221,10 @@
           "unit": "",
           "availability": "always",
           "better": "lower",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         }
       ],
       "status": "needs_calibration",
@@ -5385,7 +6270,10 @@
           "unit": "",
           "availability": "always",
           "better": "lower",
-          "primary": true
+          "primary": true,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "low_complexity_count",
@@ -5397,7 +6285,10 @@
           "unit": "",
           "availability": "always",
           "better": "lower",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "sequence_length",
@@ -5409,7 +6300,10 @@
           "unit": "",
           "availability": "always",
           "better": "context-dependent",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         }
       ],
       "status": "needs_calibration",
@@ -5476,7 +6370,10 @@
           "unit": "present for scored variants overlapping an annotated gene",
           "availability": "",
           "better": "context-dependent",
-          "primary": true
+          "primary": true,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         }
       ],
       "status": "needs_calibration",
@@ -5501,7 +6398,10 @@
           "unit": "residues",
           "availability": "always",
           "better": "context-dependent",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "gyration_radius",
@@ -5513,7 +6413,10 @@
           "unit": "\u00c5",
           "availability": "always",
           "better": "context-dependent",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "helix_pct",
@@ -5525,7 +6428,10 @@
           "unit": "%",
           "availability": "always",
           "better": "context-dependent",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "sheet_pct",
@@ -5537,7 +6443,10 @@
           "unit": "%",
           "availability": "always",
           "better": "context-dependent",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "loop_pct",
@@ -5549,7 +6458,10 @@
           "unit": "%",
           "availability": "always",
           "better": "context-dependent",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         }
       ],
       "status": "needs_calibration",
@@ -5576,7 +6488,10 @@
           "unit": "",
           "availability": "always",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "tm_score_chain_2",
@@ -5588,7 +6503,10 @@
           "unit": "",
           "availability": "always",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         }
       ],
       "status": "needs_calibration",
@@ -5629,7 +6547,10 @@
           "unit": "",
           "availability": "always",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "tm_score_structure_2",
@@ -5641,7 +6562,10 @@
           "unit": "",
           "availability": "always",
           "better": "higher",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         }
       ],
       "status": "needs_calibration",
@@ -5682,7 +6606,10 @@
           "unit": "kcal/mol",
           "availability": "always",
           "better": "lower",
-          "primary": true
+          "primary": true,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "rmsd_lower_bound",
@@ -5694,7 +6621,10 @@
           "unit": "angstrom",
           "availability": "always",
           "better": "context-dependent",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         },
         {
           "metric": "rmsd_upper_bound",
@@ -5706,7 +6636,10 @@
           "unit": "angstrom",
           "availability": "always",
           "better": "context-dependent",
-          "primary": false
+          "primary": false,
+          "calibration": {
+            "status": "needs_calibration"
+          }
         }
       ],
       "status": "needs_calibration",

@@ -220,7 +220,7 @@ def merge_constraints(from_schema, from_doc):
     return merged
 
 
-CATALOG_SCHEMA_VERSION = 2
+CATALOG_SCHEMA_VERSION = 3
 
 
 def _fetch_or_default(fetcher, key, default):
@@ -399,9 +399,10 @@ def apply_calibration(catalog, curation):
 def load_catalog(path):
     """Read a registry, refusing anything but the current schema version.
 
-    Coercing a v1 registry would silently reinstate the empty `measures`
-    column this work exists to remove, and a silently mis-read constraint
-    is exactly the fail-open behaviour `check()` refuses.
+    v1 -> v2 added derived `measures`. v2 -> v3 added per-metric
+    `calibration` on each row. Coercing an older file would silently drop the
+    calibration overlay and read every metric as having no opinion rather
+    than as uncalibrated -- the fail-open behaviour `check()` refuses.
     """
     with open(path) as fh:
         catalog = json.load(fh)

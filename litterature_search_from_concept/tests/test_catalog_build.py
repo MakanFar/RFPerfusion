@@ -39,8 +39,8 @@ def _build():
     )
 
 
-def test_registry_declares_schema_version_2():
-    assert _build()["schema_version"] == 2
+def test_registry_declares_schema_version_3():
+    assert _build()["schema_version"] == 3
 
 
 def test_measures_are_attached_per_tool():
