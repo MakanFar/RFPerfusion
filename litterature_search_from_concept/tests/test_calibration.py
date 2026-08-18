@@ -157,3 +157,48 @@ def test_committed_curation_file_parses_and_matches_the_real_catalogue():
     _, orphans = proto.apply_calibration(catalog, curation)
 
     assert orphans == [], f"curated keys no longer in the catalogue: {orphans}"
+
+
+def test_tool_is_validated_when_its_primary_metric_is():
+    out, _ = proto.apply_calibration(_catalog(), _curation(
+        {"esmfold-prediction": {"metrics": {"avg_plddt": _validated()}}}))
+
+    by_key = {t["key"]: t for t in out["tools"]}
+    assert by_key["esmfold-prediction"]["status"] == "validated"
+
+
+def test_validating_a_non_primary_metric_does_not_validate_the_tool():
+    """`primary` is the catalogue's own statement of what the tool is meant to
+    be judged on. Calibrating a secondary readout does not license ranking."""
+    out, _ = proto.apply_calibration(_catalog(), _curation(
+        {"esmfold-prediction": {"metrics": {"ptm": _validated()}}}))
+
+    by_key = {t["key"]: t for t in out["tools"]}
+    assert by_key["esmfold-prediction"]["status"] == "needs_calibration"
+
+
+def test_tool_with_no_primary_metric_can_never_be_validated():
+    """98 of 140 catalogued tools are in this position: 92 measure nothing and
+    6 emit metrics without declaring which one they are for. There is nothing
+    to judge them on, so they never roll up."""
+    catalog = _catalog()
+    catalog["tools"].append(
+        {"key": "no-primary-tool", "status": "needs_calibration",
+         "measures": [{"metric": "some_score", "primary": False}]})
+
+    out, _ = proto.apply_calibration(catalog, _curation(
+        {"no-primary-tool": {"metrics": {"some_score": _validated()}}}))
+
+    by_key = {t["key"]: t for t in out["tools"]}
+    assert by_key["no-primary-tool"]["status"] == "needs_calibration"
+
+
+def test_every_tool_in_the_committed_catalogue_is_still_uncalibrated():
+    """The shipped curation promotes nothing, so the derived status must match
+    what proto-sync wrote before this change."""
+    catalog = json.load(open("../registry/proto_catalog.json"))
+    curation = json.load(open("../registry/calibration.json"))
+
+    out, _ = proto.apply_calibration(catalog, curation)
+
+    assert {t["status"] for t in out["tools"]} == {"needs_calibration"}

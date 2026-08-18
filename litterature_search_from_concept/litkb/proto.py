@@ -324,6 +324,27 @@ def _check_metric_record(tool_key, metric, rec):
             )
 
 
+def derive_status(measures):
+    """Tool-level status, computed from its primary metrics.
+
+    Validated iff the tool declares at least one `primary` metric and every
+    one of them is validated. `primary` is the catalogue's own statement of
+    what the tool is meant to be judged on, so a tool that declares none has
+    nothing to validate and never rolls up -- true for 98 of 140 tools.
+
+    Measured against the committed catalogue: all 42 tools declaring a primary
+    declare exactly one, so in practice this reads "its primary metric is
+    validated"; the `all` is for tools that later declare more.
+    """
+    primary = [m for m in measures if m.get("primary")]
+    if not primary:
+        return "needs_calibration"
+    if all(m.get("calibration", UNCALIBRATED).get("status") == "validated"
+           for m in primary):
+        return "validated"
+    return "needs_calibration"
+
+
 def apply_calibration(catalog, curation):
     """Overlay hand-curated per-metric calibration onto a built catalogue.
 
@@ -366,10 +387,12 @@ def apply_calibration(catalog, curation):
     tools = []
     for t in catalog["tools"]:
         metrics = ((curated.get(t["key"]) or {}).get("metrics") or {})
-        tools.append({**t, "measures": [
+        measures = [
             {**m, "calibration": metrics.get(m["metric"], dict(UNCALIBRATED))}
             for m in t.get("measures", [])
-        ]})
+        ]
+        tools.append({**t, "measures": measures,
+                      "status": derive_status(measures)})
     return {**catalog, "tools": tools}, sorted(orphans)
 
 
