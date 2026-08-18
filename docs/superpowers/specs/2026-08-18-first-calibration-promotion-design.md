@@ -86,12 +86,32 @@ it needs a GPU and costs money.
 
 Per benchmark chain, three of the four steps are free and local:
 
-| step | tool | GPU | yields |
+| step | source | GPU | yields |
 |---|---|---|---|
-| 1 | `pdb-fetch-entry` | no | experimental structure (ground truth) |
-| 2 | `pdb-fetch-fasta` | no | its sequence |
-| 3 | `esmfold-prediction` | **yes** | predicted structure + `avg_plddt` |
-| 4 | `usalign-alignment` | no | TM-score, predicted vs experimental |
+| 1 | RCSB download (plain HTTP) | no | experimental structure — the ground truth |
+| 2 | `pdb-fetch-entry` | no | method + resolution, for the selection filter |
+| 3 | `pdb-fetch-fasta` | no | the chain sequence |
+| 4 | `esmfold-prediction` | **yes** | predicted structure + `avg_plddt` |
+| 5 | `usalign-alignment` | no | TM-score, predicted vs experimental |
+
+**Ground truth does not come from a proto tool.** Checked against the
+catalogue: `pdb-fetch-entry` returns metadata only (`title`, `method`,
+`resolution`, `source_url`), `pdb-fetch-fasta` returns sequences, and
+`alphafold-db-fetch` returns AlphaFold *predictions*. Using the last as the
+reference would measure agreement between two predictors, not reliability
+against experiment — which is not what §6 asks for. So the experimental
+structure is downloaded straight from RCSB
+(`https://files.rcsb.org/download/<id>.cif`), which needs no credentials, and
+handed to `usalign-alignment` — whose inputs explicitly accept "a file path,
+or raw PDB/CIF content". `pdb-fetch-entry` keeps its place supplying `method`
+and `resolution` to the selection filter.
+
+**TM-score is taken normalised by the reference.** `usalign-alignment` emits
+`tm_score_structure_1` and `tm_score_structure_2`; with the prediction passed
+as `query_structure` and the experimental structure as `reference_structure`,
+the reference-normalised score is `tm_score_structure_2`. Normalising by the
+prediction instead would let a truncated model score well on the fragment it
+did predict.
 
 `usalign-alignment` takes `query_structure` and `reference_structure`
 (confirmed against `proto-tools input usalign-alignment`), which is exactly
