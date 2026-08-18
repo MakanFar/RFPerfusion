@@ -29,7 +29,8 @@ def _catalog():
         "schema_version": proto.CATALOG_SCHEMA_VERSION,
         "tools": [
             {"key": "esmfold-prediction", "status": "needs_calibration",
-             "measures": [{"metric": "avg_plddt"}]},
+             "measures": [{"metric": "avg_plddt", "primary": True},
+                          {"metric": "ptm", "primary": False}]},
             {"key": "esm2-embedding", "status": "needs_calibration",
              "measures": []},
         ],
@@ -42,58 +43,85 @@ def _curation(tools):
     return {"schema_version": proto.CALIBRATION_SCHEMA_VERSION, "tools": tools}
 
 
-def test_curated_tool_is_promoted_to_validated():
-    """The whole point: a hand-curated promotion must reach the rebuilt
-    catalogue instead of being overwritten by the generator's default."""
-    out, _ = proto.apply_calibration(
-        _catalog(), _curation({"esmfold-prediction": {"status": "validated"}}))
-
-    by_key = {t["key"]: t for t in out["tools"]}
-    assert by_key["esmfold-prediction"]["status"] == "validated"
+def _validated(**over):
+    rec = {"status": "validated",
+           "measured_error": {"kind": "mae", "value": 0.06, "n": 312},
+           "benchmark": {"name": "CAMEO 2025-H1", "held_out": True}}
+    rec.update(over)
+    return rec
 
 
-def test_tool_absent_from_curation_stays_needs_calibration():
-    """Silence is not a promotion. Framework section 6 forbids ranking on an
-    uncalibrated tool, so the default must remain the conservative one."""
-    out, _ = proto.apply_calibration(
-        _catalog(), _curation({"esmfold-prediction": {"status": "validated"}}))
+def test_curated_metric_carries_its_calibration_onto_the_measures_row():
+    out, _ = proto.apply_calibration(_catalog(), _curation(
+        {"esmfold-prediction": {"metrics": {"avg_plddt": _validated()}}}))
 
-    by_key = {t["key"]: t for t in out["tools"]}
-    assert by_key["esm2-embedding"]["status"] == "needs_calibration"
+    row = [m for t in out["tools"] if t["key"] == "esmfold-prediction"
+           for m in t["measures"] if m["metric"] == "avg_plddt"][0]
+    assert row["calibration"]["status"] == "validated"
+    assert row["calibration"]["measured_error"]["value"] == 0.06
 
 
-def test_curated_key_missing_from_catalogue_is_reported_not_dropped():
-    """Rejections ship. A tool that was renamed or retired upstream leaves a
-    curation entry pointing at nothing; dropping it silently would let
-    calibration effort evaporate with no trace."""
-    _, orphans = proto.apply_calibration(
-        _catalog(), _curation({"tool-that-went-away": {"status": "validated"}}))
+def test_uncurated_metric_defaults_to_needs_calibration():
+    """Silence is never a promotion, at metric resolution too."""
+    out, _ = proto.apply_calibration(_catalog(), _curation(
+        {"esmfold-prediction": {"metrics": {"avg_plddt": _validated()}}}))
 
-    assert orphans == ["tool-that-went-away"]
+    row = [m for t in out["tools"] if t["key"] == "esmfold-prediction"
+           for m in t["measures"] if m["metric"] == "ptm"][0]
+    assert row["calibration"] == {"status": "needs_calibration"}
+
+
+def test_validated_without_measured_error_is_rejected():
+    """A promotion with no number is exactly what framework section 6 exists
+    to prevent, so a bare flag must not be accepted."""
+    rec = _validated()
+    del rec["measured_error"]
+    with pytest.raises(ValueError, match="measured_error"):
+        proto.apply_calibration(_catalog(), _curation(
+            {"esmfold-prediction": {"metrics": {"avg_plddt": rec}}}))
+
+
+def test_validated_without_benchmark_is_rejected():
+    rec = _validated()
+    del rec["benchmark"]
+    with pytest.raises(ValueError, match="benchmark"):
+        proto.apply_calibration(_catalog(), _curation(
+            {"esmfold-prediction": {"metrics": {"avg_plddt": rec}}}))
 
 
 def test_unknown_status_value_is_rejected_loudly():
-    """A typo like "validatd" would otherwise read as "not validated" and
-    quietly fail to promote -- the calibration equivalent of failing open."""
     with pytest.raises(ValueError, match="validatd"):
-        proto.apply_calibration(
-            _catalog(), _curation({"esmfold-prediction": {"status": "validatd"}}))
+        proto.apply_calibration(_catalog(), _curation(
+            {"esmfold-prediction": {"metrics": {"avg_plddt": {"status": "validatd"}}}}))
 
 
-def test_wrong_curation_schema_version_is_refused():
-    """Same rule the catalogue reader already enforces: coercing an unknown
-    version is how a mis-read promotion sneaks in."""
-    bad = {"schema_version": 99, "tools": {}}
+def test_orphan_tool_is_reported():
+    _, orphans = proto.apply_calibration(_catalog(), _curation(
+        {"tool-that-went-away": {"metrics": {"avg_plddt": _validated()}}}))
+    assert orphans == ["tool-that-went-away"]
+
+
+def test_orphan_metric_on_a_real_tool_is_reported_as_tool_colon_metric():
+    """A tool that stopped emitting a metric orphans the calibration for it.
+    Dropping that silently would let calibration effort evaporate."""
+    _, orphans = proto.apply_calibration(_catalog(), _curation(
+        {"esmfold-prediction": {"metrics": {"metric_that_went_away": _validated()}}}))
+    assert orphans == ["esmfold-prediction:metric_that_went_away"]
+
+
+def test_v1_curation_is_refused_with_a_pointer():
+    """v1 keyed status on the tool, which has no metric to attach to. The
+    shipped file promotes nothing, so nothing is lost by refusing it."""
+    v1 = {"schema_version": 1, "tools": {"esmfold-prediction": {"status": "validated"}}}
     with pytest.raises(ValueError, match="schema_version"):
-        proto.apply_calibration(_catalog(), bad)
+        proto.apply_calibration(_catalog(), v1)
 
 
-def test_no_curation_leaves_every_tool_uncalibrated():
-    """The state of the repo today: no tool is calibrated, and applying an
-    empty curation must be a no-op rather than a promotion."""
+def test_no_curation_leaves_every_row_uncalibrated():
     out, orphans = proto.apply_calibration(_catalog(), _curation({}))
 
-    assert [t["status"] for t in out["tools"]] == ["needs_calibration"] * 2
+    rows = [m for t in out["tools"] for m in t["measures"]]
+    assert all(m["calibration"] == {"status": "needs_calibration"} for m in rows)
     assert orphans == []
 
 
@@ -123,13 +151,9 @@ def test_calibration_file_is_read_from_disk_when_present(tmp_path):
 
 
 def test_committed_curation_file_parses_and_matches_the_real_catalogue():
-    """Guards the shipped pair: every key curated in registry/calibration.json
-    must still exist in registry/proto_catalog.json. This is the test that
-    fails when a proto-tools rename orphans real calibration work."""
     catalog = json.load(open("../registry/proto_catalog.json"))
     curation = json.load(open("../registry/calibration.json"))
 
     _, orphans = proto.apply_calibration(catalog, curation)
 
-    assert orphans == [], (
-        f"curated tool keys no longer in the catalogue: {orphans}")
+    assert orphans == [], f"curated keys no longer in the catalogue: {orphans}"

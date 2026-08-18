@@ -299,58 +299,78 @@ def fetch_output_doc(key, project="../proto"):
         capture_output=True, text=True).stdout
 
 
-CALIBRATION_SCHEMA_VERSION = 1
+CALIBRATION_SCHEMA_VERSION = 2
 CALIBRATION_STATUSES = ("needs_calibration", "validated")
+UNCALIBRATED = {"status": "needs_calibration"}
+
+
+def _check_metric_record(tool_key, metric, rec):
+    """A curated record must be complete before it can promote anything."""
+    status = (rec or {}).get("status")
+    if status not in CALIBRATION_STATUSES:
+        raise ValueError(
+            f"calibration: {tool_key}:{metric} has status {status!r}, expected "
+            f"one of {CALIBRATION_STATUSES}"
+        )
+    if status != "validated":
+        return
+    for field in ("measured_error", "benchmark"):
+        if not rec.get(field):
+            # Framework section 6 promotes on MEASURED reliability. A bare
+            # flag with no number is the claim it exists to forbid.
+            raise ValueError(
+                f"calibration: {tool_key}:{metric} is validated without "
+                f"{field}; a promotion needs the measurement behind it"
+            )
 
 
 def apply_calibration(catalog, curation):
-    """Overlay hand-curated calibration status onto a freshly built catalogue.
+    """Overlay hand-curated per-metric calibration onto a built catalogue.
 
     Returns `(catalog, orphans)`.
 
-    `build_catalog` writes `status: "needs_calibration"` for every tool and
-    never reads the file it is about to replace, so a promotion edited into
-    `proto_catalog.json` by hand survived only until the next `proto-sync` --
-    which the docs tell you to run whenever the proto-tools catalogue moves.
-    The curated fact therefore lives in its own file, and this overlays it at
-    build time. The generated registry stays fully derived, which is the
-    property that made `measures` trustworthy in the first place; nothing a
-    human maintains is stored where the generator writes.
+    Calibration keys on (tool, metric) because that is what has an error bar:
+    one model emits several metrics and may be characterised for some and not
+    others. `status` at tool level is derived from these (see `derive_status`),
+    never curated.
 
-    Orphans -- curated keys the catalogue no longer contains, e.g. after an
-    upstream rename -- are returned rather than dropped, so calibration effort
-    cannot evaporate silently. They are NOT written into the catalogue: that
-    would change its committed shape and, per this repo's own rule, force a
-    `schema_version` bump and a full regeneration to adopt a fix.
-
-    Scope: this makes curation durable, nothing more. Framework section 6 also
-    wants measured reliability, error bounds and an applicability domain per
-    evaluator, and `status` is per-tool where reliability is really per-metric.
-    Both remain unbuilt -- see the calibration notes in registry/calibration.json.
+    `build_catalog` never reads the file it replaces, so curation lives in its
+    own file and is overlaid here. Orphans -- curated keys the catalogue no
+    longer has -- are returned rather than dropped, reported as "tool" or
+    "tool:metric".
     """
     version = curation.get("schema_version")
     if version != CALIBRATION_SCHEMA_VERSION:
         raise ValueError(
             f"calibration: schema_version {version!r}, expected "
-            f"{CALIBRATION_SCHEMA_VERSION}"
+            f"{CALIBRATION_SCHEMA_VERSION}. v1 keyed status on the tool, which "
+            f"has no metric to attach to; re-key it under "
+            f"tools.<key>.metrics.<metric>."
         )
     curated = curation.get("tools") or {}
-    for key, entry in sorted(curated.items()):
-        status = (entry or {}).get("status")
-        if status not in CALIBRATION_STATUSES:
-            # A typo reads as "not validated" and quietly fails to promote --
-            # the calibration equivalent of failing open, so refuse it loudly.
-            raise ValueError(
-                f"calibration: {key} has status {status!r}, expected one of "
-                f"{CALIBRATION_STATUSES}"
-            )
-    present = {t["key"] for t in catalog["tools"]}
-    tools = [
-        {**t, "status": curated[t["key"]]["status"]} if t["key"] in curated else t
-        for t in catalog["tools"]
-    ]
-    orphans = sorted(k for k in curated if k not in present)
-    return {**catalog, "tools": tools}, orphans
+    for tool_key, entry in sorted(curated.items()):
+        for metric, rec in sorted(((entry or {}).get("metrics") or {}).items()):
+            _check_metric_record(tool_key, metric, rec)
+
+    present = {t["key"]: {m["metric"] for m in t.get("measures", [])}
+               for t in catalog["tools"]}
+    orphans = []
+    for tool_key, entry in curated.items():
+        if tool_key not in present:
+            orphans.append(tool_key)
+            continue
+        for metric in ((entry or {}).get("metrics") or {}):
+            if metric not in present[tool_key]:
+                orphans.append(f"{tool_key}:{metric}")
+
+    tools = []
+    for t in catalog["tools"]:
+        metrics = ((curated.get(t["key"]) or {}).get("metrics") or {})
+        tools.append({**t, "measures": [
+            {**m, "calibration": metrics.get(m["metric"], dict(UNCALIBRATED))}
+            for m in t.get("measures", [])
+        ]})
+    return {**catalog, "tools": tools}, sorted(orphans)
 
 
 def load_catalog(path):
