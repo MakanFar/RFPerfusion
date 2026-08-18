@@ -175,18 +175,31 @@ of every committed `false`.
 
 ### 3.4 The 007 snapshot carries calibration, and `validate.py` uses it
 
-`proto_metrics.json` goes to schema 4, adding per-metric `status` and
-`measured_error`. Two new checks in `validate_proto`:
+`proto_metrics.json` goes to schema 4. Calibration cannot be keyed by metric
+name alone — a metric emitted by several tools may be validated for one and not
+another — so each metric gains a `calibration` map keyed by tool key, mirroring
+the existing `primary_tools`. Two changes follow:
 
-1. **A gate on an uncalibrated metric is a warning, not an error.** §6 lets an
-   uncalibrated evaluator run. The runbook must label such gates so the reader
-   knows the cascade is ordering candidates on an uncharacterised signal —
-   which the emitted disclaimer already says in prose and can now say per gate.
-2. **A gate whose threshold is finer than the metric's measured error is
-   rejected.** `avg_plddt >= 0.85` against an MAE of 0.06 is a claim the
-   evaluator cannot support. This is §6 bullet 3, enforceable for the first
-   time, and only for calibrated metrics — an uncalibrated one has no error to
-   compare against and falls under check 1.
+1. **Uncalibrated gates are labelled in the reporting layer, not the
+   validator.** `validate_proto`'s return value is not a warning channel:
+   `agent.py:120` feeds any returned string into an LLM *repair* attempt before
+   recording it. With zero calibrated metrics, a validator check would fire on
+   every gate of every run and drive a repair that cannot succeed. So the label
+   belongs in `emit.py`, beside the disclaimer already printed there, as a
+   per-gate note in the runbook. This also matches §6, which places the margin
+   rule "in the reporting layer" rather than in generation.
+2. **A gate whose claimed margin is finer than the metric's measured error is
+   rejected** — in `validate_proto`, where repair is the correct response
+   because coarsening a threshold is a repair the model can actually make.
+   Two concrete forms:
+   - a `between` window narrower than twice the measured error, which cannot
+     be resolved at all;
+   - a single-boundary threshold quoted to a decimal step finer than the
+     measured error, e.g. `avg_plddt >= 0.852` against an MAE of 0.06.
+
+   This fires only for metrics validated **for the tools the gate names**, so
+   it is inert today and becomes live exactly when calibration lands. That is
+   §6 bullet 3, enforceable for the first time.
 
 Applicability domain (bullet 4) is recorded in this pass and enforced when
 candidates exist to test against it; there is no candidate set today.
@@ -212,10 +225,10 @@ All offline; proto-tools and paperclip stay monkeypatched.
 
 | area | cases |
 |---|---|
-| calibration v2 | per-metric promotion; `validated` without `measured_error` rejected; v1 file refused with a pointer; unknown status rejected; orphan metric on a real tool reported like an orphan tool |
+| calibration v2 | per-metric promotion; `validated` without `measured_error` rejected; v1 file refused with a pointer; unknown status rejected; orphan metric on a real tool reported as `tool:metric` |
 | derived tool status | validated iff all primary validated; tool with no primary never validated; one-of-two primary validated stays uncalibrated |
 | `resolve_properties` | `rankable_by` empty when nothing validated; populated when the specific metric is; `tools` unchanged either way |
-| 007 | gate on uncalibrated metric warns; threshold finer than measured error rejected; coarser threshold passes; direction check still works |
+| 007 | `between` window narrower than 2x error rejected; threshold decimal step finer than error rejected; coarser threshold passes; uncalibrated metric produces NO validator problem (it must not trigger repair); direction check still works; emit labels uncalibrated gates |
 | regression | `check()` still never treats `unknown` as pass; committed catalogue satisfies the vocabulary invariant |
 
 ## 5. Risks
