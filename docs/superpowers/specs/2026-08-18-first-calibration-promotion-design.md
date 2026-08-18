@@ -95,7 +95,19 @@ Per benchmark chain, three of the four steps are free and local:
 
 `usalign-alignment` takes `query_structure` and `reference_structure`
 (confirmed against `proto-tools input usalign-alignment`), which is exactly
-the pair required. TM-score rather than RMSD because it is length-normalised,
+the pair required.
+
+**Tools are invoked through a Python API, not a CLI.** The `proto-tools`
+command has no `run` verb -- it is discovery only (`list`, `input`, `output`,
+`schema`, `signature`, `deploy`, `doctor`). A tool call is
+`run_esmfold(ESMFoldInput(...), ESMFoldConfig())`, imported from inside the
+`proto` project's environment. So the harness keeps the split litkb already
+uses: the calibration package itself stays dependency-free and offline-
+testable, and a small committed runner script is executed with
+`uv run --project ../proto python` -- reading a JSON job file, writing a JSON
+result file. `proto_tools` is a run-time prerequisite, never an import
+dependency of the tested code, which is what lets the whole harness be tested
+with the subprocess faked. TM-score rather than RMSD because it is length-normalised,
 so chains of different sizes are comparable without a correction.
 
 The output is one row per chain: `(pdb_id, length, avg_plddt, tm_score)`.
