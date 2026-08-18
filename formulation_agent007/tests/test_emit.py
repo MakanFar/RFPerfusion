@@ -10,6 +10,7 @@ from __future__ import annotations
 import json
 import re
 
+from formulation_agent007.catalog import METRIC_CALIBRATION
 from formulation_agent007.emit import render_harvest, render_proto_brief, save_brief
 
 
@@ -78,6 +79,23 @@ class TestProtoRunbook:
 
     def test_names_the_unscoreable_step(self, brief):
         assert brief.frame.simulability_note in render_proto_brief(brief)
+
+    def test_labels_uncalibrated_gates_when_nothing_is_calibrated(self, brief):
+        text = render_proto_brief(brief)
+        assert "no measured error on the tools named" in text
+        assert "Gates " + ", ".join(str(g.order) for g in brief.proto.ordered()) in text
+
+    def test_label_is_absent_once_every_gate_metric_tool_pair_is_calibrated(
+            self, brief, monkeypatch):
+        cal = {"status": "validated",
+               "measured_error": {"kind": "mae", "value": 0.05}}
+        for gate in brief.proto.gates:
+            existing = dict(METRIC_CALIBRATION.get(gate.metric, {}))
+            existing.update({key: cal for key in gate.tool_keys})
+            monkeypatch.setitem(METRIC_CALIBRATION, gate.metric, existing)
+
+        text = render_proto_brief(brief)
+        assert "no measured error on the tools named" not in text
 
 
 class TestHarvestContract:

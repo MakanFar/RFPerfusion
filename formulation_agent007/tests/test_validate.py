@@ -12,6 +12,7 @@ import pytest
 from formulation_agent007.catalog import METRIC_CALIBRATION
 from formulation_agent007.models import FitnessGate, GateState, Linker
 from formulation_agent007.validate import (
+    _decimal_step,
     validate_assembly,
     validate_frame,
     validate_literature,
@@ -123,6 +124,61 @@ class TestProtoCascade:
         gate.threshold_upper = None
 
         assert not any("measured error" in p for p in validate_proto(proto))
+
+    def test_whole_number_threshold_is_not_rejected_by_a_coarser_error(
+            self, proto, monkeypatch):
+        """A whole number claims no fractional precision. Regression for the
+        bug where `_decimal_step` returned 0.1 for any whole-number float
+        (pydantic always coerces an authored `2` to `2.0`, so this path is
+        the only one a real gate ever takes) -- that falsely rejected a
+        gate like `count >= 2` against a measured error as coarse as 0.5."""
+        monkeypatch.setitem(METRIC_CALIBRATION, "avg_plddt", {
+            "esmfold-prediction": {
+                "status": "validated",
+                "measured_error": {"kind": "mae", "value": 0.5}}})
+        gate = proto.gates[0]
+        gate.metric, gate.tool_keys = "avg_plddt", ["esmfold-prediction"]
+        gate.operator, gate.threshold = ">=", 2.0
+        gate.threshold_upper = None
+
+        assert not any("measured error" in p for p in validate_proto(proto))
+
+    def test_inverted_between_gate_is_not_also_flagged_by_the_margin_check(
+            self, proto, monkeypatch):
+        """threshold_upper <= threshold is already rejected by the shape
+        check; the margin check must not pile on a nonsensical negative-
+        window message on top of it (that message would also feed the LLM
+        repair loop)."""
+        monkeypatch.setitem(METRIC_CALIBRATION, "avg_plddt", self._CAL)
+        gate = proto.gates[0]
+        gate.metric, gate.tool_keys = "avg_plddt", ["esmfold-prediction"]
+        gate.operator = "between"
+        gate.threshold, gate.threshold_upper = 0.85, 0.80
+
+        problems = validate_proto(proto)
+        assert any("threshold_upper <= threshold" in p for p in problems)
+        assert not any("measured error" in p for p in problems)
+
+
+class TestDecimalStep:
+    """Pinned cases for `_decimal_step`. A whole number claims no fractional
+    precision -- `repr()` of a whole-number float always appends `.0`, and
+    `models.py` types `threshold: float`, so a real gate's whole-number
+    threshold always takes this path."""
+
+    @pytest.mark.parametrize(
+        "value,expected",
+        [
+            (0.8, 0.1),
+            (0.852, 0.001),
+            (2.0, 1.0),
+            (10.0, 1.0),
+            (2.50, 0.1),
+            (0.0, 1.0),
+        ],
+    )
+    def test_pinned_cases(self, value, expected):
+        assert _decimal_step(value) == pytest.approx(expected)
 
 
 class TestLiteraturePlan:

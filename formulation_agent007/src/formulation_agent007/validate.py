@@ -50,15 +50,24 @@ MIN_PHRASE_WORDS = 2
 
 
 def _decimal_step(value: float) -> float:
-    """The resolution a number is quoted to: 0.85 -> 0.01, 0.852 -> 0.001.
+    """The resolution a number is quoted to: 0.85 -> 0.01, 0.852 -> 0.001,
+    2.0 -> 1.0.
 
     Quoting more digits than the evaluator's error supports is a claim about
-    precision the measurement does not carry.
+    precision the measurement does not carry. `repr()` of a whole-number
+    float always appends `.0` (and `models.py` types `threshold: float`, so
+    an authored `2` is always seen here as `2.0`) -- trailing zeros in the
+    fractional part are stripped first so a whole number claims no
+    fractional precision at all, rather than being scored as "quoted to one
+    decimal place".
     """
     text = f"{value!r}"
     if "." not in text or "e" in text or "E" in text:
         return 1.0
-    return 10.0 ** -len(text.split(".")[1])
+    frac = text.split(".", 1)[1].rstrip("0")
+    if not frac:
+        return 1.0
+    return 10.0 ** -len(frac)
 
 
 # --------------------------------------------------------------------------
@@ -353,7 +362,11 @@ def validate_proto(proto: ProtoBrief) -> list[str]:
             err = max(errors_for_gate)
             if gate.operator == "between" and gate.threshold_upper is not None:
                 window = gate.threshold_upper - gate.threshold
-                if window < 2 * err:
+                # window <= 0 is an inverted/degenerate 'between', already
+                # rejected by the shape check above -- piling a second,
+                # nonsensical "negative window" message on top would also
+                # feed the LLM repair loop with something it cannot fix.
+                if 0 < window < 2 * err:
                     problems.append(
                         f"gate {gate.order} keeps a window of {window:g} on "
                         f"{gate.metric!r}, but its measured error is {err:g}; "
