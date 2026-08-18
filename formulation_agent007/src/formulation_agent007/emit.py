@@ -21,6 +21,7 @@ import json
 import shlex
 from pathlib import Path
 
+from .catalog import METRIC_CALIBRATION
 from .config import SETTINGS
 from .models import DesignBrief
 from .report import render_markdown
@@ -444,6 +445,18 @@ def render_proto_brief(brief: DesignBrief) -> str:
         "manifest declares `evidence_status: discovery_only_unverified`. That "
         "status is inherited by everything built from them.",
     ]
+    uncal = [g for g in p.ordered()
+             if not any(c.get("status") == "validated"
+                        for key, c in METRIC_CALIBRATION.get(g.metric, {}).items()
+                        if key in g.tool_keys)]
+    if uncal:
+        lines.append(
+            "- Gates "
+            + ", ".join(str(g.order) for g in uncal)
+            + " threshold metrics with no measured error on the tools named. "
+              "Framework section 6 permits running them and forbids ranking on "
+              "them; treat their ordering as provisional."
+        )
     if brief.frame.simulability_note:
         lines.append(
             f"- **Unscoreable step in this pathway:** {brief.frame.simulability_note}"

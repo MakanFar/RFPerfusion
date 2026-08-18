@@ -25,6 +25,7 @@ import re
 
 from .catalog import (
     INTERFACE_METRICS,
+    METRIC_CALIBRATION,
     METRIC_DIRECTION,
     PROTO_METRICS,
     cost_rank,
@@ -46,6 +47,18 @@ SHARD_ID_RE = re.compile(r"^S[0-9]+$")
 # A phrase real authors write is several words long. One-word "phrases" match
 # everything and turn the Paperclip set into noise.
 MIN_PHRASE_WORDS = 2
+
+
+def _decimal_step(value: float) -> float:
+    """The resolution a number is quoted to: 0.85 -> 0.01, 0.852 -> 0.001.
+
+    Quoting more digits than the evaluator's error supports is a claim about
+    precision the measurement does not carry.
+    """
+    text = f"{value!r}"
+    if "." not in text or "e" in text or "E" in text:
+        return 1.0
+    return 10.0 ** -len(text.split(".")[1])
 
 
 # --------------------------------------------------------------------------
@@ -326,6 +339,35 @@ def validate_proto(proto: ProtoBrief) -> list[str]:
                 f"gate {gate.order} declares cost_tier={gate.cost_tier!r} but its "
                 f"tools are {expected!r}"
             )
+
+        # Framework section 6: no claimed design margin finer than the
+        # evaluator's measured error. Fires only for metrics validated for the
+        # tools THIS gate names, so it is inert until calibration lands.
+        errors_for_gate = [
+            c["measured_error"]["value"]
+            for key, c in METRIC_CALIBRATION.get(gate.metric, {}).items()
+            if key in gate.tool_keys and c.get("status") == "validated"
+            and c.get("measured_error")
+        ]
+        if errors_for_gate:
+            err = max(errors_for_gate)
+            if gate.operator == "between" and gate.threshold_upper is not None:
+                window = gate.threshold_upper - gate.threshold
+                if window < 2 * err:
+                    problems.append(
+                        f"gate {gate.order} keeps a window of {window:g} on "
+                        f"{gate.metric!r}, but its measured error is {err:g}; "
+                        f"the window cannot be resolved"
+                    )
+            else:
+                step = _decimal_step(gate.threshold)
+                if step < err:
+                    problems.append(
+                        f"gate {gate.order} thresholds {gate.metric!r} at "
+                        f"{gate.threshold:g}, quoted to {step:g}, but its "
+                        f"measured error is {err:g}; the claimed margin is "
+                        f"finer than the evaluator can resolve"
+                    )
 
     ranks = [cost_rank(g.cost_tier) for g in gates]
     if ranks != sorted(ranks):

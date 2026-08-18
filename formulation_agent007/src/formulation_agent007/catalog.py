@@ -39,6 +39,13 @@ PROTO_METRICS: frozenset[str] = frozenset(_SNAPSHOT["metrics"])
 METRIC_DIRECTION: dict[str, str] = {
     name: spec["better"] for name, spec in _SNAPSHOT["metrics"].items()
 }
+
+# Keyed metric -> tool key -> {"status", "measured_error"}. Keyed by tool
+# because one metric can be validated for one emitting tool and not another.
+METRIC_CALIBRATION: dict[str, dict[str, dict]] = {
+    name: spec.get("calibration", {})
+    for name, spec in _SNAPSHOT["metrics"].items()
+}
 TOOLS_BY_CATEGORY: dict[str, list[str]] = _SNAPSHOT["categories"]
 
 # `primary` is True on a metric's snapshot entry when at least one tool

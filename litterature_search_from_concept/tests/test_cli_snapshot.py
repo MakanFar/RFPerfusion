@@ -104,3 +104,25 @@ def test_better_resolves_to_context_dependent_when_tools_disagree():
     snapshot_reordered = _snapshot_from_catalog(reordered)
     assert snapshot_reordered["metrics"]["interface_hydrophobicity"]["better"] == \
         "context-dependent"
+
+
+def test_snapshot_keys_calibration_by_tool_not_by_metric_name():
+    """One metric can be validated for one emitting tool and not another, so
+    a metric-global flag would be a lie for whichever tool disagrees."""
+    catalog = {"tools": [
+        {"key": "a-tool", "category": "structure_prediction", "measures": [
+            {"metric": "iptm", "better": "higher", "primary": True,
+             "calibration": {"status": "validated",
+                             "measured_error": {"kind": "mae", "value": 0.05}}}]},
+        {"key": "b-tool", "category": "structure_prediction", "measures": [
+            {"metric": "iptm", "better": "higher", "primary": False,
+             "calibration": {"status": "needs_calibration"}}]},
+    ]}
+
+    snap = _snapshot_from_catalog(catalog)
+
+    assert snap["schema_version"] == 4
+    cal = snap["metrics"]["iptm"]["calibration"]
+    assert cal["a-tool"]["status"] == "validated"
+    assert cal["a-tool"]["measured_error"]["value"] == 0.05
+    assert cal["b-tool"]["status"] == "needs_calibration"

@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import pytest
 
+from formulation_agent007.catalog import METRIC_CALIBRATION
 from formulation_agent007.models import FitnessGate, GateState, Linker
 from formulation_agent007.validate import (
     validate_assembly,
@@ -69,6 +70,59 @@ class TestProtoCascade:
         proto.gates[2].order = 9
         problems = validate_proto(proto)
         assert any("gate orders" in p for p in problems)
+
+    _CAL = {"esmfold-prediction": {
+        "status": "validated",
+        "measured_error": {"kind": "mae", "value": 0.06}}}
+
+    def test_uncalibrated_metric_raises_no_margin_problem(self, proto):
+        """validate_proto's output drives an LLM repair attempt
+        (agent.py:120), not a warning log. With nothing calibrated, flagging
+        uncalibrated gates would fire on every gate of every run and drive a
+        repair that cannot succeed. The label belongs in the runbook."""
+        assert not any("measured error" in p for p in validate_proto(proto))
+
+    def test_between_window_narrower_than_twice_the_error_is_rejected(
+            self, proto, monkeypatch):
+        monkeypatch.setitem(METRIC_CALIBRATION, "avg_plddt", self._CAL)
+        gate = proto.gates[0]
+        gate.metric, gate.tool_keys = "avg_plddt", ["esmfold-prediction"]
+        gate.operator = "between"
+        gate.threshold, gate.threshold_upper = 0.80, 0.85
+
+        assert any("measured error" in p for p in validate_proto(proto))
+
+    def test_threshold_quoted_finer_than_the_measured_error_is_rejected(
+            self, proto, monkeypatch):
+        monkeypatch.setitem(METRIC_CALIBRATION, "avg_plddt", self._CAL)
+        gate = proto.gates[0]
+        gate.metric, gate.tool_keys = "avg_plddt", ["esmfold-prediction"]
+        gate.operator, gate.threshold = ">=", 0.852
+        gate.threshold_upper = None
+
+        assert any("measured error" in p for p in validate_proto(proto))
+
+    def test_threshold_coarser_than_the_measured_error_passes(
+            self, proto, monkeypatch):
+        monkeypatch.setitem(METRIC_CALIBRATION, "avg_plddt", self._CAL)
+        gate = proto.gates[0]
+        gate.metric, gate.tool_keys = "avg_plddt", ["esmfold-prediction"]
+        gate.operator, gate.threshold = ">=", 0.8
+        gate.threshold_upper = None
+
+        assert not any("measured error" in p for p in validate_proto(proto))
+
+    def test_calibration_for_a_tool_the_gate_does_not_name_is_ignored(
+            self, proto, monkeypatch):
+        """The gate names the tools that will actually run. A metric
+        validated on some other tool says nothing about this gate."""
+        monkeypatch.setitem(METRIC_CALIBRATION, "avg_plddt", self._CAL)
+        gate = proto.gates[0]
+        gate.metric, gate.tool_keys = "avg_plddt", ["boltz2-prediction"]
+        gate.operator, gate.threshold = ">=", 0.852
+        gate.threshold_upper = None
+
+        assert not any("measured error" in p for p in validate_proto(proto))
 
 
 class TestLiteraturePlan:
