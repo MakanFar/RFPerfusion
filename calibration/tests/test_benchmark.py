@@ -54,3 +54,24 @@ def test_every_rejection_names_its_reason():
     assert len(rejected) == 4
     assert all(r["reason"] and isinstance(r["reason"], str) for r in rejected)
     assert {r["pdb_id"] for r in rejected} == {"A", "B", "C", "D"}
+
+
+def test_an_entry_released_exactly_on_cutoff_is_rejected():
+    """The <= comparison is what makes the held-out claim honest. An entry
+    released exactly on the cutoff date may be in ESMFold's training set and
+    must be excluded. This boundary case pins the choice of <= over <, which
+    is the only filter whose removal would silently invalidate a promotion."""
+    kept, rejected = benchmark.select([_entry(released=CUTOFF)], CUTOFF)
+    assert kept == []
+    assert "cutoff" in rejected[0]["reason"]
+
+
+def test_a_pre_cutoff_multi_chain_entry_is_rejected_for_cutoff_not_chains():
+    """When an entry fails multiple filters, rejection is attributed to the
+    honesty-critical filter (cutoff) rather than cosmetic ones (chain count).
+    The elif chain ensures that pre-cutoff multi-chain entries report the
+    cutoff reason, protecting the whole framework's held-out claim."""
+    kept, rejected = benchmark.select([_entry(released="2019-01-01", n_chains=3)], CUTOFF)
+    assert kept == []
+    assert "cutoff" in rejected[0]["reason"]
+    assert "chain" not in rejected[0]["reason"]
