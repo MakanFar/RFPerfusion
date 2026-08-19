@@ -1,4 +1,7 @@
 import math
+import statistics
+
+import pytest
 
 from calib import resolution
 
@@ -164,3 +167,47 @@ def test_spearman_averages_tied_ranks_rather_than_ordering_by_input():
     assert out["ok"] is True
     assert out["spearman"] > 0
     assert math.isclose(out["spearman"], 0.6094, abs_tol=0.001)
+
+
+def test_slope_standard_error_uses_the_unbiased_residual_estimator():
+    """The flat-within-noise guard is a false-promotion safeguard, so its
+    standard error must not be understated.
+
+    OLS spends two degrees of freedom fitting the slope and the intercept,
+    so the residual variance divides by n-2. Dividing by n (which is what
+    `statistics.pstdev` does) understates se by sqrt(n/(n-2)) -- about 15%
+    at MIN_ROWS=8 -- making `slope < 2*se` fire less often than it should.
+    Less often, for this guard, means promoting fits that are not actually
+    distinguishable from flat.
+
+    Hand-checkable: with 8 residuals of magnitude 0.1, SS_resid = 8*0.01 =
+    0.08, so the unbiased sd is sqrt(0.08/6) = 0.11547 against pstdev's
+    sqrt(0.08/8) = 0.1. With sxx = 4.0 the se is 0.11547/2 = 0.057735,
+    where the population estimator would have said 0.05.
+    """
+    resid = [0.1, -0.1] * 4
+    assert resolution._slope_se(resid, sxx=4.0) == pytest.approx(0.057735, rel=1e-4)
+
+
+def test_the_unbiased_standard_error_is_larger_than_the_population_one():
+    """Direction check: the corrected estimator must be strictly more
+    conservative, never less, at every n above the fit's own degrees of
+    freedom."""
+    resid = [0.05, -0.05] * 6
+    sxx = 3.0
+    unbiased = resolution._slope_se(resid, sxx)
+    population = statistics.pstdev(resid) / math.sqrt(sxx)
+    assert unbiased > population
+
+
+def test_a_slope_between_the_two_estimators_is_now_refused():
+    """The whole point of the correction: a fit that the population
+    estimator would have waved through, because its se looked smaller than
+    it is, must now refuse."""
+    resid = [0.1, -0.1] * 4
+    sxx = 4.0
+    population_se = statistics.pstdev(resid) / math.sqrt(sxx)
+    unbiased_se = resolution._slope_se(resid, sxx)
+    borderline = (2 * population_se + 2 * unbiased_se) / 2
+
+    assert 2 * population_se < borderline < 2 * unbiased_se

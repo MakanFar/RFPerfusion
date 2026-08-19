@@ -75,3 +75,22 @@ def test_a_pre_cutoff_multi_chain_entry_is_rejected_for_cutoff_not_chains():
     assert kept == []
     assert "cutoff" in rejected[0]["reason"]
     assert "chain" not in rejected[0]["reason"]
+
+
+def test_the_esmfold_cutoff_is_the_date_the_authors_published():
+    """Pinned, because the entire held-out claim rests on this one value and
+    a plausible-looking edit would silently invalidate a promotion.
+
+    2020-05-01 comes from the ESMFold paper's own "Structure training sets
+    for ESMFold" section, not from a summary of it. A third-party comparison
+    paper says "June 2020"; the authors' methods section wins.
+    """
+    assert benchmark.ESMFOLD_PDB_CUTOFF == "2020-05-01"
+
+    # And it must actually behave as a cutoff: an entry released on that day
+    # is excluded, since "until 2020-05-01" may include it in training.
+    kept, rejected = benchmark.select(
+        [_entry(released=benchmark.ESMFOLD_PDB_CUTOFF)],
+        benchmark.ESMFOLD_PDB_CUTOFF)
+    assert kept == []
+    assert "cutoff" in rejected[0]["reason"]

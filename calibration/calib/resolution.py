@@ -63,6 +63,28 @@ def _linfit(xs, ys):
     return slope, my - slope * mx
 
 
+def _slope_se(resid, sxx):
+    """Standard error of the OLS slope, from the UNBIASED residual variance.
+
+    Divides by n-2, not n: two degrees of freedom were spent fitting the
+    slope and the intercept. `statistics.pstdev` divides by n and so
+    understates the error by sqrt(n/(n-2)) -- about 15% at MIN_ROWS, 2.6% at
+    n=40. That understatement makes `slope < SE_MULTIPLE * se` fire less
+    often than it should, and this guard exists to refuse promotions, so
+    firing less often is the permissive direction on a safeguard.
+
+    `sd_resid` elsewhere in this module deliberately stays the population
+    figure: it describes the scatter that IS there, and feeds the reported
+    resolution. This one is an inference about whether the slope differs
+    from zero, which is what needs the correction.
+    """
+    n = len(resid)
+    if n <= 2 or sxx <= 0:
+        return float("inf")
+    ss_resid = sum(r * r for r in resid)
+    return math.sqrt(ss_resid / (n - 2)) / math.sqrt(sxx)
+
+
 def _spearman(xs, ys):
     """Rank correlation, with TIED ranks averaged.
 
@@ -124,7 +146,7 @@ def measure(rows, slope_floor=SLOPE_FLOOR):
 
     mx = statistics.fmean(xs)
     sxx = sum((x - mx) ** 2 for x in xs)
-    se = sd_resid / math.sqrt(sxx) if sxx > 0 else float("inf")
+    se = _slope_se(resid, sxx)
     if slope < SE_MULTIPLE * se:
         return refuse(
             f"slope {slope:.4f} is flat within noise: below {SE_MULTIPLE:g}x "
