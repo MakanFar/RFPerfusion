@@ -57,3 +57,46 @@ def test_too_few_rows_cannot_produce_a_fit():
     out = resolution.measure([{"pdb_id": "A", "avg_plddt": 0.8, "tm_score": 0.9}])
     assert out["ok"] is False
     assert "rows" in out["reason"]
+
+
+def test_slope_just_below_min_slope_threshold_refuses_to_promote():
+    """Operator flip on MIN_SLOPE comparison (< to <=) would let a
+    non-discriminating metric promote. This test pins that a fitted slope
+    below the threshold refuses, catching the fail-open guard."""
+    # Nominal slope 0.04 should fit very close to 0.04, below MIN_SLOPE=0.05
+    out = resolution.measure(_rows(slope=0.04, noise=0.01))
+    assert out["ok"] is False
+    assert "slope" in out["reason"]
+    assert "measured_error" not in out
+
+
+def test_slope_just_above_min_slope_threshold_proceeds():
+    """Operator flip on MIN_SLOPE comparison would prevent a barely-discriminating
+    metric from promoting. This test pins the boundary: a slope just above
+    the threshold must proceed, protecting the valid promotion case."""
+    # Nominal slope 0.06 should fit very close to 0.06, above MIN_SLOPE=0.05
+    out = resolution.measure(_rows(slope=0.06, noise=0.01))
+    assert out["ok"] is True
+    assert "measured_error" in out
+
+
+def test_exactly_min_rows_produces_a_fit():
+    """Operator flip on MIN_ROWS comparison (< to <=) would reject the minimum
+    valid sample. This test pins that exactly MIN_ROWS=8 rows produce a fit."""
+    rows = _rows(slope=0.5, noise=0.01, n=8, start=0.70)
+    out = resolution.measure(rows)
+    assert out["ok"] is True
+    assert out["n"] == 8
+    assert "measured_error" in out
+
+
+def test_one_below_min_rows_refuses_to_fit():
+    """Below MIN_ROWS, insufficient data for reliable fit. This test pins
+    the boundary: n=7 must refuse, protecting the comparison operator from
+    accidental flips that would allow underpowered fits."""
+    rows = _rows(slope=0.5, noise=0.01, n=7, start=0.70)
+    out = resolution.measure(rows)
+    assert out["ok"] is False
+    assert "rows" in out["reason"]
+    assert out["n"] == 7
+    assert "measured_error" not in out
