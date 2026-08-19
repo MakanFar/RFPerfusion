@@ -3,14 +3,21 @@ import math
 from calib import resolution
 
 
+# Residual signs in blocks of four. A plain +/- alternation is NOT
+# slope-neutral: its correlation with x shifts the fitted slope by about
+# -0.5 * noise, so a fixture asking for slope 0.1 at noise 0.3 actually fit
+# to -0.05. This pattern sums to zero against x within every block, so the
+# fitted slope equals the nominal one and sd_resid equals `noise` exactly.
+_SIGNS = (1, -1, -1, 1)
+
+
 def _rows(slope, noise, n=40, start=0.70):
     """Synthetic rows with a KNOWN slope and known scatter, so the returned
     resolution has an arithmetic answer rather than a plausible one."""
     rows = []
     for i in range(n):
         plddt = start + (0.29 * i / (n - 1))
-        # deterministic alternating residual of exactly +/- `noise`
-        resid = noise if i % 2 == 0 else -noise
+        resid = noise * _SIGNS[i % 4]
         rows.append({"pdb_id": f"P{i:03d}", "avg_plddt": plddt,
                      "tm_score": 0.5 + slope * (plddt - start) + resid})
     return rows
@@ -100,3 +107,60 @@ def test_one_below_min_rows_refuses_to_fit():
     assert "rows" in out["reason"]
     assert out["n"] == 7
     assert "measured_error" not in out
+
+
+def test_a_negative_slope_refuses_to_promote():
+    """An anti-predictive metric is not a calibrated one. If accuracy FALLS as
+    confidence rises, taking |slope| turns the failure into a healthy-looking
+    resolution and licenses ranking candidates in exactly the wrong order --
+    the one thing framework section 6 exists to prevent. The refusal must name
+    the direction, because the magnitude alone reads as a good fit."""
+    out = resolution.measure(_rows(slope=-0.5, noise=0.02))
+
+    assert out["ok"] is False
+    assert "negative" in out["reason"]
+    assert "measured_error" not in out
+
+
+def test_a_slope_smaller_than_its_own_standard_error_refuses():
+    """Spec section 3.3 defines the refusal as "the fit is flat WITHIN NOISE"
+    -- a statement about the slope relative to its own standard error, not
+    against an absolute constant. A slope of 0.1 against a residual scatter of
+    0.3 clears any fixed floor and is still indistinguishable from zero; the
+    resolution it would yield is larger than the whole [0, 1] metric range."""
+    out = resolution.measure(_rows(slope=0.1, noise=0.3))
+
+    assert out["ok"] is False
+    assert "standard error" in out["reason"]
+    assert "measured_error" not in out
+
+
+def test_a_resolution_larger_than_the_metric_range_refuses():
+    """A resolution approaching the metric's own range is not a resolution:
+    it says no two values of avg_plddt on [0, 1] can be told apart, which is a
+    refusal rather than an enormous measured_error every gate satisfies."""
+    # Enough rows that the standard-error test passes on its own, so this
+    # exercises the sanity bound rather than the noise test.
+    out = resolution.measure(_rows(slope=0.15, noise=0.05, n=80))
+
+    assert out["ok"] is False
+    assert "resolution" in out["reason"]
+    assert "measured_error" not in out
+
+
+def test_spearman_averages_tied_ranks_rather_than_ordering_by_input():
+    """spearman is the human promoter's independent check on DIRECTION, and
+    direction is exactly what can go wrong. Breaking ties by input order
+    manufactures a within-group correlation out of row ordering: on this
+    fixture the tie-corrected rho is +0.61 and ordering by input reports
+    -0.26, so the reviewer's independent check would read backwards."""
+    rows = [{"pdb_id": f"T{i}", "avg_plddt": 0.90, "tm_score": 0.90 - 0.02 * i}
+            for i in range(12)]
+    rows.append({"pdb_id": "HI", "avg_plddt": 0.95, "tm_score": 0.99})
+    rows.append({"pdb_id": "LO", "avg_plddt": 0.85, "tm_score": 0.60})
+
+    out = resolution.measure(rows)
+
+    assert out["ok"] is True
+    assert out["spearman"] > 0
+    assert math.isclose(out["spearman"], 0.6094, abs_tol=0.001)
