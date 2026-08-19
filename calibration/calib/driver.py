@@ -25,7 +25,12 @@ def _subprocess_runner(job):
         input=json.dumps(job), capture_output=True, text=True)
     if proc.returncode != 0:
         raise DriverError(f"runner exited {proc.returncode}: {proc.stderr[-2000:]}")
-    return json.loads(proc.stdout)
+    try:
+        return json.loads(proc.stdout)
+    except json.JSONDecodeError as exc:
+        raise DriverError(
+            f"{job.get('pdb_id', '?')}: runner exited 0 but stdout was not "
+            f"JSON ({exc}): {proc.stdout[-2000:]}") from exc
 
 
 def measure_chain(pdb_id, runner=None):
