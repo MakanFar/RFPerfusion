@@ -27,6 +27,9 @@ jobs:
           - name: biophys_triage
             dir: biophysical_triage_pipeline
             args: ""
+          - name: calibration
+            dir: calibration
+            args: ""
     name: ${{ matrix.name }}
     steps:
       - uses: actions/checkout@v4
