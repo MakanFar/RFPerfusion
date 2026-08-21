@@ -49,4 +49,12 @@ def test_committed_catalogue_is_schema_3_with_calibration_on_every_row():
     rows = [m for t in catalog["tools"] for m in t.get("measures", [])]
     assert rows, "catalogue has no metric rows at all"
     assert all("calibration" in m for m in rows)
-    assert {m["calibration"]["status"] for m in rows} == {"needs_calibration"}
+    # Every row carries a calibration block -- that is the guard, and it is
+    # what makes an uncalibrated row read as "not calibrated" rather than as
+    # "no opinion". Exactly one row is validated (esmfold-prediction's
+    # avg_plddt); asserting every row is uncalibrated stopped being the right
+    # check at the first promotion.
+    validated = [m for m in rows if m["calibration"]["status"] == "validated"]
+    assert len(validated) == 1
+    assert validated[0]["metric"] == "avg_plddt"
+    assert {m["calibration"]["status"] for m in rows} <= {"needs_calibration", "validated"}

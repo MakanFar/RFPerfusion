@@ -155,8 +155,13 @@ def proto() -> ProtoBrief:
                 input_description="every construct",
                 state=GateState.SINGLE,
                 metric="avg_plddt",
+                # 0.8, not 0.75: avg_plddt is now calibrated at a resolution
+                # of 0.0596 pLDDT, and 0.75 is quoted to 0.01 -- finer than
+                # the evaluator can resolve, so validate_proto rejects it.
+                # A fixture named "a well-formed cascade" has to be well
+                # formed in the world the suite actually runs in.
                 operator=">=",
-                threshold=0.75,
+                threshold=0.8,
                 kill_rule="drop the candidate",
                 cost_tier="cheap",
             ),

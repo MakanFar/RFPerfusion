@@ -2220,7 +2220,50 @@
           "better": "higher",
           "primary": true,
           "calibration": {
-            "status": "needs_calibration"
+            "status": "validated",
+            "measured_error": {
+              "kind": "resolution",
+              "value": 0.0596,
+              "n": 34
+            },
+            "benchmark": {
+              "name": "PDB post-cutoff single chains",
+              "held_out": true,
+              "cutoff_date": "2020-05-01",
+              "cutoff_source": "Lin et al., bioRxiv 2022.07.20.500902, 'Structure training sets for ESMFold'",
+              "selection": "RCSB search: exptl.method=X-RAY DIFFRACTION, deposited chains 1-3, entity length 40-500. NO date constraint -- the cutoff is applied by benchmark.select so the filter the held-out claim rests on is exercised on real entries rather than pre-satisfied by the query.",
+              "release_span": [
+                "2026-02-18",
+                "2026-08-19"
+              ],
+              "limitations": [
+                "Every post-cutoff entry in the sampled pool fell in a single 2026 window; RCSB's default result ordering returned a bimodal sample (1976-1999 and 2026, nothing between). The set is therefore ~6 years past the training cutoff -- conservative for leakage -- but spans only about six months of depositions, so it is narrower in time than a benchmark drawn across 2020-2026 would be.",
+                "No homology screen was run against pre-cutoff structures. A post-cutoff entry can be a point mutant or close homolog of a structure ESMFold trained on, so the date filter bounds memorisation of that exact entry, not generalisation.",
+                "n_chains is deposited_polymer_entity_instance_count, pinned against a live RCSB response (1UBQ reports 1). This is the deposited chain count, which is what the runner's single-protein-chain guard checks."
+              ],
+              "exclusions": [],
+              "validity": {
+                "spearman": 0.6029,
+                "slope": 0.7075,
+                "sd_resid": 0.0422,
+                "slope_band": [
+                  0.7,
+                  1.0
+                ],
+                "n_chains_measured": 100
+              }
+            },
+            "applicability_domain": {
+              "molecules": [
+                "protein"
+              ],
+              "length": [
+                93,
+                398
+              ],
+              "notes": "single chains only; measured on this benchmark set"
+            },
+            "curated_on": "2026-08-20"
           }
         },
         {
@@ -2269,7 +2312,7 @@
           }
         }
       ],
-      "status": "needs_calibration",
+      "status": "validated",
       "input_kind": "complex",
       "max_length": 2400,
       "molecules": [

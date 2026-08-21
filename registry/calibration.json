@@ -3,11 +3,63 @@
   "note": "Hand-curated calibration, kept OUT of proto_catalog.json because that file is regenerated from proto-tools on every `litkb proto-sync` and everything in it is derived. Keyed by (tool, metric): one model emits several metrics and may be characterised for some and not others. Overlaid at build time by proto.apply_calibration. Tool-level `status` is DERIVED from these, never curated.",
   "promotion_rule": "A metric becomes \"validated\" only on measured reliability against a held-out benchmark, per docs/PRD-framework.md section 6, and the record must carry `measured_error` and `benchmark` or it is refused. Absence means needs_calibration; silence is never a promotion.",
   "known_gaps": [
-    "Section 6 requires measured error per evaluator (so no design margin is claimed finer than it) and an applicability domain (so out-of-domain candidates are flagged and excluded from ranking). Both fields are demonstrated on the `example` block below, not on any curated record here -- `tools` is still `{}`. `measured_error` is now read: formulation_agent007/validate.py's margin check rejects a gate whose threshold, or `between` window, is finer than the measured error of a metric validated for the tools that gate names, and emit.py labels any gate that is not fully calibrated in the runbook. `applicability_domain` is still recorded but not enforced against anything: there is no candidate set yet to check it against.",
+    "Exactly one metric is calibrated: esmfold-prediction:avg_plddt, at a resolution of 0.0596 pLDDT measured on 34 in-band chains of a 100-chain held-out benchmark. Every other (tool, metric) pair in the catalogue remains needs_calibration, so section 6 still forbids ranking on all of them. `applicability_domain` is recorded and still not enforced against anything: there is no candidate set yet to check it against.",
+    "The promoted fit rests on 34 chains, not the 60-100 the benchmark was sized for: only 34 of the 100 measured chains cleared the avg_plddt >= 0.7 slope band (measured span 0.365-0.903). It clears MIN_ROWS and the 2x-standard-error test, but it is thinner than intended and a wider high-confidence set would tighten it.",
     "Only 48 of 140 catalogued tools emit metrics at all; the other 92 are generators, retrievers, aligners and annotators for which calibration is meaningless. The real calibration surface is those 48.",
-    "Nothing distinguishes a curator from anyone with write access to this file. `apply_calibration` checks that a `validated` record is well-formed -- a positive numeric `measured_error.value` and a `benchmark` -- but enforces no authority check on who supplies it. Framework section 11 Q5 leaves 'who may promote' open, and a promotion here changes what the whole system is permitted to claim."
+    "Nothing distinguishes a curator from anyone with write access to this file. `apply_calibration` checks that a `validated` record is well-formed -- a positive numeric `measured_error.value` and a `benchmark` -- but enforces no authority check on who supplies it. Framework section 11 Q5 leaves 'who may promote' open, and this promotion changed what the whole system is permitted to claim."
   ],
-  "tools": {},
+  "tools": {
+    "esmfold-prediction": {
+      "metrics": {
+        "avg_plddt": {
+          "status": "validated",
+          "measured_error": {
+            "kind": "resolution",
+            "value": 0.0596,
+            "n": 34
+          },
+          "benchmark": {
+            "name": "PDB post-cutoff single chains",
+            "held_out": true,
+            "cutoff_date": "2020-05-01",
+            "cutoff_source": "Lin et al., bioRxiv 2022.07.20.500902, 'Structure training sets for ESMFold'",
+            "selection": "RCSB search: exptl.method=X-RAY DIFFRACTION, deposited chains 1-3, entity length 40-500. NO date constraint -- the cutoff is applied by benchmark.select so the filter the held-out claim rests on is exercised on real entries rather than pre-satisfied by the query.",
+            "release_span": [
+              "2026-02-18",
+              "2026-08-19"
+            ],
+            "limitations": [
+              "Every post-cutoff entry in the sampled pool fell in a single 2026 window; RCSB's default result ordering returned a bimodal sample (1976-1999 and 2026, nothing between). The set is therefore ~6 years past the training cutoff -- conservative for leakage -- but spans only about six months of depositions, so it is narrower in time than a benchmark drawn across 2020-2026 would be.",
+              "No homology screen was run against pre-cutoff structures. A post-cutoff entry can be a point mutant or close homolog of a structure ESMFold trained on, so the date filter bounds memorisation of that exact entry, not generalisation.",
+              "n_chains is deposited_polymer_entity_instance_count, pinned against a live RCSB response (1UBQ reports 1). This is the deposited chain count, which is what the runner's single-protein-chain guard checks."
+            ],
+            "exclusions": [],
+            "validity": {
+              "spearman": 0.6029,
+              "slope": 0.7075,
+              "sd_resid": 0.0422,
+              "slope_band": [
+                0.7,
+                1.0
+              ],
+              "n_chains_measured": 100
+            }
+          },
+          "applicability_domain": {
+            "molecules": [
+              "protein"
+            ],
+            "length": [
+              93,
+              398
+            ],
+            "notes": "single chains only; measured on this benchmark set"
+          },
+          "curated_on": "2026-08-20"
+        }
+      }
+    }
+  },
   "example": {
     "esmfold-prediction": {
       "metrics": {

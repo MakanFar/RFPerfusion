@@ -87,9 +87,21 @@ class TestProtoCascade:
 
     def test_uncalibrated_metric_raises_no_margin_problem(self, proto):
         """validate_proto's output drives an LLM repair attempt
-        (agent.py:120), not a warning log. With nothing calibrated, flagging
-        uncalibrated gates would fire on every gate of every run and drive a
-        repair that cannot succeed. The label belongs in the runbook."""
+        (agent.py:120), not a warning log. Flagging an uncalibrated gate
+        there would fire on every such gate of every run and drive a repair
+        that cannot succeed, so the label belongs in the runbook instead.
+
+        Uses `ptm`, which esmfold-prediction emits and which nothing has
+        promoted, with a threshold quoted to 0.001 -- fine enough that the
+        margin check would certainly fire if `ptm` were calibrated. Asserting
+        this against `avg_plddt` stopped testing anything once that metric
+        was promoted: it then passed only because the fixture's threshold was
+        coarse, not because the metric was uncalibrated."""
+        gate = proto.gates[0]
+        gate.metric, gate.tool_keys = "ptm", ["esmfold-prediction"]
+        gate.operator, gate.threshold = ">=", 0.852
+        gate.threshold_upper = None
+
         assert not any("measured error" in p for p in validate_proto(proto))
 
     def test_between_window_narrower_than_twice_the_error_is_rejected(

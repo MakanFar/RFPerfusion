@@ -89,10 +89,25 @@ class TestProtoRunbook:
     def test_names_the_unscoreable_step(self, brief):
         assert brief.frame.simulability_note in render_proto_brief(brief)
 
-    def test_labels_uncalibrated_gates_when_nothing_is_calibrated(self, brief):
+    def test_labels_exactly_the_gates_that_are_not_fully_calibrated(self, brief):
+        """The runbook must name the gates whose ordering is provisional, and
+        only those.
+
+        This asserted every gate was labelled, which was right while nothing
+        was calibrated and wrong the moment something was: a promotion would
+        have failed the test rather than narrowing the label, which is the
+        behaviour the label exists for. The expectation is now derived from
+        the live calibration rather than assumed, so it keeps holding as more
+        metrics are promoted -- and it still fails if a calibrated gate is
+        wrongly labelled or an uncalibrated one is quietly dropped."""
         text = render_proto_brief(brief)
+        expected = [g.order for g in brief.proto.ordered()
+                    if not any(c.get("status") == "validated"
+                               for c in catalog.calibration_for(
+                                   g.metric, g.tool_keys).values())]
+        assert expected, "fixture has no uncalibrated gate left to label"
         assert "no measured error on the tools named" in text
-        assert "Gates " + ", ".join(str(g.order) for g in brief.proto.ordered()) in text
+        assert "Gates " + ", ".join(str(o) for o in expected) in text
 
     def test_label_is_absent_once_every_gate_metric_tool_pair_is_calibrated(
             self, brief, monkeypatch):

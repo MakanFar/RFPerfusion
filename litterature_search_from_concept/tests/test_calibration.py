@@ -256,15 +256,24 @@ def test_tool_with_no_primary_metric_can_never_be_validated():
     assert by_key["no-primary-tool"]["status"] == "needs_calibration"
 
 
-def test_every_tool_in_the_committed_catalogue_is_still_uncalibrated():
-    """The shipped curation promotes nothing, so the derived status must match
-    what proto-sync wrote before this change."""
+def test_exactly_one_tool_in_the_committed_catalogue_is_validated():
+    """esmfold-prediction was promoted on a measured resolution; nothing else
+    was.
+
+    This asserts the promotion is EXACTLY as wide as it was meant to be. The
+    earlier version of this test asserted nothing was calibrated at all, which
+    was true until the first promotion and is the wrong guard afterwards -- it
+    would have failed on the intended change while staying silent about an
+    unintended second one. Framework section 6 forbids ranking on every tool
+    not in this set, so the set's size is the claim."""
     catalog = json.load(open("../registry/proto_catalog.json"))
     curation = json.load(open("../registry/calibration.json"))
 
     out, _ = proto.apply_calibration(catalog, curation)
 
-    assert {t["status"] for t in out["tools"]} == {"needs_calibration"}
+    validated = sorted(t["key"] for t in out["tools"] if t["status"] == "validated")
+    assert validated == ["esmfold-prediction"]
+    assert {t["status"] for t in out["tools"]} == {"needs_calibration", "validated"}
 
 
 def test_committed_catalogue_matches_committed_curation():

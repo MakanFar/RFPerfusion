@@ -70,13 +70,30 @@ def test_a_promotion_missing_its_measurement_is_refused(dropped):
                                 {"schema_version": 2, "tools": frag})
 
 
+def _uncalibrated_catalog():
+    """The committed catalogue with every calibration reset.
+
+    `_catalog()` reads the live registry, which now carries a real promotion
+    (esmfold-prediction:avg_plddt). Using it directly would make this test's
+    "before" state already-calibrated, so the transition it exists to
+    demonstrate would collapse into a no-op that still passed. Reconstructing
+    the pre-promotion world keeps the test measuring the thing it names.
+    """
+    catalog = _catalog()
+    for tool in catalog["tools"]:
+        tool["status"] = "needs_calibration"
+        for row in tool.get("measures", []):
+            row["calibration"] = {"status": "needs_calibration"}
+    return catalog
+
+
 def test_the_record_is_what_makes_rankable_by_non_empty():
     """The point of the whole exercise. Before this record `rankable_by` is
     empty for every term in the vocabulary -- fifteen tools can MEASURE
     fold_confidence and none of them may RANK on it, which is what section 6
     says about an uncalibrated evaluator. One promoted metric is what
     separates the two lists for the first time."""
-    catalog = _catalog()
+    catalog = _uncalibrated_catalog()
     vocab = json.loads((_ROOT / "registry" / "property_vocabulary.json").read_text())
 
     before = proto.resolve_properties(["fold_confidence"], catalog, vocab)
