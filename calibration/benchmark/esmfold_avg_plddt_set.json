@@ -1,0 +1,4139 @@
+{
+  "cutoff_date": "2020-05-01",
+  "cutoff_source": "Lin et al., bioRxiv 2022.07.20.500902, 'Structure training sets for ESMFold'",
+  "query": "RCSB search: exptl.method=X-RAY DIFFRACTION, deposited chains 1-3, entity length 40-500. NO date constraint -- the cutoff is applied by benchmark.select so the filter the held-out claim rests on is exercised on real entries rather than pre-satisfied by the query.",
+  "n_candidates": 1200,
+  "n_kept_by_select": 198,
+  "rejections_by_filter": {
+    "cutoff": 662,
+    "chains": 262,
+    "length": 78
+  },
+  "selection": "deterministic: sha256(pdb_id) rank, first 100, then sorted. Hashing rather than sorting by id, because ids are issued roughly chronologically and sorting would bias the set toward one end of the release window.",
+  "n_chosen": 100,
+  "length_span": [
+    93,
+    398
+  ],
+  "release_span": [
+    "2026-02-18",
+    "2026-08-19"
+  ],
+  "limitations": [
+    "Every post-cutoff entry in the sampled pool fell in a single 2026 window; RCSB's default result ordering returned a bimodal sample (1976-1999 and 2026, nothing between). The set is therefore ~6 years past the training cutoff -- conservative for leakage -- but spans only about six months of depositions, so it is narrower in time than a benchmark drawn across 2020-2026 would be.",
+    "No homology screen was run against pre-cutoff structures. A post-cutoff entry can be a point mutant or close homolog of a structure ESMFold trained on, so the date filter bounds memorisation of that exact entry, not generalisation.",
+    "n_chains is deposited_polymer_entity_instance_count, pinned against a live RCSB response (1UBQ reports 1). This is the deposited chain count, which is what the runner's single-protein-chain guard checks."
+  ],
+  "chosen": [
+    "10FS",
+    "10GA",
+    "10HY",
+    "10HZ",
+    "10LR",
+    "10MV",
+    "10MW",
+    "10QS",
+    "10RY",
+    "10XA",
+    "10XD",
+    "10XF",
+    "10YO",
+    "10ZG",
+    "11AD",
+    "11AP",
+    "11CH",
+    "11CI",
+    "11GZ",
+    "11IF",
+    "11MQ",
+    "11NQ",
+    "11OY",
+    "11TU",
+    "11YV",
+    "12AF",
+    "12AK",
+    "12FA",
+    "12KZ",
+    "12LA",
+    "12LB",
+    "12VR",
+    "13DZ",
+    "13EB",
+    "13IQ",
+    "13LW",
+    "13LX",
+    "13MK",
+    "13ML",
+    "13MP",
+    "13MR",
+    "13MS",
+    "13MT",
+    "13MU",
+    "13MY",
+    "13MZ",
+    "13ND",
+    "13NE",
+    "13NF",
+    "13NG",
+    "13NI",
+    "13NJ",
+    "13NK",
+    "13NN",
+    "13NO",
+    "13NP",
+    "13NT",
+    "13NU",
+    "13OA",
+    "13OB",
+    "13OD",
+    "13OF",
+    "13OH",
+    "13OJ",
+    "13OK",
+    "13OL",
+    "13ON",
+    "13OO",
+    "13OT",
+    "13OW",
+    "13OX",
+    "13OZ",
+    "13PB",
+    "13PC",
+    "13PD",
+    "13PJ",
+    "13PO",
+    "13PP",
+    "13PQ",
+    "13PS",
+    "13PT",
+    "13PV",
+    "13PW",
+    "13PX",
+    "13QC",
+    "13QF",
+    "13QK",
+    "13QL",
+    "13QM",
+    "13QN",
+    "13QP",
+    "13QR",
+    "13QS",
+    "13QT",
+    "13QV",
+    "13QW",
+    "13QX",
+    "13RA",
+    "13RC",
+    "13RE"
+  ],
+  "rejected": [
+    {
+      "pdb_id": "101M",
+      "reason": "released 1998-04-08, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "102L",
+      "reason": "released 1993-10-31, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "102M",
+      "reason": "released 1998-04-08, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "103L",
+      "reason": "released 1993-10-31, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "103M",
+      "reason": "released 1998-04-08, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "104M",
+      "reason": "released 1998-04-08, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "105M",
+      "reason": "released 1998-04-08, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "106M",
+      "reason": "released 1998-04-08, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "107L",
+      "reason": "released 1993-10-31, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "107M",
+      "reason": "released 1998-04-08, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "108L",
+      "reason": "released 1993-10-31, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "108M",
+      "reason": "released 1998-05-20, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "109L",
+      "reason": "released 1993-10-31, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "109M",
+      "reason": "released 1998-04-08, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "10AH",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "10AI",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "10AJ",
+      "reason": "429 residues outside the 50-400 band"
+    },
+    {
+      "pdb_id": "10AK",
+      "reason": "431 residues outside the 50-400 band"
+    },
+    {
+      "pdb_id": "10AP",
+      "reason": "447 residues outside the 50-400 band"
+    },
+    {
+      "pdb_id": "10BL",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "10DJ",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "10DV",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "10GI",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "10GS",
+      "reason": "released 1998-09-16, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "10JT",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "10JU",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "10JX",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "10JY",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "10KA",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "10KV",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "10KY",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "10LE",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "10LG",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "10LI",
+      "reason": "478 residues outside the 50-400 band"
+    },
+    {
+      "pdb_id": "10LW",
+      "reason": "3 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "10LX",
+      "reason": "3 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "10MH",
+      "reason": "released 1999-02-09, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "10NU",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "10NV",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "10OO",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "10PJ",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "10SB",
+      "reason": "3 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "10SL",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "10UH",
+      "reason": "3 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "10UT",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "10UV",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "10WY",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "10XE",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "10XL",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "10YV",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "10ZJ",
+      "reason": "410 residues outside the 50-400 band"
+    },
+    {
+      "pdb_id": "110L",
+      "reason": "released 1993-10-31, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "111L",
+      "reason": "released 1993-10-31, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "110M",
+      "reason": "released 1998-04-08, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "10ZB",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "10YZ",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "10YS",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "10YN",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "10XP",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "10XH",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "10US",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "10RC",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "10RB",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "10RA",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "10PI",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "10OU",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "10OQ",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "10KT",
+      "reason": "431 residues outside the 50-400 band"
+    },
+    {
+      "pdb_id": "104L",
+      "reason": "released 1993-10-31, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "11GY",
+      "reason": "3 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "11ZT",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "12FC",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "12XX",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "12WB",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "12VW",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "12VU",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "12VT",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "12VQ",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "12VD",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "12UX",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "12UM",
+      "reason": "3 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "12UL",
+      "reason": "3 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "12TD",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "12RM",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "12QB",
+      "reason": "3 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "12QA",
+      "reason": "3 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "12PY",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "12PL",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "12OC",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "12OB",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "12LP",
+      "reason": "3 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "12KH",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "12JC",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "12GS",
+      "reason": "released 1999-01-13, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "12FK",
+      "reason": "3 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "12CJ",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "12CI",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "12CA",
+      "reason": "released 1992-10-15, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "12AW",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "12AS",
+      "reason": "released 1998-12-30, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "12AJ",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "129L",
+      "reason": "released 1994-01-31, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "128L",
+      "reason": "released 1993-10-31, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "127L",
+      "reason": "released 1993-10-31, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "126L",
+      "reason": "released 1993-10-31, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "125L",
+      "reason": "released 1993-10-31, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "123L",
+      "reason": "released 1993-10-31, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "122L",
+      "reason": "released 1993-10-31, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "121P",
+      "reason": "released 1994-01-31, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "120L",
+      "reason": "released 1993-10-31, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "11WX",
+      "reason": "3 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "11UE",
+      "reason": "429 residues outside the 50-400 band"
+    },
+    {
+      "pdb_id": "11TW",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "11TV",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "11RO",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "11PU",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "11NS",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "11LI",
+      "reason": "449 residues outside the 50-400 band"
+    },
+    {
+      "pdb_id": "11LH",
+      "reason": "449 residues outside the 50-400 band"
+    },
+    {
+      "pdb_id": "11KR",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "11KP",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "11HQ",
+      "reason": "3 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "11GS",
+      "reason": "released 1999-01-13, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "11GL",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "11EX",
+      "reason": "3 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "11BG",
+      "reason": "released 1999-11-05, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "11BD",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "11BA",
+      "reason": "released 1999-03-26, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "11AS",
+      "reason": "released 1998-12-30, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "11AO",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "11AF",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "119L",
+      "reason": "released 1993-10-31, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "118L",
+      "reason": "released 1993-10-31, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "117E",
+      "reason": "released 1998-12-23, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "115L",
+      "reason": "released 1993-10-31, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "114L",
+      "reason": "released 1993-10-31, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "113L",
+      "reason": "released 1993-10-31, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "112M",
+      "reason": "released 1998-04-08, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "112L",
+      "reason": "released 1993-10-31, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "111M",
+      "reason": "released 1998-04-08, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "13LZ",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "13JK",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "13JB",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "13IV",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "13GS",
+      "reason": "released 1999-01-13, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "13FT",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "13FL",
+      "reason": "3 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "13EE",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "13CZ",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "13CT",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "139L",
+      "reason": "released 1994-01-31, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "138L",
+      "reason": "released 1994-01-31, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "137L",
+      "reason": "released 1994-07-31, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "135L",
+      "reason": "released 1993-10-31, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "134L",
+      "reason": "released 1993-10-31, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "133L",
+      "reason": "released 1993-10-31, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "132L",
+      "reason": "released 1993-10-31, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "131L",
+      "reason": "released 1994-01-31, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "130L",
+      "reason": "released 1994-01-31, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "13RI",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "13RJ",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "13RK",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "13RL",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "13RM",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "13RN",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "13RO",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "13RP",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "13RR",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "13RS",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "13RT",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "13RU",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "13RX",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "13XK",
+      "reason": "467 residues outside the 50-400 band"
+    },
+    {
+      "pdb_id": "13XL",
+      "reason": "467 residues outside the 50-400 band"
+    },
+    {
+      "pdb_id": "13XM",
+      "reason": "467 residues outside the 50-400 band"
+    },
+    {
+      "pdb_id": "13XN",
+      "reason": "467 residues outside the 50-400 band"
+    },
+    {
+      "pdb_id": "13XO",
+      "reason": "467 residues outside the 50-400 band"
+    },
+    {
+      "pdb_id": "13XP",
+      "reason": "467 residues outside the 50-400 band"
+    },
+    {
+      "pdb_id": "13XQ",
+      "reason": "467 residues outside the 50-400 band"
+    },
+    {
+      "pdb_id": "13XR",
+      "reason": "467 residues outside the 50-400 band"
+    },
+    {
+      "pdb_id": "13XS",
+      "reason": "467 residues outside the 50-400 band"
+    },
+    {
+      "pdb_id": "13XT",
+      "reason": "467 residues outside the 50-400 band"
+    },
+    {
+      "pdb_id": "13XU",
+      "reason": "467 residues outside the 50-400 band"
+    },
+    {
+      "pdb_id": "13XV",
+      "reason": "467 residues outside the 50-400 band"
+    },
+    {
+      "pdb_id": "13XW",
+      "reason": "467 residues outside the 50-400 band"
+    },
+    {
+      "pdb_id": "13XX",
+      "reason": "467 residues outside the 50-400 band"
+    },
+    {
+      "pdb_id": "13XY",
+      "reason": "467 residues outside the 50-400 band"
+    },
+    {
+      "pdb_id": "13XZ",
+      "reason": "467 residues outside the 50-400 band"
+    },
+    {
+      "pdb_id": "13YA",
+      "reason": "467 residues outside the 50-400 band"
+    },
+    {
+      "pdb_id": "13YB",
+      "reason": "467 residues outside the 50-400 band"
+    },
+    {
+      "pdb_id": "13YC",
+      "reason": "467 residues outside the 50-400 band"
+    },
+    {
+      "pdb_id": "13YD",
+      "reason": "467 residues outside the 50-400 band"
+    },
+    {
+      "pdb_id": "13YE",
+      "reason": "467 residues outside the 50-400 band"
+    },
+    {
+      "pdb_id": "13YF",
+      "reason": "467 residues outside the 50-400 band"
+    },
+    {
+      "pdb_id": "13YG",
+      "reason": "467 residues outside the 50-400 band"
+    },
+    {
+      "pdb_id": "13YH",
+      "reason": "467 residues outside the 50-400 band"
+    },
+    {
+      "pdb_id": "13YI",
+      "reason": "467 residues outside the 50-400 band"
+    },
+    {
+      "pdb_id": "13YJ",
+      "reason": "467 residues outside the 50-400 band"
+    },
+    {
+      "pdb_id": "13RY",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "13RW",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "13RV",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "13RQ",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "13YK",
+      "reason": "467 residues outside the 50-400 band"
+    },
+    {
+      "pdb_id": "13YN",
+      "reason": "467 residues outside the 50-400 band"
+    },
+    {
+      "pdb_id": "13YP",
+      "reason": "467 residues outside the 50-400 band"
+    },
+    {
+      "pdb_id": "13YQ",
+      "reason": "467 residues outside the 50-400 band"
+    },
+    {
+      "pdb_id": "13YS",
+      "reason": "467 residues outside the 50-400 band"
+    },
+    {
+      "pdb_id": "13YT",
+      "reason": "467 residues outside the 50-400 band"
+    },
+    {
+      "pdb_id": "13YV",
+      "reason": "467 residues outside the 50-400 band"
+    },
+    {
+      "pdb_id": "13YY",
+      "reason": "467 residues outside the 50-400 band"
+    },
+    {
+      "pdb_id": "13YZ",
+      "reason": "467 residues outside the 50-400 band"
+    },
+    {
+      "pdb_id": "13ZA",
+      "reason": "467 residues outside the 50-400 band"
+    },
+    {
+      "pdb_id": "13ZB",
+      "reason": "467 residues outside the 50-400 band"
+    },
+    {
+      "pdb_id": "13ZC",
+      "reason": "467 residues outside the 50-400 band"
+    },
+    {
+      "pdb_id": "13ZD",
+      "reason": "467 residues outside the 50-400 band"
+    },
+    {
+      "pdb_id": "13ZF",
+      "reason": "467 residues outside the 50-400 band"
+    },
+    {
+      "pdb_id": "13ZG",
+      "reason": "467 residues outside the 50-400 band"
+    },
+    {
+      "pdb_id": "13ZH",
+      "reason": "467 residues outside the 50-400 band"
+    },
+    {
+      "pdb_id": "13ZL",
+      "reason": "467 residues outside the 50-400 band"
+    },
+    {
+      "pdb_id": "13ZM",
+      "reason": "467 residues outside the 50-400 band"
+    },
+    {
+      "pdb_id": "13ZN",
+      "reason": "467 residues outside the 50-400 band"
+    },
+    {
+      "pdb_id": "13ZO",
+      "reason": "467 residues outside the 50-400 band"
+    },
+    {
+      "pdb_id": "13ZQ",
+      "reason": "467 residues outside the 50-400 band"
+    },
+    {
+      "pdb_id": "13ZR",
+      "reason": "467 residues outside the 50-400 band"
+    },
+    {
+      "pdb_id": "13ZS",
+      "reason": "467 residues outside the 50-400 band"
+    },
+    {
+      "pdb_id": "13ZU",
+      "reason": "467 residues outside the 50-400 band"
+    },
+    {
+      "pdb_id": "13ZV",
+      "reason": "467 residues outside the 50-400 band"
+    },
+    {
+      "pdb_id": "13ZX",
+      "reason": "467 residues outside the 50-400 band"
+    },
+    {
+      "pdb_id": "13ZZ",
+      "reason": "467 residues outside the 50-400 band"
+    },
+    {
+      "pdb_id": "140L",
+      "reason": "released 1994-01-31, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "141L",
+      "reason": "released 1994-01-31, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "142L",
+      "reason": "released 1994-01-31, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "143L",
+      "reason": "released 1994-01-31, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "146L",
+      "reason": "released 1994-01-31, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "147L",
+      "reason": "released 1994-01-31, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "148L",
+      "reason": "released 1994-04-30, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "149L",
+      "reason": "released 1994-04-30, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "14AA",
+      "reason": "467 residues outside the 50-400 band"
+    },
+    {
+      "pdb_id": "14GS",
+      "reason": "released 1999-01-13, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "14UI",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14UJ",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14UK",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14UL",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14UM",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14UP",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14UQ",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14UV",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14UX",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14UY",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14VB",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14VC",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14VD",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14VF",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14VI",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14VJ",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14VK",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14VM",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14VN",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14VO",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14VU",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14VX",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14VZ",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14WA",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14VY",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14VW",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14VV",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14VT",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14VS",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14VR",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14VQ",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14VP",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14VL",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14VH",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14VG",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14VE",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14VA",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14UZ",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14UW",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14UU",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14UT",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14US",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14UR",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14UO",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14UN",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14UH",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "145L",
+      "reason": "released 1994-01-31, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "144L",
+      "reason": "released 1994-01-31, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "13ZY",
+      "reason": "467 residues outside the 50-400 band"
+    },
+    {
+      "pdb_id": "13ZW",
+      "reason": "467 residues outside the 50-400 band"
+    },
+    {
+      "pdb_id": "13ZT",
+      "reason": "467 residues outside the 50-400 band"
+    },
+    {
+      "pdb_id": "13ZP",
+      "reason": "467 residues outside the 50-400 band"
+    },
+    {
+      "pdb_id": "13ZK",
+      "reason": "467 residues outside the 50-400 band"
+    },
+    {
+      "pdb_id": "13ZJ",
+      "reason": "467 residues outside the 50-400 band"
+    },
+    {
+      "pdb_id": "13ZI",
+      "reason": "467 residues outside the 50-400 band"
+    },
+    {
+      "pdb_id": "13ZE",
+      "reason": "467 residues outside the 50-400 band"
+    },
+    {
+      "pdb_id": "13YX",
+      "reason": "467 residues outside the 50-400 band"
+    },
+    {
+      "pdb_id": "13YW",
+      "reason": "467 residues outside the 50-400 band"
+    },
+    {
+      "pdb_id": "13YU",
+      "reason": "467 residues outside the 50-400 band"
+    },
+    {
+      "pdb_id": "13YR",
+      "reason": "467 residues outside the 50-400 band"
+    },
+    {
+      "pdb_id": "13YO",
+      "reason": "467 residues outside the 50-400 band"
+    },
+    {
+      "pdb_id": "13YM",
+      "reason": "467 residues outside the 50-400 band"
+    },
+    {
+      "pdb_id": "13YL",
+      "reason": "467 residues outside the 50-400 band"
+    },
+    {
+      "pdb_id": "14ZW",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14ZV",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14ZU",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14ZT",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14ZS",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14ZR",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14ZQ",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14ZP",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14ZO",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14ZN",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14ZM",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14ZL",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14ZK",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14ZJ",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14ZI",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14ZH",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14ZG",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14ZF",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14ZE",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14ZD",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14ZC",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14ZB",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14ZA",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14YZ",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14YY",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14YX",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14YW",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14YV",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14YU",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14YT",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14YS",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14YR",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14YQ",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14YP",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14YO",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14YN",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14YM",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14YL",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14YK",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14YJ",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14YI",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14YH",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14YG",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14YF",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14YE",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14YD",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14YC",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14YB",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14YA",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14XZ",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14XY",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14XX",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14XW",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14XV",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14XU",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14XT",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14XS",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14XR",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14XQ",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14XP",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14XO",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14XN",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14XM",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14XL",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14XK",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14XJ",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14XI",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14XH",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14XG",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14XF",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14XE",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14XD",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14XC",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14XB",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14XA",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14WZ",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14WY",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14WX",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14WW",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14WV",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14WU",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14WT",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14WS",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14WR",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14WQ",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14WP",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14WO",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14WN",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14WM",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14WL",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14WK",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14WJ",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14WI",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14WH",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14WG",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14WF",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14WE",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14WD",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14WC",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14WB",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14ZX",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14ZY",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "14ZZ",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "152L",
+      "reason": "released 1994-05-31, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "153L",
+      "reason": "released 1995-01-26, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "156L",
+      "reason": "released 1994-08-31, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "158L",
+      "reason": "released 1994-08-31, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "159L",
+      "reason": "released 1994-08-31, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "15AA",
+      "reason": "2 chains; the benchmark is single-chain so TM-score is unambiguous"
+    },
+    {
+      "pdb_id": "15C8",
+      "reason": "released 1999-03-23, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "160L",
+      "reason": "released 1994-08-31, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "162L",
+      "reason": "released 1994-08-31, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "163L",
+      "reason": "released 1994-08-31, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "164L",
+      "reason": "released 1994-08-31, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "165L",
+      "reason": "released 1994-08-31, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "166L",
+      "reason": "released 1994-08-31, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "167L",
+      "reason": "released 1995-07-10, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "16GS",
+      "reason": "released 1999-01-13, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "16PK",
+      "reason": "released 1998-11-25, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "16VP",
+      "reason": "released 1999-07-28, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "171L",
+      "reason": "released 1995-07-10, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "172L",
+      "reason": "released 1995-07-10, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "173L",
+      "reason": "released 1995-07-10, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "175L",
+      "reason": "released 1995-07-10, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "176L",
+      "reason": "released 1995-07-10, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "177L",
+      "reason": "released 1995-07-10, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "178L",
+      "reason": "released 1995-07-10, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "17GS",
+      "reason": "released 1998-12-30, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "180L",
+      "reason": "released 1996-04-03, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "181L",
+      "reason": "released 1995-07-10, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "182L",
+      "reason": "released 1995-07-10, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "183L",
+      "reason": "released 1995-07-10, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "184L",
+      "reason": "released 1995-07-10, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "185L",
+      "reason": "released 1995-07-10, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "186L",
+      "reason": "released 1995-07-10, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "187L",
+      "reason": "released 1995-07-10, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "188L",
+      "reason": "released 1995-07-10, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "189L",
+      "reason": "released 1995-07-31, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "18GS",
+      "reason": "released 1999-01-13, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1914",
+      "reason": "released 1998-12-30, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "191L",
+      "reason": "released 1995-09-15, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "193L",
+      "reason": "released 1995-12-07, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "194L",
+      "reason": "released 1995-12-07, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "196L",
+      "reason": "released 1996-03-08, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "197L",
+      "reason": "released 1996-03-08, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "198L",
+      "reason": "released 1996-03-08, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "199L",
+      "reason": "released 1996-03-08, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "19GS",
+      "reason": "released 1998-12-30, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "19HC",
+      "reason": "released 1999-12-01, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A04",
+      "reason": "released 1998-03-18, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A05",
+      "reason": "released 1998-06-17, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A06",
+      "reason": "released 1998-04-08, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A0B",
+      "reason": "released 1998-03-18, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A0E",
+      "reason": "released 1998-06-03, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A0F",
+      "reason": "released 1999-01-13, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A0G",
+      "reason": "released 1998-06-03, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A0I",
+      "reason": "released 1998-03-25, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A0K",
+      "reason": "released 1998-03-18, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A0R",
+      "reason": "released 1998-12-30, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A0T",
+      "reason": "released 1998-03-18, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A12",
+      "reason": "released 1999-01-13, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A14",
+      "reason": "released 1998-05-13, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A16",
+      "reason": "released 1999-04-06, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A17",
+      "reason": "released 1998-04-29, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A18",
+      "reason": "released 1998-07-01, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A1F",
+      "reason": "released 1998-06-10, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A1H",
+      "reason": "released 1998-06-10, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A1I",
+      "reason": "released 1998-06-17, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A1J",
+      "reason": "released 1998-06-17, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A1K",
+      "reason": "released 1998-06-10, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A1L",
+      "reason": "released 1998-06-17, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A1N",
+      "reason": "released 1998-04-08, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A1O",
+      "reason": "released 1998-04-08, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A1Q",
+      "reason": "released 1998-03-25, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A1S",
+      "reason": "released 1998-06-17, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A1V",
+      "reason": "released 1999-01-13, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A1X",
+      "reason": "released 1998-05-27, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A21",
+      "reason": "released 1998-05-27, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A22",
+      "reason": "released 1998-04-29, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A25",
+      "reason": "released 1998-05-06, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A26",
+      "reason": "released 1998-05-27, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A27",
+      "reason": "released 1998-05-27, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A1M",
+      "reason": "released 1998-04-08, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A1G",
+      "reason": "released 1998-06-10, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A19",
+      "reason": "released 1998-04-08, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A15",
+      "reason": "released 1998-08-12, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A0S",
+      "reason": "released 1998-06-10, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A0Q",
+      "reason": "released 1999-03-02, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A0P",
+      "reason": "released 1998-03-18, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "195L",
+      "reason": "released 1996-03-08, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "192L",
+      "reason": "released 1995-09-15, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "190L",
+      "reason": "released 1995-09-15, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "174L",
+      "reason": "released 1995-07-10, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "170L",
+      "reason": "released 1995-07-10, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "161L",
+      "reason": "released 1994-08-31, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "157L",
+      "reason": "released 1994-08-31, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "155L",
+      "reason": "released 1994-08-31, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "155C",
+      "reason": "released 1976-08-20, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "154L",
+      "reason": "released 1995-01-26, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "151L",
+      "reason": "released 1994-04-30, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A4H",
+      "reason": "released 1998-08-05, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A6J",
+      "reason": "released 1998-07-15, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A6I",
+      "reason": "released 1999-03-02, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A6G",
+      "reason": "released 1998-10-21, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A6F",
+      "reason": "released 1999-03-23, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A6A",
+      "reason": "released 1998-05-27, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A69",
+      "reason": "released 1998-10-14, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A68",
+      "reason": "released 1998-06-10, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A64",
+      "reason": "released 1998-05-27, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A62",
+      "reason": "released 1998-06-17, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A61",
+      "reason": "released 1998-06-17, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A5Z",
+      "reason": "released 1999-03-23, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A5Y",
+      "reason": "released 1998-06-17, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A5X",
+      "reason": "released 1998-05-27, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A5W",
+      "reason": "released 1998-05-27, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A5V",
+      "reason": "released 1998-05-27, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A5T",
+      "reason": "released 1998-05-27, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A5S",
+      "reason": "released 1999-03-30, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A5Q",
+      "reason": "released 1998-05-27, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A5P",
+      "reason": "released 1998-05-27, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A5O",
+      "reason": "released 1998-05-27, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A5N",
+      "reason": "released 1998-05-27, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A5M",
+      "reason": "released 1998-05-27, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A5L",
+      "reason": "released 1998-05-27, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A5K",
+      "reason": "released 1998-05-27, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A5I",
+      "reason": "released 1999-03-23, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A5G",
+      "reason": "released 1998-05-27, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A5F",
+      "reason": "released 1999-04-20, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A5D",
+      "reason": "released 1998-05-27, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A5C",
+      "reason": "released 1998-06-10, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A5B",
+      "reason": "released 1998-05-27, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A5A",
+      "reason": "released 1998-05-27, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A59",
+      "reason": "released 1999-03-30, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A58",
+      "reason": "released 1998-05-27, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A55",
+      "reason": "released 1998-10-14, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A54",
+      "reason": "released 1998-10-14, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A53",
+      "reason": "released 1999-03-23, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A52",
+      "reason": "released 1998-09-16, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A50",
+      "reason": "released 1999-03-30, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A4X",
+      "reason": "released 1998-08-05, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A4W",
+      "reason": "released 1998-04-29, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A4V",
+      "reason": "released 1999-04-27, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A4U",
+      "reason": "released 1999-02-16, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A4R",
+      "reason": "released 1999-03-02, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A4Q",
+      "reason": "released 1999-03-02, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A4P",
+      "reason": "released 1998-05-27, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A4I",
+      "reason": "released 1999-02-09, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A4G",
+      "reason": "released 1999-03-02, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A4F",
+      "reason": "released 1998-04-29, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A4B",
+      "reason": "released 1998-04-29, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A4A",
+      "reason": "released 1998-04-29, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A48",
+      "reason": "released 1999-03-30, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A46",
+      "reason": "released 1998-05-27, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A45",
+      "reason": "released 1998-06-17, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A44",
+      "reason": "released 1999-01-13, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A43",
+      "reason": "released 1999-02-09, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A42",
+      "reason": "released 1999-03-23, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A41",
+      "reason": "released 1999-06-01, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A40",
+      "reason": "released 1999-03-23, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A3Z",
+      "reason": "released 1998-07-29, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A3Y",
+      "reason": "released 1999-02-16, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A3X",
+      "reason": "released 1998-05-27, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A3W",
+      "reason": "released 1998-05-27, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A3V",
+      "reason": "released 1998-04-29, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A3U",
+      "reason": "released 1998-04-29, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A3T",
+      "reason": "released 1998-04-29, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A3S",
+      "reason": "released 1998-05-27, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A3R",
+      "reason": "released 1998-04-29, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A3L",
+      "reason": "released 1999-02-16, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A3K",
+      "reason": "released 1998-07-15, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A3H",
+      "reason": "released 1999-03-16, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A3G",
+      "reason": "released 1998-05-27, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A3F",
+      "reason": "released 1998-04-29, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A3E",
+      "reason": "released 1998-06-03, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A3D",
+      "reason": "released 1998-04-29, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A3C",
+      "reason": "released 1998-08-05, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A3B",
+      "reason": "released 1998-06-03, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A39",
+      "reason": "released 1999-03-02, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A34",
+      "reason": "released 1998-04-29, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A33",
+      "reason": "released 1998-07-29, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A32",
+      "reason": "released 1998-05-27, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A30",
+      "reason": "released 1998-04-29, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A2Y",
+      "reason": "released 1998-04-29, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A2X",
+      "reason": "released 1998-07-15, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A2W",
+      "reason": "released 1998-04-29, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A2U",
+      "reason": "released 1998-04-29, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A2T",
+      "reason": "released 1998-04-29, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A2Q",
+      "reason": "released 1998-04-29, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A2P",
+      "reason": "released 1998-04-29, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A2O",
+      "reason": "released 1998-04-29, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A2N",
+      "reason": "released 1998-04-29, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A2M",
+      "reason": "released 1998-07-08, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A2L",
+      "reason": "released 1998-07-08, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A2J",
+      "reason": "released 1998-09-16, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A2G",
+      "reason": "released 1998-11-25, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A2F",
+      "reason": "released 1998-11-25, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A2D",
+      "reason": "released 1998-07-01, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A2B",
+      "reason": "released 1998-06-17, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A29",
+      "reason": "released 1998-09-16, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A28",
+      "reason": "released 1998-07-15, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A6L",
+      "reason": "released 1998-05-27, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A6N",
+      "reason": "released 1999-04-06, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A75",
+      "reason": "released 1998-06-17, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A77",
+      "reason": "released 1999-08-03, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A7D",
+      "reason": "released 1998-10-14, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A7G",
+      "reason": "released 1999-04-27, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A7L",
+      "reason": "released 1998-06-17, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A7Q",
+      "reason": "released 1998-04-29, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A7S",
+      "reason": "released 1999-03-23, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A7U",
+      "reason": "released 1998-06-17, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A85",
+      "reason": "released 1999-04-27, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A86",
+      "reason": "released 1999-05-04, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A8A",
+      "reason": "released 1998-06-17, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A8J",
+      "reason": "released 1998-06-17, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A8P",
+      "reason": "released 1998-06-17, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A8U",
+      "reason": "released 1998-06-17, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A8Z",
+      "reason": "released 1998-06-17, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A9E",
+      "reason": "released 1998-10-21, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A9P",
+      "reason": "released 1998-07-15, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A9S",
+      "reason": "released 1998-07-15, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A9T",
+      "reason": "released 1998-06-17, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AA2",
+      "reason": "released 1998-02-04, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AA4",
+      "reason": "released 1997-07-23, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AA7",
+      "reason": "released 1998-01-28, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AAL",
+      "reason": "released 1993-10-31, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AAM",
+      "reason": "released 1993-10-31, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AAN",
+      "reason": "released 1993-10-31, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AAQ",
+      "reason": "released 1994-06-22, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AAR",
+      "reason": "released 1993-10-31, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AAW",
+      "reason": "released 1993-10-31, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AAX",
+      "reason": "released 1998-03-04, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AAY",
+      "reason": "released 1997-04-21, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AAZ",
+      "reason": "released 1993-10-31, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AB0",
+      "reason": "released 1997-06-16, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AB1",
+      "reason": "released 1997-08-12, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AB4",
+      "reason": "released 1998-10-14, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AB8",
+      "reason": "released 1997-05-15, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1ABA",
+      "reason": "released 1993-10-31, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1ABE",
+      "reason": "released 1993-10-31, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1ABF",
+      "reason": "released 1993-10-31, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1ABI",
+      "reason": "released 1994-01-31, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1ABJ",
+      "reason": "released 1994-01-31, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AB6",
+      "reason": "released 1998-02-04, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AB5",
+      "reason": "released 1998-02-04, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AAT",
+      "reason": "released 1982-10-21, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AAP",
+      "reason": "released 1991-10-15, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AAJ",
+      "reason": "released 1993-10-31, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AAC",
+      "reason": "released 1996-03-08, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AA0",
+      "reason": "released 1997-07-23, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A9Z",
+      "reason": "released 1998-10-21, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A9Y",
+      "reason": "released 1998-10-21, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A9U",
+      "reason": "released 1999-04-20, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A9R",
+      "reason": "released 1998-07-15, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A9Q",
+      "reason": "released 1998-07-15, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A9O",
+      "reason": "released 1998-07-15, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A9M",
+      "reason": "released 1998-06-17, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A98",
+      "reason": "released 1998-06-17, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A8Y",
+      "reason": "released 1999-03-30, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A8V",
+      "reason": "released 1999-05-04, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A8T",
+      "reason": "released 1998-10-14, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A8S",
+      "reason": "released 1998-06-17, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A8Q",
+      "reason": "released 1998-06-17, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A8O",
+      "reason": "released 1998-10-14, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A8M",
+      "reason": "released 1998-06-17, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A8L",
+      "reason": "released 1999-03-30, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A8H",
+      "reason": "released 1999-05-04, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A8G",
+      "reason": "released 1998-07-15, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A8F",
+      "reason": "released 1998-06-17, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A8E",
+      "reason": "released 1998-06-17, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A8D",
+      "reason": "released 1998-10-14, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A8B",
+      "reason": "released 1998-06-17, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A88",
+      "reason": "released 1998-10-14, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A87",
+      "reason": "released 1999-04-06, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A82",
+      "reason": "released 1999-05-11, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A80",
+      "reason": "released 1999-03-30, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A7X",
+      "reason": "released 1998-06-17, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A7W",
+      "reason": "released 1999-03-23, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A7V",
+      "reason": "released 1998-06-17, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A7T",
+      "reason": "released 1998-06-17, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A7R",
+      "reason": "released 1998-04-29, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A7P",
+      "reason": "released 1998-04-29, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A7O",
+      "reason": "released 1998-04-29, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A7N",
+      "reason": "released 1998-04-29, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A7J",
+      "reason": "released 1998-06-17, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A7H",
+      "reason": "released 1998-05-27, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A7E",
+      "reason": "released 1998-10-14, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A7C",
+      "reason": "released 1999-03-23, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A7A",
+      "reason": "released 1999-04-20, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A78",
+      "reason": "released 1998-10-14, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A76",
+      "reason": "released 1999-08-03, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A72",
+      "reason": "released 1998-06-17, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A71",
+      "reason": "released 1998-06-17, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A70",
+      "reason": "released 1998-11-25, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A6W",
+      "reason": "released 1998-07-15, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A6U",
+      "reason": "released 1998-05-27, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A6R",
+      "reason": "released 1998-10-21, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A6Q",
+      "reason": "released 1998-05-27, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A6P",
+      "reason": "released 1998-06-17, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A6M",
+      "reason": "released 1999-04-06, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1A6K",
+      "reason": "released 1999-04-06, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1ABN",
+      "reason": "released 1994-01-31, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1ABQ",
+      "reason": "released 1995-10-15, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1ABR",
+      "reason": "released 1995-02-07, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1ABS",
+      "reason": "released 1997-04-01, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1ABW",
+      "reason": "released 1998-06-17, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1ABY",
+      "reason": "released 1998-02-25, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AC5",
+      "reason": "released 1997-05-15, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AC8",
+      "reason": "released 1997-09-04, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1ACB",
+      "reason": "released 1993-10-31, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1ACF",
+      "reason": "released 1994-08-31, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AD2",
+      "reason": "released 1997-05-15, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AD4",
+      "reason": "released 1998-04-29, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AD6",
+      "reason": "released 1998-08-26, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AD8",
+      "reason": "released 1997-11-12, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1ADC",
+      "reason": "released 1995-06-03, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1ADD",
+      "reason": "released 1994-01-31, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1ADE",
+      "reason": "released 1996-01-29, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1ADF",
+      "reason": "released 1994-01-31, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1ADG",
+      "reason": "released 1994-01-31, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1ADI",
+      "reason": "released 1996-06-10, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1ADQ",
+      "reason": "released 1998-09-16, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1ADS",
+      "reason": "released 1993-10-31, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1ADU",
+      "reason": "released 1996-06-20, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1ADW",
+      "reason": "released 1997-05-15, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AE1",
+      "reason": "released 1998-11-18, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AE3",
+      "reason": "released 1997-09-04, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AE5",
+      "reason": "released 1998-03-11, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AE6",
+      "reason": "released 1998-03-18, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AE7",
+      "reason": "released 1997-05-15, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AE9",
+      "reason": "released 1997-11-19, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AEC",
+      "reason": "released 1993-10-31, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AEE",
+      "reason": "released 1997-09-04, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AEF",
+      "reason": "released 1997-09-04, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AEH",
+      "reason": "released 1997-09-04, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AEJ",
+      "reason": "released 1997-09-04, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AEM",
+      "reason": "released 1997-09-04, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AEN",
+      "reason": "released 1997-09-04, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AEP",
+      "reason": "released 1994-01-31, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AEQ",
+      "reason": "released 1997-09-04, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AER",
+      "reason": "released 1996-06-10, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AES",
+      "reason": "released 1997-09-04, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AEV",
+      "reason": "released 1997-09-04, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AEW",
+      "reason": "released 1997-09-04, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AEX",
+      "reason": "released 1997-06-16, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AF2",
+      "reason": "released 1997-07-07, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AF3",
+      "reason": "released 1997-07-07, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AF4",
+      "reason": "released 1997-06-16, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AF7",
+      "reason": "released 1998-01-28, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AF9",
+      "reason": "released 1998-04-29, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AFA",
+      "reason": "released 1996-04-03, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AFD",
+      "reason": "released 1996-04-03, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AFE",
+      "reason": "released 1997-12-03, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AFK",
+      "reason": "released 1998-03-18, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AFL",
+      "reason": "released 1998-03-18, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AFQ",
+      "reason": "released 1997-09-17, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AFU",
+      "reason": "released 1998-03-18, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AFW",
+      "reason": "released 1997-06-16, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AG1",
+      "reason": "released 1997-06-16, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AG6",
+      "reason": "released 1998-10-21, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AG9",
+      "reason": "released 1997-12-24, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AGB",
+      "reason": "released 1997-06-16, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AGC",
+      "reason": "released 1997-06-16, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AGD",
+      "reason": "released 1997-06-16, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AGE",
+      "reason": "released 1997-06-16, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AGI",
+      "reason": "released 1996-04-03, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AGJ",
+      "reason": "released 1997-09-26, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AGM",
+      "reason": "released 1994-09-30, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AGP",
+      "reason": "released 1994-04-30, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AGS",
+      "reason": "released 1995-07-10, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AGW",
+      "reason": "released 1998-03-25, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AGF",
+      "reason": "released 1997-06-16, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AG0",
+      "reason": "released 1997-10-29, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AFS",
+      "reason": "released 1997-10-08, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AFB",
+      "reason": "released 1996-04-03, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AF6",
+      "reason": "released 1998-03-25, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AF5",
+      "reason": "released 1997-07-23, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AF0",
+      "reason": "released 1998-03-25, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AEU",
+      "reason": "released 1997-09-04, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AET",
+      "reason": "released 1997-09-04, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AEO",
+      "reason": "released 1997-09-04, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AEK",
+      "reason": "released 1997-09-04, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AEG",
+      "reason": "released 1997-09-04, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AED",
+      "reason": "released 1997-09-04, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AEB",
+      "reason": "released 1997-09-04, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AE8",
+      "reason": "released 1997-12-03, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AE4",
+      "reason": "released 1998-03-11, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AE2",
+      "reason": "released 1997-09-04, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1ADV",
+      "reason": "released 1996-06-20, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1ADL",
+      "reason": "released 1994-12-20, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1ADB",
+      "reason": "released 1995-06-03, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AD5",
+      "reason": "released 1997-05-15, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AD3",
+      "reason": "released 1997-07-07, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AD1",
+      "reason": "released 1998-04-29, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1ACY",
+      "reason": "released 1994-07-31, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1ACX",
+      "reason": "released 1983-03-09, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1ACV",
+      "reason": "released 1997-10-15, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1ACD",
+      "reason": "released 1997-06-16, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AC6",
+      "reason": "released 1998-02-25, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AC4",
+      "reason": "released 1997-09-04, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AC1",
+      "reason": "released 1997-10-15, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AGX",
+      "reason": "released 1994-12-20, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AGY",
+      "reason": "released 1998-04-01, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AH0",
+      "reason": "released 1998-04-15, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AH3",
+      "reason": "released 1998-04-15, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AH4",
+      "reason": "released 1998-04-15, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AH5",
+      "reason": "released 1997-10-15, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AH6",
+      "reason": "released 1997-10-22, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AH7",
+      "reason": "released 1997-12-10, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AHB",
+      "reason": "released 1994-06-22, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AHE",
+      "reason": "released 1995-09-15, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AHF",
+      "reason": "released 1995-09-15, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AHG",
+      "reason": "released 1995-09-15, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AHH",
+      "reason": "released 1996-10-14, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AHI",
+      "reason": "released 1996-10-14, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AHN",
+      "reason": "released 1997-12-10, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AHO",
+      "reason": "released 1997-10-15, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AHQ",
+      "reason": "released 1997-09-04, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AHR",
+      "reason": "released 1997-06-16, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AHT",
+      "reason": "released 1996-03-17, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AHX",
+      "reason": "released 1995-09-15, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AI1",
+      "reason": "released 1997-05-15, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AI2",
+      "reason": "released 1997-10-15, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AI3",
+      "reason": "released 1997-11-12, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AI4",
+      "reason": "released 1997-11-12, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AI5",
+      "reason": "released 1997-11-12, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AI6",
+      "reason": "released 1997-11-12, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AI7",
+      "reason": "released 1997-11-12, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AI8",
+      "reason": "released 1997-10-15, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AI9",
+      "reason": "released 1997-11-12, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AIA",
+      "reason": "released 1994-10-15, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AIB",
+      "reason": "released 1994-10-15, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AIC",
+      "reason": "released 1994-10-15, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AII",
+      "reason": "released 1997-03-12, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AIL",
+      "reason": "released 1997-10-22, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AIM",
+      "reason": "released 1997-10-22, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AIN",
+      "reason": "released 1993-07-15, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AIQ",
+      "reason": "released 1997-11-12, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AIR",
+      "reason": "released 1997-06-16, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AIU",
+      "reason": "released 1997-07-07, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AIX",
+      "reason": "released 1997-10-15, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AIZ",
+      "reason": "released 1994-01-31, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AJ0",
+      "reason": "released 1998-05-20, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AJ2",
+      "reason": "released 1998-05-20, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AJ5",
+      "reason": "released 1998-05-20, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AJ6",
+      "reason": "released 1998-05-20, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AJ7",
+      "reason": "released 1997-11-12, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AJB",
+      "reason": "released 1995-11-14, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AJD",
+      "reason": "released 1995-11-14, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AJG",
+      "reason": "released 1997-11-12, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AJH",
+      "reason": "released 1997-11-12, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AJK",
+      "reason": "released 1998-05-06, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AJM",
+      "reason": "released 1997-11-12, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AJN",
+      "reason": "released 1997-11-12, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AJO",
+      "reason": "released 1998-05-06, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AJP",
+      "reason": "released 1997-11-12, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AJQ",
+      "reason": "released 1997-11-12, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AJR",
+      "reason": "released 1997-08-20, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AJV",
+      "reason": "released 1997-08-20, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AJX",
+      "reason": "released 1997-09-17, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AK0",
+      "reason": "released 1997-12-03, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AK1",
+      "reason": "released 1997-12-03, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AK2",
+      "reason": "released 1996-06-10, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AK9",
+      "reason": "released 1997-11-12, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AKA",
+      "reason": "released 1994-07-31, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AKB",
+      "reason": "released 1994-07-31, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AKC",
+      "reason": "released 1994-07-31, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AKD",
+      "reason": "released 1997-11-19, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AKM",
+      "reason": "released 1998-05-27, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AKQ",
+      "reason": "released 1998-12-02, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AKR",
+      "reason": "released 1998-05-27, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AKS",
+      "reason": "released 1997-02-12, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AKT",
+      "reason": "released 1998-05-27, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AKU",
+      "reason": "released 1998-12-02, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AKV",
+      "reason": "released 1998-12-02, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AKW",
+      "reason": "released 1998-05-27, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AKY",
+      "reason": "released 1995-11-14, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AKZ",
+      "reason": "released 1997-08-20, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AL3",
+      "reason": "released 1997-12-24, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AL6",
+      "reason": "released 1997-12-24, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AL7",
+      "reason": "released 1997-11-12, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AL8",
+      "reason": "released 1997-09-17, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1ALC",
+      "reason": "released 1989-10-15, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1ALB",
+      "reason": "released 1993-10-31, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1ALA",
+      "reason": "released 1993-10-31, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AKO",
+      "reason": "released 1997-08-20, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AKL",
+      "reason": "released 1996-03-08, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AKI",
+      "reason": "released 1997-11-19, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AKE",
+      "reason": "released 1994-01-31, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AJZ",
+      "reason": "released 1998-05-13, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AJS",
+      "reason": "released 1997-08-20, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AJC",
+      "reason": "released 1995-11-14, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AJA",
+      "reason": "released 1995-11-14, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AJ9",
+      "reason": "released 1998-05-20, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AJ8",
+      "reason": "released 1997-11-19, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AID",
+      "reason": "released 1997-10-15, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AHY",
+      "reason": "released 1995-09-15, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AHS",
+      "reason": "released 1996-11-08, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AHC",
+      "reason": "released 1994-06-22, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AHA",
+      "reason": "released 1994-06-22, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AH8",
+      "reason": "released 1997-10-22, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1ALD",
+      "reason": "released 1992-01-15, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1ALH",
+      "reason": "released 1995-02-27, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1ALJ",
+      "reason": "released 1995-11-14, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1ALL",
+      "reason": "released 1996-07-11, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1ALN",
+      "reason": "released 1997-09-17, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1ALU",
+      "reason": "released 1998-06-03, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1ALW",
+      "reason": "released 1998-06-10, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1ALY",
+      "reason": "released 1997-09-17, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AM1",
+      "reason": "released 1998-06-24, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AM6",
+      "reason": "released 1998-06-24, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AM7",
+      "reason": "released 1997-12-24, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AME",
+      "reason": "released 1998-06-17, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AMF",
+      "reason": "released 1997-12-24, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AMH",
+      "reason": "released 1997-12-24, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AMK",
+      "reason": "released 1997-12-17, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AMP",
+      "reason": "released 1994-08-31, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AMQ",
+      "reason": "released 1994-09-30, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AMR",
+      "reason": "released 1994-09-30, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AMS",
+      "reason": "released 1994-09-30, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AMW",
+      "reason": "released 1998-06-24, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AMX",
+      "reason": "released 1998-06-24, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AMY",
+      "reason": "released 1995-05-13, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AMZ",
+      "reason": "released 1997-12-24, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AN0",
+      "reason": "released 1999-01-13, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AN2",
+      "reason": "released 1997-09-17, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AN5",
+      "reason": "released 1998-07-01, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AN7",
+      "reason": "released 1998-07-01, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AN9",
+      "reason": "released 1997-11-12, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1ANB",
+      "reason": "released 1997-04-01, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1ANC",
+      "reason": "released 1997-04-01, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1ANE",
+      "reason": "released 1997-04-01, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1ANF",
+      "reason": "released 1997-12-24, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1ANG",
+      "reason": "released 1995-04-20, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1ANI",
+      "reason": "released 1996-01-29, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1ANK",
+      "reason": "released 1994-05-31, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1ANN",
+      "reason": "released 1996-01-29, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1ANT",
+      "reason": "released 1995-01-26, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1ANU",
+      "reason": "released 1997-07-23, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1ANV",
+      "reason": "released 1997-02-12, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AO3",
+      "reason": "released 1998-07-22, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AO5",
+      "reason": "released 1997-10-15, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AOA",
+      "reason": "released 1997-12-31, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AOB",
+      "reason": "released 1998-07-01, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AOC",
+      "reason": "released 1997-04-21, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AOD",
+      "reason": "released 1998-01-07, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AOE",
+      "reason": "released 1998-01-07, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AOG",
+      "reason": "released 1997-09-17, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AOK",
+      "reason": "released 1998-01-21, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AOL",
+      "reason": "released 1997-10-15, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AOP",
+      "reason": "released 1997-12-24, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AP5",
+      "reason": "released 1998-01-28, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AP6",
+      "reason": "released 1998-01-28, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AP9",
+      "reason": "released 1998-09-16, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1APB",
+      "reason": "released 1992-01-15, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1APM",
+      "reason": "released 1993-04-15, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1APN",
+      "reason": "released 1996-04-03, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1APT",
+      "reason": "released 1994-01-31, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1APU",
+      "reason": "released 1994-01-31, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1APV",
+      "reason": "released 1994-01-31, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1APW",
+      "reason": "released 1994-01-31, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AQ1",
+      "reason": "released 1997-11-12, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AQ6",
+      "reason": "released 1998-01-28, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AQ8",
+      "reason": "released 1998-02-25, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AQB",
+      "reason": "released 1998-01-28, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AQE",
+      "reason": "released 1998-02-04, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AQH",
+      "reason": "released 1999-02-16, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AQI",
+      "reason": "released 1997-02-12, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AQJ",
+      "reason": "released 1997-02-12, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AQK",
+      "reason": "released 1998-02-04, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AQM",
+      "reason": "released 1999-03-02, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AQN",
+      "reason": "released 1998-01-14, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AQP",
+      "reason": "released 1998-05-27, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AQT",
+      "reason": "released 1998-02-04, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AQU",
+      "reason": "released 1998-10-28, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AQV",
+      "reason": "released 1997-12-24, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AQY",
+      "reason": "released 1998-10-28, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AQZ",
+      "reason": "released 1997-11-12, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AR0",
+      "reason": "released 1997-12-24, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AQ7",
+      "reason": "released 1998-02-25, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AQ0",
+      "reason": "released 1998-02-11, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1APA",
+      "reason": "released 1994-01-31, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AOX",
+      "reason": "released 1998-11-25, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AOW",
+      "reason": "released 1998-01-14, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AOS",
+      "reason": "released 1998-01-14, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AOJ",
+      "reason": "released 1998-07-08, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AOH",
+      "reason": "released 1998-07-08, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1ANX",
+      "reason": "released 1994-12-20, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1ANW",
+      "reason": "released 1994-12-20, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1ANJ",
+      "reason": "released 1996-01-29, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AND",
+      "reason": "released 1997-04-01, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AN8",
+      "reason": "released 1998-04-29, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AN1",
+      "reason": "released 1998-07-01, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AMM",
+      "reason": "released 1996-11-08, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AMA",
+      "reason": "released 1993-10-31, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AM5",
+      "reason": "released 1997-12-24, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1AM2",
+      "reason": "released 1998-06-24, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1ALV",
+      "reason": "released 1998-06-03, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1ALQ",
+      "reason": "released 1997-09-26, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1ALK",
+      "reason": "released 1994-01-31, on or before the training cutoff 2020-05-01"
+    },
+    {
+      "pdb_id": "1ALI",
+      "reason": "released 1995-11-14, on or before the training cutoff 2020-05-01"
+    }
+  ]
+}
