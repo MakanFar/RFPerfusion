@@ -17,6 +17,7 @@ between two predictors, not reliability against experiment.
 """
 
 import json
+import os
 import sys
 import urllib.request
 from pathlib import Path
@@ -28,6 +29,15 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from calib import cif  # noqa: E402 -- after the path insert, by necessity
 
 RCSB_CIF = "https://files.rcsb.org/download/{}.cif"
+
+# proto-tools' `device` selects WHERE a tool runs, not just which local
+# accelerator: RemoteDevice is Literal["proto", "modal"], alongside "cuda"
+# and "cpu". The config docstring lists only the local pair, so calling
+# run_esmfold() with defaults runs the model IN THIS PROCESS -- which on a
+# machine without a GPU fails with "requested 'cuda' but no GPUs visible",
+# never reaching the deployed Modal app. Dispatching is opt-in and this is
+# the opt-in. Overridable so a CPU-local run stays possible without an edit.
+DEVICE = os.environ.get("PROTO_DEVICE", "modal")
 
 
 def main():
@@ -60,13 +70,13 @@ def main():
 
         stage = "esmfold"
         predicted = run_esmfold(ESMFoldInput(complexes=[sequence]),
-                                ESMFoldConfig()).structures[0]
+                                ESMFoldConfig(device=DEVICE)).structures[0]
 
         stage = "usalign"
         aln = run_usalign(
             USalignInput(query_structure=predicted,
                          reference_structure=reference_cif),
-            USalignConfig(),
+            USalignConfig(device=DEVICE),
         )
 
         json.dump({"ok": True,
