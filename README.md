@@ -43,7 +43,6 @@ Three pieces of software and two accounts.
 | [**uv**](https://docs.astral.sh/uv/) | Runs every project here | `curl -LsSf https://astral.sh/uv/install.sh \| sh` |
 | [**Paperclip**](https://paperclip.gxl.ai) | Literature CLI (`gxl-paperclip`) | Install from paperclip.gxl.ai, then `paperclip login` |
 | [**proto-tools**](https://github.com/evo-design/proto-tools) | Computational biology tool catalogue | `uv sync --project proto` |
-| [**Paperclip account**](https://paperclip.gxl.ai) | Search and full-text reading | Free · 100 LLM reads/day |
 | [**Modal account**](https://modal.com) | GPU compute for prediction and scoring | Billable · per-tool approval |
 
 ```bash
@@ -109,8 +108,15 @@ uv run --project . python -m litkb search outputs/rf/plan_rf.json -n 4 --output-
 uv run --project . python -m litkb screen outputs/rf/search_rf.json -n 1 --output-dir outputs/rf
 ```
 
-Then `dig` → `bind` → `evidence` → `report` → `manifest`. `-n` caps papers per
-query and is your cost dial — start small.
+Then `dig` → `bind` → `evidence` → `label` → `validate` → `report` → `manifest`.
+`-n` caps papers per query and is your cost dial — start small.
+
+`evidence` drafts every item with `testable_by.requires_new_evaluator:
+"unassessed"` — no claim has been made yet about what could test it. `label` is
+where you resolve that, by assigning vocabulary terms from
+`registry/property_vocabulary.json`; it is an agent judgement, not a shell step,
+which is why the generated `run_literature.sh` stops short of it. Skip `label`
+and every item stays unassessed forever.
 
 You get `evidence_<slug>.json` (mechanisms with citations),
 `artifacts_<slug>.json` (sequences that passed verification, each bound to the
@@ -153,7 +159,7 @@ experiment, and not a run.
 cd litterature_search_from_concept && uv run --project . pytest
 ```
 
-119 tests, fully offline. Tool discovery (`search_tools`, `get_tool_schema`) is
+232 tests, fully offline (383 across all four projects). Tool discovery (`search_tools`, `get_tool_schema`) is
 free, and several database tools run locally with no GPU and no billing —
 `uniprot-fetch` and `alphafold-db-fetch` will resolve a protein and return a
 real structure with per-residue confidence before you authenticate anything.
@@ -213,9 +219,19 @@ Known limits, honestly:
 - **Nothing has been generated yet.** The scoring cascade is defined and its
   gates are real, but variant generation needs Modal credentials and has not
   been run.
+- **Nothing is calibrated.** The machinery now exists: calibration is recorded
+  per `(tool, metric)` in `registry/calibration.json` and refused unless it
+  carries a measured error and a held-out benchmark, tool status is derived
+  from it, evidence items carry `rankable_by` alongside `tools`, and the
+  cascade rejects a gate whose claimed margin is finer than its evaluator's
+  measured error. None of it has fired yet: all 140 tools read
+  `needs_calibration`, `rankable_by` is `[]` on every item, and the margin
+  check is inert. Framework §6 forbids ranking on an uncalibrated evaluator,
+  so scores may order candidates for synthesis and may not rank them.
 
-Next: Modal-backed generation and the GPU gates, a held-out melting-temperature
-benchmark for calibration, and an orchestrator over the stage functions.
+Next: a held-out benchmark that promotes the first metric — which is what turns
+all of the above from mechanism into measurement — then Modal-backed generation
+and the GPU gates, and an orchestrator over the stage functions.
 
 ## License
 

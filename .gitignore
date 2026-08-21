@@ -15,3 +15,7 @@ proto/outputs/
 .modal.toml
 
 .DS_Store
+# roborev snapshots
+/.roborev/
+
+docs/
